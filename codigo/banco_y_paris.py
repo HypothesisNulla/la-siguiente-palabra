@@ -111,9 +111,9 @@ def bloque_banco(tok, modelo):
     return tabla_editorial(
         "«Banco» y otra palabra de su misma frase",
         [""] + [f"banco y {w.strip()} ({f})" for f, w in REFERENCIAS], filas, "i" + "d" * len(REFERENCIAS),
-        ["La escala para leer la tabla del capítulo: el parecido de «banco» con una palabra "
-         "distinta, en la misma frase y en las mismas capas; 1 es lo más parecido posible. La otra "
-         "palabra no dice nada del sentido de «banco»."]), datos
+        ["Sirve de escala para leer la tabla anterior: es lo que se parece «banco» a otra palabra "
+         "de su misma frase, en las mismas capas. Esa otra palabra no dice nada de su sentido. 1 es "
+         "lo más parecido posible."]), datos
 
 
 def selftest(tok, modelo):

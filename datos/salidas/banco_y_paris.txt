@@ -5,7 +5,7 @@
 SELFTEST: las tres pruebas pasan.
 
 máquina: arm64, Darwin 25.6.0, procesador
-modelo: Qwen/Qwen2.5-0.5B en float32   fecha: 2026-10-09
+modelo: Qwen/Qwen2.5-0.5B en float32   fecha: 2026-10-24
 
 --- 1. PARÍS, TROZO A TROZO ---
 
@@ -45,5 +45,5 @@ El 97,87 % del 0,0544 %, que da 0,0533 %.
 | tras capa 16 | 0,485 | 0,592 |
 | tras capa 24 | 0,863 | 0,836 |
 
-La escala para leer la tabla del capítulo: el parecido de «banco» con una palabra distinta, en la misma frase y en las mismas capas; 1 es lo más parecido posible. La otra palabra no dice nada del sentido de «banco».
+Sirve de escala para leer la tabla anterior: es lo que se parece «banco» a otra palabra de su misma frase, en las mismas capas. Esa otra palabra no dice nada de su sentido. 1 es lo más parecido posible.
 :::
