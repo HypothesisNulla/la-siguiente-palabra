@@ -57,7 +57,7 @@ def leer(ruta=AQUI / DATOS):
 def red(L, y, valores, empujon=None):
     """Tres neuronas en fila con sus flechas de ida (arriba) y de vuelta (abajo)."""
     p, ax = L.p, L.ax
-    nombres = ("entrada", "en medio", "salida")
+    nombres = ("entrada", "centro", "salida")
     for i, (x, n) in enumerate(zip(X, nombres)):
         ax.add_patch(Circle((x, y), R, facecolor="white", edgecolor=p.tinta, linewidth=1.1, zorder=3))
         v = valores[i]
@@ -83,7 +83,7 @@ def red(L, y, valores, empujon=None):
 def dibujar(casos, paleta, ruta):
     L = Lienzo("El empujón, en los dos sentidos",
                "Tres neuronas en fila, con conexiones de ida y de vuelta. Se mira la unión\n"
-               "entre la de en medio y la de salida (la flecha gruesa).",
+               "entre la del centro y la de salida (la flecha gruesa).",
                paleta, alto=ALTO)
     p = L.p
     # clave
