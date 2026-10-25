@@ -36,7 +36,9 @@ def leer(ruta):
     assert any(t.startswith("Qué viene después de «") for t in tablas), "no encuentro la lista"
     d = {}
     frase, n, cortes = tablas["El texto, partido en trozos"][1][0]
-    d["frase"], d["n_trozos"], d["trozos"] = frase, int(n), re.findall(r"`([^`]*)`", cortes)
+    # Orden 72 (25 oct 2026): los trozos de la tabla van unidos con «|» en un solo código
+    # (`La|_capital|…`), no cada uno en el suyo; antes se sacaban con re.findall de cada `…`.
+    d["frase"], d["n_trozos"], d["trozos"] = frase, int(n), cortes.strip("`").split("|")
     tam = dict((f[0], f[1]) for f in tablas["El tamaño de la máquina"][1])
     for clave, rotulo in (("numeros", "números por trozo"), ("rondas", "rondas, una detrás de otra"),
                           ("miradas", "miradas a la vez dentro de cada ronda"),

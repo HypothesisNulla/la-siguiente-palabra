@@ -39,7 +39,7 @@ SALIDA_CSV = "maquina_entera.csv"
 
 # ==========================================================
 
-from formato import barra, coma, miles, pct, tabla_editorial, trozo
+from formato import barra, coma, miles, pct, tabla_editorial, trozo, unidos
 
 import argparse
 import csv
@@ -143,7 +143,7 @@ def main():
     filas_t = []
     for t in FRASES_TROCEADO:
         piezas = trozos(tok, t)
-        filas_t.append([t, str(len(piezas)), " ".join(trozo(p.replace(" ", "_")) for p in piezas)])
+        filas_t.append([t, str(len(piezas)), unidos([p.replace(" ", "_") for p in piezas])])
     print("\n".join(tabla_editorial(
         "El texto, partido en trozos", ["el texto", "trozos", "cómo se parte"], filas_t, "idi",
         ["El guion bajo marca que ahí había un espacio."])))

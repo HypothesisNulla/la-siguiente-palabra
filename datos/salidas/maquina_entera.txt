@@ -5,9 +5,9 @@ El texto, partido en trozos
 
 | el texto | trozos | cómo se parte |
 |:--|--:|:--|
-| La capital de Francia es | 6 | `La` `_capital` `_de` `_Franc` `ia` `_es` |
-| El murciélago hambriento vigilaba | 11 | `El` `_mur` `ci` `él` `ago` `_h` `amb` `rient` `o` `_vigil` `aba` |
-| anticonstitucionalmente | 6 | `ant` `icon` `stit` `uc` `ional` `mente` |
+| La capital de Francia es | 6 | `La\|_capital\|_de\|_Franc\|ia\|_es` |
+| El murciélago hambriento vigilaba | 11 | `El\|_mur\|ci\|él\|ago\|_h\|amb\|rient\|o\|_vigil\|aba` |
+| anticonstitucionalmente | 6 | `ant\|icon\|stit\|uc\|ional\|mente` |
 
 El guion bajo marca que ahí había un espacio.
 :::

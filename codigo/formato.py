@@ -129,6 +129,15 @@ def trozo(t):
     return f"`{t}`"
 
 
+def unidos(piezas):
+    """Los trozos de una frase, en UN solo monoespaciado y separados por una barra, sin
+    espacios: `Todos|_los|_ser|es`. En papel no se ve el hueco entre dos códigos seguidos
+    (Orden 71, 25 oct 2026). En una celda de tabla, tabla_editorial escapa cada barra (`\\|`)."""
+    for t in piezas:
+        assert "`" not in t and "|" not in t, f"Se esperaba un trozo sin ` ni |; se encontró {t!r}"
+    return "`" + "|".join(piezas) + "`"
+
+
 def barra(p):
     """Una barra gris del largo de la probabilidad p (de 0 a 1). La pinta el filtro."""
     assert 0 <= p <= 1 + 1e-9, f"Se esperaba una probabilidad entre 0 y 1; se encontró {p}"

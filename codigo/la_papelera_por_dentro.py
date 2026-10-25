@@ -40,7 +40,7 @@ import sys
 import numpy as np
 import torch
 
-from formato import coma, tabla_editorial, trozo
+from formato import coma, tabla_editorial, unidos
 
 ANCHO = 64
 
@@ -181,8 +181,8 @@ def main():
     L += tabla_editorial(
         "La frase del «alto», en los trozos en que la parte el modelo",
         ["trozos", "la frase, trozo a trozo"],
-        [[str(len(piezas)), " ".join(trozo(p.strip() or "_") for p in piezas)]], "di",
-        ["Pregunta el último trozo, como en reparto_una_a_una.py."]) + [""]
+        [[str(len(piezas)), unidos([p.strip() or "_" for p in piezas])]], "di",
+        ["Pregunta el último trozo, como en reparto_una_a_una.py. “|” separa dos trozos."]) + [""]
 
     L += ["--- 1. LO QUE PONE «El» EN LA MEZCLA ---", ""]
     filas = []

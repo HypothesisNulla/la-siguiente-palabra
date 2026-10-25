@@ -80,7 +80,7 @@ TOL_IDENTICO = 1e-6
 
 # ==========================================================
 
-from formato import coma, miles, pct, tabla_editorial, trozo
+from formato import coma, miles, pct, tabla_editorial, trozo, unidos
 
 import argparse
 import datetime
@@ -207,7 +207,7 @@ def bloque_paris(tok, modelo):
         out += tabla_editorial(
             f"Dónde está París detrás de «{f}»", ["trozo", "probabilidad", "puesto"], filas, "idd",
             [f"«{PALABRA_BUSCADA.strip()}» son {len(ids_de(tok, PALABRA_BUSCADA))} trozos: "
-             f"{chips(trozos(tok, PALABRA_BUSCADA))}. Cada uno, en la lista que da la máquina "
+             f"{unidos([visible(x) for x in trozos(tok, PALABRA_BUSCADA)])}. Cada uno, en la lista que da la máquina "
              "detrás del texto que tiene delante; «entera», los dos multiplicados."]) + [""]
     return out[:-1]
 

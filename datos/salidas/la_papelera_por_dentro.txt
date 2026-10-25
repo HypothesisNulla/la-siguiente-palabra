@@ -13,9 +13,9 @@ La frase del «alto», en los trozos en que la parte el modelo
 
 | trozos | la frase, trozo a trozo |
 |--:|:--|
-| 17 | `El` `v` `aso` `no` `cab` `ía` `en` `el` `c` `aj` `ón` `porque` `era` `demasi` `ado` `alto` `.` |
+| 17 | `El\|v\|aso\|no\|cab\|ía\|en\|el\|c\|aj\|ón\|porque\|era\|demasi\|ado\|alto\|.` |
 
-Pregunta el último trozo, como en reparto_una_a_una.py.
+Pregunta el último trozo, como en reparto_una_a_una.py. “|” separa dos trozos.
 :::
 
 --- 1. LO QUE PONE «El» EN LA MEZCLA ---

@@ -1,6 +1,6 @@
 máquina: arm64, Darwin 25.6.0
 troceador: Qwen/Qwen2.5-0.5B   transformers 5.17.0
-fecha: 2026-10-10
+fecha: 2026-10-25
 
 --- 1. CUÁNTOS TROZOS CUESTA LO MISMO ---
 
@@ -39,10 +39,10 @@ El comienzo del artículo 1, trozo a trozo
 
 | idioma | trozos | cómo se parte |
 |:--|--:|:--|
-| castellano | 18 | `Todos` `_los` `_ser` `es` `_human` `os` `_n` `acen` `_lib` `res` `_e` `_ig` `uales` `_en` `_dign` `idad` `_y` `_derechos` |
-| inglés | 12 | `All` `_human` `_beings` `_are` `_born` `_free` `_and` `_equal` `_in` `_dignity` `_and` `_rights` |
+| castellano | 18 | `Todos\|_los\|_ser\|es\|_human\|os\|_n\|acen\|_lib\|res\|_e\|_ig\|uales\|_en\|_dign\|idad\|_y\|_derechos` |
+| inglés | 12 | `All\|_human\|_beings\|_are\|_born\|_free\|_and\|_equal\|_in\|_dignity\|_and\|_rights` |
 
-El guion bajo es el espacio de delante, que la palabra lleva dentro de una frase.
+“|” separa dos trozos; el guion bajo es el espacio de delante, que la palabra lleva dentro de una frase.
 :::
 
 --- 3. QUÉ HAY EN LA CAJA ---

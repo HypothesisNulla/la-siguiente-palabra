@@ -70,7 +70,7 @@ RAZON_BARAJADO_MINIMA = 1.5       # barajar las letras tiene que encarecer el te
 
 # ==========================================================
 
-from formato import coma, miles, tabla_editorial, trozo
+from formato import coma, miles, tabla_editorial, unidos
 
 import argparse
 import datetime
@@ -198,11 +198,12 @@ def bloque_articulo_1(tok, textos):
         assert "".join(piezas) == frase, f"Los trozos de la frase en {nombre} no la rehacen"
         cuentas[nombre] = (frase, piezas)
         filas.append([nombre, str(len(piezas)),
-                      " ".join(trozo(p.replace(" ", "_")) for p in piezas)])
+                      unidos([p.replace(" ", "_") for p in piezas])])
     lineas = tabla_editorial(
         "El comienzo del artículo 1, trozo a trozo", ["idioma", "trozos", "cómo se parte"],
         filas, "idi",
-        ["El guion bajo es el espacio de delante, que la palabra lleva dentro de una frase."])
+        ["“|” separa dos trozos; el guion bajo es el espacio de delante, que la palabra lleva "
+         "dentro de una frase."])
     return lineas, cuentas
 
 
