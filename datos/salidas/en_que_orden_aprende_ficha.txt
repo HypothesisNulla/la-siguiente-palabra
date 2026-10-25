@@ -1,0 +1,17 @@
+--- LA FICHA DE LA MÁQUINA DEL CAPÍTULO 10 ---
+
+::: tabla
+La ficha de la máquina del capítulo 10
+
+|  | la máquina |
+|:--|--:|
+| qué lee | letras |
+| piezas distintas | 43 |
+| números por pieza | 192 |
+| capas | 4 |
+| miradas por capa | 4 |
+| letras de contexto | 128 |
+| pesos | 1.820.971 |
+
+Contada del propio modelo, sin entrenar. Las piezas son los símbolos distintos del texto: las 42 letras y signos de ngrama.py y el salto de línea.
+:::

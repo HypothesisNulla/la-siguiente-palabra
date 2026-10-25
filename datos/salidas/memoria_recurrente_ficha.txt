@@ -1,0 +1,17 @@
+--- LA FICHA DE LAS REDES DEL CAPÍTULO 6 ---
+
+::: tabla
+La ficha de las redes del capítulo 6
+
+|  | la que escribe | la de la prueba, sin compuertas | la de la prueba, con compuertas |
+|:--|--:|--:|--:|
+| qué lee | palabras | símbolos | símbolos |
+| piezas distintas | 20.000 | 12 | 12 |
+| números por pieza | 256 | 32 | 32 |
+| números del resumen | 512 | 64 | 64 |
+| capas | 2 | 1 | 1 |
+| con compuertas | sí | no | sí |
+| pesos | 19.058.208 | 7.176 | 25.992 |
+
+Contado de los propios modelos, sin entrenar. En la que escribe, las piezas distintas incluyen «<rara>», la palabra que recoge todas las que no están entre las más usadas.
+:::

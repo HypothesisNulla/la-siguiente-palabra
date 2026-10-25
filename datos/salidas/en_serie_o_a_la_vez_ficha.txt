@@ -1,0 +1,15 @@
+--- LA FICHA DE LAS DOS MÁQUINAS DEL CAPÍTULO 9 ---
+
+::: tabla
+La ficha de las dos máquinas del capítulo 9
+
+|  | la que lee en orden | la que mira todo a la vez |
+|:--|--:|--:|
+| qué lee | una lista de números por posición | una lista de números por posición |
+| números por posición | 256 | 256 |
+| capas | 1 | 1 |
+| miradas por capa | — | 8 |
+| pesos | 592.128 | 591.872 |
+
+Contado de los propios modelos, sin medir tiempos. «Capas» de la que mira todo a la vez: un bloque de atención con su red densa.
+:::

@@ -12,6 +12,7 @@ Dos mediciones:
 Uso:
     python memoria_recurrente.py
     python memoria_recurrente.py --selftest
+    python memoria_recurrente.py --ficha > ../datos/salidas/memoria_recurrente_ficha.txt
 """
 
 # ======================= CONSTANTES =======================
@@ -74,7 +75,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from formato import coma, comprobar_ancho, miles
+from formato import coma, comprobar_ancho, miles, tabla_editorial
 
 
 def dispositivo():
@@ -311,14 +312,48 @@ def selftest():
     return 0
 
 
+def ficha():
+    """La ficha de las tres redes del capítulo (Orden 79, 25 oct 2026): qué leen, cuántas piezas
+    distintas, cuántos números lleva cada pieza, cuántas capas y cuántos pesos. Se cuenta de los
+    propios modelos, recién construidos, SIN entrenar nada (el vocabulario sí se lee del corpus,
+    que es rápido), así que sale igual en cualquier ordenador. No va al libro: es el respaldo
+    de las cifras de la ficha del capítulo 6."""
+    vocab, _, _, _ = vocabulario_y_datos(cargar_texto())
+    escribe = RedTexto(len(vocab))
+    prueba = [Recordadora(SIMBOLOS + RELLENO, OCULTO_MEMORIA, c) for c in (False, True)]
+    pesos = lambda m: sum(p.numel() for p in m.parameters())
+    redes = [escribe] + prueba
+    filas = [
+        ["qué lee", "palabras", "símbolos", "símbolos"],
+        ["piezas distintas"] + [miles(m.emb.num_embeddings) for m in redes],
+        ["números por pieza"] + [str(m.emb.embedding_dim) for m in redes],
+        ["números del resumen"] + [str(m.nucleo.hidden_size) for m in redes],
+        ["capas"] + [str(m.nucleo.num_layers) for m in redes],
+        ["con compuertas"] + ["sí" if isinstance(m.nucleo, nn.LSTM) else "no" for m in redes],
+        ["pesos"] + [miles(pesos(m)) for m in redes],
+    ]
+    print("--- LA FICHA DE LAS REDES DEL CAPÍTULO 6 ---\n")
+    print("\n".join(tabla_editorial(
+        "La ficha de las redes del capítulo 6",
+        ["", "la que escribe", "la de la prueba, sin compuertas", "la de la prueba, con compuertas"],
+        filas, "iddd",
+        ["Contado de los propios modelos, sin entrenar. En la que escribe, las piezas distintas "
+         "incluyen «<rara>», la palabra que recoge todas las que no están entre las más usadas."])))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--ficha", action="store_true",
+                    help="imprime la ficha de las redes (contada, sin entrenar) y sale")
     ap.add_argument("--pasos", type=int, default=PASOS_TEXTO,
                     help=f"pasos de aprendizaje del modelo de texto (por omisión {PASOS_TEXTO})")
     args = ap.parse_args()
     if args.selftest:
         sys.exit(selftest())
+    if args.ficha:
+        ficha()
+        return
 
     print("--- 1. RECORDAR A DISTANCIA ---")
     print("Acierto al devolver un símbolo visto N pasos antes (azar = 0,125)\n")

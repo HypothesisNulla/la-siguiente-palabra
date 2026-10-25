@@ -13,6 +13,7 @@ produce exactamente eso y nada más.
 Uso:
     python en_que_orden_aprende.py
     python en_que_orden_aprende.py --selftest
+    python en_que_orden_aprende.py --ficha > ../datos/salidas/en_que_orden_aprende_ficha.txt
 """
 
 # ======================= CONSTANTES =======================
@@ -96,7 +97,7 @@ import sys
 import time
 import unicodedata
 
-from formato import comprobar_ancho, miles, coma, pct
+from formato import comprobar_ancho, miles, coma, pct, tabla_editorial
 import numpy as np
 import torch
 import torch.nn as nn
@@ -442,9 +443,38 @@ def selftest():
     return 0
 
 
+def ficha():
+    """La ficha de la máquina del capítulo (Orden 79, 25 oct 2026): qué lee, cuántas piezas
+    distintas, cuántos números lleva cada una, cuántas capas, cuántas miradas y cuántos pesos.
+    Se cuenta del propio modelo, recién construido, SIN entrenar (el alfabeto sí se lee del
+    corpus, que es rápido). No va al libro: es el respaldo de las cifras de la ficha del
+    capítulo 10. Los pesos tienen que ser los que imprime la ejecución completa (--- TAMAÑO ---)."""
+    letras = sorted(set(cargar_texto()))
+    modelo = Transformer(len(letras))
+    pesos = sum(p.numel() for p in modelo.parameters())
+    miradas = {b.at.num_heads for b in modelo.bloques}
+    assert len(miradas) == 1, f"Se esperaba el mismo número de miradas en todas las capas: {miradas}"
+    filas = [
+        ["qué lee", "letras"],
+        ["piezas distintas", str(modelo.emb.num_embeddings)],
+        ["números por pieza", str(modelo.emb.embedding_dim)],
+        ["capas", str(len(modelo.bloques))],
+        ["miradas por capa", str(miradas.pop())],
+        ["letras de contexto", str(modelo.pos.num_embeddings)],
+        ["pesos", miles(pesos)],
+    ]
+    print("--- LA FICHA DE LA MÁQUINA DEL CAPÍTULO 10 ---\n")
+    print("\n".join(tabla_editorial(
+        "La ficha de la máquina del capítulo 10", ["", "la máquina"], filas, "id",
+        ["Contada del propio modelo, sin entrenar. Las piezas son los símbolos distintos del "
+         "texto: las 42 letras y signos de ngrama.py y el salto de línea."])))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--ficha", action="store_true",
+                    help="imprime la ficha de la máquina (contada, sin entrenar) y sale")
     ap.add_argument("--pasos", type=int, default=PASOS_TOTAL,
                     help=f"pasos de entrenamiento (por omisión {PASOS_TOTAL})")
     ap.add_argument("--solo-figura", action="store_true",
@@ -452,6 +482,9 @@ def main():
     args = ap.parse_args()
     if args.selftest:
         sys.exit(selftest())
+    if args.ficha:
+        ficha()
+        return
     if args.solo_figura:
         curva = leer_curva()
         print(f"{miles(len(curva))} puntos leídos de {SALIDA_CURVA} "

@@ -13,6 +13,7 @@ y cuenta los PASOS EN SERIE, que no dependen de la máquina.
 Uso:
     python en_serie_o_a_la_vez.py
     python en_serie_o_a_la_vez.py --selftest
+    python en_serie_o_a_la_vez.py --ficha > ../datos/salidas/en_serie_o_a_la_vez_ficha.txt
 """
 
 # ======================= CONSTANTES =======================
@@ -40,7 +41,7 @@ import os
 import sys
 import time
 
-from formato import comprobar_ancho, miles, coma
+from formato import comprobar_ancho, miles, coma, tabla_editorial
 import numpy as np
 import torch
 import torch.nn as nn
@@ -227,6 +228,29 @@ def selftest():
     return 0
 
 
+def ficha():
+    """La ficha de las dos máquinas del capítulo (Orden 79, 25 oct 2026): cuántos números lleva
+    cada posición, cuántas capas, cuántas miradas y cuántos pesos. Se cuenta de los propios
+    modelos, recién construidos, sin medir ningún tiempo, con las constantes de arriba. No va al
+    libro: es el respaldo de las cifras de la ficha del capítulo 9."""
+    serie, a_la_vez = EnSerie(ancho=ANCHO), ALaVez(ancho=ANCHO, cabezas=CABEZAS)
+    pesos = lambda m: sum(p.numel() for p in m.parameters())
+    bloques = sum(isinstance(m, nn.MultiheadAttention) for m in a_la_vez.modules())
+    filas = [
+        ["qué lee", "una lista de números por posición", "una lista de números por posición"],
+        ["números por posición", str(serie.nucleo.input_size), str(a_la_vez.atencion.embed_dim)],
+        ["capas", str(serie.nucleo.num_layers), str(bloques)],
+        ["miradas por capa", "—", str(a_la_vez.atencion.num_heads)],
+        ["pesos", miles(pesos(serie)), miles(pesos(a_la_vez))],
+    ]
+    print("--- LA FICHA DE LAS DOS MÁQUINAS DEL CAPÍTULO 9 ---\n")
+    print("\n".join(tabla_editorial(
+        "La ficha de las dos máquinas del capítulo 9",
+        ["", "la que lee en orden", "la que mira todo a la vez"], filas, "idd",
+        ["Contado de los propios modelos, sin medir tiempos. «Capas» de la que mira todo a la "
+         "vez: un bloque de atención con su red densa."])))
+
+
 def main():
     global ANCHO, LOTE
     ap = argparse.ArgumentParser(description=__doc__)
@@ -241,9 +265,14 @@ def main():
                     help=f"números por posición (por omisión {ANCHO})")
     ap.add_argument("--lote", type=int, default=LOTE,
                     help=f"cuántos textos a la vez (por omisión {LOTE})")
+    ap.add_argument("--ficha", action="store_true",
+                    help="imprime la ficha de las dos máquinas (contada, sin medir) y sale")
     args = ap.parse_args()
     if args.selftest:
         sys.exit(selftest())
+    if args.ficha:
+        ficha()
+        return
 
     ANCHO, LOTE = args.ancho, args.lote
     assert ANCHO % CABEZAS == 0, \
