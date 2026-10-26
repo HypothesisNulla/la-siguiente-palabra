@@ -71,9 +71,11 @@ AQUI = Path(__file__).resolve().parent
 # ---- el libro --------------------------------------------------------------------------
 
 def capitulo(fichero):
-    """«cap03-muchos.md» -> «3»; el prólogo y el apéndice, por su nombre."""
+    """«cap03-muchos.md» -> «3»; el prólogo, el epílogo y el apéndice, por su nombre."""
     if fichero.startswith("00-prologo"):
         return "prólogo"
+    if fichero.startswith("98-epilogo"):
+        return "epílogo"
     if fichero.startswith("99-apendice"):
         return "apéndice"
     m = re.match(r"cap(\d+)-", fichero)

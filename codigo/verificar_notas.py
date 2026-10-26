@@ -13,9 +13,10 @@ llevaba así desde el 16 de septiembre sin que nada lo dijera. Y sin nota, el fa
 capítulo que desmiente su propia nota) no se puede auditar: no hay contra qué cotejar."""
 import os, re, sys
 
-# El prólogo y el apéndice no son capítulos con cuentas propias: el prólogo no tiene ni una cifra
-# que no esté escrita con letra, y el apéndice describe las máquinas. No se les exige nota.
-SIN_NOTA = {'00-prologo.md', '99-apendice.md'}
+# El prólogo, el epílogo y el apéndice no son capítulos con cuentas propias: el prólogo y el epílogo
+# no tienen ni una cifra que no esté escrita con letra, y el apéndice describe las máquinas. No se
+# les exige nota (el epílogo, desde el 26 de octubre de 2026).
+SIN_NOTA = {'00-prologo.md', '98-epilogo.md', '99-apendice.md'}
 MINIMO_UTIL = 400   # caracteres: una nota más corta que esto es un fichero vacío con cabecera
 
 
@@ -47,13 +48,13 @@ def selftest():
     """Tres pruebas sobre lo único que decide: si a un capítulo le falta su nota."""
     fallos = []
 
-    # 1. TEST NULO — todo en su sitio: no puede saltar nada. Y el prólogo y el apéndice, que no
-    #    llevan nota por diseño, tampoco pueden saltar: si saltaran, el verificador daría un
+    # 1. TEST NULO — todo en su sitio: no puede saltar nada. Y el prólogo, el epílogo y el apéndice,
+    #    que no llevan nota por diseño, tampoco pueden saltar: si saltaran, el verificador daría un
     #    FALLA permanente y acabaríamos desconectándolo.
-    completo = revisar(['00-prologo.md', 'cap01-a.md', 'cap02-b.md', '99-apendice.md'],
+    completo = revisar(['00-prologo.md', 'cap01-a.md', 'cap02-b.md', '98-epilogo.md', '99-apendice.md'],
                        {'01': 5000, '02': 5000})
     print(f"[1] test nulo         todo en su sitio: {len(completo)} incidencias; "
-          f"el prólogo y el apéndice no piden nota")
+          f"el prólogo, el epílogo y el apéndice no piden nota")
     if completo:
         fallos.append(f"test nulo: salta con todo en su sitio: {completo}")
 
