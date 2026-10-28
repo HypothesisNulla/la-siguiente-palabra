@@ -247,11 +247,14 @@ def tablas(filas):
                   if len(trozos) > 1 else "De dónde sale cada figura")
         out.append(tabla_editorial(
             titulo, ["fig.", "cap.", "programa", "salidas que lee"], trozo, "ddii",
-            ["Programa: el fichero codigo/figura_<programa>.py (el que no empieza así, entero). "
-             "Salidas: datos/salidas/<nombre>.txt, o con su extensión si no es .txt; con un "
-             "asterisco, un fichero de datos/ que no está en salidas/. Ninguna: el programa no lee "
-             "ningún fichero; dibuja un esquema, o calcula él mismo los números, o los trae "
-             "escritos como ejemplo."]))
+            [# Orden 97: nota para el lector, y sin «< >» (el generador de Word los toma por una marca).
+             "«Programa» es el nombre del programa que dibuja la figura: en codigo/, el fichero se "
+             "llama así con «figura_» delante y «.py» detrás, salvo cuando el nombre ya empieza por "
+             "«figuras_», como figuras_el_comite_por_dentro, que entonces es el nombre entero. "
+             "«Salidas que lee» son ficheros de datos/salidas/, con el nombre sin el .txt (si acaban "
+             "de otra manera, va escrito); con asterisco, un fichero de datos/ que no está en "
+             "salidas/. «Ninguna» quiere decir que el programa no lee ningún fichero: dibuja un "
+             "esquema, o calcula él mismo los números, o los trae escritos como ejemplo."]))
     return out
 
 
