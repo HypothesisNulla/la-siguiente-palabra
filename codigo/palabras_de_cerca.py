@@ -329,12 +329,11 @@ def bloque_parecido(m, antes):
         "Cómo se parecen dos listas",
         ["pareja", f"{A}: signo", f"{A}: parecido", f"{D}: signo", f"{D}: parecido", f"{D}: puesto"],
         filas, "iddddd",
-        [f"La columna «signo» cuenta en cuántas de las {letra(DIMENSION)} posiciones las dos listas "
-         "tienen el mismo signo, las dos positivas o las dos negativas. La columna «parecido» es la "
-         "cuenta entera, que va de -1 a 1, y 1 es lo más parecido posible. La columna «puesto» dice "
-         f"en qué puesto sale la segunda palabra entre las {miles(n - 1)} vecinas de la primera. "
-         f"Como referencia, a media tabla de las vecinas de «{a0}», en el puesto {miles(medio)}, "
-         f"está «{w_medio}», con un parecido de {coma(parecido(m.wv[a0], m.wv[w_medio]), 2)}."])], valores
+        [f"«Signo» cuenta en cuántas de las {letra(DIMENSION)} posiciones coinciden de signo las "
+         "dos listas; «parecido» es la cuenta entera, de -1 a 1, y «puesto», el lugar de la "
+         f"segunda palabra entre las {miles(n - 1)} vecinas de la primera. Para comparar: a media "
+         f"tabla de las vecinas de «{a0}», en el puesto {miles(medio)}, está «{w_medio}», con un "
+         f"parecido de {coma(parecido(m.wv[a0], m.wv[w_medio]), 2)}."])], valores
 
 
 def bloque_vecinas(m):

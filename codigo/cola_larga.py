@@ -73,9 +73,10 @@ def informe(c):
             ["puesto", "palabra", "veces", "de cada millón"],
             [[miles(p), w, miles(n), uno(1e6 * n / total)] for p, w, n in filas],
             "didd",
-            [f"En total, {miles(total)} palabras; distintas, {miles(len(c))}.",
-             "Puesto: el lugar en la lista, de la más a la menos frecuente. De cada millón: de "
-             "cada millón de palabras de los libros, cuántas son ésa.",
+            [# Orden 97: nota para el lector, en una sola frase larga.
+             "El puesto es el lugar de cada palabra en la lista, de la que más sale a la que menos; "
+             "la última columna, cuántas de cada millón de palabras de los libros son ésa. En total "
+             f"hay {miles(total)} palabras, y {miles(len(c))} distintas.",
              f"Palabras que salen una sola vez: {miles(solo_una)}, "
              f"{coma(100 * solo_una / len(c), 0)} de cada cien de las distintas."]):
         print(l)

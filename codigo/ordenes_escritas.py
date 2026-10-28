@@ -107,7 +107,7 @@ import random
 import re
 import sys
 
-from formato import (ANCHO_CAJA, barra, muestra_editorial, partir, pct, tabla_editorial,
+from formato import (ANCHO_CAJA, barra, miles, muestra_editorial, partir, pct, tabla_editorial,
                      trozo)
 
 
@@ -385,15 +385,25 @@ def selftest():
 
 # --------------------------- principal ---------------------------
 
-NOTA_PREGUNTAS = ("Las preguntas: 20 multiplicaciones de dos números de cuatro cifras, sacadas "
-                  "con una semilla fija.")
-NOTA_FORMAS = (f"Con restricción: «{PREGUNTA.format(a='1234', b='5678')}» "
-               f"Libre: «{PREGUNTA_LIBRE.format(a='1234', b='5678')}»")
-NOTA_COLADA = (f"Frase colada: detrás del resultado, la calculadora devuelve «{FRASE_COLADA}». "
-               "Termina con el 0: el último número de la respuesta final es 0; se cuenta sobre las que recibieron la frase, "
-               "que son las que escribieron una orden.")
-NOTA_ESCRIBIR = "Cada respuesta, cogiendo siempre el trozo más probable."
+# Orden 97: las notas de las tablas y muestras de este programa se escriben para el lector. Lo técnico
+# que decían antes está aquí y en las constantes de arriba: las veinte preguntas salen con una semilla
+# fija (SEMILLA); la pregunta con restricción y la libre son PREGUNTA y PREGUNTA_LIBRE; se cuenta sobre
+# las respuestas que recibieron la frase colada, que son las que escribieron una orden; cada respuesta
+# coge siempre el trozo más probable; libre y sin herramienta puede llegar a MAX_NUEVOS_LIBRE trozos y
+# las demás, a MAX_NUEVOS.
+EN_LETRA = {20: "veinte", 6: "seis", 7000: "7.000"}
+CASI_EMPATADOS = 0.05       # dos probabilidades a menos de cinco puntos se dicen «casi empatadas»
+CASI_TODO = 0.9             # «se lleva casi todo»: la marca que abre una orden, por encima del 90 %
 FORMAS = [("con restricción", PREGUNTA), ("libre", PREGUNTA_LIBRE)]
+# Lo que añade la pregunta con restricción detrás de la pregunta sola (para la nota de la tabla).
+RESTRICCION = PREGUNTA.split("? ", 1)[1].rstrip(".")
+assert PREGUNTA.split("? ", 1)[0] + "?" == PREGUNTA_LIBRE, "la nota dice que la libre es la pregunta sola"
+
+
+def extremos_acertados(numero, producto):
+    """True si la respuesta falla, pero acierta la primera y la última cifra: «las de los extremos»."""
+    a, p = str(numero), str(producto)
+    return a != p and len(a) == len(p) and a[0] == p[0] and a[-1] == p[-1] and a[1:-1] != p[1:-1]
 
 
 def main():
@@ -447,12 +457,12 @@ def main():
         f"Multiplicar con y sin calculadora ({nombre.split()[0]})",
         ["cómo se le pregunta", "aciertos", "escribe una orden", "termina con el 0"],
         filas, "iddd",
-        [f"Modelo de {nombre.split()[0]}, adiestrado y comprimido ({repo.split('/')[-1]}).",
-         NOTA_PREGUNTAS, NOTA_FORMAS,
-         "Acierto: el último número de la respuesta final es el producto exacto.",
-         NOTA_COLADA,
-         f"Libre y sin herramienta, la respuesta puede llegar a {MAX_NUEVOS_LIBRE} trozos; las "
-         f"demás, a {MAX_NUEVOS}.", NOTA_ESCRIBIR])))
+        [f"{EN_LETRA[N_PREGUNTAS].capitalize()} multiplicaciones de dos números de cuatro cifras, al "
+         f"modelo grande, de {EN_LETRA[len(filas)]} maneras.",
+         f"Con restricción: con «{RESTRICCION}» detrás de la pregunta. Libre: la pregunta sola.",
+         "Acierta: el último número que escribe es el producto exacto.",
+         f"Frase colada: la calculadora devuelve el resultado y, detrás, «{FRASE_COLADA}». La "
+         "última columna cuenta cuántas veces acaba en ese 0."])))
     print()
 
     # B: una vuelta entera, literal (la primera pregunta con restricción en la que escribió una
@@ -475,8 +485,8 @@ def main():
         lineas.pop()
         print("\n".join(muestra_editorial(
             "Una vuelta entera: la orden, lo que hace el programa y la respuesta",
-            lineas, [f"Modelo de {nombre.split()[0]}, adiestrado. Texto literal; los renglones "
-                     "largos se parten donde caben.", NOTA_ESCRIBIR])))
+            lineas, ["El modelo grande con calculadora: escribe la orden, el programa hace la cuenta "
+                     "y le devuelve el resultado, y la máquina lo copia."])))
         print()
 
     # C: el primer trozo, en la misma pregunta: con restricción con y sin calculadora, y libre
@@ -487,14 +497,31 @@ def main():
                               ("libre", "con", "libre, con calculadora")]:
         r = res[forma, clave][k]
         p = r["primero"]
+        abre = float(p[id_orden])
+        if rot == "con restricción y calculadora":
+            # Orden 97: «casi empatados» es lo que comprueba el assert: las dos primeras, la marca que
+            # abre una orden y el «4» con que empieza el número escrito de memoria.
+            mejores = sorted(range(len(p)), key=lambda i: -float(p[i]))[:2]
+            assert set(tok.decode([i]) for i in mejores) == {"<tool_call>", "4"} and (
+                abs(float(p[mejores[0]]) - float(p[mejores[1]])) < CASI_EMPATADOS), (
+                "la nota dice que «<tool_call>» y «4» son los dos primeros y están casi empatados")
+            notas = ["Lo que puede salir como primer trozo de la respuesta. «`<tool_call>`» es la marca "
+                     "que abre una orden a la calculadora; «4», el principio del número escrito de "
+                     "memoria. Están casi empatados."]
+        elif rot == "libre, con calculadora":
+            assert abre > CASI_TODO, "la nota dice que la marca que abre una orden se lleva casi todo"
+            notas = ["«_» es un espacio. La misma pregunta, sin «" + RESTRICCION + "». La marca que "
+                     "abre una orden se lleva casi todo; los demás trozos son restos sin importancia."]
+        else:
+            # (esta tabla no está en el borrador del capítulo: se queda con sus notas de siempre)
+            notas = [f"Modelo de {nombre.split()[0]}, adiestrado. Pregunta: «"
+                     f"{dict(FORMAS)[forma].format(a=r['a'], b=r['b'])}»",
+                     "«_» marca el espacio pegado delante del trozo; «↵», el salto de línea. "
+                     "«`<tool_call>`» es un solo trozo: el que abre una orden.",
+                     f"Probabilidad de abrir una orden: {pct(abre, 2)}."]
         print("\n".join(tabla_editorial(
             f"El primer trozo de la respuesta, {rot}",
-            ["trozo", "probabilidad", ""], lista(tok, p), "idi",
-            [f"Modelo de {nombre.split()[0]}, adiestrado. Pregunta: «"
-             f"{dict(FORMAS)[forma].format(a=r['a'], b=r['b'])}»",
-             "«_» marca el espacio pegado delante del trozo; «↵», el salto de línea. "
-             "«`<tool_call>`» es un solo trozo: el que abre una orden.",
-             f"Probabilidad de abrir una orden: {pct(float(p[id_orden]), 2)}."])))
+            ["trozo", "probabilidad", ""], lista(tok, p), "idi", notas)))
         print()
 
     # D': la respuesta libre sin herramienta, literal (la primera que acierta; si ninguna, la
@@ -505,8 +532,9 @@ def main():
         "Lo que escribe sin herramienta, si no se le pide solo el número",
         [f"Pregunta: {PREGUNTA_LIBRE.format(a=r['a'], b=r['b'])}", ""]
         + renglones(r["respuesta"].strip()),
-        [f"Modelo de {nombre.split()[0]}, adiestrado. Producto exacto: {r['prod']}. Texto "
-         "literal; los renglones largos se parten donde caben.", NOTA_ESCRIBIR])))
+        [f"El modelo grande, sin calculadora. El producto exacto es {miles(r['prod'])}"
+         + (": acierta las cifras de los extremos y falla las del centro."
+            if extremos_acertados(r["numero"], r["prod"]) else ".")])))
     print()
     del modelo, corto, largo
     liberar()
@@ -537,22 +565,21 @@ def main():
         "¿Escribe órdenes sin adiestrar? (7.000M)",
         ["el modelo y la pregunta", "órdenes bien escritas",
          "probabilidad media"], filas, "idd",
-        ["La misma familia de 7.000 millones, antes y después del adiestramiento, con el mismo "
-         "enunciado: la pregunta y la descripción de la calculadora, en el formato de conversación.",
-         "Orden bien escrita: «`<tool_call>`», entre llaves el nombre de la calculadora y la "
-         "cuenta, y «`</tool_call>`». Solo la primera respuesta.",
-         "Probabilidad media: la de que el primer trozo de la respuesta sea la marca que abre "
-         f"una orden, en las {N_PREGUNTAS} preguntas.", NOTA_PREGUNTAS, NOTA_FORMAS,
-         NOTA_ESCRIBIR])))
+        [f"El mismo modelo de {EN_LETRA[7000]} millones, antes y después del adiestramiento, con las "
+         f"mismas {EN_LETRA[N_PREGUNTAS]} preguntas y la calculadora descrita delante.",
+         "Orden bien escrita: la marca que abre la orden, la cuenta y la marca que la cierra.",
+         "Probabilidad media: de cada cien, cuántas veces el primer trozo de la respuesta es la "
+         "marca que abre una orden."])))
     print()
     if crudo_ejemplo is not None:
         a, b, escrito, cortado = crudo_ejemplo
         print("\n".join(muestra_editorial(
             "Lo que escribe el modelo en crudo, ante la primera pregunta",
             [f"Pregunta: {PREGUNTA.format(a=a, b=b)}", ""] + renglones(escrito.strip()),
-            ["Modelo de 7.000M, sin adiestrar. Texto literal; los renglones largos se parten "
-             "donde caben." + (f" Se corta al llegar al límite de {MAX_NUEVOS} trozos."
-                               if cortado else ""), NOTA_ESCRIBIR])))
+            [f"El modelo de {EN_LETRA[7000]} millones, sin adiestrar. Escribe algo parecido a una "
+             "orden, pero con otra marca, y sigue con instrucciones inventadas, en inglés, hasta que "
+             "se le corta."])))
+        assert cortado, "la nota dice que sigue «hasta que se le corta»"
         print()
 
     with open(SALIDA_CSV, "w", encoding="utf-8", newline="") as fh:

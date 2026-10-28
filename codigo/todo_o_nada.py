@@ -48,11 +48,11 @@ def bloque():
     return tabla_editorial(
         "Una respuesta de cinco partes: cada parte, o las cinco a la vez",
         ["cada parte suelta", "", "las cinco a la vez", ""], filas, "didi",
-        ["De cada cien. Las cinco a la vez: solo cuenta la respuesta si están bien las cinco "
-         "partes.",
-         f"Con {TABLA[0]} de cada cien en cada parte, las cinco a la vez: {cadena(TABLA[0])} da "
-         f"{coma(a_la_vez(TABLA[0]) / 100, 3)}, que son unas {coma(a_la_vez(TABLA[0]), 0)} de "
-         "cada cien."])
+        [# Orden 97: la cuenta con un 50 («0,5 por 0,5 por… da 0,031») ya no va en la nota; está en
+         # `cadena` y en la primera fila de la tabla.
+         "De cada cien veces. A la izquierda, cuántas sale bien cada parte por separado; a la "
+         "derecha, cuántas salen bien las cinco a la vez, que es lo único que cuenta cuando se "
+         "puntúa todo o nada."])
 
 
 def selftest():

@@ -25,6 +25,8 @@ PRUEBAS_A_ESCRIBIR = [(10, 1), (40, 1)]        # (cuánta paja, cuántas pruebas
 SEMILLA_EJEMPLO = 20260928
 LETRAS = "ABCDEFGH"
 NUMEROS_PAJA = "1234"
+# Orden 97: cifras que las notas escriben con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {8: "ocho", 2: "dos"}
 
 # ==========================================================
 
@@ -81,8 +83,9 @@ def bloque_pruebas():
                 [["se le enseña", simbolos[0]], ["luego, la paja", " ".join(simbolos[1:])],
                  ["pregunta", "¿cuál era el primero?"],
                  ["**respuesta buscada**", f"**{a_texto(objetivo)}**"]], "ii",
-                [f"Los {mr.SIMBOLOS} símbolos que se le pueden pedir: " + " ".join(LETRAS) +
-                 f". Los {mr.RELLENO} de paja, distintos de esos: " + " ".join(NUMEROS_PAJA) + "."])
+                [f"Las letras, de la {LETRAS[0]} a la {LETRAS[-1]}, son lo que se le puede pedir; la "
+                 f"paja son cifras del {NUMEROS_PAJA[0]} al {NUMEROS_PAJA[-1]}, así que nunca se "
+                 "confunde con ellas."])
             out.append("")
     return out[:-1]
 
@@ -94,8 +97,9 @@ def bloque_tabla(tabla):
         ["paja en medio, en símbolos", "memoria simple", "con compuertas"],
         [[str(d), de_cada_cien(tabla[d][0]), de_cada_cien(tabla[d][3])] for d in mr.DISTANCIAS],
         "ddd",
-        [f"Acertar por puro azar: {coma(100 * azar, 1)} de cada 100 (una de cada {mr.SIMBOLOS}).",
-         f"Cada cifra, media de {mr.SEMILLAS_MEMORIA} entrenamientos desde cero."])
+        [f"Por puro azar acertaría {coma(100 * azar, 1)} de cada cien, una de cada "
+         f"{EN_LETRA[mr.SIMBOLOS]}. Cada cifra es la media de {EN_LETRA[mr.SEMILLAS_MEMORIA]} "
+         "entrenamientos desde cero."])
 
 
 def selftest():

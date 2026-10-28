@@ -56,6 +56,9 @@ import numpy as np
 
 import lo_habia_visto_ya as L
 import memoria_recurrente as mr
+# Orden 97: cifras que las notas escriben con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {200: "doscientas", 7: "siete"}
+
 from formato import ANCHO_CAJA, coma, miles, muestra_editorial, pct, tabla_editorial
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -267,13 +270,12 @@ def bloque_tabla(puntos, palabras, corpus, umbral, cache=None):
         "Rachas y copiado, según quién escribe",
         ["quién escribe", "racha, en palabras: mediana", "racha, en palabras: máximo",
          "copiado: mediana"], filas, "iddd",
-        [f"{L.VENTANAS} muestras de {largo} palabras en cada fila.",
-         "Los libros que no vio son seis de la misma época que no entraron en el entrenamiento. "
-         "«Contar» es la máquina del capítulo 1, mirando una, dos o tres palabras hacia atrás. La "
-         "red es la de las muestras de arriba. El texto real es lo que sigue a cada comienzo en su "
-         "libro.",
-         f"Una racha cuenta como copia desde {umbral} palabras: una más que la más larga de la "
-         "máquina de contar con una palabra."])
+        [# Orden 97: las notas dicen al lector qué es cada fila, no cómo se obtuvo; lo técnico
+         # (los seis libros ajenos, el umbral y su margen) está en las constantes y en el código.
+         f"Cada fila son {EN_LETRA[L.VENTANAS]} muestras de {largo} palabras. «Contar» es la "
+         "máquina del capítulo 1, mirando una, dos o tres palabras atrás, y «el texto real», lo que "
+         f"sigue a cada comienzo en su libro. Una racha cuenta como copia desde {EN_LETRA[umbral]} "
+         "palabras seguidas."])
     return lin, res
 
 

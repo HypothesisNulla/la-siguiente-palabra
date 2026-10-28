@@ -99,9 +99,7 @@ Lo que aprenden veinte tablas, según el juez y el tablero
 | C | solo lee | 12 | 6 | 0 | 20 |
 | D | solo lee | 12 | no se llega | 20 | 0 |
 
-Cada tabla aprende 2.000 partidas. «Letrero, a» y «meta, a»: pasos desde la salida. «Al letrero», «a la meta»: cuántas de las 20 tablas acaban yendo ahí.
-
-Solo lee: pone la nota si al final se lee «meta conseguida». Comprueba: solo si se ha llegado a la meta.
+«Letrero, a» y «meta, a» dicen a cuántos pasos de la salida está cada uno; las dos últimas columnas, cuántas de las veinte tablas acaban yendo ahí después de 2.000 partidas. El juez que solo lee pone la nota si al final se lee «meta conseguida»; el que comprueba, solo si se ha llegado de verdad a la meta.
 :::
 
 ::: tabla
@@ -120,9 +118,7 @@ Las diez primeras partidas de la primera tabla (variante A)
 | 9 | el letrero | 2 | 0,9922 | 0,8906 |
 | 10 | el letrero | 2 | 0,9961 | 0,9166 |
 
-Junto al letrero: el número de «derecha» en la casilla que está a la izquierda del letrero. En la salida: el número de «derecha» en la salida. Los dos, al acabar la partida.
-
-Una partida acaba al pisar la meta o el letrero, o a los 40 movimientos.
+Las dos últimas columnas son el número de «derecha» en dos casillas al acabar cada partida: la que está justo a la izquierda del letrero y la salida. Una partida acaba al pisar la meta o el letrero, o a los 40 movimientos; «nada» quiere decir que llegó a los 40 sin pisar ninguno.
 :::
 
 ::: tabla

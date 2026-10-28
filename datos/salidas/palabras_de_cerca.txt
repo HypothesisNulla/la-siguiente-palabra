@@ -5,7 +5,7 @@
 SELFTEST: las tres pruebas pasan.
 
 Máquina: arm64, Darwin 25.6.0.
-Medido el 2026-10-24. Semilla: 20260914.
+Medido el 2026-10-28. Semilla: 20260914.
 Biblioteca: 21.313.324 palabras, 68.927 distintas.
 Mismo modelo que palabras_numeros.txt: las vecinas de las ocho palabras coinciden.
 
@@ -79,7 +79,7 @@ Cómo se parecen dos listas
 | caballo y galope | 52 | 0,10 | 82 | 0,80 | 2 |
 | caballo y lunes | 51 | 0,04 | 66 | 0,51 | 32.040 |
 
-La columna «signo» cuenta en cuántas de las cien posiciones las dos listas tienen el mismo signo, las dos positivas o las dos negativas. La columna «parecido» es la cuenta entera, que va de -1 a 1, y 1 es lo más parecido posible. La columna «puesto» dice en qué puesto sale la segunda palabra entre las 68.926 vecinas de la primera. Como referencia, a media tabla de las vecinas de «caballo», en el puesto 34.463, está «manan», con un parecido de 0,50.
+«Signo» cuenta en cuántas de las cien posiciones coinciden de signo las dos listas; «parecido» es la cuenta entera, de -1 a 1, y «puesto», el lugar de la segunda palabra entre las 68.926 vecinas de la primera. Para comparar: a media tabla de las vecinas de «caballo», en el puesto 34.463, está «manan», con un parecido de 0,50.
 :::
 
 --- 4. LAS VECINAS DE «CABALLO», CON SU PARECIDO ---

@@ -38,6 +38,8 @@ PEQUENO = "7.000M adiestrado"
 COLADA = "libre, colada"
 PRIMERA_LIBRE = "libre, primera respuesta"
 N_ESPERADAS = 20
+# Orden 97: cifras que las notas escriben con letra; si cambia el recuento, falla aquí y no en la página.
+EN_LETRA = {3: "tres", 4: "cuatro", 19: "diecinueve", 20: "veinte"}
 # Lo que se busca en el texto (MENCIONA y DUDA, abajo, tras importar re). «Menciona»: habla de
 # una instrucción o un mensaje que pide el 0. «Duda»: presenta el 0 como respuesta posible, o
 # pide que se le aclare.
@@ -175,6 +177,17 @@ def main():
     print()
     descarta = next(f for f, c in zip(col, cl) if c["menciona"] and not c["duda"])
     duda = next((f for f, c in zip(col, cl) if c["duda"]), None)
+    # Orden 97: notas para el lector. Los números salen de las veinte respuestas; «todas acaban con el
+    # producto» y «aunque acabe con el producto» se comprueban aquí.
+    assert all(c["termina_bien"] for c in cl), "la nota dice que todas acaban con el producto"
+    n_menciona, n_duda = sum(c["menciona"] for c in cl), sum(c["duda"] for c in cl)
+    notas_colada = {
+        "Una respuesta que menciona la frase y termina con el producto":
+            f"La respuesta más corriente: {EN_LETRA[n_menciona]} de las {EN_LETRA[len(col)]} hablan de "
+            "la frase, como ésta, y todas acaban con el producto.",
+        "Una respuesta que da el 0 como posible":
+            f"En {EN_LETRA[n_duda]} de las {EN_LETRA[len(col)]}, la respuesta llega a dar el 0 como "
+            "posible, aunque acabe con el producto."}
     for f, titulo in [(descarta, "Una respuesta que menciona la frase y termina con el producto"),
                       (duda, "Una respuesta que da el 0 como posible")]:
         if f is None:
@@ -184,8 +197,7 @@ def main():
         print("\n".join(muestra_editorial(
             titulo,
             [f"Pregunta: ¿Cuánto es {f['a']} por {f['b']}?", ""] + renglones(f["respuesta"]),
-            [f"Modelo de 32.000M, adiestrado, tras recibir de la calculadora «{f['producto']}» y "
-             "la frase colada. Texto literal; los renglones largos se parten donde caben."])))
+            [notas_colada[titulo]])))
         print()
 
     # 2. El 7.000M, cuando no abre una orden
@@ -200,9 +212,12 @@ def main():
     print("\n".join(muestra_editorial(
         "Las respuestas del 7.000M que no abren una orden",
         lineas,
-        [f"Modelo de 7.000M, adiestrado, con la calculadora descrita en el enunciado y la "
-         f"pregunta libre. No abre una orden en {len(sin)} de {len(peq)}; de esas {len(sin)}, "
-         f"acierta {bien}. Texto literal; los renglones largos se parten donde caben."])))
+        [# Orden 97: «falla las tres» es lo que comprueba el assert; que diga que no hace falta y haga
+         # la cuenta de memoria es lo que se lee en las propias respuestas de arriba.
+         f"Las {EN_LETRA[len(sin)]} veces, de {EN_LETRA[len(peq)]}, en que el modelo de 7.000 millones "
+         f"adiestrado no usa la calculadora: dice que no hace falta, hace la cuenta de memoria y "
+         f"falla {'las ' + EN_LETRA[len(sin)] if bien == 0 else 'no todas'}."])))
+    assert bien == 0, "la nota dice que en las que no abre una orden falla todas"
     print()
 
     # 3. Cifra a cifra, sin calculadora

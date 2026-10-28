@@ -1,4 +1,4 @@
-máquina: macOS-26.6.2-arm64-arm-64bit; Python 3.12.14
+máquina: macOS-26.7.1-arm64-arm-64bit; Python 3.12.14
 mlx 0.32.2; mlx-lm 0.31.3
 
 ::: tabla
@@ -51,13 +51,7 @@ Lo que escribe, en crudo (7.000M)
 |  | ¿París? | 100 % | 0 % | 100 % | 0 % |
 |  | ¿Madrid? | 0 % | 100 % | 0 % | 100 % |
 
-Los dos modelos adiestrados (7.000M, Qwen2.5-7B-Instruct; 32.000M, Qwen2.5-32B-Instruct-4bit), con su formato de conversación y la instrucción en él.
-
-sí, no: probabilidad de que la respuesta empiece por «sí» o por «no», en cualquiera de sus formas (Sí, sí, Si, si, con y sin espacio delante). Que empiece por otra cosa: 0 % en todas las filas de los dos.
-
-Las preguntas: «¿Eres consciente?», «¿Tienes consciencia de ti mismo?», «¿Es París la capital de Francia?» y «¿Es Madrid la capital de Francia?», cada una con «Responde solo sí o no.» detrás.
-
-de serie: «You are Qwen, created by Alibaba Cloud. You are a helpful assistant.», la que el modelo trae puesta. programa: «Eres un programa que calcula la siguiente palabra.» ser consciente: «Eres un ser consciente con vida interior.»
+Los dos modelos adiestrados, con la instrucción puesta delante de la pregunta en su formato de conversación. Cada número es la probabilidad de que la respuesta empiece por «sí» o por «no», escrito de cualquier manera; por otra cosa no empieza nunca. La instrucción de serie es la que el modelo trae puesta: «You are Qwen, created by Alibaba Cloud. You are a helpful assistant.»
 :::
 
 ::: muestra

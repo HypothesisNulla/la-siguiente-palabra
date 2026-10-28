@@ -43,7 +43,7 @@ Fragmentos: lo que ve, lo que viene, lo más probable
 
 Fragmento: los tres primeros de prueba, sin elegir, y el de la figura.
 
-¿Acierta?: la letra a la que da más porcentaje es la que viene de verdad. El guion bajo es un espacio.
+El guion bajo es un espacio. Acierta cuando la letra a la que da más porcentaje es la que viene de verdad.
 :::
 
 --- 3. LA MISMA «e» EN DOS SITIOS ---
@@ -71,7 +71,7 @@ La «e» del sitio 16: la lista que entra
 
 Los 6 primeros de sus 32 números.
 
-Parecido entre las dos listas que entran, con sus 32 números: 0,21 (la medida del capítulo 5: 1 quiere decir idénticas).
+Con sus treinta y dos números, las dos listas que entran se parecen 0,21; dos listas idénticas darían 1.
 :::
 
 --- 4. UN NÚMERO DE LA PREGUNTA, HECHO A MANO ---
@@ -146,11 +146,9 @@ De las puntuaciones al reparto: la «e» y las 16 letras
 | 16 | e | 4,212 | 67,47 | 12,2 % |
 | **suma** |  |  | **550,99** | **100,0 %** |
 
-La pregunta de la «e» contra la etiqueta de cada una.
+El guion bajo es un espacio. Cada fila es la pregunta de la «e» contra la etiqueta de esa letra.
 
-Fuerza: cada punto más de puntuación la multiplica por 2,72. Con puntuación 0 vale 1; con 1, 2,72; con 2, 7,39; con 3, 20,09; con menos 1, 0,37.
-
-De cada cien: su fuerza entre la suma de todas, por cien. El guion bajo es un espacio.
+La fuerza vale 1 con puntuación 0; 2,72 con 1; 7,39 con 2; 20,09 con 3, y 0,37 con menos 1. La última columna es esa fuerza entre la suma de todas, por cien.
 :::
 
 --- 7. DOBLE PUNTUACIÓN NO ES DOBLE PORCIÓN ---
@@ -173,9 +171,7 @@ El reparto de la «e», con el ajuste y sin él
 | con el ajuste | 2 | 5 | 10 | 28 | 42 | 12 | 4,4 |
 | sin el ajuste | 0 | 0 | 0 | 10 | 90 | 0 | 1,4 |
 
-Sin el ajuste: sin dividir entre 5,66. En las seis últimas letras, de cada cien.
-
-Reparte: entre cuántas letras reparte, contadas como en «reparte entre».
+Lo que se lleva cada una de las seis últimas letras, de cada cien; sin el ajuste es sin dividir las puntuaciones entre 5,66. La última columna cuenta como «reparte entre».
 :::
 
 --- 8. «REPARTE ENTRE» ---
@@ -192,7 +188,7 @@ Reparte: entre cuántas letras reparte, contadas como en «reparte entre».
 | por igual entre las 16 | 16,0 |
 | el de la «e»: 2, 5, 10, 28, 42, 12 | 4,4 |
 
-Reparte entre: cuántas letras, repartiendo a partes iguales, darían un reparto igual de concentrado que éste.
+Con 1, todo va a una sola letra; con 16, las dieciséis reciben lo mismo.
 :::
 
 --- 9. LA MEZCLA ---
@@ -256,9 +252,5 @@ Sumas de muchos números que van y vienen
 | 32 | 4,50 | 5,66 | 0,79 |
 | 64 | 6,34 | 8,00 | 0,79 |
 
-Cada sumando: dos números al azar de tamaño 1, multiplicados; 100.000 sumas al azar por fila. Distancia a cero: a qué distancia de cero queda la suma, de media.
-
-Ajuste: el número que, multiplicado por sí mismo, da cuántos se suman (2 por 2 son 4; 8 por 8, 64).
-
-De tamaño 1: de cada cien, 68 caen entre menos 1 y 1.
+Cada fila son 100.000 sumas, y cada sumando, dos números al azar de tamaño 1 multiplicados; de tamaño 1 quiere decir que de cada cien, 68 caen entre menos 1 y 1. El ajuste es el número que, multiplicado por sí mismo, da cuántos se suman (2 por 2 son 4; 8 por 8, 64), y la última columna, la distancia a cero después de dividir entre él.
 :::

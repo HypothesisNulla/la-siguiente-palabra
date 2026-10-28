@@ -48,9 +48,7 @@ Las palabras al revés
 | pan | nap | nap | sí | apn | no |
 | mar | ram | ram | sí | aram | no |
 
-32.000M: comprimida. 7.000M: sin comprimir. Las dos, adiestradas.
-
-Escribe: la primera línea de lo que escribió. ¿Vale?: si la regla de corrección la da por buena.
+La máquina grande, comprimida, y la de 7.000 millones, sin comprimir; las dos, adiestradas. «Escribe» es la primera línea de lo que escribió cada una, y «¿vale?», si la regla de corrección la da por buena.
 :::
 
 lo que escribió después de la primera línea, entero:
@@ -78,7 +76,5 @@ Las cinco respuestas de «datos del mundo», 32.000M comprimido
 | África | Egipto está en el continente | no |
 | 8 | Una araña tiene 8 patas | no |
 
-Sin tocar. «/»: salto de línea. Se le dejan 8 trozos de respuesta.
-
-¿Vale?: si la regla de corrección la da por buena; la regla exige que la respuesta empiece por la palabra que se esperaba.
+«/» es un salto de línea. Lo que escribe, sin tocar, en los ocho trozos que se le dejan. «¿Vale?» dice si la regla de corrección la da por buena, y la regla exige que la respuesta empiece por la palabra que se esperaba.
 :::

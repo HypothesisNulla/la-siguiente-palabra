@@ -28,6 +28,8 @@ PAPELETAS_ESCALA = (100, 50, 25, 10, 5, 1, 0.1)   # la tabla del paso 1 (segunda
 CASO_A_MANO = 23.7                        # el trozo «f» del párrafo de la persona, convertido a mano
 TROZOS_VISTOS = 12                        # cuántos trozos del paso 2 se enseñan
 PARRAFO = 0                               # cuál de los ocho párrafos se hace a mano (el primero)
+# Orden 97: cifra que la nota escribe con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {12: "doce"}
 SALIDA_CSV_ROMPER = "../datos/salidas/romper_la_maquina.csv"   # las medias del capítulo
 TOL_MEDIA = 0.0015                        # la media recalculada tiene que dar la del capítulo
 TOL_CUENTA = 1e-4                         # la cuenta trozo a trozo es la del programa del capítulo
@@ -156,13 +158,12 @@ def informe(R, tok, modelo):
         "Un párrafo, trozo a trozo",
         ["una persona: trozo", "una persona: papeletas", "la máquina: trozo",
          "la máquina: papeletas"], filas, "idid",
-        ["Papeletas: de cada cien, las que la máquina daba a ese trozo justo antes de que "
-         "viniera. «_»: un espacio.",
-         f"Son los {TROZOS_VISTOS} primeros trozos de cada texto. El texto entero: la persona, "
-         f"{ids_h_largo(humano)} trozos; la máquina, {ids_h_largo(maquina)}.",
-         f"Sorpresa media del texto entero: persona {coma(media(h), 3)}; máquina "
-         f"{coma(media(m), 3)}.",
-         f"Modelo de 7.000 millones, adiestrado y sin comprimir ({R.MODELO}), a temperatura 0."])))
+        [# Orden 97: nota para el lector; el modelo (7.000 millones, adiestrado y sin comprimir, a
+         # temperatura 0) sale arriba y los trozos de cada texto, en `ids_h_largo`.
+         f"«_» es un espacio. Los {EN_LETRA[TROZOS_VISTOS]} primeros trozos de cada texto, cada uno "
+         "con las papeletas de cada cien que la máquina le daba justo antes de que viniera. La "
+         f"sorpresa media del texto entero es {coma(media(h), 3)} en el de la persona y "
+         f"{coma(media(m), 3)} en el de la máquina."])))
 
     print("\n--- 3. LA MEDIA DE LOS OCHO PÁRRAFOS ---")
     sh = sum(media(trozo_a_trozo(R, tok, modelo, a, b)) for a, b, _ in todos) / len(todos)
@@ -175,11 +176,11 @@ def informe(R, tok, modelo):
     print("\n".join(tabla_editorial(
         f"La media de los {len(todos)} párrafos",
         ["", "sorpresa media", "papeletas por trozo"], filas, "idd",
-        ["Papeletas por trozo: la sorpresa media pasada otra vez a papeletas de cada cien, con "
-         "la tabla de la sorpresa. No es la media de las papeletas.",
-         f"{len(todos)} párrafos. La persona: {R.LARGO_B} trozos en cada uno. La máquina: entre "
-         f"{min(c.shape[1] for _, _, c in todos)} y {max(c.shape[1] for _, _, c in todos)}, "
-         "porque a veces da su texto por terminado antes."])))
+        ["«Papeletas por trozo» es la sorpresa media vuelta a papeletas con la tabla de la "
+         "sorpresa, no la media de las papeletas. Los textos de la máquina son a veces más cortos, "
+         "porque da el suyo por terminado antes."])))
+    assert min(c.shape[1] for _, _, c in todos) < R.LARGO_B, (
+        "la nota dice que los textos de la máquina son a veces más cortos")
     ch, cm = medias_del_capitulo()
     # Desde el 28 de septiembre, romper_la_maquina.py también cuenta con los trozos tal cual, así
     # que las dos medias tienen que coincidir; si no, revienta.

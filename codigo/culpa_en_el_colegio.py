@@ -57,6 +57,7 @@ TOL_MANO = 1e-3                  # la cuenta a mano del error y el error medido,
 ANCHO_SALIDA = 62                # líneas de no más de 62 caracteres, fuera de las tablas
 # Cómo dicen con letra los números que las notas de las tablas escriben así (Orden 50)
 EN_LETRA = {7: "siete", 9: "nueve", 10: "diez", 13: "trece"}
+EN_ORDINAL = {9: "noveno"}   # «hasta el noveno decimal» (Orden 97)
 
 SALIDA_DATOS = "../datos/salidas/culpa_en_el_colegio_datos.csv"   # para las figuras
 EL_COLEGIO_EN_ANOS = "../datos/salidas/el_colegio_en_anos.txt"    # donde la Orden 19 dio esta red
@@ -210,12 +211,9 @@ def bloque_a(red):
             ["edad", "tendría que decir", "la red dice", "lo que falla"],
             [[str(int(e)), str(int(Y[i])), c3(dice[i]), firmado(dice[i] - Y[i], 3)]
              for i, e in enumerate(EDADES)], "iddd",
-            [f"La red se entrenó {miles(PASOS_ENTRENADO)} pasos, con los ajustes que se explican más "
-             "adelante en el capítulo: en cada paso, cada peso se mueve "
-             + ("la mitad" if POQUITO == 0.5 else f"{coma(POQUITO, 1)} veces")
-             + " de su culpa, y los pesos de arranque, puestos al azar, se dividen entre 10. La "
-             "última columna, «lo que falla», es lo que dice la red menos lo que tendría que "
-             "decir."]),
+            [f"Lo que tendría que decir es 1 para los {letra(int(sum(Y)))} de primaria y 0 para los "
+             "demás. La última columna, «lo que falla», es lo que dice la red menos lo que tendría "
+             "que decir."]),
         tabla_editorial(
             "Los pesos y los listones de la red entrenada",
             ["neurona", "la línea que viene de", "peso", "listón"],
@@ -363,10 +361,9 @@ def bloque_b(red, p):
     tabla(tabla_editorial(
         "La misma culpa, a lo bruto", ["peso", "por el atajo", "a lo bruto"],
         [[n, coma(a, 10), coma(b, 10)] for n, a, b, _, _ in filas], "idd",
-        ["«A lo bruto» quiere decir sin atajo: se sube el peso una cienmilésima y se mira el error, "
-         "se baja una cienmilésima y se mira otra vez, y la culpa es lo que va de un error a otro, "
-         "dividido entre lo que se ha movido el peso. Las dos columnas coinciden en sus "
-         f"{letra(min(juntas))} primeros decimales."]))
+        ["La columna «a lo bruto» se calcula sin atajo: se mueve el peso una cienmilésima hacia "
+         "arriba y otra hacia abajo, y se mira cuánto cambia el error. Coincide con la del atajo "
+         f"hasta el {EN_ORDINAL[min(juntas)]} decimal."]))
     for n, _, _, mas, menos in filas:
         tabla(tabla_editorial(
             f"El error, con {n} movido", ["el peso", "el error"],
@@ -499,8 +496,8 @@ def bloque_e(resultados, red_capitulo_mal):
     tabla(tabla_editorial(
         "Qué edades fallan las que siguen, y qué dicen en ellas",
         ["edades que fallan", "redes", "lo que dicen en ellas", "su error"], filas, "idd" + "d",
-        [f"Todas, después de los {miles(PASOS_EXTRA)} pasos de más. La columna «lo que dicen en "
-         "ellas» es lo que contesta la red a esas edades."]))
+        [f"Las {len(siguen)} que siguen atascadas después de los {miles(PASOS_EXTRA)} pasos de "
+         "más, agrupadas según las edades en las que fallan."]))
     # el estado en que se quedan casi todas, y el otro: cuenta a mano contra el error medido
     estados = []
     for mal, rs in sorted(grupos.items(), key=lambda t: -len(t[1])):

@@ -14,11 +14,9 @@ Las cuentas escritas paso a paso que fallan (32.000M)
 | 3226 por 7467 | 23.991.542 | 24.088.542 | bien |
 | 9946 por 7862 | 78.234.452 | 78.195.452 | bien |
 
-De las 20 cuentas de «Multiplicar escribiendo la cuenta paso a paso», las 10 que fallan.
+Las diez de las veinte cuentas que fallan.
 
-Productos parciales: el primer número por cada cifra del segundo, con sus ceros, como en la cuenta de la escuela. Bien: los cuatro están escritos en la respuesta, así que la cuenta se torció al sumar. Falta: el que no aparece en ninguna parte.
+Productos parciales: el primer número por cada cifra del segundo, con sus ceros, como en la cuenta de la escuela. «Bien» quiere decir que los cuatro están escritos y son correctos: el error llegó al sumarlos. Pasa en nueve de diez.
 
-Al sumar: 9 de 10. Antes de sumar: 1 de 10.
-
-Lo que se lleva de una columna a la siguiente, en las 20 cuentas: escrito en la suma, 0 de 20; escrito al multiplicar los parciales, 3 de 20.
+En ninguna de las veinte escribe lo que se lleva de una columna a la siguiente al sumar.
 :::

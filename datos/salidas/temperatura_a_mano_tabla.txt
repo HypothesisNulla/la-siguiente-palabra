@@ -9,9 +9,5 @@ Las 20 tiradas de cada temperatura
 | 1,3 | 9 de 20 | 0 de 20 | 20 |
 | 1,8 | 0 de 20 | 0 de 20 | 20 |
 
-Solo letras latinas: de principio a fin, todas sus letras son de nuestro alfabeto (puede haber palabras de otro idioma que lo use, como el inglés).
-
-Acaban en bucle: repiten al final la misma frase tres veces. Distintas entre sí: cuántas de las tiradas no son iguales.
-
-Modelo de 7.000 millones, adiestrado y sin comprimir, el del capítulo 12. A temperatura 0 no hay sorteo: las tiradas salen iguales.
+«Solo letras latinas»: tiradas escritas de principio a fin con nuestro alfabeto, aunque se cuele alguna palabra de otro idioma que lo use, como el inglés. «Acaban en bucle»: repiten al final la misma frase tres veces. La última columna cuenta cuántas tiradas distintas hay: a temperatura 0, como no hay sorteo, las veinte son la misma.
 :::

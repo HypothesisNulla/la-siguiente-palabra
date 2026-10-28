@@ -44,11 +44,5 @@ De cada cien pasos, ¿cuántos están abiertos?
 | El ayuntamiento anunció ayer que | 40 % | 24 % | 60 % | 39 % |
 | **las seis juntas** | **57 %** | **37 %** | **43 %** | **25 %** |
 
-Casi seguro: el trozo seleccionado tenía 90 % o más.
-
-Casi seguro sin terminar: casi seguro, y el trozo no se pega a una palabra empezada, como «ia» detrás de «Franc».
-
-Abierto: el trozo seleccionado no llegaba al 90 %.
-
-Reñido: no llegaba al 50 %; las demás candidatas juntas se llevaban más de la mitad.
+Un paso es casi seguro cuando el trozo seleccionado tenía el 90 % o más, y abierto cuando no llegaba; por eso esas dos columnas suman cien. «Casi seguro sin terminar» cuenta solo los casi seguros que no rematan una palabra empezada, como «ia» detrás de «Franc». Y reñido es un paso en el que el trozo seleccionado no llegaba ni al 50 %.
 :::

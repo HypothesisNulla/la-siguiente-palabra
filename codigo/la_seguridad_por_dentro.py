@@ -156,11 +156,11 @@ def main():
             [[adj, f"{coma(100 * p['vaso'])} %", f"{coma(100 * p['cajón'])} %",
               f"{coma(100 * sum(p.values()))} %", gan, f"{coma(100 * seg)} %"]
              for adj, (_, (p, gan, seg)) in modelos[nombre].items()], "idddid",
-            ["«vaso», «cajón»: de cada cien veces, cuántas escribiría esa palabra justo ahí, en su "
-             "lista entera de trozos posibles. Las dos: la suma; el resto va a otras palabras.",
-             seguridad,
-             "El texto acaba en «Respuesta: El» y las opciones llevan el espacio delante, como las "
-             "escribe el modelo."]) + [""]
+            [# Orden 97: nota para el lector; que el texto acabe en «Respuesta: El» y que las opciones
+             # lleven el espacio delante (como las escribe el modelo) está en `cuenta`.
+             "Las dos primeras columnas dicen, de cada cien veces, cuántas escribiría el modelo «vaso» "
+             "o «cajón» justo detrás de «Respuesta: El»; lo que falta hasta cien va a otras palabras. "
+             "La seguridad es la parte que se lleva la ganadora de lo que suman las dos."]) + [""]
     a, b = MODELOS
     L += ["--- 4. EL TAMAÑO DE LOS DOS MODELOS ---", ""] + tabla_editorial(
         "El tamaño de los dos modelos", ["el modelo", "números"],

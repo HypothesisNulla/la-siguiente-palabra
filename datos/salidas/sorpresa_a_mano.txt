@@ -1,4 +1,4 @@
-Medido el 2026-10-09 en macOS-26.6.2-arm64-arm-64bit.
+Medido el 2026-10-28 en macOS-26.7.1-arm64-arm-64bit.
 modelo: Qwen/Qwen2.5-7B-Instruct   dispositivo: mps
 
 --- 1. QUÉ ES LA SORPRESA DE UN TROZO ---
@@ -50,13 +50,7 @@ Un párrafo, trozo a trozo
 | `_y` | 74,0 | `us` | 99,8 |
 | `_modest` | 0,0 | `ias` | 99,7 |
 
-Papeletas: de cada cien, las que la máquina daba a ese trozo justo antes de que viniera. «_»: un espacio.
-
-Son los 12 primeros trozos de cada texto. El texto entero: la persona, 120 trozos; la máquina, 40.
-
-Sorpresa media del texto entero: persona 2,524; máquina 0,444.
-
-Modelo de 7.000 millones, adiestrado y sin comprimir (Qwen/Qwen2.5-7B-Instruct), a temperatura 0.
+«_» es un espacio. Los doce primeros trozos de cada texto, cada uno con las papeletas de cada cien que la máquina le daba justo antes de que viniera. La sorpresa media del texto entero es 2,524 en el de la persona y 0,444 en el de la máquina.
 :::
 
 --- 3. LA MEDIA DE LOS OCHO PÁRRAFOS ---
@@ -71,9 +65,7 @@ La media de los 8 párrafos
 | humano entre máquina | 4,1 veces |  |
 | máquina entre humano |  | 8,0 veces |
 
-Papeletas por trozo: la sorpresa media pasada otra vez a papeletas de cada cien, con la tabla de la sorpresa. No es la media de las papeletas.
-
-8 párrafos. La persona: 120 trozos en cada uno. La máquina: entre 35 y 120, porque a veces da su texto por terminado antes.
+«Papeletas por trozo» es la sorpresa media vuelta a papeletas con la tabla de la sorpresa, no la media de las papeletas. Los textos de la máquina son a veces más cortos, porque da el suyo por terminado antes.
 :::
   las medias de romper_la_maquina.py: 2,754 y 0,673; coinciden: sí
   trozos que escribió la máquina en cada párrafo: 40, 120, 120, 35, 120, 120, 120, 44

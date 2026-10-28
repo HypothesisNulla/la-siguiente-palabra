@@ -18,9 +18,7 @@ La batería del capítulo 11 con tres máquinas
 | razonar sobre una frase | 3 de 5 | 4 de 5 | 3 de 5 |
 | **en total** | **14 de 30** | **17 de 30** | **19 de 30** |
 
-Cada número: cuántas de las 5 preguntas de la tarea acierta. 7.000M, 32.000M: millones de números (nominal).
-
-Comprimido: guardado con menos detalle en cada número. Sin comprimir: tal como salió del entrenamiento. Las tres máquinas están adiestradas (capítulo 12).
+Cuántas de las cinco preguntas de cada tarea acierta cada máquina. Las tres están adiestradas; la comprimida guarda cada número con menos detalle.
 :::
 
 ::: tabla
@@ -36,8 +34,6 @@ La misma máquina en los capítulos 12 y 13
 | razonar sobre una frase | 4 de 5 | 3 de 5 | sí |
 | **en total** | **17 de 30** | **14 de 30** |  |
 
-Las dos columnas son el modelo de 7.000M adiestrado y sin comprimir, con la misma batería y la misma regla.
-
-Cap. 12: con el programa de uso general. Cap. 13: con el programa de Apple.
+Las dos columnas son la misma máquina, con las mismas preguntas y la misma regla de corrección. Solo cambia el programa que la pone en marcha: en el capítulo 12, uno de uso general; en éste, el de Apple.
 :::
 

@@ -12,9 +12,7 @@ Las palabras de los trescientos libros, por puestos
 | 10.000 | maurescamp | 172 | 7,7 |
 | 100.000 | dislacerante | 5 | 0,2 |
 
-En total, 22.236.987 palabras; distintas, 330.210.
-
-Puesto: el lugar en la lista, de la más a la menos frecuente. De cada millón: de cada millón de palabras de los libros, cuántas son ésa.
+El puesto es el lugar de cada palabra en la lista, de la que más sale a la que menos; la última columna, cuántas de cada millón de palabras de los libros son ésa. En total hay 22.236.987 palabras, y 330.210 distintas.
 
 Palabras que salen una sola vez: 143.430, 43 de cada cien de las distintas.
 :::

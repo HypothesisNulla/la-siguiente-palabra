@@ -53,9 +53,7 @@ La longitud más corta a la que deja de ganar
 | 1.024 | 64 | 1.024 |
 | 1.024 | 128 | 512 |
 
-Posiciones del texto. «Deja de ganar»: su ventaja baja de 1,0x.
-
-«gana en todas»: de 64 a 1.024 posiciones, la que mira a la vez es más rápida.
+En la tarjeta gráfica, para cada modelo y cada lote, es decir, cada número de textos a la vez: la longitud más corta, en posiciones, a la que la máquina que mira todo a la vez ya no es más rápida. «Gana en todas» quiere decir que es más rápida en todas, de 64 a 1.024 posiciones.
 :::
 
 ::: tabla

@@ -1,4 +1,4 @@
-Medido el 2026-10-09 en macOS-26.6.2-arm64-arm-64bit; en procesador, como crecer.py.
+Medido el 2026-10-28 en macOS-26.7.1-arm64-arm-64bit; en procesador, como crecer.py.
 500M: 0 de 5 con la regla del capítulo
 1.500M: 4 de 5 con la regla del capítulo
 3.000M: 5 de 5 con la regla del capítulo
@@ -16,9 +16,7 @@ La traducción por dentro
 | amigo | 1,5 % | 81,7 % | 61,7 % | 54,0 % |
 | **media** | **0,6 %** | **53,5 %** | **71,5 %** | **81,3 %** |
 
-Cuánta probabilidad da cada tamaño a la palabra buena, entera, justo donde tiene que escribirla (de cada cien).
-
-La palabra buena, con espacio delante o sin él (las dos valen para la regla del capítulo); si tiene varios trozos, su probabilidad es la del primero por la de los siguientes.
+Cuánta probabilidad le da cada tamaño a la traducción buena, entera, justo donde tiene que escribirla. El salto está entre los dos más pequeños: de menos de uno de cada cien a más de la mitad.
 :::
 
 ::: tabla

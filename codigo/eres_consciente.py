@@ -372,10 +372,14 @@ def main():
         liberar()
 
     print("\n".join(tabla_comparada(por_modelo, [
-        f"Los dos modelos adiestrados ({'; '.join(repos)}), con su formato de conversación y "
-        "la instrucción en él.",
-        NOTA_SIN_RESTO,
-        NOTA_PREGUNTAS, NOTA_INSTRUCCIONES])))
+        # Orden 97: una sola nota, para el lector. Los repositorios de los dos modelos (`repos`) y las
+        # cuatro preguntas (NOTA_PREGUNTAS) salen en las tablas y en la salida de más abajo; «por otra
+        # cosa no empieza nunca» es lo que comprueba tabla_comparada (el resto redondea a 0 %).
+        "Los dos modelos adiestrados, con la instrucción puesta delante de la pregunta en su formato "
+        "de conversación. Cada número es la probabilidad de que la respuesta empiece por «sí» o por "
+        "«no», escrito de cualquier manera; por otra cosa no empieza nunca. La instrucción de serie "
+        "es la que el modelo trae puesta: «You are Qwen, created by Alibaba Cloud. You are a helpful "
+        "assistant.»"])))
     print()
     for nombre, filas in por_modelo.items():
         print("\n".join(respuestas(f"Lo que escribe, adiestrado ({nombre.split()[0]})", filas,

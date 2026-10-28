@@ -1,4 +1,4 @@
-Medido el 2026-10-09 en macOS-26.6.2-arm64-arm-64bit; generación determinista (do_sample=False) en procesador, como crecer.py.
+Medido el 2026-10-28 en macOS-26.7.1-arm64-arm-64bit; generación determinista (do_sample=False) en procesador, como crecer.py.
 Las respuestas reproducen crecer.csv en los cuatro tamaños.
 
 --- 1. LA TABLA DEL CAPÍTULO, EN PREGUNTAS ---
@@ -16,9 +16,7 @@ La batería, en los cuatro tamaños
 | razonar sobre una frase | 1 de 5 | 2 de 5 | 3 de 5 | 3 de 5 |
 | **en total** | **4 de 30** | **14 de 30** | **19 de 30** | **19 de 30** |
 
-Cada número: cuántas de las 5 preguntas de la tarea acierta. Acierta si lo primero que escribe es la respuesta correcta.
-
-500M quiere decir 500 millones de números (pesos): es el nombre redondo con que se publicó cada modelo.
+Cuántas de las cinco preguntas de cada tarea acierta cada tamaño. 500M quiere decir quinientos millones de números, sus pesos: es la cifra redonda con que se publicó el modelo.
 :::
 
 ::: tabla
@@ -54,7 +52,7 @@ Lo que contesta cada tamaño a esa pregunta de «sumar dos cifras»
 | 3.000M | «77» | acierta |
 | 7.000M | «77» | acierta |
 
-Lo que escribe: el primer renglón; es lo único que mira la regla. Acierta si lo primero que escribe es la respuesta correcta.
+De cada respuesta va el primer renglón, que es lo único que mira la regla.
 :::
 
 ::: muestra
@@ -77,7 +75,7 @@ Lo que contesta cada tamaño a esa pregunta de «plurales»
 | 3.000M | «mesas» | acierta |
 | 7.000M | «mesas» | acierta |
 
-Lo que escribe: el primer renglón; es lo único que mira la regla. Acierta si lo primero que escribe es la respuesta correcta.
+De cada respuesta va el primer renglón, que es lo único que mira la regla.
 :::
 
 ::: muestra
@@ -100,7 +98,7 @@ Lo que contesta cada tamaño a esa pregunta de «traducir del inglés»
 | 3.000M | «agua» | acierta |
 | 7.000M | «agua» | acierta |
 
-Lo que escribe: el primer renglón; es lo único que mira la regla. Acierta si lo primero que escribe es la respuesta correcta.
+De cada respuesta va el primer renglón, que es lo único que mira la regla.
 :::
 
 ::: muestra
@@ -122,7 +120,7 @@ Lo que contesta cada tamaño a esa pregunta de «datos del mundo»
 | 3.000M | «1. ¿Cuál es la capital» | falla |
 | 7.000M | «Lisboa» | acierta |
 
-Lo que escribe: el primer renglón; es lo único que mira la regla. Acierta si lo primero que escribe es la respuesta correcta.
+De cada respuesta va el primer renglón, que es lo único que mira la regla.
 :::
 
 ::: muestra
@@ -145,7 +143,7 @@ Lo que contesta cada tamaño a esa pregunta de «seguir un patrón inventado»
 | 3.000M | «ibrlo» | falla |
 | 7.000M | «abro» | falla |
 
-Lo que escribe: el primer renglón; es lo único que mira la regla. Acierta si lo primero que escribe es la respuesta correcta.
+De cada respuesta va el primer renglón, que es lo único que mira la regla.
 :::
 
 ::: muestra
@@ -169,7 +167,7 @@ Lo que contesta cada tamaño a esa pregunta de «razonar sobre una frase»
 | 3.000M | «vaso» | acierta |
 | 7.000M | «vaso» | acierta |
 
-Lo que escribe: el primer renglón; es lo único que mira la regla. Acierta si lo primero que escribe es la respuesta correcta.
+De cada respuesta va el primer renglón, que es lo único que mira la regla.
 :::
 
 --- 3. CÓMO LE LLEGA EL PATRÓN INVENTADO ---
@@ -181,7 +179,7 @@ El primer enunciado del patrón inventado, en trozos
     mes|a|_->|_a|sem
     lib|ro|_->|_
 
-«|» separa dos trozos; «_», un espacio. Cada renglón acaba en un trozo más, el salto de línea.
+«_» es un espacio, y «|», el corte entre dos trozos. Cada renglón acaba además en un trozo que no se ve: el salto de línea.
 :::
 
 ::: tabla
@@ -194,9 +192,7 @@ Las palabras y sus vueltas, en trozos
 | libro | `lib\|ro` | orbil | `orb\|il` |
 | sol | `sol` | los | `los` |
 
-«|» separa dos trozos.
-
-«asem» con el espacio de delante, como va en el enunciado, se parte de otra manera: _a|sem.
+«|» marca el corte entre dos trozos. En el enunciado, «asem» va con un espacio delante, y así se parte de otra manera: _a|sem.
 :::
 
 ::: tabla
@@ -209,7 +205,7 @@ Lo que contesta cada tamaño a «libro ->»
 | 3.000M | «ibrlo» |
 | 7.000M | «abro» |
 
-Lo que debía escribir: «orbil». Lo que escribe: el primer renglón.
+Lo que debía escribir es «orbil». Ninguno lo escribe.
 :::
 
 --- 4. LAS MISMAS RESPUESTAS, CORREGIDAS POR LETRAS ---
@@ -243,7 +239,7 @@ Las listas de la segunda estación
 | 3.000M | 3.085.938.688 | 311.164.928 | 10,1 % | [barra:10.1] |
 | 7.000M | 7.615.616.512 | 544.997.376 | 7,2 % | [barra:7.2] |
 
-La segunda estación del capítulo 7 cambia cada trozo por su lista de números. En las listas: cuántos números suman todas esas listas. Parte: qué parte son de todos los números de la máquina.
+Cuántos de los números de cada máquina están en las listas de los trozos, las que consulta al entrar el texto, y qué parte son del total.
 :::
 
 

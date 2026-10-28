@@ -15,7 +15,7 @@ La frase del «alto», en los trozos en que la parte el modelo
 |--:|:--|
 | 17 | `El\|v\|aso\|no\|cab\|ía\|en\|el\|c\|aj\|ón\|porque\|era\|demasi\|ado\|alto\|.` |
 
-Pregunta el último trozo, como en reparto_una_a_una.py. “|” separa dos trozos.
+“|” separa dos trozos. El que pregunta es el último, el punto.
 :::
 
 --- 1. LO QUE PONE «El» EN LA MEZCLA ---
@@ -38,9 +38,7 @@ Lo que pone «El» en la mezcla
 | «caro» | últimas | «El» | 60,8 % | 0,343 | 34,5 % |
 |  |  | las demás palabras | 39,2 % | 0,790 | 65,5 % |
 
-Porción: la parte del reparto que se lleva, de cada cien. Tamaño: de media, cuánto se aleja de cero cada uno de los 64 números de su contenido. Parte de la mezcla: su contenido por su porción, frente a lo mismo de todas las palabras juntas, de cada cien.
-
-Todas: las 336 miradas; últimas: las 112 de las 8 últimas capas. El tamaño de «las demás» es la media de una palabra; su porción y su parte, la suma de todas.
+Porción y parte de la mezcla, de cada cien. En «las demás palabras», el tamaño es el de una palabra media, y la porción y la parte, las de todas juntas. «Todas» son las 336 miradas; «últimas», las 112 de las 8 últimas capas.
 :::
 
 --- 2. EL REPARTO DEL FINAL DE LA FRASE, PALABRA A PALABRA ---
@@ -57,9 +55,7 @@ El reparto del final de la frase, palabra a palabra
 | caro | todas | 53,3 % | 3,6 % | 2,5 % | 25,3 % |
 | caro | últimas | 60,8 % | 1,1 % | 0,6 % | 26,2 % |
 
-Lo que va a los trozos de una palabra se suma: «v» y «aso» cuentan como «vaso». El final: los dos últimos trozos juntos, el adjetivo y el punto: lo que se queda el final de la frase. «El» es la primera palabra: la papelera.
-
-Todas: las 336 miradas; últimas: las 112 de las 8 últimas capas.
+Lo que va a los trozos de una palabra se suma, y «el final» son los dos últimos trozos juntos, el adjetivo y el punto. «Todas» son las 336 miradas del modelo; «últimas», las 112 de sus 8 últimas capas.
 
 Lo mismo que reparto_una_a_una.py, con la última columna rotulada por lo que es.
 :::

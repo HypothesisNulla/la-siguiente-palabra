@@ -266,11 +266,13 @@ def imprimir(medidas, medido, n_total):
         "Cada turno, en veces el coste de «solo añadir»",
         ["condición", "trozos", f"{ra}: cuentas", f"{ra}: reloj", f"{rb}: cuentas", f"{rb}: reloj"],
         filas, "iddddd",
-        [f"Un texto de {miles(n_total)} trozos.",
-         "Trozos: los que se vuelven a calcular en ese turno. Cuentas: multiplicaciones del turno "
-         "entre las de «solo añadir». Reloj: mediana del tiempo medido entre la de «solo añadir» (de "
-         "editar_contexto.csv; depende de la máquina).",
-         f"Todo desde cero: los {miles(n_total)} trozos, sin nada ya calculado.", leyenda]) + [""]
+        [# Orden 97: nota para el lector. La mediana del reloj y el csv de donde sale se dicen arriba
+         # (esta salida) y en editar_contexto.py; la leyenda de los modelos queda en las otras tablas.
+         f"Un texto de {miles(n_total)} trozos. «Trozos» son los que hay que volver a calcular en ese "
+         "turno; «cuentas» y «reloj», las multiplicaciones y el tiempo del turno, en veces los de "
+         "«solo añadir». «Todo desde cero» es sin nada ya calculado.",
+         f"El de {rb[:-1]} millones va comprimido, con sus números redondeados para que quepa en el "
+         "portátil: eso cambia el reloj, no las cuentas."]) + [""]
 
     filas = []
     for nombre in (a, b):

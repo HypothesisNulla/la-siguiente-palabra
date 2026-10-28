@@ -1,5 +1,5 @@
 máquina: arm64, Darwin 25.6.0, procesador
-modelo: Qwen/Qwen2.5-0.5B en float32   fecha: 2026-10-09
+modelo: Qwen/Qwen2.5-0.5B en float32   fecha: 2026-10-28
 la palabra que pregunta es el adjetivo final de cada frase
 
 ::: tabla
@@ -80,9 +80,7 @@ En 4 de ellas, el sujeto no es el primer sustantivo.
 | 6 | caja | armario | dentro | no |
 | 7 | libro | mesa | sobre | no |
 
-La mirada de la capa 13, número 10: la que más se fija en «vaso» en la frase del vaso.
-
-Frases donde el sujeto no es el primer sustantivo: 4. De ésas, en las que se fija en el sujeto: 0.
+Es la mirada número 10 de la capa 13, la que más se fija en «vaso» en la frase del vaso. En las cuatro frases en que el sujeto no es el primer sustantivo, no se fija en él ni una vez.
 :::
 
 ::: tabla

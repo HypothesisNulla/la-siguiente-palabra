@@ -21,11 +21,7 @@ La ley de 2020: cuánto baja el error al crecer
 | 100.000 | 42 | [barra:41.7] |
 | 1.000.000 | 35 | [barra:35.0] |
 
-Lo mal que lo hace: el del primero vale 100.
-
-Doblar: de 100 a 94,9; se le quita un 5 %. Por diez: de 100 a 83,9; se le quita un 16 %.
-
-Lo que midieron en tamaño: de 768 números a 1.500 millones, 1.953.125 veces más; en ese tramo, de 100 a 33,3. En cálculo, el tramo medido es de 100.000.000 de veces.
+Lo mal que lo hace cada tamaño, contando como 100 lo del primero. Al doblar el tamaño, el error pierde un 5 %; al multiplicarlo por diez, un 16 %.
 :::
 
 --- 2. LA RECETA DE 2022: TAMAÑO Y TEXTO ---
@@ -38,9 +34,5 @@ La receta de 2022: tamaño y texto
 | 280.000M | 280.000 millones | 300.000 millones | 1,1 |
 | 70.000M | 70.000 millones | 1,4 billones | 20,0 |
 
-El de 70.000M tiene 4 veces menos números que el de 280.000M, y leyó 4,7 veces más texto.
-
-Lo que cuesta entrenar va como números por texto leído: una cuarta parte por 4,7 veces da 1,17, más o menos lo mismo (el artículo dice que gastaron el mismo cálculo).
-
-Billones, en castellano: millones de millones. M: millones de números.
+El de 70.000 millones tiene cuatro veces menos números que el de 280.000 millones y leyó casi cinco veces más texto. Como lo que cuesta entrenar crece con las dos cosas a la vez, a los dos les costó más o menos lo mismo. Un billón, en castellano, es un millón de millones.
 :::

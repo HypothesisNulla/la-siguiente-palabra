@@ -123,11 +123,15 @@ def elegida(t, veredictos):
 
 
 NOTA_REGLA = "Acierta si lo primero que escribe es la respuesta correcta."
+# Orden 97: cifras que las notas escriben con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {5: "cinco", 500: "quinientos"}
 
 
 def bloque_tabla(usados, resp, cuentas):
     etiquetas = [ETIQUETA_TAMANO[m] for m in usados]
     filas, totales, n_total = [], {m: 0 for m in usados}, 0
+    preguntas = len(next(iter(TAREAS.values())))
+    assert all(len(items) == preguntas for items in TAREAS.values()), "la nota dice «cinco preguntas de cada tarea»"
     for t, items in TAREAS.items():
         fila = [t]
         for m in usados:
@@ -141,9 +145,10 @@ def bloque_tabla(usados, resp, cuentas):
     out += tabla_editorial(
         "La batería, en los cuatro tamaños", ["tarea"] + etiquetas, filas,
         "i" + "d" * len(etiquetas),
-        ["Cada número: cuántas de las 5 preguntas de la tarea acierta. " + NOTA_REGLA,
-         f"{etiquetas[0]} quiere decir {etiquetas[0][:-1]} millones de números (pesos): es el "
-         "nombre redondo con que se publicó cada modelo."])
+        [# Orden 97: nota para el lector. La regla de acierto (NOTA_REGLA) está en `acierta`.
+         f"Cuántas de las {EN_LETRA[preguntas]} preguntas de cada tarea acierta cada tamaño. "
+         f"{etiquetas[0]} quiere decir {EN_LETRA[int(etiquetas[0][:-1])]} millones de números, sus "
+         "pesos: es la cifra redonda con que se publicó el modelo."])
     out += [""] + tabla_editorial(
         "Cuántos números tiene cada modelo", ["modelo", "números (pesos)"],
         [[ETIQUETA_TAMANO[m], miles(cuentas[m][0])] for m in usados], "dd",
@@ -166,7 +171,7 @@ def bloque_ejemplos(usados, resp):
         out += [""] + tabla_editorial(
             f"Lo que contesta cada tamaño a esa pregunta de «{t}»",
             ["tamaño", "lo que escribe", "la regla"], filas, "dic",
-            ["Lo que escribe: el primer renglón; es lo único que mira la regla. " + NOTA_REGLA])
+            ["De cada respuesta va el primer renglón, que es lo único que mira la regla."])
     return out
 
 
@@ -186,8 +191,8 @@ def bloque_troceado(tok, usados, resp):
     renglones.append("|".join(visible(y) for y in renglon))
     out += muestra_editorial(
         "El primer enunciado del patrón inventado, en trozos", renglones,
-        ["«|» separa dos trozos; «_», un espacio. Cada renglón acaba en un trozo más, el salto "
-         "de línea."])
+        ["«_» es un espacio, y «|», el corte entre dos trozos. Cada renglón acaba además en un "
+         "trozo que no se ve: el salto de línea."])
     filas = []
     for pal, rev in [("casa", "asac"), ("mesa", "asem")] + \
             [(pp.split("\n")[-1].split(" ")[0], ee) for pp, ee in items
@@ -195,15 +200,15 @@ def bloque_troceado(tok, usados, resp):
         assert pal[::-1] == rev, f"se esperaba que «{rev}» fuera «{pal}» al revés"
         filas.append([pal, trozo("|".join(trozos(tok, pal))), rev,
                       trozo("|".join(trozos(tok, rev)))])
-    notas = ["«|» separa dos trozos."]
+    notas = ["«|» marca el corte entre dos trozos."]
     # En el enunciado, lo que va detrás de «->» lleva un espacio delante, y el espacio cambia el
     # troceado: «asem» sola es «as|em», y « asem» es «_a|sem». Se dice, para que el lector no vea
     # dos troceados de la misma palabra sin saber por qué.
     for rev in ("asac", "asem"):
         solo, con = trozos(tok, rev), trozos(tok, " " + rev)
         if [visible(x) for x in con] != ["_" + solo[0]] + solo[1:]:
-            notas.append(f"«{rev}» con el espacio de delante, como va en el enunciado, se parte "
-                         f"de otra manera: {'|'.join(visible(x) for x in con)}.")
+            notas[0] += (f" En el enunciado, «{rev}» va con un espacio delante, y así se parte de "
+                         f"otra manera: {'|'.join(visible(x) for x in con)}.")
     out += [""] + tabla_editorial(
         "Las palabras y sus vueltas, en trozos",
         ["palabra", "en trozos", "al revés", "en trozos"], filas, "iiii", notas)
@@ -212,7 +217,10 @@ def bloque_troceado(tok, usados, resp):
         f"Lo que contesta cada tamaño a «{pregunta}»", ["tamaño", "lo que escribe"],
         [[ETIQUETA_TAMANO[m], f"«{recorte(primera_linea(resp[m][TAREA_PATRON][0]).strip())}»"]
          for m in usados], "di",
-        [f"Lo que debía escribir: «{e}». Lo que escribe: el primer renglón."])
+        [f"Lo que debía escribir es «{e}». "
+         + ("Ninguno lo escribe." if not any(acierta(resp[m][TAREA_PATRON][0], e) for m in usados)
+            else "Lo escribe " + ", ".join(ETIQUETA_TAMANO[m] for m in usados
+                                           if acierta(resp[m][TAREA_PATRON][0], e)) + ".")])
     return out
 
 
@@ -240,9 +248,8 @@ def bloque_primera_estacion(usados, cuentas):
     return ["--- 5. LAS LISTAS DE LA SEGUNDA ESTACIÓN ---", ""] + tabla_editorial(
         "Las listas de la segunda estación",
         ["tamaño", "números en total", "en las listas", "parte", ""], filas, "ddddi",
-        ["La segunda estación del capítulo 7 cambia cada trozo por su lista de números. En las "
-         "listas: cuántos números suman todas esas listas. Parte: qué parte son de todos los "
-         "números de la máquina."])
+        ["Cuántos de los números de cada máquina están en las listas de los trozos, las que "
+         "consulta al entrar el texto, y qué parte son del total."])
 
 
 def selftest():

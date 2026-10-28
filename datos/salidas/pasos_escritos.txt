@@ -1,4 +1,4 @@
-máquina: macOS-26.6.2-arm64-arm-64bit; Python 3.12.14
+máquina: macOS-26.7.1-arm64-arm-64bit; Python 3.12.14
 mlx 0.32.2; mlx-lm 0.31.3
 
 ::: tabla
@@ -10,13 +10,9 @@ Multiplicar escribiendo la cuenta paso a paso (32.000M)
 | terminan con «Resultado:» | 20 |
 | se cortan sin terminar | 0 |
 
-Modelo de 32.000M, adiestrado y comprimido, sin herramienta. Las mismas 20 multiplicaciones de dos números de cuatro cifras que en «Multiplicar con y sin calculadora».
+El modelo grande, sin calculadora, con las mismas veinte multiplicaciones, pidiéndole que escriba la cuenta paso a paso y acabe con «Resultado:» y el número.
 
-La pregunta: «¿Cuánto es 1234 por 5678? Escribe la cuenta paso a paso y termina con una línea «Resultado: » y el número.»
-
-Largo de las respuestas: mediana de 277 trozos; la más corta, 161; la más larga, 771 (límite, 900).
-
-Acierto: el número que sigue al último «Resultado:» (o, si no lo hay, el último número) es el producto exacto. Cada respuesta, cogiendo siempre el trozo más probable.
+Acierta: el número de detrás de «Resultado:» es el producto exacto.
 :::
 
 ::: muestra
@@ -72,6 +68,6 @@ Una cuenta escrita paso a paso que falla
     
     Resultado: 32470340
 
-Modelo de 32.000M, adiestrado, sin herramienta. Producto exacto: 32472340; leído: 32470340. Texto literal; los renglones largos se parten donde caben.
+Los cuatro productos parciales están bien; el error está en la suma final: 32.470.340 en lugar de 32.472.340.
 :::
 

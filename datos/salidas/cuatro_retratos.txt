@@ -47,9 +47,7 @@ El trío «ten», dentro de cinco palabras
 | atención | ate, **ten**, enc, nci, ció, ión |
 | contento | con, ont, nte, **ten**, ent, nto |
 
-Los tríos de letras de una palabra: se toman tres letras seguidas, se corre una letra, y otra vez.
-
-En negrita, el trío «ten».
+Cada palabra, partida en tríos: tres letras seguidas, corriendo una letra cada vez. En negrita, «ten», que sale en las cinco.
 :::
 
 --- 4. LO QUE SE ENCUENTRA EN UN PASO, DE MEDIA ---

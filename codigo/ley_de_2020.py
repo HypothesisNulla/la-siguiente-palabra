@@ -52,6 +52,9 @@ import sys
 
 from formato import barra, coma, miles, tabla_editorial
 
+# Orden 97: cifras que la nota escribe con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {4: "cuatro", 5: "cinco"}
+
 
 def queda(veces, exponente=EXPONENTE):
     """Lo mal que lo hace un modelo `veces` más grande, si el primero hace 100."""
@@ -73,30 +76,30 @@ def bloque_ley():
     return tabla_editorial(
         "La ley de 2020: cuánto baja el error al crecer",
         ["tamaño, en veces el primero", "lo mal que lo hace", ""], filas, "ddi",
-        ["Lo mal que lo hace: el del primero vale 100.",
-         f"Doblar: de 100 a {coma(queda(2), 1)}; se le quita un {coma(100 - queda(2), 0)} %. Por "
-         f"diez: de 100 a {coma(queda(10), 1)}; se le quita un {coma(100 - queda(10), 0)} %.",
-         f"Lo que midieron en tamaño: de {miles(MEDIDO_MENOR)} números a "
-         f"{miles(MEDIDO_MAYOR // 10 ** 6)} millones, {miles(tramo)} veces más; en ese tramo, de "
-         f"100 a {coma(queda(tramo), 1)}. En cálculo, el tramo medido es de "
-         f"{miles(10 ** ORDENES_CALCULO)} de veces."])
+        [# Orden 97: nota para el lector; el tramo que midieron (de 768 números a 1.500 millones) ya no
+         # va aquí, está en MEDIDO_MENOR y MEDIDO_MAYOR.
+         "Lo mal que lo hace cada tamaño, contando como 100 lo del primero. Al doblar el tamaño, el "
+         f"error pierde un {coma(100 - queda(2), 0)} %; al multiplicarlo por diez, un "
+         f"{coma(100 - queda(10), 0)} %."])
 
 
 def bloque_2022():
     (g, ng, tg), (c, nc, tc) = MODELOS_2022
     coste = (nc * tc) / (ng * tg)
+    assert 0.8 < coste < 1.25, "la nota dice que a los dos les costó más o menos lo mismo"
+    assert 4.5 <= tc / tg < 5, "la nota dice «casi cinco veces más texto»"
     filas = [[n, en_palabras(num), en_palabras(texto), coma(texto / num, 1)]
              for n, num, texto in MODELOS_2022]
     print("--- 2. LA RECETA DE 2022: TAMAÑO Y TEXTO ---\n")
     return tabla_editorial(
         "La receta de 2022: tamaño y texto",
         ["modelo", "números", "trozos de texto leídos", "trozos por número"], filas, "iddd",
-        [f"El de {c} tiene {coma(ng / nc, 0)} veces menos números que el de {g}, y leyó "
-         f"{coma(tc / tg, 1)} veces más texto.",
-         f"Lo que cuesta entrenar va como números por texto leído: una cuarta parte por "
-         f"{coma(tc / tg, 1)} veces da {coma(coste, 2)}, más o menos lo mismo (el artículo dice "
-         "que gastaron el mismo cálculo).",
-         "Billones, en castellano: millones de millones. M: millones de números."])
+        [# Orden 97: nota para el lector. La nota dice «cuatro veces menos», «casi cinco veces más» y que
+         # a los dos les costó más o menos lo mismo; las tres cosas se comprueban aquí con los números.
+         f"El de {en_palabras(nc)} tiene {EN_LETRA[round(ng / nc)]} veces menos números que el de "
+         f"{en_palabras(ng)} y leyó casi {EN_LETRA[round(tc / tg)]} veces más texto. Como lo que "
+         "cuesta entrenar crece con las dos cosas a la vez, a los dos les costó más o menos lo "
+         "mismo. Un billón, en castellano, es un millón de millones."])
 
 
 def selftest():

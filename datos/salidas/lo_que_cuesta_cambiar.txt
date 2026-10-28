@@ -49,13 +49,9 @@ Cada turno, en veces el coste de «solo añadir»
 | cambio al 95 % | 875 | 1,7 | 1,7 | 1,7 | 1,6 |
 | todo desde cero | 8.000 | 14,5 | 12,4 | 14,9 | 13,4 |
 
-Un texto de 8.000 trozos.
+Un texto de 8.000 trozos. «Trozos» son los que hay que volver a calcular en ese turno; «cuentas» y «reloj», las multiplicaciones y el tiempo del turno, en veces los de «solo añadir». «Todo desde cero» es sin nada ya calculado.
 
-Trozos: los que se vuelven a calcular en ese turno. Cuentas: multiplicaciones del turno entre las de «solo añadir». Reloj: mediana del tiempo medido entre la de «solo añadir» (de editar_contexto.csv; depende de la máquina).
-
-Todo desde cero: los 8.000 trozos, sin nada ya calculado.
-
-7.000M, 32.000M: millones de números de cada modelo. El de 32.000M va comprimido, con sus números redondeados para que quepa en el portátil: eso cambia el reloj, no las cuentas.
+El de 32.000 millones va comprimido, con sus números redondeados para que quepa en el portátil: eso cambia el reloj, no las cuentas.
 :::
 
 ::: tabla

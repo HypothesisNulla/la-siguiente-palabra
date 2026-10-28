@@ -66,13 +66,14 @@ def bloque(usados, res):
         filas.append([e] + [pct(res[m][k][1], 1) for m in usados])
     medias = [sum(r[1] for r in res[m]) / len(res[m]) for m in usados]
     filas.append(["**media**"] + [f"**{pct(v, 1)}**" for v in medias])
+    assert medias[0] < 0.01 and medias[1] > 0.5, "la nota dice «de menos de uno de cada cien a más de la mitad»"
     t1 = tabla_editorial(
         "La traducción por dentro", ["palabra"] + et, filas, "i" + "d" * len(et),
-        ["Cuánta probabilidad da cada tamaño a la palabra buena, entera, justo donde tiene que "
-         "escribirla (de cada cien).",
-         "La palabra buena, con espacio delante o sin él (las dos valen para la regla del "
-         "capítulo); si tiene varios trozos, su probabilidad es la del primero por la de los "
-         "siguientes."])
+        [# Orden 97: nota para el lector. Que la palabra buena valga con espacio delante o sin él, y que
+         # su probabilidad sea la del primer trozo por la de los siguientes, está en `medir`.
+         "Cuánta probabilidad le da cada tamaño a la traducción buena, entera, justo donde tiene que "
+         "escribirla. El salto está entre los dos más pequeños: de menos de uno de cada cien a más "
+         "de la mitad."])
     filas = []
     for k, (p, e) in enumerate(TAREAS[TAREA]):
         for j, m in enumerate(usados):

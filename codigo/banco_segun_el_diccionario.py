@@ -106,17 +106,15 @@ def informe(tiradas):
         ["sentido", "palabra"] + [f"tirada: {k + 1}" for k in range(len(tiradas))], filas,
         "ii" + "d" * len(tiradas),
         [f"Cada número es el puesto de esa palabra entre las {miles(n)} vecinas de «{PALABRA}»: el 1 "
-         "es la más parecida. La mediana de un grupo es el puesto del medio cuando se ordenan los de "
-         "sus palabras: la mitad sale en ese puesto o más arriba. La última fila es el puesto del "
-         "medio de toda la tabla, el que saca una palabra cualquiera.",
-         # Orden 56: la fuente de los dos grupos y la comprobación de que están en el modelo, que
-         # la nota de la Orden 55 había dejado fuera.
+         "es la más parecida. Las dos filas de la mediana dan el puesto del medio de cada grupo, y "
+         "la última, el que saca una palabra cualquiera.",
+         # Orden 97: la nota ya no lleva la dirección ni la fecha de consulta del diccionario (están
+         # en FUENTE y CONSULTADO, y en la bibliografía del capítulo 16), ni dice que las palabras
+         # están en el modelo. Si alguna faltara, la nota lo diría, como antes.
          f"Las palabras de cada grupo son los sustantivos de las definiciones de «{PALABRA}» en el "
-         f"Diccionario de la lengua española ({FUENTE}, consultado el {fecha_larga(CONSULTADO)}): "
-         "las acepciones 1 y 2, el asiento y la mesa de carpintero, para el mueble, y la 5, la "
-         "empresa de operaciones financieras, para el dinero. "
-         + ("Todas están en el modelo." if not fuera else
-            f"Faltan en el modelo: {', '.join(fuera)}.")])
+         "Diccionario de la lengua española: las acepciones 1 y 2, el asiento y la mesa de "
+         "carpintero, para el mueble, y la 5, la empresa de operaciones financieras, para el dinero."
+         + (f" Faltan en el modelo: {', '.join(fuera)}." if fuera else "")])
     vecinas = tabla_editorial(
         f"Las {VECINAS} vecinas de «{PALABRA}» en cada tirada",
         ["tirada", f"las {VECINAS} más parecidas"],

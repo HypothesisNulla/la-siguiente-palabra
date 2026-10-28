@@ -204,7 +204,5 @@ Racha y copiado de cada muestra
 | 199 | después de este | 6 | 0,0 % |
 | 200 | que no está | 8 | 17,8 % |
 
-La racha es la más larga de cada muestra, en palabras.
-
-El copiado es la parte de la muestra que cae dentro de rachas de 7 palabras o más: una más que la más larga de la máquina de contar con una palabra.
+La racha es la más larga de cada muestra, en palabras; el copiado, la parte de sus 45 palabras que cae dentro de rachas de siete o más.
 :::

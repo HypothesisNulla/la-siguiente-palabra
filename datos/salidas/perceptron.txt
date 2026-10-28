@@ -11,11 +11,7 @@ Dos dígitos, con la regla de Rosenblatt
 | distinguir un 3 de un 5 | 255 | 100 % | 41 |
 | distinguir un 4 de un 9 | 252 | 98 % | 37 |
 
-Ejemplos: dibujos que se le enseñaron para aprender.
-
-Acierto: sobre dibujos que no vio mientras aprendía.
-
-Correcciones: cuántas veces hubo que retocarle los pesos.
+Cada fila es una prueba distinta. Los ejemplos son los dibujos con los que aprendió; el acierto se mide sobre otros que no vio mientras aprendía, y las correcciones son las veces que hubo que retocarle los pesos.
 
 Deja de corregirse solo en 4 de las 4 tareas.
 :::

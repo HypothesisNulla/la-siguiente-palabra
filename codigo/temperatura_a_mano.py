@@ -27,6 +27,8 @@ Uso (en el Mac: la parte 2 necesita la tarjeta gráfica):
 TEMPERATURAS = (0.0, 1.0, 1.3, 1.8)      # las cuatro de los relatos del capítulo 13
 CANDIDATOS = (" la", " una", " un")      # los tres primeros de la urna del capítulo 7
 PAPELETAS = 100
+# Orden 97: cifra que la nota escribe con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {20: "veinte"}
 URNA_CAP7 = "../datos/maquina_entera.csv"   # la urna que imprime el capítulo 7
 TOL_URNA = 0.0005                        # la urna a temperatura 1 es la del capítulo 7
 SALIDA_CSV = "../datos/salidas/temperatura_a_mano.csv"
@@ -130,20 +132,24 @@ def parte_urna(filas):
     print(f"--- 1. EL SORTEO DEL CAPÍTULO 7 A CUATRO TEMPERATURAS ---")
     print(f"modelo: {modelo} (el del capítulo 7)")
     tabla = []
+    otros = []
     for t in TEMPERATURAS:
         r = reparto(logits, pos, t)
+        otros.append(r[3])
         e = en_papeletas(r)
         tabla.append([coma(t, 1)] + [coma(100 * x, 1) for x in r[:3]] + [coma(100 * r[3], 1),
                                                                          barra(r[3])])
         filas.append(["urna", f"{t:.1f}"] + [f"{x:.6f}" for x in r] + [str(x) for x in e])
+    assert otros == sorted(otros) and otros[-1] > 0.5, (
+        "la nota dice que al subir la temperatura «otros» se lo va quedando casi todo")
     print()
     print("\n".join(tabla_editorial(
         f"Las papeletas de «{frase}» a cuatro temperaturas",
         ["temperatura", "«la»", "«una»", "«un»", "otros", ""], tabla, "cddddi",
-        ["Papeletas de cada cien que lleva cada trozo. Otros: todos los demás trozos posibles "
-         "juntos; la barra es su parte.",
-         f"Modelo de 500 millones, sin adiestrar ({modelo}), el del capítulo 7. A temperatura 0 "
-         "no hay sorteo: gana siempre el favorito."])))
+        [# Orden 97: nota para el lector; el modelo (Qwen/Qwen2.5-0.5B, el del capítulo 7) sale arriba.
+         "Papeletas de cada cien para cada trozo. «Otros» son todos los demás trozos juntos, y la "
+         "barra, su parte: al subir la temperatura se lo van quedando casi todo. A temperatura 0 no "
+         "hay sorteo: gana siempre el favorito."])))
     print("\nlas mismas, redondeadas a papeletas enteras (para la figura):")
     for t in TEMPERATURAS:
         e = en_papeletas(reparto(logits, pos, t))
@@ -197,17 +203,18 @@ def tabla_de_tiradas(resumen, n):
     «se quedan en el castellano», que es más de lo que se mide; se cambió el 28 de septiembre)."""
     filas = [[coma(t, 1), f"{dentro} de {n}", f"{bucle} de {n}", str(distintas)]
              for t, dentro, bucle, distintas, _ in resumen]
+    assert resumen[0][0] == 0.0 and resumen[0][3] == 1, "la nota dice que a temperatura 0 las tiradas son la misma"
     print()
     print("\n".join(tabla_editorial(
         f"Las {n} tiradas de cada temperatura",
         ["temperatura", "solo letras latinas", "acaban en bucle", "distintas entre sí"], filas,
         "cddd",
-        ["Solo letras latinas: de principio a fin, todas sus letras son de nuestro alfabeto "
-         "(puede haber palabras de otro idioma que lo use, como el inglés).",
-         "Acaban en bucle: repiten al final la misma frase tres veces. Distintas entre sí: "
-         "cuántas de las tiradas no son iguales.",
-         "Modelo de 7.000 millones, adiestrado y sin comprimir, el del capítulo 12. A temperatura "
-         "0 no hay sorteo: las tiradas salen iguales."])))
+        [# Orden 97: nota para el lector; el modelo (7.000 millones, adiestrado y sin comprimir, el del
+         # capítulo 12) sale arriba. «Las veinte son la misma» es lo que comprueba el assert.
+         "«Solo letras latinas»: tiradas escritas de principio a fin con nuestro alfabeto, aunque se "
+         "cuele alguna palabra de otro idioma que lo use, como el inglés. «Acaban en bucle»: repiten "
+         "al final la misma frase tres veces. La última columna cuenta cuántas tiradas distintas hay: "
+         f"a temperatura 0, como no hay sorteo, las {EN_LETRA[n]} son la misma."])))
 
 
 def tabla_desde_csv():
@@ -248,12 +255,10 @@ def parte_puntuaciones():
         f"Las puntuaciones de «{frase}», divididas entre la temperatura",
         ["temperatura", "puntuación: «la»", "puntuación: «una»", "puntuación: uno del medio",
          "«la», en veces el del medio"], filas, "cdddd",
-        [f"Uno del medio: el trozo que queda en medio de la lista de los {miles(len(logits))} "
-         "ordenados por puntuación.",
-         "«La», en veces el del medio: la fuerza de «la» entre la de ese trozo (cada punto de "
-         "diferencia, por 2,72).",
-         f"Modelo de 500 millones, sin adiestrar ({modelo}). A temperatura 0 no se divide: se "
-         "selecciona el favorito."])))
+        [# Orden 97: nota para el lector; la lista de {len(logits)} trozos y el modelo salen arriba.
+         "«Uno del medio» es el trozo que queda a mitad de la lista, ordenados todos por puntuación. "
+         "La última columna dice cuántas veces es más fuerte «la» que ése. A temperatura 0 no se "
+         "divide nada: sale siempre el favorito."])))
 
 
 def selftest():

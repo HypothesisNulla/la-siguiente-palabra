@@ -53,6 +53,10 @@ NOMBRE_TABLA = {"contenedor, 2 núcleos": "el ordenador de 2 núcleos en la nube
 # dato, y la palabra de al lado solo lo resume.
 QUEDA_CRECE = 1.10           # por encima de esto, la ventaja crece
 QUEDA_CAE = 0.75             # por debajo de esto, la ventaja cae
+# Orden 97: el lote con el que se midió todo lo de en_serie_*.txt (el LOTE de en_serie_o_a_la_vez.py),
+# escrito con letra en la nota; si cambia, falla aquí y no en la página.
+TEXTOS_POR_PASADA = 16
+EN_LETRA = {16: "dieciséis"}
 MEDIO_ULTIMO = 0.00005       # los segundos se imprimen con cuatro decimales: medio último
 
 # ==========================================================
@@ -144,11 +148,10 @@ def informe(ejecuciones=EJECUCIONES, carpeta=CARPETA):
             [[miles(ancho)] + [coma(v, 1) + "x" for _, _, _, v in filas]
              + [f"{pct(queda, 0)}, {palabra}"] for ancho, filas, palabra, queda in ejes],
             "d" * (len(longitudes) + 1) + "i",
-            ["Ventaja: cuántas veces más rápida es la máquina que lo mira todo a la vez; por "
-             "debajo de 1,0x, es más lenta.",
-             "Queda: qué parte de la ventaja del texto más corto queda en el más largo. Por "
-             "debajo del 75 % se dice que cae; por encima del 110 %, que crece; en medio, que "
-             "se mantiene."]) + [""]
+            ["Cuántas veces más rápida va la máquina que lo mira todo a la vez, con cada tamaño de "
+             "modelo y cada longitud de texto. «Queda» es la parte de la ventaja del texto más corto "
+             f"que sigue en el más largo: por debajo del {pct(QUEDA_CAE, 0)} se dice que cae, y entre "
+             f"el {round(100 * QUEDA_CAE)} y el {pct(QUEDA_CRECE, 0)}, que se mantiene."]) + [""]
     return lineas
 
 
@@ -224,10 +227,11 @@ GRANDE = ("en_serie_1024_cpu.txt", 1, "el procesador del portátil", 1024)
 
 
 NOTAS_SEGUNDOS = [
-    "Cada número de segundos es lo que tarda una pasada de entrenamiento con 16 textos de esa "
-    "longitud: la media de tres, tras una de calentamiento que se tira.",
-    "Ventaja: los segundos de «en orden» entre los de «a la vez». Por encima de 1,0x gana la "
-    "que mira todo a la vez; por debajo, la que lee en orden."]
+    # Orden 97: nota para el lector. Que cada número sea la media de tres pasadas tras una de
+    # calentamiento que se tira está en en_serie_o_a_la_vez.py (REPETICIONES, CALENTAMIENTO).
+    f"Lo que tarda, en segundos, una pasada de entrenamiento con {EN_LETRA[TEXTOS_POR_PASADA]} "
+    "textos de cada longitud. La ventaja es el primer tiempo entre el segundo: por encima de 1,0x "
+    "gana la que mira todo a la vez; por debajo, la que lee en orden."]
 
 
 def tabla_de_segundos(titulo, filas, notas=NOTAS_SEGUNDOS):

@@ -6,7 +6,7 @@
 SELFTEST: las tres pruebas pasan.
 
 ########## capítulo 8: una mirada que nadie programa ##########
-máquina: Darwin arm64; calcula en: cpu. Medido el 2026-10-09.
+máquina: Darwin arm64; calcula en: cpu. Medido el 2026-10-28.
 Semilla 20260914. Texto: el Quijote, 2.095.402 letras:
 1.885.861 para aprender y 209.541 para probar.
 
@@ -42,11 +42,7 @@ Lo que acierta y cómo reparte la mirada, en cinco momentos
 | 10.000 pasos | 44,5 % | 4,4 letras |
 | 20.000 pasos | 44,5 % | 4,4 letras |
 
-Con 20.000 fragmentos de prueba de 16 letras, que nunca ha visto.
-
-Acierta la siguiente: la letra a la que da más porcentaje es la que viene de verdad detrás del fragmento.
-
-Reparte entre: a cuántas de las 16 letras mira de verdad, de media: 16 si reparte por igual, 1 si mira a una sola.
+Medido con 20.000 fragmentos de prueba de 16 letras, que la máquina nunca ha visto. «Acierta la siguiente» dice, de cada cien, en cuántos la letra a la que da más porcentaje es la que viene de verdad; «reparte entre», a cuántas de las 16 letras mira de media, de 16, todas por igual, a 1, una sola.
 :::
 
 --- 3. A DÓNDE MIRA MÁS LA ÚLTIMA LETRA ---
@@ -62,9 +58,7 @@ A dónde mira más la última letra, al principio y al final
 | la primera letra de la palabra | 2,8 % | 6,4 % |
 | otra | 74,8 % | 8,5 % |
 
-De cada cien fragmentos de prueba, en cuántos la letra a la que más mira de las 16 es ésta.
-
-Al empezar reparte casi por igual: «la que más mira» sale por decimales, y esa columna es casi azar.
+Cada columna cuenta, de cada cien fragmentos de prueba, en cuántos la letra más mirada es la de esa fila. Al empezar reparte casi por igual, y cuál sale la más mirada se decide por decimales: esa columna es casi azar.
 :::
 
 --- 4. ¿SIRVE DE ALGO MIRAR? ---
@@ -82,9 +76,7 @@ Al empezar reparte casi por igual: «la que más mira» sale por decimales, y es
 | esta, sin mirar atrás | 30,0 % | 11.594 |  |
 | esta, mirando | 44,5 % | 15.690 |  |
 
-Números: los que guarda cada máquina. En la de contar, uno por cada hoja y cada letra que se ha visto detrás alguna vez.
-
-Vacías: fragmentos de prueba cuya hoja quedó en blanco al aprender. Cuentan como fallo: contar no tiene nada que decir ahí. Esta máquina no tiene libreta.
+«Números» son los que guarda cada máquina; en la de contar, uno por cada hoja de su libreta y cada letra que vio detrás alguna vez. «Vacías» son los fragmentos de prueba que caen en una hoja en blanco: ahí la de contar no tiene nada que decir, y cuentan como fallo. Esta máquina no tiene libreta, y en sus filas esa columna va en blanco.
 :::
 
 --- 5. EL REPARTO DE LA ÚLTIMA LETRA DE LA FRASE ---
@@ -130,11 +122,7 @@ El ajuste de escala, con él y sin él
 | de tamaño 1 | sí | 3 % | 33 % | 40 % | 45 % | 6,3 |
 | de tamaño 1 | no | 3 % | 30 % | 37 % | 38 % | 1,3 |
 
-64 números por letra en lugar de 32; 3.000 pasos; cada número se mueve con su propio poquito.
-
-Empiezan: de qué tamaño son al azar las listas de las letras antes de aprender: de cada cien números, 68 entre menos 1 y 1 («de tamaño 1») o 68 entre menos 0,02 y 0,02.
-
-Acierta: de cada cien, tras esos pasos. Reparte: entre cuántas letras mira antes de aprender nada.
+La máquina del Quijote con 64 números por letra en lugar de 32, y cada número moviéndose con su propio poquito. «Empiezan» dice de qué tamaño son al azar las listas de las letras antes de aprender: de tamaño 1, de cada cien números 68 caen entre menos 1 y 1; pequeños, entre menos 0,02 y 0,02. El acierto va de cada cien; «reparte», entre cuántas letras mira antes de aprender nada.
 :::
 
 ::: tabla
@@ -159,7 +147,7 @@ Números de tamaño 1; cuánto acierta tras 3.000 pasos, de cada cien.
 | pregunta y etiqueta al azar, fijas | 32,4 % | 16,0 |
 | sin mirar atrás | 30,0 % |  |
 
-Pregunta y etiqueta al azar, fijas: se entrena todo menos las dos tablas que fijan a dónde mira; el contenido sí aprende.
+En la segunda fila se entrena todo menos las dos tablas que deciden a dónde mira, la de la pregunta y la de la etiqueta; el contenido sí aprende.
 :::
 
 ::: tabla
@@ -183,7 +171,7 @@ Con el reparto impuesto, y 5.000 pasos para que el resto vuelva a aprender
 | por igual entre las 16 | 32,5 % | 16,0 |
 | todo a la de justo antes | 39,5 % | 1,0 |
 
-La pregunta y la etiqueta no cuentan; el resto aprende moviendo cada número 0,1 veces su culpa.
+Con el reparto impuesto, la pregunta y la etiqueta ya no deciden nada; el resto de los números vuelve a aprender, con el mismo poquito en las tres filas.
 :::
 
 ::: tabla

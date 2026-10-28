@@ -16,9 +16,7 @@ Una respuesta de cinco partes: cada parte, o las cinco a la vez
 | 90 | [barra:90.0] | 59 | [barra:59.0] |
 | 100 | [barra:100.0] | 100 | [barra:100.0] |
 
-De cada cien. Las cinco a la vez: solo cuenta la respuesta si están bien las cinco partes.
-
-Con 50 de cada cien en cada parte, las cinco a la vez: 0,5 por 0,5 por 0,5 por 0,5 por 0,5 da 0,031, que son unas 3 de cada cien.
+De cada cien veces. A la izquierda, cuántas sale bien cada parte por separado; a la derecha, cuántas salen bien las cinco a la vez, que es lo único que cuenta cuando se puntúa todo o nada.
 :::
 
 Escrito ../datos/salidas/todo_o_nada.csv

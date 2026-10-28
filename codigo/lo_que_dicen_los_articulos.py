@@ -32,6 +32,10 @@ Uso:
 #     («closed-book», tabla 1) y con solo el bueno («oracle», tabla 1). La versión que admite
 #     cuatro veces más texto (16K frente a 4K) es la fila «GPT-3.5-Turbo (16K)» de la tabla 6.
 LIU_PUESTOS = (1, 5, 10, 15, 20)
+DOCUMENTOS = 20                    # los documentos de cada pregunta
+VERSIONES = ("4.000", "16.000")    # trozos de texto que admite cada versión de la máquina
+# Orden 97: cifra que la nota escribe con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {20: "veinte", 6: "seis"}
 LIU_4K = (75.8, 57.2, 53.8, 55.4, 63.2)
 LIU_16K = (75.7, 57.3, 54.1, 55.4, 63.1)
 LIU_SIN_DOCUMENTOS = 56.1
@@ -90,7 +94,8 @@ def imprime(*bloques):
 
 def liu():
     print("--- 1. PERDIDO EN MEDIO (Liu y otros, 2023) ---\n")
-    filas = [[f"en el puesto {p} de 20", coma(a, 1), coma(b, 1)]
+    assert max(LIU_PUESTOS) == DOCUMENTOS, "la nota dice «veinte documentos»"
+    filas = [[f"en el puesto {p} de {DOCUMENTOS}", coma(a, 1), coma(b, 1)]
              for p, a, b in zip(LIU_PUESTOS, LIU_4K, LIU_16K)]
     filas += [["sin ningún documento", coma(LIU_SIN_DOCUMENTOS, 1),
                coma(LIU_SIN_DOCUMENTOS_16K, 1)],
@@ -98,11 +103,12 @@ def liu():
                coma(LIU_SOLO_EL_BUENO_16K, 1)]]
     imprime(tabla_editorial(
         "Aciertos según dónde está el documento bueno (Liu y otros, 2023)",
-        ["dónde estaba el documento bueno", "4.000", "16.000"], filas, "idd",
-        ["Veinte documentos y una pregunta; solo uno de los veinte trae la respuesta. Aciertos "
-         "de cada cien.",
-         "4.000, 16.000: cuántos trozos de texto admite la versión de la máquina (la misma, en "
-         "dos tamaños de entrada)."]))
+        ["dónde estaba el documento bueno", *VERSIONES], filas, "idd",
+        [# Orden 97: nota para el lector. Los veinte documentos (LIU_PUESTOS llega hasta el 20) y los
+         # trozos de cada versión (4.000 y 16.000) salen en la nota con letra y con el rótulo.
+         f"Aciertos de cada cien, con {EN_LETRA[DOCUMENTOS]} documentos y una pregunta, y solo uno de "
+         f"los {EN_LETRA[DOCUMENTOS]} con la respuesta. Las dos columnas son la misma máquina en dos "
+         f"versiones: una admite {VERSIONES[0]} trozos de texto y la otra, {VERSIONES[1]}."]))
     peor = min(range(len(LIU_4K)), key=lambda i: LIU_4K[i])
     return peor
 
@@ -164,11 +170,12 @@ def dream():
         tabla_editorial(
             "Lo que tarda el programa encontrado (Dream-RSI, 2026)",
             ["conjunto", "fija", "nueva", "gana", "por"], filas, "iddid",
-            ["En milisegundos; menos es mejor. Fija: la búsqueda sin cambiar. Nueva: la "
-             "búsqueda con el programa mejorado.",
-             "Gana: la que tarda menos. Por: cuántos milisegundos menos. Media: sumar los seis "
-             "y dividir entre seis.",
-             f"Llamadas al agente: fija {DREAM_LLAMADAS_FIJO}, nueva {DREAM_LLAMADAS_NUEVO}."]),
+            [# Orden 97: nota para el lector; las llamadas al agente (fija 550, nueva 317) están en
+             # DREAM_LLAMADAS_FIJO y DREAM_LLAMADAS_NUEVO.
+             "Lo que tarda, en milisegundos, el programa que encuentra cada búsqueda: la fija, sin "
+             "cambiar, y la nueva, con el programa mejorado. Menos es mejor. «Por» es cuántos "
+             "milisegundos menos tarda la que gana, y la media es la de los "
+             f"{EN_LETRA[len(DREAM_CONJUNTOS)]} conjuntos."]),
         tabla_editorial(
             "Dónde pierde y dónde gana la búsqueda nueva",
             ["", "milisegundos"],

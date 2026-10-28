@@ -177,8 +177,9 @@ def imprimir_perceptron(res, emitir):
     emitir(tabla_editorial(
         "Cuántas correcciones necesita el perceptrón con la edad",
         ["lo que tiene que decir", "¿se queda quieto?", "correcciones"], filas, "icd",
-        [f"El plazo es de {miles(PLAZO)} correcciones.",
-         "Se queda quieto cuando una vuelta entera no corrige nada."]))
+        ["Se queda quieto cuando da una vuelta entera por las edades sin tener que corregir nada. "
+         f"Con el colegio no lo consigue nunca: a las {miles(PLAZO)} correcciones se le acaba el "
+         "plazo."]))
     emitir([""])
     r = res["de 6 a 12"]
     mal = ", ".join(str(e) for e in r["mal"])

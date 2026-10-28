@@ -139,7 +139,7 @@ def tabla(juntas, letras):
         "Las primeras juntas, con el Quijote", ["junta", "pareja", "pieza nueva", "veces"],
         [[str(k), f"{ver(a)} y {ver(b)}", ver(a + b), miles(n)]
          for k, (a, b, n) in enumerate(juntas[:PRIMERAS], 1)], "ciid",
-        ["Cada junta suelda la pareja que más se repite. El guion bajo es un espacio."])
+        ["El guion bajo es un espacio. Cada junta suelda la pareja que más se repite."])
     total = sum(n for _, n in letras)
     out += [""] + tabla_editorial(
         "Las piezas de una letra con que se empieza", ["de qué clase", "piezas"],

@@ -288,7 +288,7 @@ La culpa, capa a capa, en la red de 6 capas
 | la 2.ª | 0,0002636 | 0,585 |
 | la 1.ª, la primera | 0,0000469 | 0,178 |
 
-La red está armada como en los 80, con 16 neuronas por capa, recién arrancada y sin entrenar; la culpa se mide con 64 ejemplos de 16 números puestos al azar, cada uno con un sí o un no también al azar. Una red de 6 capas tiene 6 capas de líneas, una delante de cada capa de neuronas, y se cuentan desde la entrada: la 1.ª es la que sale de ella. La culpa de una capa de líneas es la media de la culpa de sus pesos, sin mirar el signo.
+La red de seis capas, recién arrancada y armada como en los 80. La culpa de cada capa de líneas es la media de la de sus pesos, sin mirar el signo, y la última columna dice qué parte de la culpa de la capa de encima le llega a ésta.
 :::
 
 ::: tabla

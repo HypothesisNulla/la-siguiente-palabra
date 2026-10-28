@@ -1,0 +1,50 @@
+# Cifras de datos/salidas/mapa_en_la_tarjeta.txt tal como las imprimió la medición de la Orden 25
+# (19 oct 2026, HEAD 6c4d40c), con los dos decimales con que se imprimen: la ventaja de la que mira todo
+# a la vez, por modelo (ancho), lote y longitud. Las cabeceras de la salida van detrás de «# salida: ».
+# Las lee mapa_en_la_tarjeta.py --desde-guardado, que reimprime la salida sin volver a medir.
+# salida: ######## el mapa de la tarjeta (Orden 25) ########
+# salida: fecha: 2026-10-19
+# salida: máquina: Darwin arm64, Apple M4 Max, 36 GB
+# salida: python 3.12.14, torch 2.14.0
+# salida: se usa la tarjeta (mps, con sincronización).
+ancho,lote,longitud,ventaja
+256,16,64,3.11
+256,16,128,3.27
+256,16,256,3.11
+256,16,512,1.95
+256,16,1024,1.35
+256,32,64,1.79
+256,32,128,1.81
+256,32,256,1.66
+256,32,512,1.20
+256,32,1024,0.74
+256,64,64,2.77
+256,64,128,1.29
+256,64,256,1.11
+256,64,512,0.71
+256,64,1024,0.47
+256,128,64,1.34
+256,128,128,0.99
+256,128,256,0.76
+256,128,512,0.52
+256,128,1024,0.34
+1024,16,64,1.69
+1024,16,128,1.82
+1024,16,256,1.73
+1024,16,512,1.56
+1024,16,1024,1.35
+1024,32,64,1.38
+1024,32,128,1.32
+1024,32,256,1.27
+1024,32,512,1.16
+1024,32,1024,1.00
+1024,64,64,1.20
+1024,64,128,1.17
+1024,64,256,1.12
+1024,64,512,1.04
+1024,64,1024,0.88
+1024,128,64,1.07
+1024,128,128,1.05
+1024,128,256,1.01
+1024,128,512,0.91
+1024,128,1024,0.79

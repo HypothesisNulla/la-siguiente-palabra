@@ -341,9 +341,9 @@ def main():
     for l in tabla_editorial(
             "Dos dígitos, con la regla de Rosenblatt",
             ["tarea", "ejemplos", "acierto", "correcciones"], editorial, "iddd",
-            ["Ejemplos: dibujos que se le enseñaron para aprender.",
-             "Acierto: sobre dibujos que no vio mientras aprendía.",
-             "Correcciones: cuántas veces hubo que retocarle los pesos.",
+            ["Cada fila es una prueba distinta. Los ejemplos son los dibujos con los que aprendió; "
+             "el acierto se mide sobre otros que no vio mientras aprendía, y las correcciones son "
+             "las veces que hubo que retocarle los pesos.",
              f"Deja de corregirse solo en {convergen} de las {len(PAREJAS_DIGITOS)} tareas."]):
         print(l)
 

@@ -4,7 +4,7 @@
 
 SELFTEST: las tres pruebas pasan.
 
-Medido el 2026-10-24. No entrena nada: busca texto en texto.
+Medido el 2026-10-28. No entrena nada: busca texto en texto.
 listón: 7 palabras (el de la tabla de lo_habia_visto_ya.txt)
 
 --- 1. LAS TRES MUESTRAS DEL CAPÍTULO ---
@@ -109,9 +109,5 @@ Rachas y copiado, según quién escribe
 | contar, 3 palabras | 19,0 | 45 | 97,8 % |
 | el texto real | 45,0 | 45 | 100,0 % |
 
-200 muestras de 45 palabras en cada fila.
-
-Los libros que no vio son seis de la misma época que no entraron en el entrenamiento. «Contar» es la máquina del capítulo 1, mirando una, dos o tres palabras hacia atrás. La red es la de las muestras de arriba. El texto real es lo que sigue a cada comienzo en su libro.
-
-Una racha cuenta como copia desde 7 palabras: una más que la más larga de la máquina de contar con una palabra.
+Cada fila son doscientas muestras de 45 palabras. «Contar» es la máquina del capítulo 1, mirando una, dos o tres palabras atrás, y «el texto real», lo que sigue a cada comienzo en su libro. Una racha cuenta como copia desde siete palabras seguidas.
 :::

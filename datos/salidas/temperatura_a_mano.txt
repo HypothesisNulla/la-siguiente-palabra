@@ -1,4 +1,4 @@
-Medido el 2026-10-09 en macOS-26.6.2-arm64-arm-64bit.
+Medido el 2026-10-28 en macOS-26.7.1-arm64-arm-64bit.
 --- 1. EL SORTEO DEL CAPÍTULO 7 A CUATRO TEMPERATURAS ---
 modelo: Qwen/Qwen2.5-0.5B (el del capítulo 7)
 
@@ -12,9 +12,7 @@ Las papeletas de «La capital de Francia es» a cuatro temperaturas
 | 1,3 | 6,4 | 5,0 | 4,6 | 84,0 | [barra:84.0] |
 | 1,8 | 1,2 | 1,0 | 0,9 | 96,9 | [barra:96.9] |
 
-Papeletas de cada cien que lleva cada trozo. Otros: todos los demás trozos posibles juntos; la barra es su parte.
-
-Modelo de 500 millones, sin adiestrar (Qwen/Qwen2.5-0.5B), el del capítulo 7. A temperatura 0 no hay sorteo: gana siempre el favorito.
+Papeletas de cada cien para cada trozo. «Otros» son todos los demás trozos juntos, y la barra, su parte: al subir la temperatura se lo van quedando casi todo. A temperatura 0 no hay sorteo: gana siempre el favorito.
 :::
 
 las mismas, redondeadas a papeletas enteras (para la figura):
@@ -126,11 +124,7 @@ Las 20 tiradas de cada temperatura
 | 1,3 | 9 de 20 | 0 de 20 | 20 |
 | 1,8 | 0 de 20 | 0 de 20 | 20 |
 
-Solo letras latinas: de principio a fin, todas sus letras son de nuestro alfabeto (puede haber palabras de otro idioma que lo use, como el inglés).
-
-Acaban en bucle: repiten al final la misma frase tres veces. Distintas entre sí: cuántas de las tiradas no son iguales.
-
-Modelo de 7.000 millones, adiestrado y sin comprimir, el del capítulo 12. A temperatura 0 no hay sorteo: las tiradas salen iguales.
+«Solo letras latinas»: tiradas escritas de principio a fin con nuestro alfabeto, aunque se cuele alguna palabra de otro idioma que lo use, como el inglés. «Acaban en bucle»: repiten al final la misma frase tres veces. La última columna cuenta cuántas tiradas distintas hay: a temperatura 0, como no hay sorteo, las veinte son la misma.
 :::
 
 Escrito ../datos/salidas/temperatura_a_mano.csv

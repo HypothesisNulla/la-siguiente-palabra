@@ -28,6 +28,8 @@ COMPRIMIDO_32 = "mlx-community/Qwen2.5-32B-Instruct-4bit"
 TABLA = "model.layers.0.self_attn.q_proj"   # una tabla cualquiera: la primera de la primera capa
 CUANTOS = 5                                 # cuántos números se enseñan
 BYTES_SIN_COMPRIMIR = 2                     # lo que ocupa cada número sin comprimir (bf16)
+# Orden 97: cifras que las notas escriben con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {5: "cinco", 2: "dos"}
 MEMORIA_PORTATIL_GB = 36                    # lo que dice la ficha: MacBook Pro M4 Max
 # Pero la memoria no se cuenta en miles de millones de bytes: «36 GB» son 36 veces 1.024 por 1.024
 # por 1.024 bytes, 38.654.705.664 (lo que da `sysctl -n hw.memsize` en este Mac). Compararla con el
@@ -176,9 +178,11 @@ def informe():
             ["número", "sin comprimir", "comprimido", "diferencia"],
             [[str(k), coma(a, 6), coma(b, 6), coma(b - a, 6)]
              for k, (a, b) in enumerate(zip(antes, despues), 1)], "cddd",
-            [f"Los {CUANTOS} primeros números de la primera fila de una tabla de la primera "
-             "capa, en las dos copias del modelo de 7.000 millones adiestrado.",
-             "Diferencia: el comprimido menos el sin comprimir."]),
+            [# Orden 97: nota para el lector. Que sea la primera fila de una tabla de la primera capa
+             # (TABLA) y que la diferencia sea el comprimido menos el sin comprimir, está en el código.
+             f"Los {EN_LETRA[CUANTOS]} primeros números de una de las tablas de la máquina de 7.000 "
+             "millones adiestrada, tal como salieron del entrenamiento y en la copia comprimida. La "
+             "diferencia es lo que se ha movido cada uno al comprimir."]),
         tabla_editorial(
             f"Valores distintos en el primer grupo de {q['group_size']} números de esa fila",
             ["sin comprimir", "comprimido"], [[str(len(set(grupo0))), str(len(set(grupo1)))]],
@@ -197,10 +201,14 @@ def informe():
         "Lo que ocupa cada copia",
         ["copia", "ocupa", "cómo"],
         [[nombre, coma(b / GB, 1) + " GB", como] for nombre, b, como in filas], "idi",
-        [linea_memoria(),
-         f"Números de la de 32.000M: {miles(n32)}. Números de la de 7.000M: {miles(n7)}.",
-         "Medido: lo que ocupan sus ficheros en el disco. Calculado: sus números por "
-         f"{BYTES_SIN_COMPRIMIR} bytes cada uno, como la de 7.000M sin comprimir."]))
+        [# Orden 97: nota para el lector. Los números de cada copia (32.640.013.312 y 7.615.616.512) y
+         # lo que son los «36 GB» de la ficha están en `cuantos_numeros` y en `linea_memoria`.
+         "«Medido»: lo que ocupan sus ficheros en el disco. «Calculado»: "
+         f"{EN_LETRA[BYTES_SIN_COMPRIMIR]} bytes por cada número, como la de 7.000M sin comprimir. "
+         f"El portátil tiene {coma(MEMORIA_PORTATIL_BYTES / GB, 1)} GB de memoria para todo, y la "
+         "grande sin comprimir no cabe."]))
+    assert n32 * BYTES_SIN_COMPRIMIR > MEMORIA_PORTATIL_BYTES, (
+        "la nota dice que la grande sin comprimir no cabe en la memoria del portátil")
 
 
 def selftest():

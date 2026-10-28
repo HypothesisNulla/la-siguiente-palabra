@@ -13,9 +13,7 @@ Aciertos según dónde está el documento bueno (Liu y otros, 2023)
 | sin ningún documento | 56,1 | 56,0 |
 | con solo el documento bueno | 88,3 | 88,6 |
 
-Veinte documentos y una pregunta; solo uno de los veinte trae la respuesta. Aciertos de cada cien.
-
-4.000, 16.000: cuántos trozos de texto admite la versión de la máquina (la misma, en dos tamaños de entrada).
+Aciertos de cada cien, con veinte documentos y una pregunta, y solo uno de los veinte con la respuesta. Las dos columnas son la misma máquina en dos versiones: una admite 4.000 trozos de texto y la otra, 16.000.
 :::
 
 --- 2. TURING Y LA PRUEBA DE 2025, EN LA MISMA MONEDA ---
@@ -78,11 +76,7 @@ Lo que tarda el programa encontrado (Dream-RSI, 2026)
 | Duke Breast | 28,4 | 32,5 | fija | 4,1 |
 | **media** | **3.587,1** | **2.931,0** | **nueva** | **656,1** |
 
-En milisegundos; menos es mejor. Fija: la búsqueda sin cambiar. Nueva: la búsqueda con el programa mejorado.
-
-Gana: la que tarda menos. Por: cuántos milisegundos menos. Media: sumar los seis y dividir entre seis.
-
-Llamadas al agente: fija 550, nueva 317.
+Lo que tarda, en milisegundos, el programa que encuentra cada búsqueda: la fija, sin cambiar, y la nueva, con el programa mejorado. Menos es mejor. «Por» es cuántos milisegundos menos tarda la que gana, y la media es la de los seis conjuntos.
 :::
 
 ::: tabla

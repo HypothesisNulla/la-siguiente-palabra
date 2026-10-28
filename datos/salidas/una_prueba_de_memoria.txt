@@ -16,7 +16,7 @@ Una prueba, con 10 de paja
 | pregunta | ¿cuál era el primero? |
 | **respuesta buscada** | **B** |
 
-Los 8 símbolos que se le pueden pedir: A B C D E F G H. Los 4 de paja, distintos de esos: 1 2 3 4.
+Las letras, de la A a la H, son lo que se le puede pedir; la paja son cifras del 1 al 4, así que nunca se confunde con ellas.
 :::
 
 ::: tabla
@@ -29,7 +29,7 @@ Una prueba, con 40 de paja
 | pregunta | ¿cuál era el primero? |
 | **respuesta buscada** | **C** |
 
-Los 8 símbolos que se le pueden pedir: A B C D E F G H. Los 4 de paja, distintos de esos: 1 2 3 4.
+Las letras, de la A a la H, son lo que se le puede pedir; la paja son cifras del 1 al 4, así que nunca se confunde con ellas.
 :::
 
 --- 2. DE CADA 100 PRUEBAS, CUÁNTAS ACIERTA ---
@@ -45,7 +45,5 @@ De cada 100 pruebas, cuántas acierta
 | 80 | 20 | 13 |
 | 160 | 11 | 12 |
 
-Acertar por puro azar: 12,5 de cada 100 (una de cada 8).
-
-Cada cifra, media de 2 entrenamientos desde cero.
+Por puro azar acertaría 12,5 de cada cien, una de cada ocho. Cada cifra es la media de dos entrenamientos desde cero.
 :::

@@ -64,11 +64,7 @@ Qué responde el de quinientos millones
 | bajo | 66,2 % | 3,6 % | 69,8 % | vaso | 94,8 % |
 | caro | 79,8 % | 2,4 % | 82,2 % | vaso | 97,1 % |
 
-«vaso», «cajón»: de cada cien veces, cuántas escribiría esa palabra justo ahí, en su lista entera de trozos posibles. Las dos: la suma; el resto va a otras palabras.
-
-Seguridad: lo que se lleva la ganadora de lo que suman las dos, de cada cien.
-
-El texto acaba en «Respuesta: El» y las opciones llevan el espacio delante, como las escribe el modelo.
+Las dos primeras columnas dicen, de cada cien veces, cuántas escribiría el modelo «vaso» o «cajón» justo detrás de «Respuesta: El»; lo que falta hasta cien va a otras palabras. La seguridad es la parte que se lleva la ganadora de lo que suman las dos.
 :::
 
 ::: tabla
@@ -80,11 +76,7 @@ Qué responde el de mil quinientos millones
 | bajo | 89,6 % | 6,5 % | 96,1 % | vaso | 93,3 % |
 | caro | 94,3 % | 3,2 % | 97,6 % | vaso | 96,7 % |
 
-«vaso», «cajón»: de cada cien veces, cuántas escribiría esa palabra justo ahí, en su lista entera de trozos posibles. Las dos: la suma; el resto va a otras palabras.
-
-Seguridad: lo que se lleva la ganadora de lo que suman las dos, de cada cien.
-
-El texto acaba en «Respuesta: El» y las opciones llevan el espacio delante, como las escribe el modelo.
+Las dos primeras columnas dicen, de cada cien veces, cuántas escribiría el modelo «vaso» o «cajón» justo detrás de «Respuesta: El»; lo que falta hasta cien va a otras palabras. La seguridad es la parte que se lleva la ganadora de lo que suman las dos.
 :::
 
 --- 4. EL TAMAÑO DE LOS DOS MODELOS ---

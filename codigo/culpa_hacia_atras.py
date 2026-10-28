@@ -44,6 +44,7 @@ PELIN = 1e-6                 # lo que se sube lo que entra para medir lo que dej
 PELIN_BRUTO = 1e-5           # lo que se mueve un peso a lo bruto: el epsilon de retropropagacion.py
 PUNTOS_RAMPA = [-6, -4, -2, -0.5, 0, 0.5, 2, 4, 6]   # «cuánto pasa del listón», para la tabla de las dos
 PROFUNDIDAD_CADENA = 5       # capas en medio de la red en la que se sigue la culpa capa a capa
+EN_LETRA = {6: "seis"}       # la nota de la tabla de la cadena dice «la red de seis capas» (Orden 97)
 CAPA_DE_LA_SUMA = 3          # en esa red, la capa de en medio de la neurona cuya culpa se suma a mano
 CUANTAS_SE_ENSENAN = 5       # de las dieciséis de encima, cuántas se enseñan una a una
 KILOMETRO_EN_MM = 1_000_000  # para poner a escala el factor de veinte capas
@@ -544,12 +545,10 @@ def bloque_7():
             f"La culpa, capa a capa, en la red de {PROFUNDIDAD_CADENA + 1} capas",
             ["capa de líneas, de la final hacia la entrada", "culpa",
              "de cada 1 de la de encima, le llega"], filas, "idd",
-            [f"La red está armada como en los 80, con {ANCHO} neuronas por capa, recién arrancada y "
-             f"sin entrenar; la culpa se mide con {len(Xc)} ejemplos de {ANCHO} números puestos al "
-             "azar, cada uno con un sí o un no también al azar. Una red de "
-             f"{PROFUNDIDAD_CADENA + 1} capas tiene {n} capas de líneas, una delante de cada capa "
-             "de neuronas, y se cuentan desde la entrada: la 1.ª es la que sale de ella. La culpa "
-             "de una capa de líneas es la media de la culpa de sus pesos, sin mirar el signo."]),
+            [f"La red de {EN_LETRA[PROFUNDIDAD_CADENA + 1]} capas, recién arrancada y armada como "
+             "en los 80. La culpa de cada capa de líneas es la media de la de sus pesos, sin mirar "
+             "el signo, y la última columna dice qué parte de la culpa de la capa de encima le "
+             "llega a ésta."]),
         tabla_editorial(
             "De la última capa de líneas a la primera", ["", "cuánto"],
             [["la culpa de la última", coma(m[-1], 7)],

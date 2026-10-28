@@ -45,11 +45,29 @@ import random
 import re
 import sys
 
-from formato import muestra_editorial, tabla_editorial
+from formato import miles, muestra_editorial, tabla_editorial
+from pasos_a_la_vista import faltan
 from ordenes_escritas import (MODELO_GRANDE, N_PREGUNTAS, SEMILLA, cargar, enunciado, escribir,
                               liberar, preguntas, renglones, ultimo_numero)
 
+# Orden 97: cifra que la nota escribe con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {20: "veinte"}
+
 RESULTADO = re.compile(r"Resultado:\s*\**\s*([\d.,   ]*\d)")
+
+
+def nota_cuenta(f, titulo):
+    """La nota de la muestra de una cuenta escrita paso a paso (Orden 97: para el lector)."""
+    if "falla" in titulo:
+        if faltan(f["texto"], f["a"], f["b"]):
+            return (f"Falta algún producto parcial: {miles(f['numero'])} en lugar de "
+                    f"{miles(f['prod'])}.")
+        return (f"Los cuatro productos parciales están bien; el error está en la suma final: "
+                f"{miles(f['numero'])} en lugar de {miles(f['prod'])}.")
+    # (la muestra que acierta no está en el borrador del capítulo: se queda con su nota de siempre)
+    return (f"Modelo de 32.000M, adiestrado, sin herramienta. Producto exacto: "
+            f"{f['prod']}; leído: {f['numero']}. Texto literal; los renglones largos se parten "
+            "donde caben.")
 
 
 def leer_resultado(texto):
@@ -140,14 +158,13 @@ def main():
         [["aciertos", f"{aciertos}"],
          ["terminan con «Resultado:»", f"{con_resultado}"],
          ["se cortan sin terminar", f"{cortadas}"]], "id",
-        [f"Modelo de {nombre.split()[0]}, adiestrado y comprimido, sin herramienta. Las mismas "
-         "20 multiplicaciones de dos números de cuatro cifras que en «Multiplicar con y sin "
-         "calculadora».",
-         f"La pregunta: «{PREGUNTA_PASOS.format(a='1234', b='5678')}»",
-         f"Largo de las respuestas: mediana de {mediana} trozos; la más corta, {largos[0]}; la "
-         f"más larga, {largos[-1]} (límite, {MAX_NUEVOS_PASOS}).",
-         "Acierto: el número que sigue al último «Resultado:» (o, si no lo hay, el último "
-         "número) es el producto exacto. Cada respuesta, cogiendo siempre el trozo más probable."])))
+        [# Orden 97: notas para el lector. El modelo (adiestrado y comprimido), la pregunta exacta
+         # (PREGUNTA_PASOS), el largo de las respuestas (mediana 277, de 161 a 771, límite
+         # MAX_NUEVOS_PASOS) y que se lea el último número si falta «Resultado:» (`leer_resultado`) ya
+         # no van en la nota.
+         f"El modelo grande, sin calculadora, con las mismas {EN_LETRA[N_PREGUNTAS]} multiplicaciones, "
+         "pidiéndole que escriba la cuenta paso a paso y acabe con «Resultado:» y el número.",
+         "Acierta: el número de detrás de «Resultado:» es el producto exacto."])))
     print()
     ej = next((f for f in filas if f["numero"] == f["prod"]), None)
     mal = next((f for f in filas if f["numero"] != f["prod"]), None)
@@ -160,9 +177,7 @@ def main():
         print("\n".join(muestra_editorial(
             titulo,
             [f"Pregunta: ¿Cuánto es {f['a']} por {f['b']}?", ""] + renglones(f["texto"].strip()),
-            [f"Modelo de {nombre.split()[0]}, adiestrado, sin herramienta. Producto exacto: "
-             f"{f['prod']}; leído: {f['numero']}. Texto literal; los renglones largos se parten "
-             "donde caben."])))
+            [nota_cuenta(f, titulo)])))
         print()
 
     with open(SALIDA_CSV, "w", encoding="utf-8", newline="") as fh:

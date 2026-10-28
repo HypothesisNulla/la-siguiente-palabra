@@ -61,11 +61,7 @@ Cuántas veces se calla
 | avisando de que fallar resta | 19 de 20 | 95 % | [barra:95.0] |
 | con respuesta, avisando | 0 de 5 | 0 % | [barra:0.0] |
 
-Se calla: contesta que no lo sabe, o que no existe.
-
-Las dos primeras filas: las veinte preguntas sin respuesta. La tercera: cinco que sí la tienen, del capítulo 11.
-
-Modelo de 7.000 millones, adiestrado y sin comprimir.
+«Se calla»: contesta que no lo sabe, o que eso no existe. Las dos primeras filas son las veinte preguntas sin respuesta; la tercera, cinco del capítulo 11 que sí la tienen.
 :::
 
 ::: muestra

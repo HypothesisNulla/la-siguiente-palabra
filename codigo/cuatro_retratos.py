@@ -36,6 +36,8 @@ UNA_LETRA = {"a", "e", "o", "u", "y"}
 
 # Las palabras que el capítulo pone como ejemplo de la racha «ten».
 RACHA = "ten"
+# Orden 97: cifra que la nota escribe con letra (las palabras del ejemplo); si cambia, falla aquí y no en la página.
+EN_LETRA = {5: "cinco"}
 PALABRAS_RACHA = ["tener", "tenía", "intento", "atención", "contento"]
 
 # Los peldaños de la escalera, con lo que se cuenta de cada uno en el texto de entrenamiento.
@@ -143,8 +145,8 @@ def bloque_racha():
         [[w, ", ".join(f"**{r}**" if r == RACHA else r for r in rachas(w))]
          for w in PALABRAS_RACHA],
         "ii",
-        ["Los tríos de letras de una palabra: se toman tres letras seguidas, se corre una "
-         "letra, y otra vez.", f"En negrita, el trío «{RACHA}»."])
+        ["Cada palabra, partida en tríos: tres letras seguidas, corriendo una letra cada vez. "
+         f"En negrita, «{RACHA}», que sale en las {EN_LETRA[len(PALABRAS_RACHA)]}."])
 
 
 def bloque_muestras(muestras):

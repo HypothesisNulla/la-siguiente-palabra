@@ -1,7 +1,7 @@
 máquina: arm64, Darwin 25.6.0, procesador
 modelo: Qwen/Qwen2.5-0.5B en float32
 torch 2.14.0   transformers 5.17.0
-fecha: 2026-10-25
+fecha: 2026-10-28
 
 --- 1. QUÉ SE PARTE Y QUÉ NO ---
 
@@ -32,7 +32,7 @@ La misma palabra, en castellano y en inglés
 | gato | 2 | cat | 1 |
 | ventana | 1 | window | 1 |
 
-Trozos distintos en el repertorio: 151.665.
+Cuántos trozos necesita cada palabra en la caja de la máquina, que tiene 151.665 trozos distintos.
 :::
 
 --- 2. DÓNDE ESTÁ PARÍS ---
@@ -47,7 +47,7 @@ Dónde está París detrás de «La capital de Francia es»
 | **«París» entera** | **0,0533 %** |  |
 | «Paris», sin tilde, un trozo | 0,0453 % | 147 |
 
-«París» son 2 trozos: `_Par|ís`. Cada uno, en la lista que da la máquina detrás del texto que tiene delante; «entera», los dos multiplicados.
+«París» va en dos trozos, `_Par|ís`, y cada uno se mira en la lista que da la máquina detrás de lo que tiene delante. «Entera» es la probabilidad de los dos seguidos: una multiplicada por la otra.
 :::
 
 ::: tabla
@@ -60,7 +60,7 @@ Dónde está París detrás de «La capital de Francia es la ciudad de»
 | **«París» entera** | **14,9237 %** |  |
 | «Paris», sin tilde, un trozo | 11,8461 % | 2 |
 
-«París» son 2 trozos: `_Par|ís`. Cada uno, en la lista que da la máquina detrás del texto que tiene delante; «entera», los dos multiplicados.
+«París» va en dos trozos, `_Par|ís`, y cada uno se mira en la lista que da la máquina detrás de lo que tiene delante. «Entera» es la probabilidad de los dos seguidos: una multiplicada por la otra.
 :::
 
 --- 3. LAS TRES PRIMERAS CANDIDATAS DE CADA PASO ---

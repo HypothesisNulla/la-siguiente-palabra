@@ -172,8 +172,6 @@ def main():
     miradas = modelo.config.num_attention_heads
     desde = capas - max(1, int(round(capas * FRACCION_CAPAS_FINALES)))
     todas, ultimas = capas * miradas, (capas - desde) * miradas
-    claves = (f"Todas: las {todas} miradas; últimas: las {ultimas} de las {capas - desde} últimas "
-              "capas.")
     # L24 (9 de octubre): tablas editoriales (regla 6 ter). Las cuentas no cambian.
     L = ["", "####### capítulo 8: la papelera por dentro #######",
          f"modelo: {MODELO}, el mismo de reparto_una_a_una.py", ""]
@@ -182,7 +180,7 @@ def main():
         "La frase del «alto», en los trozos en que la parte el modelo",
         ["trozos", "la frase, trozo a trozo"],
         [[str(len(piezas)), unidos([p.strip() or "_" for p in piezas])]], "di",
-        ["Pregunta el último trozo, como en reparto_una_a_una.py. “|” separa dos trozos."]) + [""]
+        ["“|” separa dos trozos. El que pregunta es el último, el punto."]) + [""]
 
     L += ["--- 1. LO QUE PONE «El» EN LA MEZCLA ---", ""]
     filas = []
@@ -197,11 +195,12 @@ def main():
     L += tabla_editorial(
         "Lo que pone «El» en la mezcla",
         ["frase", "miradas", "", "porción", "tamaño", "parte de la mezcla"], filas, "iiiddd",
-        ["Porción: la parte del reparto que se lleva, de cada cien. Tamaño: de media, cuánto se "
-         "aleja de cero cada uno de los 64 números de su contenido. Parte de la mezcla: su "
-         "contenido por su porción, frente a lo mismo de todas las palabras juntas, de cada cien.",
-         claves + " El tamaño de «las demás» es la media de una palabra; su porción y su parte, "
-         "la suma de todas."]) + [""]
+        [# Orden 97: nota para el lector; lo técnico (los 64 números del contenido, cómo se mide el
+         # tamaño) está en `resumen` y en el encabezado de este programa.
+         "Porción y parte de la mezcla, de cada cien. En «las demás palabras», el tamaño es el de una "
+         "palabra media, y la porción y la parte, las de todas juntas. "
+         f"«Todas» son las {todas} miradas; «últimas», las {ultimas} de las {capas - desde} últimas "
+         "capas."]) + [""]
 
     L += ["--- 2. EL REPARTO DEL FINAL DE LA FRASE, PALABRA A PALABRA ---", ""]
     filas = []
@@ -216,10 +215,9 @@ def main():
     L += tabla_editorial(
         "El reparto del final de la frase, palabra a palabra",
         ["frase", "miradas", "«El»", "«vaso»", "«cajón»", "el final"], filas, "iidddd",
-        ["Lo que va a los trozos de una palabra se suma: «v» y «aso» cuentan como «vaso». El "
-         "final: los dos últimos trozos juntos, el adjetivo y el punto: lo que se queda el final "
-         "de la frase. «El» es la primera palabra: la papelera.",
-         claves,
+        ["Lo que va a los trozos de una palabra se suma, y «el final» son los dos últimos trozos "
+         f"juntos, el adjetivo y el punto. «Todas» son las {todas} miradas del modelo; «últimas», las "
+         f"{ultimas} de sus {capas - desde} últimas capas.",
          "Lo mismo que reparto_una_a_una.py, con la última columna rotulada por lo que es."]) + [""]
 
     L += ["--- 3. SI PREGUNTA EL ADJETIVO Y NO EL PUNTO DE DETRÁS ---", ""]

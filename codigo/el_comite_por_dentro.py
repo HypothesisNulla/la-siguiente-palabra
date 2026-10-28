@@ -337,9 +337,9 @@ def main():
         f"La cuenta del {DIGITO_SI}, punto a punto", ["punto", "tinta", "peso", "aporta"], filas,
         "iddd",
         [f"Arriba, los {EN_LETRA[PUNTOS_EN_TABLA]} puntos que más suman; debajo, los "
-         f"{EN_LETRA[PUNTOS_EN_TABLA]} que más restan; y en una sola fila, lo que suman juntos todos "
-         "los demás. Lo que aporta cada punto es su tinta por su peso. "
-         f"El listón es {miles(liston)}: si el total pasa de ahí, el comité dice «es un {DIGITO_SI}»."]))
+         f"{EN_LETRA[PUNTOS_EN_TABLA]} que más restan; y en una sola fila, lo que suman juntos los "
+         f"otros {len(resto)}. El listón es {miles(liston)}: si el total pasa de ahí, el comité "
+         f"dice «es un {DIGITO_SI}»."]))
     T.append(tabla_editorial(
         f"Un {DIGITO_SI} y un {rival}, contra el listón",
         ["dibujo", "total", "listón", "¿pasa del listón?"],
@@ -373,10 +373,8 @@ def main():
          ["puntos donde peso y diferencia empujan al mismo lado", f"{iguales} de {vivos}"]],
          "id",
         ["La columna «cuánto se parecen» va de −1 a 1: 1 quiere decir que las dos cuadrículas son "
-         "iguales salvo el tamaño de los números, y 0, que no tienen nada que ver. En la última "
-         "fila solo se cuentan los puntos donde ni el peso ni la diferencia valen cero. La media "
-         f"de los otros nueve dígitos y la diferencia salen de los {miles(len(y_ap))} dibujos con "
-         "los que aprendió el comité."])))
+         "iguales salvo el tamaño de los números, y 0, que no tienen nada que ver. La última fila "
+         f"cuenta solo los {vivos} puntos en los que ni el peso ni la diferencia valen cero."])))
     de_donde_salen_los_pesos(m, casos, liston)
 
 

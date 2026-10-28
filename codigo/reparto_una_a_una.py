@@ -41,6 +41,8 @@ from reparto_atencion import (
     cargar_modelo,
 )
 
+# Orden 97: cifras que la nota escribe con letra; si cambia el recuento, falla aquí y no en la página.
+EN_LETRA = {4: "cuatro"}
 PRIMERA_PALABRA = "el"            # la papelera: el primer trozo de la frase
 SALIDA_CSV = "reparto_una_a_una.csv"
 
@@ -286,10 +288,10 @@ def bloque_sujeto(tok, modelo, datos, cual):
     tabla = tabla_editorial(
         "¿Sigue al sujeto, o al principio de la frase?",
         ["frase", "sujeto", "primer sustantivo", "se fija en", "¿es el sujeto?"], filas, "ciiic",
-        [f"La mirada de la capa {capa + 1}, número {mirada + 1}: la que más se fija en «{cual}» en "
-         "la frase del vaso.",
-         f"Frases donde el sujeto no es el primer sustantivo: {distinguibles}. De ésas, en las que "
-         f"se fija en el sujeto: {aciertos}."])
+        [f"Es la mirada número {mirada + 1} de la capa {capa + 1}, la que más se fija en «{cual}» en "
+         f"la frase del vaso. En las {EN_LETRA[distinguibles]} frases en que el sujeto no es el primer "
+         + ("sustantivo, no se fija en él ni una vez." if aciertos == 0 else
+            f"sustantivo, se fija en él {aciertos} {'vez' if aciertos == 1 else 'veces'}.")])
     return frases + [""] + tabla
 
 

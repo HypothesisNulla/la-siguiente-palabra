@@ -29,6 +29,13 @@ PREDICCIÓN DE CLAUDE, escrita antes de medir (Orden 25, 19 oct 2026, copiada ta
 Uso:
     python mapa_en_la_tarjeta.py --selftest
     python mapa_en_la_tarjeta.py > ../datos/salidas/mapa_en_la_tarjeta.txt
+    python mapa_en_la_tarjeta.py --desde-guardado > ../datos/salidas/mapa_en_la_tarjeta.txt
+
+Con `--desde-guardado` (Orden 98) no se mide nada: se leen de `datos/salidas/mapa_en_la_tarjeta.csv`
+las cifras que midió la Orden 25 (las de la salida guardada, con sus dos decimales y sus cabeceras:
+fecha, máquina y versiones son las de aquella medición) y se escribe la salida entera. Sirve para
+cambiar el texto de las notas sin que las cifras se muevan: una medición nueva en la tarjeta, aunque
+sea con la misma máquina, da otras cifras. La medición de verdad es la de sin modo.
 """
 
 # ======================= CONSTANTES =======================
@@ -38,12 +45,14 @@ LOTES = [16, 32, 64, 128]
 ANCHOS = [256, 1024]                # números por posición
 MARGEN_INVARIANTE = 0.30            # las casillas de 1.024 posiciones, a menos de un 30 % de las guardadas
 REFERENCIA = "../datos/salidas/lotes_en_la_tarjeta.txt"
+GUARDADO = "../datos/salidas/mapa_en_la_tarjeta.csv"   # lo medido en la Orden 25, para --desde-guardado
 GANA_EN_TODAS = "gana en todas"
 ANCHO_SALIDA = 62                   # líneas de no más de 62 caracteres, fuera de las tablas
 
 # ==========================================================
 
 import argparse
+import csv
 import platform
 import re
 import sys
@@ -98,6 +107,24 @@ def cerca(valor, ref, margen=MARGEN_INVARIANTE):
     return ref * (1 - margen) <= valor <= ref * (1 + margen)
 
 
+def leer_guardado(ruta=AQUI / GUARDADO):
+    """(cabecera, {(ancho, lote, longitud): ventaja}) del csv de lo medido en la Orden 25. La cabecera
+    son las cinco primeras líneas de la salida de entonces, que el csv guarda tras «# salida: »."""
+    cabecera, filas = [], []
+    for l in Path(ruta).read_text(encoding="utf-8").splitlines():
+        if l.startswith("# salida: "):
+            cabecera.append(l[len("# salida: "):])
+        elif not l.startswith("#"):
+            filas.append(l)
+    v = {}
+    for f in csv.DictReader(filas):
+        v[(int(f["ancho"]), int(f["lote"]), int(f["longitud"]))] = float(f["ventaja"]) if f["ventaja"] else None
+    esperadas = {(a, b, c) for a in ANCHOS for b in LOTES for c in LONGITUDES}
+    assert set(v) == esperadas, f"Se esperaban las {len(esperadas)} casillas en {ruta}; hay {len(v)}"
+    assert len(cabecera) == 5, f"Se esperaban cinco líneas de cabecera en {ruta}; hay {len(cabecera)}"
+    return cabecera, v
+
+
 def celda(v):
     return L.NO_CABE if v is None else coma(v, 2) + "x"
 
@@ -122,8 +149,11 @@ def informe(v, emitir):
     emitir(tabla_editorial(
         "La longitud más corta a la que deja de ganar",
         ["números por posición", "lote", "deja de ganar con"], filas, "dd" + "d",
-        ["Posiciones del texto. «Deja de ganar»: su ventaja baja de 1,0x.",
-         f"«{GANA_EN_TODAS}»: de 64 a 1.024 posiciones, la que mira a la vez es más rápida."]))
+        [# Orden 97: nota para el lector, en una sola frase larga.
+         "En la tarjeta gráfica, para cada modelo y cada lote, es decir, cada número de textos a la "
+         "vez: la longitud más corta, en posiciones, a la que la máquina que mira todo a la vez ya "
+         f"no es más rápida. «{GANA_EN_TODAS.capitalize()}» quiere decir que es más rápida en "
+         f"todas, de {miles(LONGITUDES[0])} a {miles(LONGITUDES[-1])} posiciones."]))
     emitir([""])
 
 
@@ -178,6 +208,8 @@ def selftest():
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--desde-guardado", action="store_true",
+                    help="no mide: reimprime la salida con las cifras guardadas en el csv de la Orden 25")
     args = ap.parse_args()
     comprobar_entrada()
     if args.selftest:
@@ -195,20 +227,24 @@ def main():
             print(l)
         emitir.dentro = dentro
 
-    emitir(["######## el mapa de la tarjeta (Orden 25) ########",
-            f"fecha: {date.today().isoformat()}",
-            f"máquina: {platform.system()} {platform.machine()}, Apple M4 Max, 36 GB",
-            f"python {platform.python_version()}, torch {torch.__version__}",
-            f"se usa la tarjeta ({E.DISPOSITIVO}, con sincronización).",
-            "Los tiempos solo valen en este portátil.", ""])
-    L.calentar_la_tarjeta()
-    v, tiempos = {}, {}
-    for ancho in ANCHOS:
-        for lote in LOTES:
-            for longitud in LONGITUDES:
-                t = L.medir(ancho, lote, longitud)
-                tiempos[(ancho, lote, longitud)] = t
-                v[(ancho, lote, longitud)] = ventaja(*t)
+    if args.desde_guardado:
+        cabecera, v = leer_guardado()
+        emitir(cabecera + ["Los tiempos solo valen en este portátil.", ""])
+    else:
+        emitir(["######## el mapa de la tarjeta (Orden 25) ########",
+                f"fecha: {date.today().isoformat()}",
+                f"máquina: {platform.system()} {platform.machine()}, Apple M4 Max, 36 GB",
+                f"python {platform.python_version()}, torch {torch.__version__}",
+                f"se usa la tarjeta ({E.DISPOSITIVO}, con sincronización).",
+                "Los tiempos solo valen en este portátil.", ""])
+        L.calentar_la_tarjeta()
+        v, tiempos = {}, {}
+        for ancho in ANCHOS:
+            for lote in LOTES:
+                for longitud in LONGITUDES:
+                    t = L.medir(ancho, lote, longitud)
+                    tiempos[(ancho, lote, longitud)] = t
+                    v[(ancho, lote, longitud)] = ventaja(*t)
     informe(v, emitir)
 
     ref = referencia()

@@ -38,6 +38,6 @@ Lo que recibe la máquina, con la calculadora y la frase colada
     </tool_response><|im_end|>
     <|im_start|>assistant
 
-Modelo de 32.000M, adiestrado, antes de escribir su segunda respuesta a «¿Cuánto es 6396 por 7576?», con restricción. Texto literal, con las marcas del formato de conversación; los renglones largos se parten donde caben.
+Todo lo que tiene delante la máquina antes de su segunda respuesta, con las marcas del formato de conversación. Arriba, en inglés, la descripción de la calculadora que pone el programa; abajo, el resultado de la calculadora con la frase colada detrás.
 :::
 

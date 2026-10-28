@@ -98,12 +98,10 @@ def bloque_elecciones(pasos):
         "De cada cien pasos, ¿cuántos están abiertos?",
         ["frase de arranque", "casi seguro", "casi seguro sin terminar", "abierto", "reñido"],
         filas, "idddd",
-        [f"Casi seguro: el trozo seleccionado tenía {pct(CASI_SEGURO, 0)} o más.",
-         "Casi seguro sin terminar: casi seguro, y el trozo no se pega a una palabra empezada, "
-         "como «ia» detrás de «Franc».",
-         f"Abierto: el trozo seleccionado no llegaba al {pct(CASI_SEGURO, 0)}.",
-         f"Reñido: no llegaba al {pct(RENIDO, 0)}; las demás candidatas juntas se llevaban más de "
-         "la mitad."])
+        [f"Un paso es casi seguro cuando el trozo seleccionado tenía el {pct(CASI_SEGURO, 0)} o más, y "
+         "abierto cuando no llegaba; por eso esas dos columnas suman cien. «Casi seguro sin terminar» "
+         "cuenta solo los casi seguros que no rematan una palabra empezada, como «ia» detrás de "
+         f"«Franc». Y reñido es un paso en el que el trozo seleccionado no llegaba ni al {pct(RENIDO, 0)}."])
     return lin, k
 
 

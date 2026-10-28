@@ -1,4 +1,4 @@
-Medido el 2026-10-09 en macOS-26.6.2-arm64-arm-64bit.
+Medido el 2026-10-28 en macOS-26.7.1-arm64-arm-64bit.
 --- 1. CINCO NÚMEROS, ANTES Y DESPUÉS DE COMPRIMIR ---
 máquina: mlx-community/Qwen2.5-7B-Instruct-bf16 y mlx-community/Qwen2.5-7B-Instruct-4bit
 tabla: model.layers.0.self_attn.q_proj, fila 1, números 1 a 5
@@ -14,9 +14,7 @@ Cinco números, antes y después de comprimir
 | 4 | 0,002258 | 0,004059 | 0,001801 |
 | 5 | -0,003265 | -0,004059 | -0,000793 |
 
-Los 5 primeros números de la primera fila de una tabla de la primera capa, en las dos copias del modelo de 7.000 millones adiestrado.
-
-Diferencia: el comprimido menos el sin comprimir.
+Los cinco primeros números de una de las tablas de la máquina de 7.000 millones adiestrada, tal como salieron del entrenamiento y en la copia comprimida. La diferencia es lo que se ha movido cada uno al comprimir.
 :::
 
 ::: tabla
@@ -41,10 +39,6 @@ Lo que ocupa cada copia
 | 32.000M sin comprimir | 65,3 GB | calculado |
 | 32.000M comprimido | 18,4 GB | medido |
 
-Memoria del portátil: 38,7 GB, para todo: los «36 GB» de su ficha son 36 veces 1.024 por 1.024 por 1.024 bytes.
-
-Números de la de 32.000M: 32.640.013.312. Números de la de 7.000M: 7.615.616.512.
-
-Medido: lo que ocupan sus ficheros en el disco. Calculado: sus números por 2 bytes cada uno, como la de 7.000M sin comprimir.
+«Medido»: lo que ocupan sus ficheros en el disco. «Calculado»: dos bytes por cada número, como la de 7.000M sin comprimir. El portátil tiene 38,7 GB de memoria para todo, y la grande sin comprimir no cabe.
 :::
 

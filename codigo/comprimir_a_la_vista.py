@@ -29,6 +29,8 @@ CAP12 = "../datos/salidas/crudo_o_adiestrado.txt"
 CAP12_TAMANO = "7.000M"                 # la sección del capítulo 12 que se compara
 CAP12_COLUMNA = "adiestrado"            # su columna: enunciado tal cual, como en el capítulo 13
 PREGUNTAS_POR_TAREA = 5
+# Orden 97: cifra que la nota escribe con letra (MAX_NUEVOS de crecer.py); si cambia, falla aquí y no en la página.
+EN_LETRA = {8: "ocho"}
 TAREA_REVES = "seguir un patrón inventado"
 TAREA_MUNDO = "datos del mundo"      # el cero de cinco de la de 32.000M
 NOMBRES = {                              # como escribe los tamaños el capítulo 11
@@ -160,9 +162,9 @@ def informe_reves():
         "Las palabras al revés",
         ["palabra", "al revés, como debía", "32.000M: escribe", "32.000M: ¿vale?",
          "7.000M: escribe", "7.000M: ¿vale?"], filas, "iiicic",
-        ["32.000M: comprimida. 7.000M: sin comprimir. Las dos, adiestradas.",
-         "Escribe: la primera línea de lo que escribió. ¿Vale?: si la regla de corrección la da "
-         "por buena."])))
+        ["La máquina grande, comprimida, y la de 7.000 millones, sin comprimir; las dos, "
+         "adiestradas. «Escribe» es la primera línea de lo que escribió cada una, y «¿vale?», si "
+         "la regla de corrección la da por buena."])))
     print("\nlo que escribió después de la primera línea, entero:")
     for nombre, items in ((GRANDE, g), (PEQUENO, p)):
         for x in items:
@@ -188,9 +190,9 @@ def informe_mundo():
     print("\n".join(tabla_editorial(
         f"Las cinco respuestas de «{TAREA_MUNDO}», 32.000M comprimido",
         ["se esperaba", "lo que escribe", "¿vale?"], filas, "iic",
-        [f"Sin tocar. «/»: salto de línea. Se le dejan {max_nuevos()} trozos de respuesta.",
-         "¿Vale?: si la regla de corrección la da por buena; la regla exige que la respuesta "
-         "empiece por la palabra que se esperaba."])))
+        ["«/» es un salto de línea. Lo que escribe, sin tocar, en los "
+         f"{EN_LETRA[max_nuevos()]} trozos que se le dejan. «¿Vale?» dice si la regla de corrección "
+         "la da por buena, y la regla exige que la respuesta empiece por la palabra que se esperaba."])))
     return g
 
 

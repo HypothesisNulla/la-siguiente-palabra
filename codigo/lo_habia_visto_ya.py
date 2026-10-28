@@ -63,6 +63,9 @@ import numpy as np
 
 import ngrama
 import memoria_recurrente as mr
+# Orden 97: cifras que la nota escribe con letra; si cambia el umbral, falla aquí y no en la página.
+EN_LETRA = {7: "siete"}
+
 from formato import coma, comprobar_ancho, miles, pct, tabla_editorial
 
 
@@ -470,9 +473,9 @@ def _reportar_muestras(ruta_fichero, puntos, palabras, corpus, rng_ngrama):
         filas.append([str(i), arranque, str(racha_max), pct(copiado, 1, de_uno=False)])
     print("\n".join(tabla_editorial(
         "Racha y copiado de cada muestra", ["muestra", "arranque", "racha", "copiado"], filas, "didd",
-        ["La racha es la más larga de cada muestra, en palabras.",
-         f"El copiado es la parte de la muestra que cae dentro de rachas de {int(umbral)} palabras "
-         "o más: una más que la más larga de la máquina de contar con una palabra."])))
+        [# Orden 97: nota para el lector; el porqué del umbral está en _umbral_45.
+         f"La racha es la más larga de cada muestra, en palabras; el copiado, la parte de sus "
+         f"{largo} palabras que cae dentro de rachas de {EN_LETRA[int(umbral)]} o más."])))
 
 
 def _medir_largo(largo, n_ventanas, puntos, palabras, primera, corpus, ajenas, puntos_ajenos,

@@ -72,6 +72,7 @@ CAPAS_A_IMPRIMIR = [0, 1, 2, 4, 8, 12, 16, 20, 23, 24]
 PROMPT_FACIL = "uno, dos, tres, cuatro,"
 CONTINUACION_FACIL = " cinco"
 PROMPT_PALABRA_LARGA = "Madrid es la capital de España, y París es la capital de"
+EN_LETRA = {2: "dos"}          # Orden 97: lo que las notas escriben con letra
 PALABRA_LARGA = " Francia"          # dos trozos: _Franc | ia
 UMBRAL_SENAL = 0.30
 PRIMER_PASO_ESPERADO = (" la", 0.1746)   # lo que imprimió maquina_entera.txt
@@ -190,7 +191,8 @@ def bloque_troceado(tok):
         ["castellano", "trozos", "inglés", "trozos"],
         [[es.strip(), str(len(trozos(tok, es))), en.strip(), str(len(trozos(tok, en)))]
          for es, en in PAREJAS_IDIOMA], "idid",
-        [f"Trozos distintos en el repertorio: {miles(len(tok))}."])
+        [f"Cuántos trozos necesita cada palabra en la caja de la máquina, que tiene {miles(len(tok))} "
+         "trozos distintos."])
     return partes + [""] + idiomas
 
 
@@ -206,9 +208,12 @@ def bloque_paris(tok, modelo):
                    miles(d2[0][2])]]
         out += tabla_editorial(
             f"Dónde está París detrás de «{f}»", ["trozo", "probabilidad", "puesto"], filas, "idd",
-            [f"«{PALABRA_BUSCADA.strip()}» son {len(ids_de(tok, PALABRA_BUSCADA))} trozos: "
-             f"{unidos([visible(x) for x in trozos(tok, PALABRA_BUSCADA)])}. Cada uno, en la lista que da la máquina "
-             "detrás del texto que tiene delante; «entera», los dos multiplicados."]) + [""]
+            # Orden 97: la nota habla de dos trozos y de «los dos»; si la palabra se parte en otros tantos,
+            # falla aquí y no en la página.
+            [f"«{PALABRA_BUSCADA.strip()}» va en {EN_LETRA[len(ids_de(tok, PALABRA_BUSCADA))]} trozos, "
+             f"{unidos([visible(x) for x in trozos(tok, PALABRA_BUSCADA)])}, y cada uno se mira en la "
+             "lista que da la máquina detrás de lo que tiene delante. «Entera» es la probabilidad de los "
+             "dos seguidos: una multiplicada por la otra."]) + [""]
     return out[:-1]
 
 

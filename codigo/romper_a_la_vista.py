@@ -187,14 +187,17 @@ def informe(C, filas, por_cap, n_pajar):
 
     print("--- 3. EL ENUNCIADO QUE AVISA DE QUE FALLAR RESTA ---\n")
     cuenta = cuantas_abstenciones()
-    tabla = []
+    tabla, totales = [], []
     for f in filas:
         if f["medicion"] != "D_abstencion":
             continue
         total = cuenta[f["clave"]][1]
         k = round(float(f["a"]) * total)
         assert k == cuenta[f["clave"]][0], f"«{f['clave']}»: el CSV y las respuestas no casan"
+        totales.append(total)
         tabla.append([ROTULOS[f["clave"]], f"{k} de {total}", pct(k / total, 0), barra(k / total)])
+    assert totales == [20, 20, 5], (
+        "la nota dice «las veinte preguntas sin respuesta» en las dos primeras filas y «cinco» en la tercera")
     imprime(
         muestra_editorial(
             "Lo que se puso delante de cada una de las veinte preguntas",
@@ -202,10 +205,11 @@ def informe(C, filas, por_cap, n_pajar):
             ["La segunda regla del examen, escrita para la máquina."]),
         tabla_editorial(
             "Cuántas veces se calla", ["enunciado", "se calla en", "", ""], tabla, "iddi",
-            ["Se calla: contesta que no lo sabe, o que no existe.",
-             "Las dos primeras filas: las veinte preguntas sin respuesta. La tercera: cinco que "
-             "sí la tienen, del capítulo 11.",
-             "Modelo de 7.000 millones, adiestrado y sin comprimir."]),
+            [# Orden 97: nota para el lector; el modelo (7.000 millones, adiestrado y sin comprimir) sale
+             # en la nota del pajar. Las veinte y las cinco preguntas se comprueban con los totales.
+             "«Se calla»: contesta que no lo sabe, o que eso no existe. Las dos primeras filas son "
+             "las veinte preguntas sin respuesta; la tercera, cinco del capítulo 11 que sí la "
+             "tienen."]),
         muestra_editorial(
             f"Lo que contesta, avisando de que fallar resta, sobre el arroyo de {ESCAPADA[1]}",
             escapada(),

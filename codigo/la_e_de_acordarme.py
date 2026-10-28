@@ -54,6 +54,8 @@ PAREJAS_PUNTUACION = [(1, 2), (2, 4), (10, 20)]   # doble puntuación no es dobl
 SUMANDOS = [4, 16, 32, 64]    # cuántos productos se suman en una puntuación
 TIRADAS_SUMAS = 100_000       # sumas al azar por cada fila
 SEMILLA_SUMAS = 20260927
+# Orden 97: cifras que las notas escriben con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {16: "dieciséis", 6: "seis", 32: "treinta y dos"}
 TOL_MANO = 1e-4               # diferencia máxima entre la cuenta a mano y la ida de la máquina
 
 # ==========================================================
@@ -279,8 +281,8 @@ def informe(texto, prueba, p, med):
         "Fragmentos: lo que ve, lo que viene, lo más probable",
         ["fragmento", "lo que ve", "viene", "lo más probable", "¿acierta?"], filas, "ciiic",
         ["Fragmento: los tres primeros de prueba, sin elegir, y el de la figura.",
-         "¿Acierta?: la letra a la que da más porcentaje es la que viene de verdad. El guion bajo "
-         "es un espacio."]) + [""]
+         "El guion bajo es un espacio. Acierta cuando la letra a la que da más porcentaje es la que "
+         "viene de verdad."]) + [""]
 
     # 3. de la letra a la lista que entra
     k = MIRADOS_SITIO
@@ -295,8 +297,8 @@ def informe(texto, prueba, p, med):
             (s1, ent1, [f"Los {k} primeros de sus {A} números. En «quiero acordarme» hay una «e» en "
                         f"el sitio {s1} y otra en el {s2}."]),
             (s2, ent2, [f"Los {k} primeros de sus {A} números.",
-                        f"Parecido entre las dos listas que entran, con sus {A} números: "
-                        f"{coma(parecido, 2)} (la medida del capítulo 5: 1 quiere decir idénticas)."])):
+                        f"Con sus {EN_LETRA[A]} números, las dos listas que entran se parecen "
+                        f"{coma(parecido, 2)}; dos listas idénticas darían 1."])):
         L += tabla_editorial(
             f"La «e» del sitio {s}: la lista que entra", [""] + [num(j + 1) for j in range(k)],
             [fila("la lista de la «e»", r["letra"][s2 - 1]),
@@ -348,11 +350,11 @@ def informe(texto, prueba, p, med):
           f"{coma(100 * r['reparto'][i])} %"] for i, ch in enumerate(tramo)]
         + [neg(["suma", "", "", dec(r["fuerza"].sum()), f"{coma(100 * r['reparto'].sum())} %"])],
         "ccddd",
-        ["La pregunta de la «e» contra la etiqueta de cada una.",
-         f"Fuerza: cada punto más de puntuación la multiplica por {coma(math.e, 2)}. Con "
-         f"puntuación 0 vale 1; con 1, {coma(math.e, 2)}; con 2, {coma(math.e ** 2, 2)}; con 3, "
-         f"{coma(math.e ** 3, 2)}; con menos 1, {coma(math.e ** -1, 2)}.",
-         "De cada cien: su fuerza entre la suma de todas, por cien. El guion bajo es un espacio."]) + [""]
+        ["El guion bajo es un espacio. Cada fila es la pregunta de la «e» contra la etiqueta de esa "
+         "letra.",
+         f"La fuerza vale 1 con puntuación 0; {coma(math.e, 2)} con 1; {coma(math.e ** 2, 2)} con 2; "
+         f"{coma(math.e ** 3, 2)} con 3, y {coma(math.e ** -1, 2)} con menos 1. La última columna es "
+         "esa fuerza entre la suma de todas, por cien."]) + [""]
 
     # 7. doble puntuación no es doble porción
     filas = []
@@ -371,9 +373,9 @@ def informe(texto, prueba, p, med):
          + [coma(reparte_entre(r["reparto"]))],
          ["sin el ajuste"] + [str(round(100 * sin[i])) for i in ult] + [coma(reparte_entre(sin))]],
         "i" + "d" * len(ult) + "d",
-        [f"Sin el ajuste: sin dividir entre {dec(r['divisor'])}. En las seis últimas letras, de "
-         "cada cien.",
-         "Reparte: entre cuántas letras reparte, contadas como en «reparte entre»."]) + [""]
+        [f"Lo que se lleva cada una de las {EN_LETRA[len(ult)]} últimas letras, de cada cien; sin el "
+         f"ajuste es sin dividir las puntuaciones entre {dec(r['divisor'])}. La última columna cuenta "
+         "como «reparte entre»."]) + [""]
 
     # 8. reparte entre
     mayores = [i for i in range(T) if round(100 * r["reparto"][i]) > 0]
@@ -382,8 +384,7 @@ def informe(texto, prueba, p, med):
         [[nombre, coma(reparte_entre(rep))] for nombre, rep in EJEMPLOS_REPARTO]
         + [["el de la «e»: " + ", ".join(str(round(100 * r["reparto"][i])) for i in mayores),
             coma(reparte_entre(r["reparto"]))]], "id",
-        ["Reparte entre: cuántas letras, repartiendo a partes iguales, darían un reparto igual de "
-         "concentrado que éste."]) + [""]
+        [f"Con 1, todo va a una sola letra; con {T}, las {EN_LETRA[T]} reciben lo mismo."]) + [""]
 
     # 9. la mezcla
     km = MIRADOS_MEZCLA
@@ -431,12 +432,11 @@ def informe(texto, prueba, p, med):
         ["se suman", "distancia a cero, de media", "ajuste entre", "tras el ajuste"],
         [[str(nn), dec(d), dec(math.sqrt(nn)), dec(d / math.sqrt(nn))] for nn, d in zip(SUMANDOS, dist)],
         "dddd",
-        [f"Cada sumando: dos números al azar de tamaño 1, multiplicados; {miles(TIRADAS_SUMAS)} "
-         "sumas al azar por fila. Distancia a cero: a qué distancia de cero queda la suma, de media.",
-         "Ajuste: el número que, multiplicado por sí mismo, da cuántos se suman (2 por 2 son 4; 8 "
-         "por 8, 64).",
-         f"De tamaño 1: de cada cien, "
-         f"{coma(100 * dentro_de_uno(np.random.default_rng(SEMILLA_SUMAS)), 0)} caen entre menos 1 y 1."])
+        [f"Cada fila son {miles(TIRADAS_SUMAS)} sumas, y cada sumando, dos números al azar de tamaño 1 "
+         "multiplicados; de tamaño 1 quiere decir que de cada cien, "
+         f"{coma(100 * dentro_de_uno(np.random.default_rng(SEMILLA_SUMAS)), 0)} caen entre menos 1 y 1. "
+         "El ajuste es el número que, multiplicado por sí mismo, da cuántos se suman (2 por 2 son 4; "
+         "8 por 8, 64), y la última columna, la distancia a cero después de dividir entre él."])
     return L
 
 

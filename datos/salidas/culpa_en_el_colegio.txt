@@ -1,5 +1,5 @@
 ######## la culpa, en la red del colegio (Orden 20) ########
-fecha: 2026-10-24
+fecha: 2026-10-28
 máquina: Darwin arm64
 python 3.12.14, numpy 2.5.3
 GPU: no se usa (todo en numpy). Nada de lo que sigue
@@ -29,7 +29,7 @@ Lo que dice la red entrenada, edad por edad
 | 14 | 0 | 0,001 | +0,001 |
 | 15 | 0 | 0,001 | +0,001 |
 
-La red se entrenó 100.000 pasos, con los ajustes que se explican más adelante en el capítulo: en cada paso, cada peso se mueve la mitad de su culpa, y los pesos de arranque, puestos al azar, se dividen entre 10. La última columna, «lo que falla», es lo que dice la red menos lo que tendría que decir.
+Lo que tendría que decir es 1 para los siete de primaria y 0 para los demás. La última columna, «lo que falla», es lo que dice la red menos lo que tendría que decir.
 :::
 
 ::: tabla
@@ -261,7 +261,7 @@ La misma culpa, a lo bruto
 | la segunda, de la edad | -0,5935879966 | -0,5935879967 |
 | la final, de la segunda | 0,2266538661 | 0,2266538661 |
 
-«A lo bruto» quiere decir sin atajo: se sube el peso una cienmilésima y se mira el error, se baja una cienmilésima y se mira otra vez, y la culpa es lo que va de un error a otro, dividido entre lo que se ha movido el peso. Las dos columnas coinciden en sus nueve primeros decimales.
+La columna «a lo bruto» se calcula sin atajo: se mueve el peso una cienmilésima hacia arriba y otra hacia abajo, y se mira cuánto cambia el error. Coincide con la del atajo hasta el noveno decimal.
 :::
 
 ::: tabla
@@ -411,7 +411,7 @@ Qué edades fallan las que siguen, y qué dicen en ellas
 | 13, 14, 15 | 23 | 0,7006 | 0,1619 |
 | 3, 4, 5, 13, 14, 15 | 6 | 0,5385 | 0,2485 |
 
-Todas, después de los 100.000 pasos de más. La columna «lo que dicen en ellas» es lo que contesta la red a esas edades.
+Las 29 que siguen atascadas después de los 100.000 pasos de más, agrupadas según las edades en las que fallan.
 :::
 
 ::: tabla

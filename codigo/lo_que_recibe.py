@@ -137,9 +137,11 @@ def main():
                if len(partes) == 1 else
                ["Lo que recibe la máquina, con la calculadora y la frase colada (1 de 2)",
                 "Lo que recibe la máquina, con la calculadora y la frase colada (2 de 2)"])
-    nota = (f"Modelo de 32.000M, adiestrado, antes de escribir su segunda respuesta a «¿Cuánto es "
-            f"{A} por {B}?», con restricción. Texto literal, con las marcas del formato de "
-            "conversación; los renglones largos se parten donde caben.")
+    # Orden 97: nota para el lector. La pregunta (6396 por 7576, con restricción) y que el texto es
+    # literal, con los renglones largos partidos, están en las constantes y en `renglones`.
+    nota = ("Todo lo que tiene delante la máquina antes de su segunda respuesta, con las marcas del "
+            "formato de conversación. Arriba, en inglés, la descripción de la calculadora que pone el "
+            "programa; abajo, el resultado de la calculadora con la frase colada detrás.")
     for titulo, parte in zip(titulos, partes):
         print("\n".join(muestra_editorial(titulo, parte, [nota])))
         print()

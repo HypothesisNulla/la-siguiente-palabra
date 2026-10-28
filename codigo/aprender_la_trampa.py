@@ -57,6 +57,8 @@ MOVIMIENTOS = [(0, 1), (1, 0), (0, -1), (-1, 0)]   # derecha, abajo, izquierda, 
 NOMBRES_MOV = ["derecha", "abajo", "izquierda", "arriba"]
 
 PARTIDAS = 2000                   # partidas de aprendizaje por tabla
+# Orden 97: cifra que la nota escribe con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {20: "veinte"}
 PASOS_MAX = 40                    # movimientos por partida, como mucho
 ALFA = 0.5                        # cuánto se mueve un número hacia lo que vino después
 GAMMA = 0.95                      # cuánto vale un premio que llega un paso más tarde
@@ -320,11 +322,10 @@ def bloque_resumen(resultados):
     return tabla_editorial(
         "Lo que aprenden veinte tablas, según el juez y el tablero",
         ["", "el juez", "letrero, a", "meta, a", "al letrero", "a la meta"], filas, "iidddd",
-        [f"Cada tabla aprende {miles(PARTIDAS)} partidas. «Letrero, a» y «meta, a»: pasos desde "
-         f"la salida. «Al letrero», «a la meta»: cuántas de las {len(SEMILLAS)} tablas acaban "
-         f"yendo ahí.",
-         "Solo lee: pone la nota si al final se lee «meta conseguida». Comprueba: solo si se ha "
-         "llegado a la meta."])
+        ["«Letrero, a» y «meta, a» dicen a cuántos pasos de la salida está cada uno; las dos "
+         f"últimas columnas, cuántas de las {EN_LETRA[len(SEMILLAS)]} tablas acaban yendo ahí "
+         f"después de {miles(PARTIDAS)} partidas. El juez que solo lee pone la nota si al final se "
+         "lee «meta conseguida»; el que comprueba, solo si se ha llegado de verdad a la meta."])
 
 
 def rastro(semilla=SEMILLAS[0], clave="A", partidas=PARTIDAS_RASTRO):
@@ -353,10 +354,10 @@ def bloque_rastro(filas):
         [[str(f["partida"]), nombre[f["final"]], str(f["movimientos"]),
           coma(f["al_lado"], 4), coma(f["salida"], 4)] for f in filas],
         "iiddd",
-        ["Junto al letrero: el número de «derecha» en la casilla que está a la izquierda del "
-         "letrero. En la salida: el número de «derecha» en la salida. Los dos, al acabar la "
-         "partida.",
-         f"Una partida acaba al pisar la meta o el letrero, o a los {PASOS_MAX} movimientos."])
+        ["Las dos últimas columnas son el número de «derecha» en dos casillas al acabar cada "
+         "partida: la que está justo a la izquierda del letrero y la salida. Una partida acaba al "
+         f"pisar la meta o el letrero, o a los {PASOS_MAX} movimientos; «nada» quiere decir que "
+         f"llegó a los {PASOS_MAX} sin pisar ninguno."])
 
 
 def bloque_longitudes():

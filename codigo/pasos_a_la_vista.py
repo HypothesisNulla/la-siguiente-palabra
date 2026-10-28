@@ -25,6 +25,8 @@ Uso (desde codigo/):
 
 ENTRADA = "../datos/salidas/pasos_escritos.csv"
 N_ESPERADAS = 20
+# Orden 97: cifras que las notas escriben con letra; si cambia el recuento, falla aquí y no en la página.
+EN_LETRA = {20: "veinte", 10: "diez", 9: "nueve"}
 
 # ==========================================================
 
@@ -117,17 +119,16 @@ def main():
     print("\n".join(tabla_editorial(
         "Las cuentas escritas paso a paso que fallan (32.000M)",
         ["multiplicación", "escribe", "exacto", "sus productos parciales"], filas, "iddi",
-        [f"De las {N_ESPERADAS} cuentas de «Multiplicar escribiendo la cuenta paso a paso», las "
-         f"{len(mal)} que fallan.",
+        [# Orden 97: notas para el lector. Lo que se lleva «al multiplicar los parciales» (3 de 20) y el
+         # criterio de «falta» (el parcial que no aparece en ninguna parte) están en `lleva` y `faltan`.
+         f"Las {EN_LETRA[len(mal)]} de las {EN_LETRA[len(fs)]} cuentas que fallan.",
          "Productos parciales: el primer número por cada cifra del segundo, con sus ceros, como "
-         "en la cuenta de la escuela. Bien: los cuatro están escritos en la respuesta, así que "
-         "la cuenta se torció al sumar. Falta: el que no aparece en ninguna parte.",
-         f"Al sumar: {al_sumar} de {len(mal)}. Antes de sumar: {len(mal) - al_sumar} de "
-         f"{len(mal)}.",
-         f"Lo que se lleva de una columna a la siguiente, en las {len(fs)} cuentas: escrito en "
-         f"la suma, {sum(lleva(f['respuesta'])[1] for f in fs)} de {len(fs)}; escrito al "
-         f"multiplicar los parciales, {sum(lleva(f['respuesta'])[0] for f in fs)} de "
-         f"{len(fs)}."])))
+         "en la cuenta de la escuela. «Bien» quiere decir que los cuatro están escritos y son "
+         f"correctos: el error llegó al sumarlos. Pasa en {EN_LETRA[al_sumar]} de {EN_LETRA[len(mal)]}.",
+         f"En ninguna de las {EN_LETRA[len(fs)]} escribe lo que se lleva de una columna a la "
+         "siguiente al sumar."])))
+    assert sum(lleva(f["respuesta"])[1] for f in fs) == 0, (
+        "la nota dice que en ninguna de las veinte escribe lo que se lleva al sumar")
 
 
 if __name__ == "__main__":

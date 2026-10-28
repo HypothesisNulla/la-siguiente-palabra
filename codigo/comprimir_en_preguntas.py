@@ -25,6 +25,8 @@ TXT_CAP12 = "../datos/salidas/crudo_o_adiestrado_una_a_una.txt"
 # se lee de ahí, por su título.
 BLOQUE_CAP12 = "La batería del capítulo 11, en las tres columnas (7.000M)"
 POR_TAREA = 5
+# Orden 97: cifras que las notas escriben con letra; si cambia el parámetro, falla aquí y no en la página.
+EN_LETRA = {5: "cinco", 3: "tres"}
 TAREAS = ["sumar dos cifras", "plurales", "traducir del inglés", "datos del mundo",
           "seguir un patrón inventado", "razonar sobre una frase"]
 COLUMNAS = ["7B sin comprimir", "7B comprimido", "32B comprimido"]
@@ -86,10 +88,11 @@ def bloques(a, c12):
     filas.append(["**en total**"] + [f"**{x} de 30**" for x in tot])
     t1 = tabla_editorial(
         "La batería del capítulo 11 con tres máquinas", ["tarea"] + ROTULOS_1, filas, "iddd",
-        ["Cada número: cuántas de las 5 preguntas de la tarea acierta. 7.000M, 32.000M: "
-         "millones de números (nominal).",
-         "Comprimido: guardado con menos detalle en cada número. Sin comprimir: tal como salió "
-         "del entrenamiento. Las tres máquinas están adiestradas (capítulo 12)."])
+        [# Orden 97: nota para el lector. Que 7.000M y 32.000M sean millones de números (nominal) y
+         # que «sin comprimir» sea tal como salió del entrenamiento está en el código y en cap. 13.
+         f"Cuántas de las {EN_LETRA[POR_TAREA]} preguntas de cada tarea acierta cada máquina. Las "
+         f"{EN_LETRA[len(COLUMNAS)]} están adiestradas; la comprimida guarda cada número con menos "
+         "detalle."])
     filas = []
     for t in TAREAS:
         x, y = c12[t], a[t][0]
@@ -98,9 +101,9 @@ def bloques(a, c12):
     filas.append(["**en total**", f"**{t12} de 30**", f"**{t13} de 30**", ""])
     t2 = tabla_editorial(
         "La misma máquina en los capítulos 12 y 13", ["tarea"] + ROTULOS_2, filas, "iddc",
-        ["Las dos columnas son el modelo de 7.000M adiestrado y sin comprimir, con la misma "
-         "batería y la misma regla.",
-         "Cap. 12: con el programa de uso general. Cap. 13: con el programa de Apple."])
+        ["Las dos columnas son la misma máquina, con las mismas preguntas y la misma regla de "
+         "corrección. Solo cambia el programa que la pone en marcha: en el capítulo 12, uno de uso "
+         "general; en éste, el de Apple."])
     return [t1, t2], tot, (t12, t13)
 
 

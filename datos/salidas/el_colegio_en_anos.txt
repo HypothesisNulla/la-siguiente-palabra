@@ -1,5 +1,5 @@
 ######## el colegio con la edad en años (Orden 19) ########
-fecha: 2026-10-24
+fecha: 2026-10-28
 máquina: Darwin arm64
 python 3.12.14, numpy 2.5.3
 GPU: no se usa (todo en numpy). Nada de lo que sigue
@@ -148,7 +148,7 @@ Lo que acaban haciendo las dos neuronas de la primera capa
 | sí desde los 6 años | sí desde los 13 años | 81 | 137 |
 | sí hasta los 5 años | sí hasta los 12 años | 19 | 33 |
 
-Se entrenaron 200 redes, cada una desde su propio arranque, y 170 lo resolvieron. Todas esas 170 acabaron haciendo una de estas dos parejas de preguntas. «Sí desde los 6 años» quiere decir que esa neurona dice que sí (más de 0,5) a los de seis años en adelante, y que no a los más pequeños; «sí hasta los 5 años» es al revés. La columna «de cada 100» cuenta solo las 170 que lo resolvieron.
+De 200 redes entrenadas desde cero, cada una con su propio arranque, 170 lo resolvieron, y todas con una de estas dos parejas; «de cada 100» se cuenta sobre esas 170. «Sí desde los 6 años» quiere decir que la neurona dice más de 0,5 de los seis años en adelante y menos a los más pequeños; «sí hasta los 5 años» es al revés.
 :::
 
 LA RED DEL CAPÍTULO (con la edad en años)
