@@ -28,13 +28,31 @@ PREDICCIÓN DE CLAUDE, escrita antes de medir (Orden 24, 19 oct 2026, copiada ta
   cruza, la frase de los catorce núcleos es falsa.
 =====================================================================================
 
+Orden 101: una sola medición varía demasiado de una vez a otra, así que la medición son BARRIDOS barridos
+completos (tras BARRIDOS_TIRADOS que se tiran, con las longitudes al revés si LONGITUDES_AL_REVES: el
+protocolo de la Orden 100) y cada celda es la mediana de los BARRIDOS. Los barridos, con sus tiempos, se
+guardan en `datos/salidas/cuantos_hilos.csv`.
+
+Orden 105: la salida del libro sale de DOS repeticiones enteras, A y B (Orden 104), que `--desde-guardado`
+lee juntas sin medir nada: `datos/salidas/cuantos_hilos-A.csv` y `-B.csv`. Cada celda es la mediana de las diez
+mediciones (cinco barridos de cada una). La multiplicación de matrices no se guarda en el csv y ese modo no la
+repite: su sección no sale.
+
 Uso:
     python cuantos_hilos.py --selftest
     python cuantos_hilos.py > ../datos/salidas/cuantos_hilos.txt
+    python cuantos_hilos.py --desde-guardado > ../datos/salidas/cuantos_hilos.txt
 """
 
 # ======================= CONSTANTES =======================
 
+BARRIDOS = 5                       # barridos completos; cada celda es la mediana de los BARRIDOS
+BARRIDOS_TIRADOS = 1               # barridos enteros que se miden antes y se tiran
+LONGITUDES_AL_REVES = True         # las longitudes, de la más larga a la más corta
+CSV_BARRIDOS = "../datos/salidas/cuantos_hilos.csv"          # donde escribe una medición nueva (luego se guarda como A o B)
+GUARDADOS = ["../datos/salidas/cuantos_hilos-A.csv",         # las dos repeticiones que lee --desde-guardado (Orden 105)
+             "../datos/salidas/cuantos_hilos-B.csv"]
+EN_LETRA = {5: "cinco", 10: "diez"}  # cifra que la nota escribe con letra; si no está, falla aquí y no en la página
 HILOS = [1, 2, 4, 8, 14]           # el portátil tiene 14 núcleos: 10 de rendimiento y 4 de eficiencia
 HILOS_ENTRE_PROCESOS = 1           # torch.set_num_interop_threads, una sola vez
 LONGITUD_LARGA = 1024              # donde se mira la predicción
@@ -56,6 +74,7 @@ import os
 os.environ["FORZAR_CPU"] = "1"
 
 import argparse
+import csv
 import platform
 import re
 import statistics
@@ -90,15 +109,67 @@ def modelos():
     return E.EnSerie(E.ANCHO).to(E.DISPOSITIVO), E.ALaVez(E.ANCHO, E.CABEZAS).to(E.DISPOSITIVO)
 
 
-def medir_pasadas(serie, a_la_vez):
+def un_barrido(serie, a_la_vez):
     """{(n, longitud): (segundos en orden, segundos a la vez)} con la función de cronometrar de
     en_serie_o_a_la_vez.py, para cada número de hilos."""
     r = {}
+    longitudes = E.LONGITUDES[::-1] if LONGITUDES_AL_REVES else E.LONGITUDES
     for n in HILOS:
         poner_hilos(n)
-        for longitud in E.LONGITUDES:
+        for longitud in longitudes:
             r[(n, longitud)] = (E.cronometrar(serie, longitud), E.cronometrar(a_la_vez, longitud))
     return r
+
+
+def medir_pasadas(serie, a_la_vez):
+    """Los BARRIDOS barridos (tras los tirados): {(barrido, n, longitud): (en orden, a la vez)}, con los
+    segundos a seis decimales (los del csv; de ellos sale todo)."""
+    for _ in range(BARRIDOS_TIRADOS):
+        un_barrido(serie, a_la_vez)
+    crudo = {}
+    for b in range(1, BARRIDOS + 1):
+        for (n, longitud), (t_s, t_v) in un_barrido(serie, a_la_vez).items():
+            crudo[(b, n, longitud)] = (round(t_s, 6), round(t_v, 6))
+    return crudo
+
+
+def escribir_barridos(crudo, ruta=AQUI / CSV_BARRIDOS):
+    with open(ruta, "w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["barrido", "hilos", "longitud", "t_en_orden", "t_a_la_vez", "ventaja"])
+        for (b, n, longitud), (t_s, t_v) in sorted(crudo.items()):
+            w.writerow([b, n, longitud, f"{t_s:.6f}", f"{t_v:.6f}", f"{t_s / t_v:.4f}"])
+
+
+def leer_guardados(rutas=None):
+    """{(barrido, n, longitud): (en orden, a la vez)} de los csv guardados (por omisión, GUARDADOS: las repeticiones
+    A y B, Orden 105); los barridos del segundo siguen la numeración del primero (6 a 10 tras 1 a 5)."""
+    rutas = rutas or [AQUI / g for g in GUARDADOS]
+    crudo = {}
+    for ruta in rutas:
+        desplazamiento = max((k[0] for k in crudo), default=0)
+        propios = {}
+        for f in csv.DictReader(open(ruta, encoding="utf-8")):
+            propios[(int(f["barrido"]) + desplazamiento, int(f["hilos"]), int(f["longitud"]))] = (
+                float(f["t_en_orden"]), float(f["t_a_la_vez"]))
+        barridos = sorted({k[0] for k in propios})
+        esperadas = {(b, n, l) for b in barridos for n in HILOS for l in E.LONGITUDES}
+        assert set(propios) == esperadas, f"Se esperaban todas las casillas en cada barrido de {ruta}; hay {len(propios)}"
+        crudo.update(propios)
+    return crudo
+
+
+def medianas(crudo):
+    """({(n, longitud): (mediana de los segundos en orden, mediana de los segundos a la vez)},
+    {(n, longitud): mediana de las ventajas de los barridos}, sin redondear)."""
+    seg, ventajas = {}, {}
+    barridos = sorted({k[0] for k in crudo})
+    for n in HILOS:
+        for longitud in E.LONGITUDES:
+            tiempos = [crudo[(b, n, longitud)] for b in barridos]
+            seg[(n, longitud)] = (statistics.median(t[0] for t in tiempos), statistics.median(t[1] for t in tiempos))
+            ventajas[(n, longitud)] = statistics.median(t[0] / t[1] for t in tiempos)
+    return seg, ventajas
 
 
 def tiempo_matmul(n, matriz=MATRIZ, repeticiones=REPETICIONES_MATRIZ, tandas=TANDAS_MATRIZ):
@@ -134,26 +205,30 @@ def cerca(valor, referencia, margen=MARGEN_INVARIANTE):
 
 # ---------------------------------------------------------------- impresión
 
-def informe(r, matmul, emitir):
+def informe(r, v, matmul, emitir, barridos=BARRIDOS):
+    """`matmul` es None si no se midió (--desde-guardado): entonces no sale la sección de la multiplicación."""
+    mediana = f" Cada cifra es la mediana de {EN_LETRA[barridos]} mediciones." if barridos > 1 else ""
     emitir(["--- TIEMPO DE UNA PASADA DE ENTRENAMIENTO, SEGÚN LOS HILOS ---", ""])
     filas = []
     for n in HILOS:
         for longitud in E.LONGITUDES:
             t_s, t_v = r[(n, longitud)]
-            filas.append([str(n), miles(longitud), coma(t_s, 4), coma(t_v, 4), coma(t_s / t_v, 2) + "x"])
+            filas.append([str(n), miles(longitud), coma(t_s, 4), coma(t_v, 4), coma(v[(n, longitud)], 2) + "x"])
     emitir(tabla_editorial(
         "Una pasada de entrenamiento, por hilos y longitud",
         ["hilos", "posiciones", "en orden (s)", "a la vez (s)", "ventaja"], filas, "ddddd",
         ["Procesador del portátil, modelo de 256 números por posición, lotes de 16.",
          "Ventaja: cuántas veces más rápida es la que mira todo a la vez; por debajo de 1,0x es más "
-         "lenta."]))
+         f"lenta.{mediana}"]))
     emitir([""])
-    filas = [[str(n)] + [coma(r[(n, l)][0] / r[(n, l)][1], 2) + "x" for l in E.LONGITUDES] for n in HILOS]
+    filas = [[str(n)] + [coma(v[(n, l)], 2) + "x" for l in E.LONGITUDES] for n in HILOS]
     emitir(tabla_editorial(
         "La ventaja, por hilos y longitud", ["hilos"] + [miles(l) for l in E.LONGITUDES], filas,
         "d" * (1 + len(E.LONGITUDES)),
         ["Columnas: posiciones del texto. Es la última columna de la tabla de arriba."]))
     emitir([""])
+    if matmul is None:
+        return
     emitir(["--- UNA MULTIPLICACIÓN DE MATRICES ---", ""])
     t1, tn = matmul[HILOS[0]], matmul[HILOS[-1]]
     flops = 2 * MATRIZ ** 3
@@ -232,6 +307,8 @@ def selftest():
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--desde-guardado", action="store_true",
+                    help="no mide: lee los barridos guardados, A y B, y escribe la salida entera (sin la multiplicación)")
     args = ap.parse_args()
     torch.set_num_interop_threads(HILOS_ENTRE_PROCESOS)
     comprobar_entrada()
@@ -250,21 +327,38 @@ def main():
             print(l)
         emitir.dentro = dentro
 
-    emitir(["######## ¿son los núcleos? (Orden 24) ########",
-            f"fecha: {date.today().isoformat()}",
-            f"máquina: {platform.system()} {platform.machine()}, Apple M4 Max, "
-            f"{os.cpu_count()} núcleos",
-            f"python {platform.python_version()}, torch {torch.__version__}",
-            f"se usa el procesador ({E.DISPOSITIVO}); la tarjeta no.",
-            f"hilos entre procesos: {torch.get_num_interop_threads()}; hilos por omisión: 10",
-            "Los tiempos solo valen en este portátil.", ""])
-    serie, a_la_vez = modelos()
-    r = medir_pasadas(serie, a_la_vez)
-    matmul = {n: tiempo_matmul(n) for n in (HILOS[0], HILOS[-1])}
-    informe(r, matmul, emitir)
+    if args.desde_guardado:
+        # Orden 105: no se mide nada; el csv no guarda ni la fecha ni las versiones, así que la máquina y las
+        # versiones que salen son las del entorno donde se lee (el mismo portátil y el mismo entorno).
+        emitir(["######## ¿son los núcleos? (Orden 24) ########",
+                "se leen los barridos guardados, A y B (cuantos_hilos-A.csv",
+                "y cuantos_hilos-B.csv); no se mide nada.",
+                f"máquina: {platform.system()} {platform.machine()}, Apple M4 Max, "
+                f"{os.cpu_count()} núcleos",
+                f"python {platform.python_version()}, torch {torch.__version__}",
+                "Los tiempos solo valen en este portátil.",
+                "La multiplicación de matrices no se vuelve a medir: no",
+                "sale en esta salida.", ""])
+        crudo = leer_guardados()
+        matmul = None
+    else:
+        emitir(["######## ¿son los núcleos? (Orden 24) ########",
+                f"fecha: {date.today().isoformat()}",
+                f"máquina: {platform.system()} {platform.machine()}, Apple M4 Max, "
+                f"{os.cpu_count()} núcleos",
+                f"python {platform.python_version()}, torch {torch.__version__}",
+                f"se usa el procesador ({E.DISPOSITIVO}); la tarjeta no.",
+                f"hilos entre procesos: {torch.get_num_interop_threads()}; hilos por omisión: 10",
+                "Los tiempos solo valen en este portátil.", ""])
+        serie, a_la_vez = modelos()
+        crudo = medir_pasadas(serie, a_la_vez)
+        escribir_barridos(crudo)
+        matmul = {n: tiempo_matmul(n) for n in (HILOS[0], HILOS[-1])}
+    r, v = medianas(crudo)
+    informe(r, v, matmul, emitir, len({k[0] for k in crudo}))
 
     ref = ventaja_de_referencia()
-    v14 = r[(HILOS[-1], LONGITUD_LARGA)][0] / r[(HILOS[-1], LONGITUD_LARGA)][1]
+    v14 = v[(HILOS[-1], LONGITUD_LARGA)]
     ok = cerca(v14, ref)
     emitir(tabla_editorial(
         "La comprobación contra la medición del portátil",
@@ -275,7 +369,7 @@ def main():
         ["Si no queda a menos de un 30 %, esta medición no vale."]))
     emitir([""])
     assert ok, f"con {HILOS[-1]} hilos la ventaja ({v14}) no queda a menos de un 30 % de {ref}"
-    v_poco = {n: r[(n, LONGITUD_LARGA)][0] / r[(n, LONGITUD_LARGA)][1] for n in HILOS}
+    v_poco = {n: v[(n, LONGITUD_LARGA)] for n in HILOS}
     cruza = {n: v < 1.0 for n, v in v_poco.items()}
     emitir(tabla_editorial(
         f"¿Cae por debajo de 1,0x con {miles(LONGITUD_LARGA)} posiciones?", ["hilos", "ventaja", "¿por debajo de 1,0x?"],

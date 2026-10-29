@@ -1,10 +1,11 @@
 ######## ¿son los núcleos? (Orden 24) ########
-fecha: 2026-10-19
+se leen los barridos guardados, A y B (cuantos_hilos-A.csv
+y cuantos_hilos-B.csv); no se mide nada.
 máquina: Darwin arm64, Apple M4 Max, 14 núcleos
 python 3.12.14, torch 2.14.0
-se usa el procesador (cpu); la tarjeta no.
-hilos entre procesos: 1; hilos por omisión: 10
 Los tiempos solo valen en este portátil.
+La multiplicación de matrices no se vuelve a medir: no
+sale en esta salida.
 
 --- TIEMPO DE UNA PASADA DE ENTRENAMIENTO, SEGÚN LOS HILOS ---
 
@@ -13,35 +14,35 @@ Una pasada de entrenamiento, por hilos y longitud
 
 | hilos | posiciones | en orden (s) | a la vez (s) | ventaja |
 |--:|--:|--:|--:|--:|
-| 1 | 64 | 0,0107 | 0,0064 | 1,66x |
-| 1 | 128 | 0,0224 | 0,0161 | 1,39x |
-| 1 | 256 | 0,0433 | 0,0408 | 1,06x |
-| 1 | 512 | 0,0880 | 0,1241 | 0,71x |
-| 1 | 1.024 | 0,1787 | 0,3592 | 0,50x |
-| 2 | 64 | 0,0111 | 0,0048 | 2,34x |
-| 2 | 128 | 0,0227 | 0,0102 | 2,24x |
-| 2 | 256 | 0,0448 | 0,0254 | 1,77x |
-| 2 | 512 | 0,0928 | 0,0769 | 1,21x |
-| 2 | 1.024 | 0,1851 | 0,2121 | 0,87x |
-| 4 | 64 | 0,0106 | 0,0038 | 2,81x |
-| 4 | 128 | 0,0213 | 0,0073 | 2,90x |
-| 4 | 256 | 0,0424 | 0,0177 | 2,39x |
-| 4 | 512 | 0,0876 | 0,0514 | 1,70x |
-| 4 | 1.024 | 0,1770 | 0,1340 | 1,32x |
-| 8 | 64 | 0,0125 | 0,0038 | 3,32x |
-| 8 | 128 | 0,0252 | 0,0064 | 3,94x |
-| 8 | 256 | 0,0498 | 0,0129 | 3,85x |
-| 8 | 512 | 0,1008 | 0,0336 | 3,00x |
-| 8 | 1.024 | 0,2102 | 0,0838 | 2,51x |
-| 14 | 64 | 0,0180 | 0,0046 | 3,90x |
-| 14 | 128 | 0,0352 | 0,0067 | 5,27x |
-| 14 | 256 | 0,0701 | 0,0128 | 5,48x |
-| 14 | 512 | 0,1417 | 0,0312 | 4,54x |
-| 14 | 1.024 | 0,2883 | 0,0788 | 3,66x |
+| 1 | 64 | 0,0103 | 0,0068 | 1,52x |
+| 1 | 128 | 0,0209 | 0,0160 | 1,30x |
+| 1 | 256 | 0,0428 | 0,0420 | 1,02x |
+| 1 | 512 | 0,0862 | 0,1303 | 0,66x |
+| 1 | 1.024 | 0,1707 | 0,3698 | 0,46x |
+| 2 | 64 | 0,0117 | 0,0049 | 2,37x |
+| 2 | 128 | 0,0235 | 0,0105 | 2,23x |
+| 2 | 256 | 0,0476 | 0,0260 | 1,83x |
+| 2 | 512 | 0,0954 | 0,0814 | 1,16x |
+| 2 | 1.024 | 0,1922 | 0,2136 | 0,90x |
+| 4 | 64 | 0,0113 | 0,0039 | 2,92x |
+| 4 | 128 | 0,0228 | 0,0075 | 3,04x |
+| 4 | 256 | 0,0465 | 0,0177 | 2,63x |
+| 4 | 512 | 0,0926 | 0,0529 | 1,77x |
+| 4 | 1.024 | 0,1884 | 0,1346 | 1,41x |
+| 8 | 64 | 0,0129 | 0,0037 | 3,50x |
+| 8 | 128 | 0,0254 | 0,0060 | 4,17x |
+| 8 | 256 | 0,0509 | 0,0124 | 4,13x |
+| 8 | 512 | 0,1025 | 0,0331 | 3,09x |
+| 8 | 1.024 | 0,2115 | 0,0824 | 2,56x |
+| 14 | 64 | 0,0177 | 0,0045 | 3,92x |
+| 14 | 128 | 0,0347 | 0,0068 | 5,17x |
+| 14 | 256 | 0,0697 | 0,0127 | 5,48x |
+| 14 | 512 | 0,1656 | 0,0309 | 5,39x |
+| 14 | 1.024 | 0,2844 | 0,0789 | 3,64x |
 
 Procesador del portátil, modelo de 256 números por posición, lotes de 16.
 
-Ventaja: cuántas veces más rápida es la que mira todo a la vez; por debajo de 1,0x es más lenta.
+Ventaja: cuántas veces más rápida es la que mira todo a la vez; por debajo de 1,0x es más lenta. Cada cifra es la mediana de diez mediciones.
 :::
 
 ::: tabla
@@ -49,28 +50,13 @@ La ventaja, por hilos y longitud
 
 | hilos | 64 | 128 | 256 | 512 | 1.024 |
 |--:|--:|--:|--:|--:|--:|
-| 1 | 1,66x | 1,39x | 1,06x | 0,71x | 0,50x |
-| 2 | 2,34x | 2,24x | 1,77x | 1,21x | 0,87x |
-| 4 | 2,81x | 2,90x | 2,39x | 1,70x | 1,32x |
-| 8 | 3,32x | 3,94x | 3,85x | 3,00x | 2,51x |
-| 14 | 3,90x | 5,27x | 5,48x | 4,54x | 3,66x |
+| 1 | 1,52x | 1,30x | 1,02x | 0,66x | 0,46x |
+| 2 | 2,37x | 2,23x | 1,83x | 1,16x | 0,90x |
+| 4 | 2,92x | 3,04x | 2,63x | 1,77x | 1,41x |
+| 8 | 3,50x | 4,17x | 4,13x | 3,09x | 2,56x |
+| 14 | 3,92x | 5,17x | 5,48x | 5,39x | 3,64x |
 
 Columnas: posiciones del texto. Es la última columna de la tabla de arriba.
-:::
-
---- UNA MULTIPLICACIÓN DE MATRICES ---
-
-::: tabla
-Una multiplicación de matrices de 1.024 × 1.024
-
-| hilos | milisegundos | miles de millones de cuentas por segundo |
-|--:|--:|--:|
-| 1 | 0,69 | 3.131 |
-| 14 | 0,69 | 3.107 |
-
-Con 1 hilo tarda 0,99 veces lo que con 14.
-
-Casi igual: en este Mac los hilos no reparten la multiplicación.
 :::
 
 ::: tabla
@@ -79,7 +65,7 @@ La comprobación contra la medición del portátil
 |  | ventaja |
 |:--|--:|
 | la guardada, en el procesador, con 1.024 posiciones | 3,2x |
-| esta, con 14 hilos | 3,66x |
+| esta, con 14 hilos | 3,64x |
 | ¿a menos de un 30 % de la guardada? | sí |
 
 Si no queda a menos de un 30 %, esta medición no vale.
@@ -90,11 +76,11 @@ Si no queda a menos de un 30 %, esta medición no vale.
 
 | hilos | ventaja | ¿por debajo de 1,0x? |
 |--:|--:|:-:|
-| 1 | 0,50x | sí |
-| 2 | 0,87x | sí |
-| 4 | 1,32x | no |
-| 8 | 2,51x | no |
-| 14 | 3,66x | no |
+| 1 | 0,46x | sí |
+| 2 | 0,90x | sí |
+| 4 | 1,41x | no |
+| 8 | 2,56x | no |
+| 14 | 3,64x | no |
 
 El texto del capítulo 9 dice que con dos núcleos la que mira todo a la vez pierde.
 :::

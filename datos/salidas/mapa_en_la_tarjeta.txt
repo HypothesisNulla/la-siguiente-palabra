@@ -1,5 +1,5 @@
 ######## el mapa de la tarjeta (Orden 25) ########
-fecha: 2026-10-19
+fecha: 2026-10-29
 máquina: Darwin arm64, Apple M4 Max, 36 GB
 python 3.12.14, torch 2.14.0
 se usa la tarjeta (mps, con sincronización).
@@ -12,14 +12,14 @@ La ventaja, con el modelo de 256 números por posición
 
 | lote | 64 | 128 | 256 | 512 | 1.024 |
 |--:|--:|--:|--:|--:|--:|
-| 16 | 3,11x | 3,27x | 3,11x | 1,95x | 1,35x |
-| 32 | 1,79x | 1,81x | 1,66x | 1,20x | 0,74x |
-| 64 | 2,77x | 1,29x | 1,11x | 0,71x | 0,47x |
-| 128 | 1,34x | 0,99x | 0,76x | 0,52x | 0,34x |
+| 16 | 2,66x | 2,73x | 2,54x | 1,90x | 1,21x |
+| 32 | 1,88x | 1,82x | 1,55x | 1,09x | 0,65x |
+| 64 | 1,34x | 1,22x | 1,00x | 0,66x | 0,42x |
+| 128 | 1,06x | 0,93x | 0,69x | 0,49x | 0,32x |
 
 Columnas: posiciones del texto. Filas: textos a la vez.
 
-Ventaja: cuántas veces más rápida es la que mira todo a la vez; por debajo de 1,0x es más lenta. «no cabe»: la tarjeta se quedó sin memoria.
+Ventaja: cuántas veces más rápida es la que mira todo a la vez; por debajo de 1,0x es más lenta. «no cabe»: la tarjeta se quedó sin memoria. Cada ventaja es la mediana de diez mediciones.
 :::
 
 ::: tabla
@@ -27,14 +27,14 @@ La ventaja, con el modelo de 1.024 números por posición
 
 | lote | 64 | 128 | 256 | 512 | 1.024 |
 |--:|--:|--:|--:|--:|--:|
-| 16 | 1,69x | 1,82x | 1,73x | 1,56x | 1,35x |
-| 32 | 1,38x | 1,32x | 1,27x | 1,16x | 1,00x |
-| 64 | 1,20x | 1,17x | 1,12x | 1,04x | 0,88x |
-| 128 | 1,07x | 1,05x | 1,01x | 0,91x | 0,79x |
+| 16 | 1,75x | 1,75x | 1,69x | 1,50x | 1,26x |
+| 32 | 1,35x | 1,34x | 1,22x | 1,13x | 0,96x |
+| 64 | 1,20x | 1,13x | 1,09x | 0,97x | 0,85x |
+| 128 | 1,07x | 1,04x | 0,98x | 0,90x | 0,80x |
 
 Columnas: posiciones del texto. Filas: textos a la vez.
 
-Ventaja: cuántas veces más rápida es la que mira todo a la vez; por debajo de 1,0x es más lenta. «no cabe»: la tarjeta se quedó sin memoria.
+Ventaja: cuántas veces más rápida es la que mira todo a la vez; por debajo de 1,0x es más lenta. «no cabe»: la tarjeta se quedó sin memoria. Cada ventaja es la mediana de diez mediciones.
 :::
 
 --- DÓNDE DEJA DE GANAR ---
@@ -46,14 +46,14 @@ La longitud más corta a la que deja de ganar
 |--:|--:|--:|
 | 256 | 16 | gana en todas |
 | 256 | 32 | 1.024 |
-| 256 | 64 | 512 |
+| 256 | 64 | 256 |
 | 256 | 128 | 128 |
 | 1.024 | 16 | gana en todas |
-| 1.024 | 32 | gana en todas |
-| 1.024 | 64 | 1.024 |
-| 1.024 | 128 | 512 |
+| 1.024 | 32 | 1.024 |
+| 1.024 | 64 | 512 |
+| 1.024 | 128 | 256 |
 
-En la tarjeta gráfica, para cada modelo y cada lote, es decir, cada número de textos a la vez: la longitud más corta, en posiciones, a la que la máquina que mira todo a la vez ya no es más rápida. «Gana en todas» quiere decir que es más rápida en todas, de 64 a 1.024 posiciones.
+En la tarjeta gráfica, para cada modelo y cada lote, es decir, cada número de textos a la vez: la longitud más corta, en posiciones, a la que la máquina que mira todo a la vez ya no gana. Ganar es ir más de un 2 % por delante; a menos, es empate, que es más o menos lo que varía la misma medición al repetirla. «Gana en todas» quiere decir que gana en todas, de 64 a 1.024 posiciones. Cada ventaja es la mediana de diez mediciones.
 :::
 
 ::: tabla
@@ -61,14 +61,14 @@ La comprobación contra lotes_en_la_tarjeta.txt
 
 | números por posición | lote | la guardada | esta | ¿a menos de un 30 %? |
 |--:|--:|--:|--:|:-:|
-| 256 | 16 | 1,44x | 1,35x | sí |
-| 256 | 32 | 0,71x | 0,74x | sí |
-| 256 | 64 | 0,46x | 0,47x | sí |
-| 256 | 128 | 0,32x | 0,34x | sí |
-| 1.024 | 16 | 1,30x | 1,35x | sí |
-| 1.024 | 32 | 1,01x | 1,00x | sí |
-| 1.024 | 64 | 0,88x | 0,88x | sí |
-| 1.024 | 128 | 0,79x | 0,79x | sí |
+| 256 | 16 | 1,44x | 1,21x | sí |
+| 256 | 32 | 0,71x | 0,65x | sí |
+| 256 | 64 | 0,46x | 0,42x | sí |
+| 256 | 128 | 0,32x | 0,32x | sí |
+| 1.024 | 16 | 1,30x | 1,26x | sí |
+| 1.024 | 32 | 1,01x | 0,96x | sí |
+| 1.024 | 64 | 0,88x | 0,85x | sí |
+| 1.024 | 128 | 0,79x | 0,80x | sí |
 
 Las casillas de 1.024 posiciones. Si alguna no queda a menos de un 30 %, esta medición no vale.
 :::

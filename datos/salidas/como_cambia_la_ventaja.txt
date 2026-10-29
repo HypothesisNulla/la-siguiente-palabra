@@ -1,7 +1,8 @@
 ##### capítulo 9: cómo cambia la ventaja al alargar el texto #####
 máquina: ninguna. Este programa NO cronometra: relee las siete
-tablas ya guardadas en datos/salidas/, así que da lo mismo en
-cualquier ordenador y no hay máquina que declarar.
+ejecuciones ya guardadas en datos/salidas/ (las del portátil,
+dos repeticiones, A y B), así que da lo mismo en cualquier
+ordenador y no hay máquina que declarar.
 
 «longitud del texto» son posiciones; «ventaja», cuántas veces
 más rápida es la máquina que lo mira todo a la vez, y por debajo
@@ -14,7 +15,7 @@ La ventaja en el ordenador de 2 núcleos en la nube
 
 | modelo, números por posición | longitud del texto: 64 | longitud del texto: 128 | longitud del texto: 256 | longitud del texto: 512 | longitud del texto: 1.024 | queda |
 |--:|--:|--:|--:|--:|--:|:--|
-| 256 | 1,1x | 0,8x | 0,9x | 0,7x | 0,5x | 45 %, cae |
+| 256 | 1,1x | 0,8x | 0,9x | 0,7x | 0,5x | 42 %, cae |
 
 Cuántas veces más rápida va la máquina que lo mira todo a la vez, con cada tamaño de modelo y cada longitud de texto. «Queda» es la parte de la ventaja del texto más corto que sigue en el más largo: por debajo del 75 % se dice que cae, y entre el 75 y el 110 %, que se mantiene.
 :::
@@ -24,11 +25,11 @@ La ventaja en el procesador del portátil, con tres tamaños de modelo
 
 | modelo, números por posición | longitud del texto: 64 | longitud del texto: 128 | longitud del texto: 256 | longitud del texto: 512 | longitud del texto: 1.024 | queda |
 |--:|--:|--:|--:|--:|--:|:--|
-| 256 | 3,8x | 4,8x | 4,8x | 3,8x | 3,2x | 84 %, se mantiene |
-| 512 | 3,9x | 4,2x | 3,2x | 4,7x | 3,1x | 79 %, se mantiene |
-| 1.024 | 4,6x | 5,2x | 6,4x | 5,5x | 4,8x | 104 %, se mantiene |
+| 256 | 3,7x | 4,6x | 4,7x | 4,0x | 2,9x | 78 %, se mantiene |
+| 512 | 4,4x | 4,7x | 5,0x | 4,3x | 3,7x | 84 %, se mantiene |
+| 1.024 | 5,8x | 6,2x | 6,4x | 6,2x | 4,8x | 83 %, se mantiene |
 
-Cuántas veces más rápida va la máquina que lo mira todo a la vez, con cada tamaño de modelo y cada longitud de texto. «Queda» es la parte de la ventaja del texto más corto que sigue en el más largo: por debajo del 75 % se dice que cae, y entre el 75 y el 110 %, que se mantiene.
+Cuántas veces más rápida va la máquina que lo mira todo a la vez, con cada tamaño de modelo y cada longitud de texto. «Queda» es la parte de la ventaja del texto más corto que sigue en el más largo: por debajo del 75 % se dice que cae, y entre el 75 y el 110 %, que se mantiene. Cada ventaja es la mediana de diez mediciones.
 :::
 
 ::: tabla
@@ -36,11 +37,11 @@ La ventaja en la tarjeta gráfica del portátil, con tres tamaños de modelo
 
 | modelo, números por posición | longitud del texto: 64 | longitud del texto: 128 | longitud del texto: 256 | longitud del texto: 512 | longitud del texto: 1.024 | queda |
 |--:|--:|--:|--:|--:|--:|:--|
-| 256 | 3,9x | 2,9x | 2,7x | 2,4x | 1,2x | 31 %, cae |
-| 512 | 3,0x | 2,2x | 2,2x | 1,8x | 1,2x | 40 %, cae |
-| 1.024 | 1,8x | 1,8x | 1,6x | 1,5x | 1,3x | 72 %, cae |
+| 256 | 2,51x | 3,14x | 2,83x | 2,11x | 1,31x | 52 %, cae |
+| 512 | 2,34x | 2,40x | 2,19x | 1,83x | 1,26x | 54 %, cae |
+| 1.024 | 1,72x | 1,67x | 1,64x | 1,45x | 1,27x | 74 %, cae |
 
-Cuántas veces más rápida va la máquina que lo mira todo a la vez, con cada tamaño de modelo y cada longitud de texto. «Queda» es la parte de la ventaja del texto más corto que sigue en el más largo: por debajo del 75 % se dice que cae, y entre el 75 y el 110 %, que se mantiene.
+Cuántas veces más rápida va la máquina que lo mira todo a la vez, con cada tamaño de modelo y cada longitud de texto. «Queda» es la parte de la ventaja del texto más corto que sigue en el más largo: por debajo del 75 % se dice que cae, y entre el 75 y el 110 %, que se mantiene. Cada ventaja es la mediana de diez mediciones.
 :::
 
 
@@ -65,13 +66,13 @@ Los segundos en el procesador del portátil, modelo de 256 números por posició
 
 | longitud | en orden (s) | a la vez (s) | ventaja |
 |--:|--:|--:|--:|
-| 64 | 0,0157 | 0,0041 | 3,8x |
-| 128 | 0,0300 | 0,0063 | 4,8x |
-| 256 | 0,0571 | 0,0120 | 4,8x |
-| 512 | 0,1156 | 0,0304 | 3,8x |
-| 1.024 | 0,2443 | 0,0754 | 3,2x |
+| 64 | 0,0145 | 0,0039 | 3,7x |
+| 128 | 0,0284 | 0,0061 | 4,6x |
+| 256 | 0,0569 | 0,0123 | 4,7x |
+| 512 | 0,1242 | 0,0314 | 4,0x |
+| 1.024 | 0,2387 | 0,0828 | 2,9x |
 
-Lo que tarda, en segundos, una pasada de entrenamiento con dieciséis textos de cada longitud. La ventaja es el primer tiempo entre el segundo: por encima de 1,0x gana la que mira todo a la vez; por debajo, la que lee en orden.
+Cada cifra es la mediana de diez mediciones.
 :::
 
 ::: tabla
@@ -93,8 +94,10 @@ Con 1.024 posiciones y el modelo de 256 números, los tres ordenadores
 | ordenador | en orden (s) | a la vez (s) |
 |:--|--:|--:|
 | ordenador de 2 núcleos | 0,3664 | 0,7737 |
-| portátil, procesador | 0,2443 | 0,0754 |
-| portátil, tarjeta gráfica | 0,0460 | 0,0390 |
+| portátil, procesador | 0,2387 | 0,0828 |
+| portátil, tarjeta gráfica | 0,0485 | 0,0368 |
+
+Las del portátil son la mediana de diez mediciones; la del ordenador de dos núcleos es la segunda de sus tres.
 :::
 
 ::: tabla
@@ -102,12 +105,12 @@ Los segundos en el procesador del portátil, modelo de 1.024 números por posici
 
 | longitud | en orden (s) | a la vez (s) | ventaja |
 |--:|--:|--:|--:|
-| 64 | 0,1251 | 0,0274 | 4,6x |
-| 128 | 0,2590 | 0,0500 | 5,2x |
-| 256 | 0,6000 | 0,0931 | 6,4x |
-| 512 | 1,1246 | 0,2062 | 5,5x |
-| 1.024 | 2,0900 | 0,4325 | 4,8x |
+| 64 | 0,1450 | 0,0251 | 5,8x |
+| 128 | 0,2914 | 0,0470 | 6,2x |
+| 256 | 0,5874 | 0,0919 | 6,4x |
+| 512 | 1,2251 | 0,1995 | 6,2x |
+| 1.024 | 2,0826 | 0,4312 | 4,8x |
 
-Lo que tarda, en segundos, una pasada de entrenamiento con dieciséis textos de cada longitud. La ventaja es el primer tiempo entre el segundo: por encima de 1,0x gana la que mira todo a la vez; por debajo, la que lee en orden.
+Cada cifra es la mediana de diez mediciones.
 :::
 

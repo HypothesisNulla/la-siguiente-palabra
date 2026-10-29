@@ -33,15 +33,70 @@ MARGEN_TEST_NULO = 1.3
 
 SALIDA_CSV = "en_serie_o_a_la_vez.csv"
 
+# Orden 100: el modo --barridos repite la medición de siempre BARRIDOS veces, con los tres tamaños de
+# modelo de la tarjeta (los de en_serie_o_a_la_vez.txt, en_serie_512_gpu.txt y en_serie_1024_gpu.txt), y
+# guarda las BARRIDOS mediciones de cada celda: una sola varía demasiado de una vez a otra.
+BARRIDOS = 5
+BARRIDOS_TIRADOS = 1                # barridos enteros que se miden antes y se tiran: calientan la tarjeta
+LONGITUDES_AL_REVES = True          # las longitudes, de la más larga a la más corta (la 64 deja de ir la primera)
+ANCHOS_BARRIDOS = (256, 512, 1024)
+CSV_BARRIDOS = "../datos/salidas/en_serie_barridos.csv"          # en la tarjeta
+CSV_BARRIDOS_CPU = "../datos/salidas/en_serie_barridos_cpu.csv"  # con FORZAR_CPU=1, en el procesador
+
 # ==========================================================
 
 import argparse
 import csv
 import os
+import subprocess
 import sys
 import time
 
 from formato import comprobar_ancho, miles, coma, tabla_editorial
+
+
+def lanzar_barridos(lote):
+    """Orden 104: EL PROCESO QUE LANZA no importa `torch` (ni este mismo módulo más allá de aquí): solo
+    lanza un proceso por ancho con `subprocess`, recoge sus líneas y escribe el csv. Con `torch` importado en
+    el proceso que espera, el hijo salía un 19 % más lento en la tarjeta (256 números, lote 16, 1.024
+    posiciones: de 0,044 s a 0,052 s en orden; Respuesta 103), sin que el padre hiciera nada más que esperar.
+
+    BARRIDOS barridos (tras BARRIDOS_TIRADOS que se tiran) de cada ancho de ANCHOS_BARRIDOS, **cada ancho en
+    su propio proceso** (Orden 103: después de las pasadas largas de un modelo grande, el pequeño se queda un
+    35 % más lento en ese mismo proceso en el procesador; Respuesta 102). Las BARRIDOS mediciones de cada
+    celda van a CSV_BARRIDOS (CSV_BARRIDOS_CPU, si el hijo dice que usó el procesador): segundos de las dos
+    máquinas y ventaja, a seis decimales; la ventaja sale de los segundos ya redondeados."""
+    assert "torch" not in sys.modules, "El proceso que lanza no puede haber importado torch (Orden 104)"
+    filas, dispositivo = [], None
+    for ancho in ANCHOS_BARRIDOS:
+        hijo = subprocess.run([sys.executable, os.path.abspath(__file__), "--barridos-de-un-ancho", str(ancho),
+                               "--lote", str(lote)], capture_output=True, text=True)
+        assert hijo.returncode == 0, f"El proceso del ancho {ancho} falló:\n{hijo.stderr}"
+        for l in hijo.stdout.splitlines():
+            if l.startswith("# dispositivo "):
+                assert dispositivo in (None, l.split()[2]), "Los procesos de los anchos usaron dispositivos distintos"
+                dispositivo = l.split()[2]
+        medidas = [l.split(",") for l in hijo.stdout.splitlines() if l.count(",") == 3]
+        assert len(medidas) == BARRIDOS * len(LONGITUDES), (
+            f"Se esperaban {BARRIDOS * len(LONGITUDES)} celdas del ancho {ancho}; hay {len(medidas)}")
+        for b, n, t_s, t_v in medidas:
+            t_s, t_v = float(t_s), float(t_v)
+            filas.append([int(b), ancho, int(n), f"{t_s:.6f}", f"{t_v:.6f}", f"{t_s / t_v:.4f}"])
+    print(f"Procesador usado: {dispositivo}", file=sys.stderr)
+    destino = CSV_BARRIDOS_CPU if dispositivo == "cpu" else CSV_BARRIDOS
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), destino), "w",
+              newline="", encoding="utf-8") as fh:
+        csv.writer(fh).writerows(
+            [["barrido", "ancho", "longitud", "en_serie_s", "a_la_vez_s", "ventaja"]] + filas)
+    print(f"Escrito {destino}: {BARRIDOS} barridos, anchos {ANCHOS_BARRIDOS} (cada uno en su proceso), lote {lote}.")
+
+
+if __name__ == "__main__" and "--barridos" in sys.argv:
+    _ap = argparse.ArgumentParser(add_help=False)
+    _ap.add_argument("--barridos", action="store_true")
+    _ap.add_argument("--lote", type=int, default=LOTE)
+    sys.exit(lanzar_barridos(_ap.parse_known_args()[0].lote))
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -251,6 +306,30 @@ def ficha():
          "vez: un bloque de atención con su red densa."])))
 
 
+def un_barrido(lote, ancho):
+    """La medición de siempre con un ancho: las dos máquinas, y las LONGITUDES de la más corta a la más
+    larga, o al revés si LONGITUDES_AL_REVES. Devuelve {longitud: (en serie, a la vez)}."""
+    global ANCHO, LOTE
+    LOTE, ANCHO = lote, ancho
+    serie = EnSerie(ancho=ancho).to(DISPOSITIVO)
+    a_la_vez = ALaVez(ancho=ancho, cabezas=CABEZAS).to(DISPOSITIVO)
+    out = {}
+    for n in (LONGITUDES[::-1] if LONGITUDES_AL_REVES else LONGITUDES):
+        out[n] = (cronometrar(serie, n), cronometrar(a_la_vez, n))
+    return out
+
+
+def barridos_de_un_ancho(lote, ancho):
+    """Dentro de SU proceso: BARRIDOS_TIRADOS barridos que se tiran y BARRIDOS que cuentan, de un solo ancho.
+    Escribe en la salida estándar una línea «barrido,longitud,segundos en serie,segundos a la vez» por celda."""
+    print(f"# dispositivo {DISPOSITIVO.type}")
+    for _ in range(BARRIDOS_TIRADOS):
+        un_barrido(lote, ancho)
+    for b in range(1, BARRIDOS + 1):
+        for n, (t_s, t_v) in un_barrido(lote, ancho).items():
+            print(f"{b},{n},{t_s:.6f},{t_v:.6f}")
+
+
 def main():
     global ANCHO, LOTE
     ap = argparse.ArgumentParser(description=__doc__)
@@ -267,12 +346,22 @@ def main():
                     help=f"cuántos textos a la vez (por omisión {LOTE})")
     ap.add_argument("--ficha", action="store_true",
                     help="imprime la ficha de las dos máquinas (contada, sin medir) y sale")
+    ap.add_argument("--barridos", action="store_true",
+                    help=f"repite la medición {BARRIDOS} veces con los anchos {ANCHOS_BARRIDOS}, escribe "
+                         f"{CSV_BARRIDOS} ({CSV_BARRIDOS_CPU} con FORZAR_CPU=1) y sale (no escribe {SALIDA_CSV})")
+    ap.add_argument("--barridos-de-un-ancho", type=int, metavar="ANCHO",
+                    help="(interno de --barridos) los barridos de un solo ancho, en este proceso")
     args = ap.parse_args()
     if args.selftest:
         sys.exit(selftest())
     if args.ficha:
         ficha()
         return
+    if args.barridos_de_un_ancho:
+        barridos_de_un_ancho(args.lote, args.barridos_de_un_ancho)
+        return
+    if args.barridos:           # lo atiende el lanzador de arriba, antes de importar torch
+        raise SystemExit("--barridos tiene que ejecutarse como programa: python en_serie_o_a_la_vez.py --barridos")
 
     ANCHO, LOTE = args.ancho, args.lote
     assert ANCHO % CABEZAS == 0, \

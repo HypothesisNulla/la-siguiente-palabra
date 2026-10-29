@@ -13,6 +13,21 @@ Este programa NO mide: lee las tablas que ya hay en datos/salidas/ (siete ejecuc
 máquinas y tres tamaños de modelo), recompone la ventaja longitud a longitud y dice, para
 cada una, cuánto vale al principio, cuánto al final y en qué sentido va.
 
+Orden 101: de la tarjeta y del procesador del portátil no lee los `.txt` (una sola medición, con la
+ventaja a un decimal) sino los csv de los barridos, `en_serie_barridos.csv` y `en_serie_barridos_cpu.csv`
+(cinco mediciones por celda, Orden 100): los segundos de cada celda son la mediana de los segundos de los
+barridos, y la ventaja, la mediana de las ventajas. «Queda» y su palabra se calculan con las medianas SIN
+redondear (redondear antes de dividir ponía una fila a un lado o a otro de la raya del 75 %) y solo el
+porcentaje se redondea, al entero. El ordenador de dos núcleos de la nube, que no se puede repetir, sigue
+saliendo de su `.txt`, con la ventaja calculada de sus segundos y no de la que va impresa a un decimal.
+
+Orden 105: las cifras del portátil son la mediana de DIEZ mediciones: los cinco barridos de cada una de las
+dos repeticiones (A y B, Orden 104), `en_serie_barridos-A.csv` y `-B.csv` (la tarjeta) y
+`en_serie_barridos_cpu-A.csv` y `-B.csv` (el procesador). Se juntan los diez y se toma la mediana de cada
+celda, igual que antes con los cinco. La tabla de la tarjeta con tres tamaños va con dos decimales (con uno,
+el lector que divide dos cifras de la tabla no obtiene el «queda» que la tabla dice), y las notas de las
+tablas del portátil dicen de cuántas mediciones es cada cifra.
+
 No lleva cronómetro a propósito: un tiempo medido aquí sería un tiempo de OTRA máquina
 presentado como si fuera el del libro, que es el fallo que este mismo capítulo cuenta.
 
@@ -43,6 +58,19 @@ EJECUCIONES = [
     ("en_serie_1024_cpu.txt",            "portátil, procesador", 1024, 1),
     ("en_serie_1024_gpu.txt",            "portátil, tarjeta",    1024, 1),
 ]
+# Orden 101: de dónde sale cada ejecución del portátil, ahora: los csv de los barridos y su ancho. Los `.txt` de
+# arriba quedan como la medición guardada de antes; solo se leen para el ordenador de 2 núcleos.
+# Orden 105: cada base tiene dos csv, el de la repetición A y el de la B (`base-A.csv`, `base-B.csv`).
+CSV_BARRIDOS = {"en_serie_o_a_la_vez_cpu.txt": ("en_serie_barridos_cpu", 256),
+                "en_serie_512_cpu.txt": ("en_serie_barridos_cpu", 512),
+                "en_serie_1024_cpu.txt": ("en_serie_barridos_cpu", 1024),
+                "en_serie_o_a_la_vez.txt": ("en_serie_barridos", 256),
+                "en_serie_512_gpu.txt": ("en_serie_barridos", 512),
+                "en_serie_1024_gpu.txt": ("en_serie_barridos", 1024)}
+REPETICIONES = ("A", "B")    # las dos repeticiones enteras de la medición (Orden 104)
+BARRIDOS_POR_REPETICION = 5  # barridos de cada una (los que se tiran antes no están en el csv)
+MEDICIONES = len(REPETICIONES) * BARRIDOS_POR_REPETICION   # de cuántas mediciones es cada cifra: 10
+DECIMALES_VENTAJA = {"portátil, tarjeta": 2}   # las demás tablas de ventajas, a uno (Orden 105)
 CORTO, LARGO = 64, 1024      # las dos longitudes que el capítulo compara
 # Cómo se llama cada ordenador en el título de su tabla.
 NOMBRE_TABLA = {"contenedor, 2 núcleos": "el ordenador de 2 núcleos en la nube",
@@ -56,14 +84,16 @@ QUEDA_CAE = 0.75             # por debajo de esto, la ventaja cae
 # Orden 97: el lote con el que se midió todo lo de en_serie_*.txt (el LOTE de en_serie_o_a_la_vez.py),
 # escrito con letra en la nota; si cambia, falla aquí y no en la página.
 TEXTOS_POR_PASADA = 16
-EN_LETRA = {16: "dieciséis"}
+EN_LETRA = {16: "dieciséis", 10: "diez"}
 MEDIO_ULTIMO = 0.00005       # los segundos se imprimen con cuatro decimales: medio último
 
 # ==========================================================
 
 import argparse
+import csv
 import os
 import re
+import statistics
 import sys
 
 from formato import comprobar_ancho, coma, miles, pct, tabla_editorial
@@ -110,6 +140,37 @@ def leer(ruta, cual=1):
     return filas
 
 
+def leer_barridos(carpeta, base, ancho):
+    """Las filas de los csv de los barridos para un ancho, como [(longitud, mediana de los segundos en
+    serie, mediana de los segundos a la vez, mediana de las ventajas)] (sin redondear), y cuántos
+    barridos hay. Orden 105: son los de las dos repeticiones juntas, `base-A.csv` y `base-B.csv`: diez
+    por celda. Las ventajas son las de cada barrido (en serie entre a la vez), no las del csv."""
+    tiempos = {}
+    for repeticion in REPETICIONES:
+        ruta = os.path.join(carpeta, f"{base}-{repeticion}.csv")
+        for f in csv.DictReader(open(ruta, encoding="utf-8")):
+            if int(f["ancho"]) == ancho:
+                tiempos.setdefault(int(f["longitud"]), []).append((float(f["en_serie_s"]), float(f["a_la_vez_s"])))
+    assert tiempos, f"Se esperaban filas del ancho {ancho} en {base}-A.csv y {base}-B.csv; no hay ninguna"
+    largos = {len(v) for v in tiempos.values()}
+    assert len(largos) == 1, f"Se esperaban los mismos barridos en todas las longitudes de {base}: {largos}"
+    assert largos == {MEDICIONES}, (
+        f"Se esperaban {MEDICIONES} mediciones por celda en {base} (las notas dicen «{EN_LETRA[MEDICIONES]}»); "
+        f"hay {largos}")
+    filas = [(n, statistics.median(t[0] for t in v), statistics.median(t[1] for t in v),
+              statistics.median(t[0] / t[1] for t in v)) for n, v in sorted(tiempos.items())]
+    return filas, largos.pop()
+
+
+def leer_fuente(carpeta, fichero, cual):
+    """Las filas de una ejecución: la mediana de los barridos del portátil, si hay csv (Orden 101); si no
+    (el ordenador de 2 núcleos), la tabla del `.txt`, con la ventaja calculada de los segundos."""
+    if fichero in CSV_BARRIDOS:
+        base, ancho = CSV_BARRIDOS[fichero]
+        return leer_barridos(carpeta, base, ancho)[0]
+    return [(n, t_s, t_v, t_s / t_v) for n, t_s, t_v, _ in leer(os.path.join(carpeta, fichero), cual)]
+
+
 def sentido(filas):
     """Ventaja al principio y al final, qué parte de ella queda, y cómo se llama eso."""
     ventajas = dict((n, v) for n, _, _, v in filas)
@@ -130,7 +191,7 @@ def informe(ejecuciones=EJECUCIONES, carpeta=CARPETA):
     sangrados que el capítulo copiaba)."""
     por_maquina = {}
     for fichero, maquina, ancho, cual in ejecuciones:
-        filas = leer(os.path.join(carpeta, fichero), cual)
+        filas = leer_fuente(carpeta, fichero, cual)
         palabra, _, _, queda = sentido(filas)
         por_maquina.setdefault(maquina, []).append((ancho, filas, palabra, queda))
     lineas = []
@@ -145,13 +206,14 @@ def informe(ejecuciones=EJECUCIONES, carpeta=CARPETA):
             if len(ejes) == 3 else f"La ventaja en {NOMBRE_TABLA[maquina]}",
             ["modelo, números por posición"] + [f"longitud del texto: {miles(n)}" for n in longitudes]
             + ["queda"],
-            [[miles(ancho)] + [coma(v, 1) + "x" for _, _, _, v in filas]
+            [[miles(ancho)] + [coma(v, DECIMALES_VENTAJA.get(maquina, 1)) + "x" for _, _, _, v in filas]
              + [f"{pct(queda, 0)}, {palabra}"] for ancho, filas, palabra, queda in ejes],
             "d" * (len(longitudes) + 1) + "i",
             ["Cuántas veces más rápida va la máquina que lo mira todo a la vez, con cada tamaño de "
              "modelo y cada longitud de texto. «Queda» es la parte de la ventaja del texto más corto "
              f"que sigue en el más largo: por debajo del {pct(QUEDA_CAE, 0)} se dice que cae, y entre "
-             f"el {round(100 * QUEDA_CAE)} y el {pct(QUEDA_CRECE, 0)}, que se mantiene."]) + [""]
+             f"el {round(100 * QUEDA_CAE)} y el {pct(QUEDA_CRECE, 0)}, que se mantiene."
+             + (f" {NOTA_VENTAJA}" if maquina.startswith("portátil") else "")]) + [""]
     return lineas
 
 
@@ -194,8 +256,17 @@ def selftest():
             if not (minimo - 0.05 <= ventaja <= maximo + 0.05):
                 fuera.append(f"{fichero}, longitud {miles(n)}: impresa {coma(ventaja, 1)}x, "
                              f"posible entre {coma(minimo, 2)}x y {coma(maximo, 2)}x")
+    # Orden 105: y los csv de las dos repeticiones dan, en cada celda del portátil, las diez mediciones de las
+    # que las notas dicen que son la mediana (leer_barridos lo exige).
+    celdas_csv = 0
+    for base, ancho in sorted(set(CSV_BARRIDOS.values())):
+        filas_csv, barridos = leer_barridos(CARPETA, base, ancho)
+        celdas_csv += len(filas_csv)
+        if barridos != MEDICIONES:
+            fallos.append(f"invariante: {base}, ancho {ancho}: {barridos} mediciones por celda y las notas dicen {MEDICIONES}")
     print(f"[3] invariante        la ventaja impresa cabe en el cociente de los dos "
-          f"tiempos: {revisadas - len(fuera)} de {revisadas} filas")
+          f"tiempos: {revisadas - len(fuera)} de {revisadas} filas; los csv A y B dan "
+          f"{MEDICIONES} mediciones en {celdas_csv} celdas")
     if fuera:
         fallos.append("invariante: la ventaja impresa no sale de los tiempos impresos en "
                       + "; ".join(fuera))
@@ -226,6 +297,12 @@ TRES_MAQUINAS = [
 GRANDE = ("en_serie_1024_cpu.txt", 1, "el procesador del portátil", 1024)
 
 
+# Orden 105: lo que dicen las notas de las tablas del portátil sobre de cuántas mediciones es cada cifra.
+NOTA_CIFRA = f"Cada cifra es la mediana de {EN_LETRA[MEDICIONES]} mediciones."
+NOTA_VENTAJA = f"Cada ventaja es la mediana de {EN_LETRA[MEDICIONES]} mediciones."
+NOTA_TRES_ORDENADORES = (f"Las del portátil son la mediana de {EN_LETRA[MEDICIONES]} mediciones; la del "
+                         "ordenador de dos núcleos es la segunda de sus tres.")
+
 NOTAS_SEGUNDOS = [
     # Orden 97: nota para el lector. Que cada número sea la media de tres pasadas tras una de
     # calentamiento que se tira está en en_serie_o_a_la_vez.py (REPETICIONES, CALENTAMIENTO).
@@ -235,6 +312,8 @@ NOTAS_SEGUNDOS = [
 
 
 def tabla_de_segundos(titulo, filas, notas=NOTAS_SEGUNDOS):
+    """Las dos tablas del procesador del portátil (256 y 1.024 números) llevan solo NOTA_CIFRA (Orden 105);
+    la del ordenador de 2 núcleos, la nota larga de siempre."""
     return tabla_editorial(
         titulo, ["longitud", "en orden (s)", "a la vez (s)", "ventaja"],
         [[miles(n), coma(t_s, 4), coma(t_v, 4), coma(v, 1) + "x"] for n, t_s, t_v, v in filas],
@@ -247,11 +326,12 @@ def segundos(carpeta=CARPETA):
     L = ["", "##### los segundos, ordenador a ordenador #####", ""]
     tablas = {}
     for letra, fichero, cual, maquina, ancho in TABLAS_DE_SEGUNDOS + [("C",) + GRANDE]:
-        tablas[letra] = (leer(os.path.join(carpeta, fichero), cual), maquina, ancho)
+        tablas[letra] = (leer_fuente(carpeta, fichero, cual), maquina, ancho)
     for letra in ("A", "B"):
         filas, maquina, ancho = tablas[letra]
         L += tabla_de_segundos(f"Los segundos en {maquina}, modelo de {miles(ancho)} números "
-                               f"por posición", filas) + [""]
+                               f"por posición", filas,
+                               NOTAS_SEGUNDOS if letra == "A" else [NOTA_CIFRA]) + [""]
     # la cuenta de la ventaja, hecha, con la primera y la última fila del ordenador de 2 núcleos
     cuenta, quien = [], []
     for n, t_s, t_v, v in (tablas["A"][0][0], tablas["A"][0][-1]):
@@ -269,14 +349,14 @@ def segundos(carpeta=CARPETA):
          "La que mira todo a la vez: " + "; ".join(quien) + "."]) + [""]
     tres = []
     for nombre, fichero, cual in TRES_MAQUINAS:
-        f = [r for r in leer(os.path.join(carpeta, fichero), cual) if r[0] == LARGO][0]
+        f = [r for r in leer_fuente(carpeta, fichero, cual) if r[0] == LARGO][0]
         tres.append([nombre, coma(f[1], 4), coma(f[2], 4)])
     L += tabla_editorial(
         f"Con {miles(LARGO)} posiciones y el modelo de 256 números, los tres ordenadores",
-        ["ordenador", "en orden (s)", "a la vez (s)"], tres, "idd") + [""]
+        ["ordenador", "en orden (s)", "a la vez (s)"], tres, "idd", [NOTA_TRES_ORDENADORES]) + [""]
     filas, maquina, ancho = tablas["C"]
     L += tabla_de_segundos(f"Los segundos en {maquina}, modelo de {miles(ancho)} números "
-                           f"por posición", filas) + [""]
+                           f"por posición", filas, [NOTA_CIFRA]) + [""]
     return L
 
 
@@ -290,8 +370,9 @@ def main():
     cabecera = [
         "##### capítulo 9: cómo cambia la ventaja al alargar el texto #####",
         "máquina: ninguna. Este programa NO cronometra: relee las siete",
-        "tablas ya guardadas en datos/salidas/, así que da lo mismo en",
-        "cualquier ordenador y no hay máquina que declarar.",
+        "ejecuciones ya guardadas en datos/salidas/ (las del portátil,",
+        "dos repeticiones, A y B), así que da lo mismo en cualquier",
+        "ordenador y no hay máquina que declarar.",
         "",
         "«longitud del texto» son posiciones; «ventaja», cuántas veces",
         "más rápida es la máquina que lo mira todo a la vez, y por debajo",
