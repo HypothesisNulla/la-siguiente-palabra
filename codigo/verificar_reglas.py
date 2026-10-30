@@ -6,7 +6,7 @@
 
 Es el verificador que sostiene la promesa del prólogo —«en este libro no hay ni una sola
 fórmula»—, así que se comprueba a sí mismo como cualquier otra medición del libro."""
-import re, sys, unicodedata
+import os, re, sys, unicodedata
 
 # Jerga que no entra en el cuerpo por ningún motivo. Los términos que el libro SÍ se
 # apropia —red neuronal, neurona, capa, pesos— no se vigilan aquí: se declaran en
@@ -38,12 +38,50 @@ def norm(s):
 # y toda la prosa, se siguen vigilando igual.
 SANGRIA_MUESTRA = '    '
 
+# El puente (regla 5 septies, 30 de octubre de 2026): «token» y «parámetro» siguen prohibidos, pero
+# el libro los dice UNA vez, en la línea de su puente («a estos trozos, en la prensa y en
+# inglés, se les llama *tokens*»), y pueden aparecer dentro de un bloque «::: tabla» o
+# «::: muestra» (salida de máquina o texto que el programa imprime). En cualquier otro sitio
+# del cuerpo siguen suspendiendo. El apartado «Puentes» de notas/VOCABULARIO.md dice cuál es
+# la línea de cada puente (la frase ancla); verificar_vocabulario.py vigila además que
+# ninguna palabra de un puente vaya antes que él.
+LIBRES_EN_UN_PUENTE = ('token', 'parametro')
+APARTADO_PUENTES = '## Puentes'
 
-def revisar(lineas, es_el_mapa=False):
-    """Devuelve la lista de incidencias: (número de línea, clase, término, trozo)."""
+
+def puentes_de(ruta):
+    """Las frases ancla de los puentes declarados para este fichero, o [] si no hay
+    notas/VOCABULARIO.md por encima de él (se sube desde su carpeta hasta encontrarlo)."""
+    d = os.path.dirname(os.path.abspath(ruta))
+    while not os.path.exists(os.path.join(d, 'notas', 'VOCABULARIO.md')):
+        if os.path.dirname(d) == d:
+            return []
+        d = os.path.dirname(d)
+    nombre = os.path.basename(ruta)
+    anclas, dentro = [], False
+    for linea in open(os.path.join(d, 'notas', 'VOCABULARIO.md'), encoding='utf-8'):
+        if linea.startswith('## '):
+            dentro = linea.strip() == APARTADO_PUENTES
+            continue
+        if not dentro or linea.count('|') != 4 or linea[:1] in ('#', ' ', '\t'):
+            continue
+        fichero, ancla = [x.strip() for x in linea.split('|')][3:5]
+        if fichero == nombre:
+            anclas.append(ancla)
+    return anclas
+
+
+def revisar(lineas, es_el_mapa=False, anclas=()):
+    """Devuelve la lista de incidencias: (número de línea, clase, término, trozo).
+    `anclas`: las frases de los puentes de este fichero (puentes_de)."""
     fallos = []
     en_muestra = False
+    en_bloque = False        # dentro de un «::: tabla» o un «::: muestra», título y notas incluidos
     for i, l in enumerate(lineas, 1):
+        if l.strip() in ('::: tabla', '::: muestra'):
+            en_bloque = True
+        elif en_bloque and l.strip() == ':::':
+            en_bloque = False
         if l.strip() == '::: muestra':
             en_muestra = True
             continue
@@ -59,6 +97,8 @@ def revisar(lineas, es_el_mapa=False):
         if not es_el_mapa:
             for p in PROHIBIDAS:
                 if p in n:
+                    if p in LIBRES_EN_UN_PUENTE and (en_bloque or any(a in l for a in anclas)):
+                        continue
                     fallos.append((i, 'jerga', p, l.strip()[:70]))
         if GRIEGO.search(l): fallos.append((i, 'griego', '', l.strip()[:70]))
         if MATE.search(l):   fallos.append((i, 'notacion', '', l.strip()[:70]))
@@ -119,13 +159,28 @@ def selftest():
     fuera = revisar(["La cuenta es 6396 * 7576 = 48406576."])
     titulo = revisar(["::: muestra", "Lo que escribe: 3 × 4", "", "    texto", ":::"])
     exenta = not revisar(muestra) and clases(fuera) == ['notacion'] and clases(titulo) == ['notacion']
+    # Cuarta (regla 5 septies): «token» y «parámetro» valen en la línea de su puente y dentro de un
+    # bloque de tabla o de muestra; en la prosa de cualquier otro sitio, no. Y el puente de un
+    # token no deja pasar un vector en la misma línea.
+    ancla = "se les llama *tokens*"
+    puente = "A estos trozos, en la prensa y en inglés, se les llama *tokens*; aquí, trozos."
+    suelta = "Cada token es un número."
+    en_tabla = ["::: tabla", "| trozo | token |", "Cada token es un número.", ":::"]
+    en_su_puente = not revisar([puente], anclas=[ancla])
+    sin_puente = clases(revisar([puente])) == ['jerga']
+    en_prosa = clases(revisar([suelta], anclas=[ancla])) == ['jerga']
+    en_bloque = not revisar(en_tabla) and not revisar(["::: muestra", "    token", ":::"])
+    mezclado = clases(revisar([puente + " Y un vector."], anclas=[ancla])) == ['jerga']
+    puentes_ok = en_su_puente and sin_puente and en_prosa and en_bloque and mezclado
     print(f"[3] invariante        en el mapa queda {clases(en_el_mapa)} "
           f"({'bien: solo la notación' if solo_notacion else 'MAL'}); "
           f"envoltorio de imprenta: {len(envuelto)} incidencias; texto de máquina en una muestra "
-          f"exento, y fuera de ella o en su título, no: {exenta}")
-    if not solo_notacion or envuelto or not exenta:
-        fallos.append("invariante: el mapa levanta solo la jerga, el envoltorio no es notación y "
-                      "solo el texto de máquina de una muestra está exento")
+          f"exento, y fuera de ella o en su título, no: {exenta}; «token» libre en su puente y en "
+          f"una tabla o muestra, y no en la prosa: {puentes_ok}")
+    if not solo_notacion or envuelto or not exenta or not puentes_ok:
+        fallos.append("invariante: el mapa levanta solo la jerga, el envoltorio no es notación, "
+                      "solo el texto de máquina de una muestra está exento y «token» solo se "
+                      "libra en su puente y en tablas y muestras")
 
     print()
     if fallos:
@@ -153,7 +208,7 @@ ES_EL_MAPA = 'mapa-de-los-sotanos' in path
 if ES_EL_MAPA:
     print("NOTA: es el mapa de los sótanos; se permite la jerga y NO se permite nada más.")
 
-fallos = revisar(lineas, ES_EL_MAPA)
+fallos = revisar(lineas, ES_EL_MAPA, puentes_de(path))
 if fallos:
     for f in fallos:
         print(f"  linea {f[0]:>4}  {f[1]:<9} {f[2]:<16} {f[3]}")
