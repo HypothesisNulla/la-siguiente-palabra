@@ -1,0 +1,29 @@
+Tarea 3: primera línea con «Dulcinea»
+Respuesta buena: 278
+
+Enunciado:
+¿En qué número de línea aparece por primera vez «Dulcinea»? (La primera línea del fichero es la 1.) El texto está en el fichero quijote.txt de la carpeta de trabajo. Úsalo entero, tal cual. Contesta con el resultado.
+
+----- La máquina escribe -----
+<tool_call>
+{"name": "ejecutar_python", "arguments": {"code": "with open('quijote.txt', 'r', encoding='utf-8') as file:\n    line_number = 1\n    for line in file:\n        if 'Dulcinea' in line:\n            print(line_number)\n            break\n        line_number += 1"}}
+</tool_call>
+
+----- Programa que se ejecuta (vuelta 1) -----
+with open('quijote.txt', 'r', encoding='utf-8') as file:
+    line_number = 1
+    for line in file:
+        if 'Dulcinea' in line:
+            print(line_number)
+            break
+        line_number += 1
+
+----- Lo que vuelve a la máquina (sin error) -----
+278
+
+
+----- La máquina escribe -----
+La palabra «Dulcinea» aparece por primera vez en la línea número 278 del archivo.
+
+----- Resultado -----
+acierta: sí; vueltas: 1; programas con error: 0; se corrige: no; órdenes mal escritas: 0; respuesta final: la última escritura

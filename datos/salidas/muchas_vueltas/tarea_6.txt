@@ -1,0 +1,40 @@
+Tarea 6: «Rocinante» en el primer capítulo
+Respuesta buena: 1
+
+Enunciado:
+¿Cuántas veces aparece «Rocinante» entre la primera línea que empieza por «Capítulo primero» y la primera que empieza por «Capítulo II», sin contar esas dos líneas? El texto está en el fichero quijote.txt de la carpeta de trabajo. Úsalo entero, tal cual. Contesta con el resultado.
+
+----- La máquina escribe -----
+<tool_call>
+{"name": "ejecutar_python", "arguments": {"code": "with open('quijote.txt', 'r', encoding='utf-8') as file:\n    lines = file.readlines()\n\nstart_line = None\nend_line = None\n\nfor i, line in enumerate(lines):\n    if line.startswith('Capítulo primero') and start_line is None:\n        start_line = i + 1\n    elif line.startswith('Capítulo II') and end_line is None:\n        end_line = i - 1\n\nif start_line is not None and end_line is not None:\n    text = ''.join(lines[start_line:end_line])\n    count = text.count('Rocinante')\n    print(count)\nelse:\n    print('No se encontraron las líneas delimitadoras.')"}}
+</tool_call>
+
+----- Programa que se ejecuta (vuelta 1) -----
+with open('quijote.txt', 'r', encoding='utf-8') as file:
+    lines = file.readlines()
+
+start_line = None
+end_line = None
+
+for i, line in enumerate(lines):
+    if line.startswith('Capítulo primero') and start_line is None:
+        start_line = i + 1
+    elif line.startswith('Capítulo II') and end_line is None:
+        end_line = i - 1
+
+if start_line is not None and end_line is not None:
+    text = ''.join(lines[start_line:end_line])
+    count = text.count('Rocinante')
+    print(count)
+else:
+    print('No se encontraron las líneas delimitadoras.')
+
+----- Lo que vuelve a la máquina (sin error) -----
+1
+
+
+----- La máquina escribe -----
+La palabra «Rocinante» aparece 1 vez entre la primera línea que empieza por «Capítulo primero» y la primera que empieza por «Capítulo II», sin contar esas dos líneas.
+
+----- Resultado -----
+acierta: sí; vueltas: 1; programas con error: 0; se corrige: no; órdenes mal escritas: 0; respuesta final: la última escritura

@@ -1,0 +1,26 @@
+Tarea 2: líneas que empiezan por «Capítulo»
+Respuesta buena: 126
+
+Enunciado:
+¿Cuántas líneas empiezan exactamente por «Capítulo» (con mayúscula, en el primer carácter de la línea)? El texto está en el fichero quijote.txt de la carpeta de trabajo. Úsalo entero, tal cual. Contesta con el resultado.
+
+----- La máquina escribe -----
+<tool_call>
+{"name": "ejecutar_python", "arguments": {"code": "with open('quijote.txt', 'r', encoding='utf-8') as file:\n    lines = file.readlines()\n    count = sum(1 for line in lines if line.startswith('Capítulo'))\nprint(count)"}}
+</tool_call>
+
+----- Programa que se ejecuta (vuelta 1) -----
+with open('quijote.txt', 'r', encoding='utf-8') as file:
+    lines = file.readlines()
+    count = sum(1 for line in lines if line.startswith('Capítulo'))
+print(count)
+
+----- Lo que vuelve a la máquina (sin error) -----
+126
+
+
+----- La máquina escribe -----
+El número de líneas que empiezan exactamente con «Capítulo» es 126.
+
+----- Resultado -----
+acierta: sí; vueltas: 1; programas con error: 0; se corrige: no; órdenes mal escritas: 0; respuesta final: la última escritura

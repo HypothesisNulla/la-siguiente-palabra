@@ -1,0 +1,28 @@
+Tarea 8: «Dulcinea» en la segunda mitad
+Respuesta buena: 195
+
+Enunciado:
+Si el fichero tiene N líneas, la segunda mitad son las líneas de N//2 + 1 a N. ¿Cuántas veces aparece «Dulcinea» en la segunda mitad? El texto está en el fichero quijote.txt de la carpeta de trabajo. Úsalo entero, tal cual. Contesta con el resultado.
+
+----- La máquina escribe -----
+<tool_call>
+{"name": "ejecutar_python", "arguments": {"code": "with open('quijote.txt', 'r', encoding='utf-8') as file:\n    lines = file.readlines()\n    n = len(lines)\n    second_half = lines[n//2:]\n    count = sum(line.lower().count('dulcinea') for line in second_half)\n    print(count)"}}
+</tool_call>
+
+----- Programa que se ejecuta (vuelta 1) -----
+with open('quijote.txt', 'r', encoding='utf-8') as file:
+    lines = file.readlines()
+    n = len(lines)
+    second_half = lines[n//2:]
+    count = sum(line.lower().count('dulcinea') for line in second_half)
+    print(count)
+
+----- Lo que vuelve a la máquina (sin error) -----
+195
+
+
+----- La máquina escribe -----
+La palabra «Dulcinea» aparece 195 veces en la segunda mitad del fichero quijote.txt.
+
+----- Resultado -----
+acierta: sí; vueltas: 1; programas con error: 0; se corrige: no; órdenes mal escritas: 0; respuesta final: la última escritura

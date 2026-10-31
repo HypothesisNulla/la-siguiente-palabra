@@ -13,6 +13,10 @@ corpus_es/
 # de arriba y `git status` no las veía.
 !salidas/muestras/
 !salidas/muestras/*.txt
+# Las ocho conversaciones completas de muchas_vueltas.py (Orden 114): también son salidas, y sin
+# esto el «*.txt» de arriba las dejaba fuera.
+!salidas/muchas_vueltas/
+!salidas/muchas_vueltas/*.txt
 # Las copias de lo que se midió antes de un cambio (p. ej. «-resta2»): también son salidas.
 !salidas/historico/*.txt
 # Los nueve textos de la Declaración Universal que cuenta idiomas_en_trozos.py (capítulo 7). Sin
