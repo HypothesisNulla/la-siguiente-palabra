@@ -17,7 +17,7 @@ MINIMO = 10_000   # el bloque entero: ver el fallo 4.21 del catálogo
 EXCEPCIONES = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            '..', '..', 'libro-ia-libro', 'notas', 'CITAS-DE-AUTOR.md')
 
-def quitar_marcado(t):
+def quitar_marcado(t, comillas=True):
     """Quita el marcado de imprenta que envuelve trozos de la salida, dejando el trozo.
 
     A temperatura alta el modelo escribe en chino, tailandés o árabe. La fuente del libro no
@@ -25,9 +25,13 @@ def quitar_marcado(t):
     versión limpiada de lo que la máquina escribió. El envoltorio es formato, no dato.
 
     También quita las comillas simples inversas, que en el libro ponen un trozo en monoespaciado
-    y no forman parte de lo que imprimió el programa."""
+    y no forman parte de lo que imprimió el programa. Salvo con `comillas=False`, que es lo que
+    se pide dentro de un bloque `::: muestra` (Orden 118): allí las líneas sangradas son la
+    salida de máquina tal cual, y una comilla invertida es un carácter que la máquina escribió
+    (el asistente de `una_tarea_con_asistente.py` escribe `fichero.csv` con comillas
+    invertidas, como en markdown), no marcado de imprenta."""
     t = re.sub(r'`\\[a-záéíóúñ]+\{(.*?)\}`\{=latex\}', r'\1', t)
-    return t.replace('`', '')
+    return t.replace('`', '') if comillas else t
 
 
 def normalizar(t):
@@ -39,10 +43,10 @@ def normalizar(t):
     t = re.sub(r'(?<=\d),(?=\d)', '.', t)
     return re.sub(r'\s+', ' ', t)
 
-def texto_del_bloque(b):
+def texto_del_bloque(b, literal=False):
     lineas = [re.sub(r'^(> ?| {4})', '', l) for l in b.splitlines()]
     lineas = [l for l in lineas if l.strip() != '```']   # las vallas son formato, no dato
-    return normalizar(quitar_marcado(' '.join(lineas))).strip()
+    return normalizar(quitar_marcado(' '.join(lineas), not literal)).strip()
 
 def fila_esta_en_alguna_linea(celdas, lineas=None):
     """¿Hay una línea de la salida que contenga todas estas celdas, en este orden?
@@ -55,14 +59,14 @@ def fila_esta_en_alguna_linea(celdas, lineas=None):
     return any(patron.search(l) for l in (lineas_salida if lineas is None else lineas))
 
 
-def lineas_crudas_del_bloque(b):
+def lineas_crudas_del_bloque(b, literal=False):
     """Las líneas del bloque sin el prefijo de cita ni las vallas, pero SIN aplastar los espacios."""
     out = []
     for l in b.splitlines():
         l = re.sub(r'^(> ?| {4})', '', l)
         if l.strip() == '```':
             continue
-        l = quitar_marcado(l).rstrip()
+        l = quitar_marcado(l, not literal).rstrip()
         if l.strip():
             out.append(l)
     return out
@@ -81,7 +85,7 @@ def casa_con_los_espacios(linea):
     return re.search(patron, salida_con_espacios) is not None
 
 
-def espacios_comidos(b):
+def espacios_comidos(b, literal=False):
     """¿El libro ha cambiado una racha de espacios por uno solo?
 
     Un bloque de máquina puede QUITAR una columna entera que no cabe (regla 6), y un renglón de
@@ -95,7 +99,7 @@ def espacios_comidos(b):
     aplastarlos: ésa es exactamente la que el libro ha retocado. Una línea que falta del todo, o
     a la que se le ha quitado una columna, la caza la comprobación de siempre."""
     avisos = 0
-    for l in lineas_crudas_del_bloque(b):
+    for l in lineas_crudas_del_bloque(b, literal):
         if normalizar(l).strip() in salida and not casa_con_los_espacios(l.strip()):
             print(f"AVISO, espacios distintos: «{l.strip()[:50]}…» está en la salida con otras\n  rachas de espacios. Si son ancho de columna, da igual; si el espacio es un dato del\n  bloque —capítulo 1—, no da igual.")
             avisos += 1
@@ -138,6 +142,33 @@ def titulos_y_notas(lineas, salida_lineas):
             if t not in conjunto:
                 perdidos.append(t)
     return n, perdidos
+
+
+def lineas_de_datos(b, literal=False):
+    """Las líneas del bloque, sin el prefijo de cita ni las vallas de código."""
+    out = []
+    for l in b.splitlines():
+        l = re.sub(r'^(> ?| {4})', '', l)
+        if l.strip() == '```':
+            continue
+        l = normalizar(quitar_marcado(l, not literal)).strip()
+        if l:
+            out.append(l)
+    return out
+
+
+def comprobar_bloque(b, salida_texto, literal=False):
+    """Un bloque contra la salida (ya normalizada): ('literal', None) si entero está en ella;
+    ('recompuesto', primera línea) si cada línea, una por una, lo está; ('no literal', primera
+    línea que falta) si no. `literal` es True dentro de un `::: muestra` (ver quitar_marcado)."""
+    t = texto_del_bloque(b, literal)
+    if t[:MINIMO] in salida_texto:
+        return 'literal', None
+    sueltas = lineas_de_datos(b, literal)
+    perdidas = [l for l in sueltas if l not in salida_texto]
+    if perdidas:
+        return 'no literal', perdidas[0]
+    return 'recompuesto', sueltas[0]
 
 
 def selftest():
@@ -252,12 +283,31 @@ def selftest():
     if pb or not pm or nb != 1:
         fallos.append("tabla editorial: el título y la nota se copian literales o no valen")
 
+    # 9. LAS COMILLAS INVERTIDAS DENTRO DE UNA MUESTRA (Orden 118) — en un bloque `::: muestra` las
+    #    líneas sangradas son salida de máquina tal cual, y una comilla invertida es un carácter
+    #    que escribió la máquina (el asistente de una_tarea_con_asistente.py escribe `fichero.csv`
+    #    como en markdown). Con `literal` se comparan tal cual y el bloque pasa; fuera de una
+    #    muestra se siguen quitando; y la prueba del revés: una palabra cambiada sigue suspendiendo.
+    sal = normalizar("Sale del fichero A (`cuantos_hilos-A.csv`), con 14 hilos y\n"
+                     "longitud 512, y la columna `ventaja` lo confirma.\n")
+    bloque = ("    Sale del fichero A (`cuantos_hilos-A.csv`), con 14 hilos y\n"
+              "    longitud 512, y la columna `ventaja` lo confirma.\n")
+    cambiado = bloque.replace("longitud", "anchura")
+    en_muestra = comprobar_bloque(bloque, sal, literal=True)[0]
+    fuera = comprobar_bloque(bloque, sal, literal=False)[0]
+    revuelta = comprobar_bloque(cambiado, sal, literal=True)[0]
+    print(f"[9] comillas invertidas  en una muestra: {en_muestra}; fuera de una muestra se "
+          f"quitan: {fuera}; con una palabra cambiada: {revuelta}")
+    if en_muestra != 'literal' or fuera == 'literal' or revuelta != 'no literal':
+        fallos.append("comillas invertidas: dentro de una muestra se comparan tal cual y el bloque "
+                      "pasa; fuera se quitan; una palabra cambiada suspende")
+
     print()
     if fallos:
         for f in fallos:
             print("FALLA:", f)
         return 1
-    print("SELFTEST: las ocho pruebas pasan.")
+    print("SELFTEST: las nueve pruebas pasan.")
     return 0
 
 
@@ -301,44 +351,34 @@ if os.path.exists(EXCEPCIONES):
 # «todo lo que va sangrado en bloque», no «todo lo que lleva >»: durante un tiempo el
 # verificador solo miraba las citas, y una tabla sangrada con cuatro espacios pasaba sin
 # que nadie la comprobara.
-bloques = (re.findall(r'((?:^>.*\n)+)', crudo, re.M) +
-           re.findall(r'((?:^ {4}.*\n|^\n(?= {4}))+)', crudo, re.M))
-
-def lineas_de_datos(b):
-    """Las líneas del bloque, sin el prefijo de cita ni las vallas de código."""
-    out = []
-    for l in b.splitlines():
-        l = re.sub(r'^(> ?| {4})', '', l)
-        if l.strip() == '```':
-            continue
-        l = normalizar(quitar_marcado(l)).strip()
-        if l:
-            out.append(l)
-    return out
+muestras = [(m.start(), m.end()) for m in re.finditer(r'^::: muestra\s*\n.*?^:::\s*$', crudo,
+                                                       re.M | re.S)]
+bloques = [(m.group(1), any(a <= m.start() < z for a, z in muestras))
+           for m in sorted(list(re.finditer(r'((?:^>.*\n)+)', crudo, re.M)) +
+                           list(re.finditer(r'((?:^ {4}.*\n|^\n(?= {4}))+)', crudo, re.M)),
+                           key=lambda m: m.start())]
 
 fallos = comprobados = de_autor = recompuestos = 0
-for b in bloques:
-    t = texto_del_bloque(b)
+for b, literal in bloques:
+    t = texto_del_bloque(b, literal)
     if not t:
         continue
     if any(t.startswith(d) for d in declaradas):
         de_autor += 1
         continue
     comprobados += 1
-    if t[:MINIMO] in salida:
-        espacios_comidos(b)
-        continue
-    # El bloque entero no cuadra. Segunda oportunidad: que cada línea, una por una, sea
+    # Si el bloque entero no cuadra, segunda oportunidad: que cada línea, una por una, sea
     # literal. Eso permite quitar del libro lo que es adorno de consola —unas comillas, una
     # columna de barras que no cabe en la página— y sigue prohibiendo cambiar un solo dato.
-    sueltas = lineas_de_datos(b)
-    perdidas = [l for l in sueltas if l not in salida]
-    if perdidas:
-        print(f"NO LITERAL: «{perdidas[0][:60]}…»")
+    estado, linea = comprobar_bloque(b, salida, literal)
+    if estado == 'literal':
+        espacios_comidos(b, literal)
+    elif estado == 'no literal':
+        print(f"NO LITERAL: «{linea[:60]}…»")
         fallos += 1
     else:
         recompuestos += 1
-        print(f"recompuesto (líneas literales, bloque recortado): «{sueltas[0][:50]}…»")
+        print(f"recompuesto (líneas literales, bloque recortado): «{linea[:50]}…»")
 
 # Las tablas con números también son datos medidos: cada fila tiene que aparecer, con sus
 # números y en el mismo orden, en la salida del programa.

@@ -22,3 +22,6 @@ __pycache__/
 *.svg
 *.gif
 !figuras/.gitkeep
+# La salida en bruto de una_tarea_con_asistente.py lleva el nombre de usuario del Mac: no se publica
+# (vive en el repositorio privado del libro, en notas/fuentes/una_tarea_con_asistente/).
+datos/salidas/una_tarea_con_asistente/

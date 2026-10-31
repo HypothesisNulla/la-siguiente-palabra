@@ -1,0 +1,105 @@
+máquina: macOS-26.7.1-arm64-arm-64bit; Python 3.12.14
+asistente: 2.1.309 (Claude Code), modelo claude-opus-5-5; clave de acceso: ANTHROPIC_API_KEY; ejecutable ~/Library/Application Support/Claude/claude-code/2.1.309/5af865b9901c/claude.app/Contents/MacOS/claude
+herramientas que tuvo: Bash, Glob, Grep, Read; servidores MCP: 0; skills: 18 y plugins: 3, todos de los que trae Claude Code; agentes: claude, claude-code-guide, Explore, general-purpose, Plan
+carga: ni CLAUDE.md ni memoria ni instrucciones del usuario (--safe-mode); Claude Code añade por su cuenta el correo de la cuenta y unas líneas de atribución para commits
+confinamiento: sin red, sin leer /Users, sin escribir fuera de la carpeta de trabajo; en la carpeta de trabajo, al terminar, además de los ocho CSV: .claude; bloques de razonamiento interno (no se ven): 1
+fin: success, código de salida 0, denegaciones de permiso: 0
+acierto: cuenta como respuesta el número que la respuesta final da como resultado (el que va detrás de «la mayor ventaja es»). Esta regla se corrigió el 31 de octubre de 2026 después de ver el resultado: la primera miraba el último número, y la respuesta acaba hablando de otros barridos
+salida en bruto: no se publica aquí porque lleva el nombre de usuario del Mac; está en el repositorio privado del libro, en notas/fuentes/una_tarea_con_asistente/. Lo de abajo es la muestra ya procesada
+
+::: tabla
+Una tarea entera, hecha por un asistente de hoy
+
+| lo que se mide | resultado |
+|:--|--:|
+| la respuesta buena | 6,6989 |
+| lo que da como resultado | 6,70 |
+| ¿acierta? | sí |
+| vueltas (órdenes que dio) | 2 |
+| órdenes con error | 0 |
+| duración | 14 s |
+
+Es la tarea de los ficheros de medidas: la mayor ventaja en los dos ficheros de hilos, con la instrucción tal cual, sin más ayuda y sin acceso a nada fuera de su carpeta.
+
+Acierta si el número que da como resultado, el que va detrás de «la mayor ventaja es», es la mayor ventaja. Las vueltas son las órdenes que da; con error, las que le devuelven un fallo. La duración es la de esta ejecución, en este portátil y con conexión al servicio.
+:::
+
+[salida ajena: empieza — lo que escribe Claude Code y lo que le devuelven sus herramientas; no se revisa el formato de sus números (regla 6)]
+::: muestra
+La primera vuelta: mirar la carpeta
+
+    Instrucción: En las mediciones hechas con distinto número de hilos,
+    ¿cuál es la mayor ventaja que aparece, contando los dos ficheros (A
+    y B)? Los ficheros están en la carpeta de trabajo. Contesta con el
+    resultado.
+    
+    Da esta orden (herramienta Bash):
+    Descripción que le pone: List files and preview contents
+    ls -la && head -50 *
+    
+    Le vuelve (sin error):
+    total 88
+    drwx------@ 11 352 Oct 31 09:28 .
+    drwxrwxrwt 264 8448 Oct 31 09:28 ..
+    drwxr-xr-x@ 3 96 Oct 31 09:28 .claude
+    -rw-r--r--@ 1 1324 Oct 31 09:28 crecer.csv
+    -rw-r--r--@ 1 4329 Oct 31 09:28 cuantos_hilos-A.csv
+    -rw-r--r--@ 1 4329 Oct 31 09:28 cuantos_hilos-B.csv
+    -rw-r--r--@ 1 4306 Oct 31 09:28 editar_contexto.csv
+    -rw-r--r--@ 1 2779 Oct 31 09:28 en_serie_barridos-A.csv
+    -rw-r--r--@ 1 2779 Oct 31 09:28 en_serie_barridos-B.csv
+    -rw-r--r--@ 1 2779 Oct 31 09:28 en_serie_barridos_cpu-A.csv
+    -rw-r--r--@ 1 2779 Oct 31 09:28 en_serie_barridos_cpu-B.csv
+    ==> cuantos_hilos-A.csv <==
+    barrido,hilos,longitud,t_en_orden,t_a_la_vez,ventaja
+    1,1,64,0.010299,0.006933,1.4855
+    1,1,128,0.020979,0.016224,1.2931
+    1,1,256,0.042364,0.042122,1.0057
+    [... recortado: faltan 14.672 caracteres]
+
+Cada paso es lo que escribe el asistente, la orden que da con una herramienta (la terminal) y lo que esa herramienta le devuelve.
+
+De lo que vuelve a la primera orden se enseñan solo el listado de ficheros, al que se le han quitado las columnas del propietario y del grupo, y el principio de uno de ellos; se dice cuánto falta.
+:::
+
+::: muestra
+La segunda vuelta y la respuesta
+
+    Da esta orden (herramienta Bash):
+    Descripción que le pone: Find max ventaja in both thread files
+    for f in cuantos_hilos-*.csv; do echo $f; tail -n +2 $f | sort -t,
+    -k6 -gr | head -3; tail -n +2 $f | awk -F, '{r=$4/$5;
+    if(r>m){m=r;l=$0}} END{print "recalc max",m,l}'; wc -l $f; done
+    
+    Le vuelve (sin error):
+    cuantos_hilos-A.csv
+    1,14,512,0.203619,0.030396,6.6989
+    2,14,512,0.177424,0.031407,5.6492
+    3,14,512,0.178668,0.031867,5.6067
+    recalc max 6.69887 1,14,512,0.203619,0.030396,6.6989
+         126 cuantos_hilos-A.csv
+    cuantos_hilos-B.csv
+    3,14,512,0.176693,0.031486,5.6118
+    1,14,512,0.171478,0.030623,5.5996
+    5,14,256,0.070053,0.012616,5.5527
+    recalc max 5.6118 3,14,512,0.176693,0.031486,5.6118
+         126 cuantos_hilos-B.csv
+    
+    Escribe el asistente:
+    La mayor ventaja es **6,70× (6,6989)**. Sale del fichero **A**
+    (`cuantos_hilos-A.csv`), en el barrido 1, con 14 hilos y longitud
+    512. He recalculado el cociente `t_en_orden / t_a_la_vez` y coincide
+    con la columna `ventaja`. El máximo del fichero B es 5,61× (barrido
+    3, mismo caso).
+    
+    Ese 6,70 parece un valor atípico. En esa medición la ejecución en
+    orden tardó más de lo normal (0,204 s, frente a unos 0,17–0,18 s en
+    los demás barridos), y eso hace que la ventaja salga más alta. En
+    los demás barridos de ese caso, en A y en B, la ventaja se queda en
+    torno a 5,6×.
+
+Las órdenes, lo que vuelve y la respuesta están tal cual.
+
+En total, 2 vueltas, 0 órdenes con error; acierta.
+:::
+[salida ajena: termina]

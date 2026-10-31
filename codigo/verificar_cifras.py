@@ -25,7 +25,16 @@ miraba a la DERECHA del número, y en `Qwen/Qwen2.5-0.5B` la barra está a la iz
 es estrecha a propósito —hace falta una letra o una barra a la izquierda, dentro de la misma
 palabra— y está MEDIDA sobre los 44 ficheros de `datos/salidas/`: silencia los seis
 `Qwen2.5-0.5B` y `Qwen2.5-1.5B` y ningún otro. `TAMAÑO 0.5B` (que sí es una cantidad) y
-`1.98x` (una ventaja) siguen marcándose, y la prueba 5 del selftest está para que sigan."""
+`1.98x` (una ventaja) siguen marcándose, y la prueba 5 del selftest está para que sigan.
+
+Lo que tampoco se mira, y es lo único que se declara a mano (Orden 118, 31 oct 2026): la salida de
+un programa AJENO que el libro cita tal cual. `una_tarea_con_asistente.py` enseña lo que escribe
+Claude Code y lo que le devuelven sus herramientas —un `awk` suyo imprime `recalc max 6.69887`—, y
+eso no es nuestro ni se puede retocar (regla 6). El programa que imprime esa salida la rodea con dos
+líneas de marca, `[salida ajena: empieza …]` y `[salida ajena: termina]`, y las líneas que van
+entre las dos no se miran. Solo esas: el resto del fichero y los demás ficheros, igual. Una marca
+que empieza y no termina (o al revés) es un fallo, para que un descuido no deje sin mirar el resto
+de un fichero."""
 import os, re, sys
 
 # Una cantidad con separador de millar inglés. Aquí pasa lo mismo que con el punto, en espejo:
@@ -84,10 +93,26 @@ def es_referencia_del_catalogo(linea, inicio):
     return bool(REFERENCIA.search(linea[:inicio]))
 
 
+# Las dos líneas de marca de la salida ajena. Lo que sigue a «empieza» o «termina» es libre (el
+# programa que las imprime explica ahí qué es y por qué no se toca).
+MARCA_AJENA = re.compile(r'^\[salida ajena: (empieza|termina)\b')
+
+
 def revisar_texto(texto):
     """Devuelve [(número de línea, clase, trozo)] de lo que está escrito a la inglesa."""
     fallos = []
+    ajena = 0                                     # la línea donde empezó la salida ajena, o 0
     for i, l in enumerate(texto.splitlines(), 1):
+        marca = MARCA_AJENA.match(l)
+        if marca:
+            if marca.group(1) == 'empieza' and ajena:
+                fallos.append((i, 'marca', 'empieza otra salida ajena sin cerrar la de la línea %d' % ajena))
+            elif marca.group(1) == 'termina' and not ajena:
+                fallos.append((i, 'marca', 'termina una salida ajena que no había empezado'))
+            ajena = i if marca.group(1) == 'empieza' else 0
+            continue
+        if ajena:
+            continue
         # Una línea de traceback o de ruta no es una tabla de datos del libro.
         if l.lstrip().startswith(('File "', 'Traceback', '  File')):
             continue
@@ -102,6 +127,8 @@ def revisar_texto(texto):
                     and not es_parte_de_un_nombre(l, m.start())
                     and not es_referencia_del_catalogo(l, m.start())):
                 fallos.append((i, 'decimal', m.group(0)))
+    if ajena:
+        fallos.append((ajena, 'marca', 'empieza una salida ajena y no termina'))
     return fallos
 
 
@@ -187,12 +214,30 @@ def selftest():
                       f"palabra «fallo» al principio de la línea no tapa nada "
                       f"({len(referencia)}, {len(suelto)}, {len(lejos)})")
 
+    # 7. LA SALIDA AJENA (Orden 118) — un número a la inglesa DENTRO de las dos marcas pasa; el
+    #    mismo, fuera, suspende; y una marca mal cerrada es un fallo (si no, un «empieza» olvidado
+    #    dejaría sin mirar el resto del fichero).
+    dentro = revisar_texto("antes 90,4 %\n[salida ajena: empieza — un awk\n"
+                           "recalc max 6.69887 y 5.6118\n[salida ajena: termina]\ndespués 90,4 %")
+    fuera = revisar_texto("antes 6.69887\n[salida ajena: empieza]\nrecalc max 6.69887\n"
+                          "[salida ajena: termina]\ndespués 5.6118")
+    sin_cerrar = revisar_texto("[salida ajena: empieza]\nrecalc max 6.69887\nluego 5.6118")
+    sin_abrir = revisar_texto("luego 90,4 %\n[salida ajena: termina]")
+    print(f"[7] la salida ajena   dentro de las marcas: {len(dentro)} incidencias (tiene que ser 0); "
+          f"las mismas cifras fuera: {len(fuera)} (2); marca sin cerrar: "
+          f"{[f[1] for f in sin_cerrar]} (['marca']); marca sin abrir: "
+          f"{[f[1] for f in sin_abrir]} (['marca'])")
+    if (dentro or [f[0] for f in fuera] != [1, 5] or [f[1] for f in sin_cerrar] != ['marca']
+            or [f[1] for f in sin_abrir] != ['marca']):
+        fallos.append(f"la salida ajena: dentro de las marcas pasa, fuera suspende, y una marca mal "
+                      f"cerrada falla ({dentro}, {fuera}, {sin_cerrar}, {sin_abrir})")
+
     print()
     if fallos:
         for f in fallos:
             print("FALLA:", f)
         return 1
-    print("SELFTEST: las seis pruebas pasan.")
+    print("SELFTEST: las siete pruebas pasan.")
     return 0
 
 
