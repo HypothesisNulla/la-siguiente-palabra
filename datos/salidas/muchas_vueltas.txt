@@ -4,15 +4,18 @@ modelo: 32.000M adiestrado (mlx-community/Qwen2.5-32B-Instruct-4bit)
 dispositivo de cálculo: Device(gpu, 0)
 herramienta: /opt/homebrew/bin/python3 (Python 3.14.4), con -I, 30 s como máximo
 
+Nota del 31 de octubre de 2026 (Orden 115). La lectura de la tarea 4 se corrigió después de ver el resultado: la primera daba por buena la respuesta «muy» porque «Quijote» salía en la frase; ahora la respuesta es la última palabra entre comillas de la respuesta final, o la última palabra si no hay comillas. Con la lectura corregida acierta 4 de 8 y no 5.
+Esta salida se ha regenerado a partir de las ocho conversaciones guardadas, que no han cambiado, sin volver a ejecutar el modelo. Y el experimento se sustituye por muchas_vueltas_carpeta.py porque el ejecutor de este no devolvía el valor de la última línea, como hacen los asistentes de hoy: los cuatro fallos son un programa que acaba en una expresión sin print.
+
 ::: tabla
-Las 8 tareas sobre el Quijote con un programa en bucle: aciertan 5
+Las 8 tareas sobre el Quijote con un programa en bucle: aciertan 4
 
 | la tarea | acierta | vueltas | con error | se corrige |
 |:--|:-:|--:|--:|:-:|
 | 1. «Sancho» como palabra entera | no | 1 | 0 | — |
 | 2. líneas que empiezan por «Capítulo» | sí | 1 | 0 | — |
 | 3. primera línea con «Dulcinea» | sí | 1 | 0 | — |
-| 4. palabra larga más repetida | sí | 1 | 0 | — |
+| 4. palabra larga más repetida | no | 1 | 0 | — |
 | 5. palabras distintas | no | 1 | 0 | — |
 | 6. «Rocinante» en el primer capítulo | sí | 1 | 0 | — |
 | 7. capítulo con más líneas | no | 1 | 0 | — |
@@ -31,13 +34,13 @@ Lo que había que contestar y lo que se lee en la respuesta final
 | 1. «Sancho» como palabra entera | 2.171 | 546 |
 | 2. líneas que empiezan por «Capítulo» | 126 | 126 |
 | 3. primera línea con «Dulcinea» | 278 | 278 |
-| 4. palabra larga más repetida | quijote | quijote |
+| 4. palabra larga más repetida | quijote | muy |
 | 5. palabras distintas | 23.575 | 10.094 |
 | 6. «Rocinante» en el primer capítulo | 1 | 1 |
 | 7. capítulo con más líneas | 17.594 | 13.549 |
 | 8. «Dulcinea» en la segunda mitad | 195 | 195 |
 
-La respuesta buena la calcula un programa antes de preguntar, de dos maneras que tienen que dar lo mismo. La última columna es el último número de la respuesta final de la máquina (en la tarea 4, la palabra buena si aparece).
+La respuesta buena la calcula un programa antes de preguntar, de dos maneras que tienen que dar lo mismo. La última columna es el último número de la respuesta final de la máquina (en la tarea 4, la última palabra entre comillas, o la última palabra).
 :::
 
 muestra elegida: tarea 1, ningún programa dio error: se toma la tarea 1

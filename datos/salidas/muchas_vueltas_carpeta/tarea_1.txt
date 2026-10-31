@@ -1,0 +1,75 @@
+Tarea 1: mayor ventaja, según los hilos
+Respuesta buena: 6.6989
+
+Enunciado:
+En las mediciones hechas con distinto número de hilos, ¿cuál es la mayor ventaja que aparece, contando los dos ficheros (A y B)? Los ficheros están en la carpeta de trabajo. Contesta con el resultado.
+
+----- La máquina escribe -----
+<tool_call>
+{"name": "ejecutar_python", "arguments": {"code": "import pandas as pd\n\n# Cargar los datos de ambos archivos\nfile_a = pd.read_csv('mediciones_A.csv')\nfile_b = pd.read_csv('mediciones_B.csv')\n\n# Combinar los datos\ncombined_data = pd.concat([file_a, file_b])\n\n# Encontrar la mayor ventaja en términos de tiempo de ejecución\nmax_advantage = combined_data['ventaja'].max()\n\nmax_advantage"}}
+</tool_call>
+
+----- Programa que se ejecuta (vuelta 1) -----
+import pandas as pd
+
+# Cargar los datos de ambos archivos
+file_a = pd.read_csv('mediciones_A.csv')
+file_b = pd.read_csv('mediciones_B.csv')
+
+# Combinar los datos
+combined_data = pd.concat([file_a, file_b])
+
+# Encontrar la mayor ventaja en términos de tiempo de ejecución
+max_advantage = combined_data['ventaja'].max()
+
+max_advantage
+
+----- Lo que vuelve a la máquina (con error) -----
+Traceback (most recent call last):
+  File "<cell 1>", line 1, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'
+
+
+----- La máquina escribe -----
+Se ha producido un error porque el módulo `pandas` no está disponible en el entorno actual. Para resolver este problema, puedo utilizar la biblioteca estándar de Python para leer los archivos CSV y calcular la mayor ventaja. Vamos a hacerlo de esa manera.
+<tool_call>
+{"name": "ejecutar_python", "arguments": {"code": "import csv\n\nmax_advantage = 0\n\n# Leer y procesar el archivo A\nwith open('mediciones_A.csv', newline='') as csvfile:\n    reader = csv.DictReader(csvfile)\n    for row in reader:\n        advantage = float(row['ventaja'])\n        if advantage > max_advantage:\n            max_advantage = advantage\n\n# Leer y procesar el archivo B\nwith open('mediciones_B.csv', newline='') as csvfile:\n    reader = csv.DictReader(csvfile)\n    for row in reader:\n        advantage = float(row['ventaja'])\n        if advantage > max_advantage:\n            max_advantage = advantage\n\nmax_advantage"}}
+</tool_call>
+
+----- Programa que se ejecuta (vuelta 2) -----
+import csv
+
+max_advantage = 0
+
+# Leer y procesar el archivo A
+with open('mediciones_A.csv', newline='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        advantage = float(row['ventaja'])
+        if advantage > max_advantage:
+            max_advantage = advantage
+
+# Leer y procesar el archivo B
+with open('mediciones_B.csv', newline='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        advantage = float(row['ventaja'])
+        if advantage > max_advantage:
+            max_advantage = advantage
+
+max_advantage
+
+----- Lo que vuelve a la máquina (con error) -----
+Traceback (most recent call last):
+  File "<cell 2>", line 6, in <module>
+    with open('mediciones_A.csv', newline='') as csvfile:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'mediciones_A.csv'
+
+
+----- La máquina escribe -----
+Parece que los archivos 'mediciones_A.csv' y 'mediciones_B.csv' no están disponibles en el directorio de trabajo actual. Sin estos archivos, no puedo procesar los datos y calcular la mayor ventaja. Por favor, asegúrate de que los archivos estén en el directorio correcto y vuelve a intentarlo. Si tienes los datos en otro formato o puedes proporcionarlos de otra manera, por favor, infórmame.
+
+----- Resultado -----
+acierta: no; vueltas: 2; programas con error: 2; se corrige: no; órdenes mal escritas: 0; respuesta final: la última escritura

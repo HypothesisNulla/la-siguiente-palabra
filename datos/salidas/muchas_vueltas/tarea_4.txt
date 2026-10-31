@@ -34,4 +34,4 @@ most_common_word
 La palabra de más de seis letras que más veces aparece en el texto de "Don Quijote" es "muy".
 
 ----- Resultado -----
-acierta: sí; vueltas: 1; programas con error: 0; se corrige: no; órdenes mal escritas: 0; respuesta final: la última escritura
+acierta: no; vueltas: 1; programas con error: 0; se corrige: no; órdenes mal escritas: 0; respuesta final: la última escritura

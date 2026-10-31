@@ -1,0 +1,59 @@
+Tarea 5: filas de todos los CSV
+Respuesta buena: 658
+
+Enunciado:
+¿Cuántas filas tienen en total todos los CSV de la carpeta, sin contar las cabeceras? Los ficheros están en la carpeta de trabajo. Contesta con el resultado.
+
+----- La máquina escribe -----
+<tool_call>
+{"name": "ejecutar_python", "arguments": {"code": "import os\nimport pandas as pd\n\ntotal_rows = 0\nfor file in os.listdir('.'):  # '.' represents the current working directory\n    if file.endswith('.csv'):\n        df = pd.read_csv(file)\n        total_rows += len(df)\n\ntotal_rows"}}
+</tool_call>
+
+----- Programa que se ejecuta (vuelta 1) -----
+import os
+import pandas as pd
+
+total_rows = 0
+for file in os.listdir('.'):  # '.' represents the current working directory
+    if file.endswith('.csv'):
+        df = pd.read_csv(file)
+        total_rows += len(df)
+
+total_rows
+
+----- Lo que vuelve a la máquina (con error) -----
+Traceback (most recent call last):
+  File "<cell 1>", line 2, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'
+
+
+----- La máquina escribe -----
+Se ha producido un error porque el módulo 'pandas' no está instalado en este entorno. Intentaré resolver la solicitud utilizando solo las funciones estándar de Python para contar las filas en los archivos CSV.
+
+Voy a proceder a contar las filas en todos los archivos CSV en la carpeta de trabajo, sin contar las cabeceras, utilizando solo la biblioteca estándar de Python.
+<tool_call>
+{"name": "ejecutar_python", "arguments": {"code": "import os\n\ntotal_rows = 0\nfor file in os.listdir('.'):  # '.' represents the current working directory\n    if file.endswith('.csv'):\n        with open(file, 'r') as f:\n            lines = f.readlines()\n            total_rows += len(lines) - 1  # Subtract 1 to exclude the header\n\ntotal_rows"}}
+</tool_call>
+
+----- Programa que se ejecuta (vuelta 2) -----
+import os
+
+total_rows = 0
+for file in os.listdir('.'):  # '.' represents the current working directory
+    if file.endswith('.csv'):
+        with open(file, 'r') as f:
+            lines = f.readlines()
+            total_rows += len(lines) - 1  # Subtract 1 to exclude the header
+
+total_rows
+
+----- Lo que vuelve a la máquina (sin error) -----
+658
+
+
+----- La máquina escribe -----
+El total de filas en todos los archivos CSV de la carpeta de trabajo, sin contar las cabeceras, es de 658 filas.
+
+----- Resultado -----
+acierta: sí; vueltas: 2; programas con error: 1; se corrige: sí; órdenes mal escritas: 0; respuesta final: la última escritura

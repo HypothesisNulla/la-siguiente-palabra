@@ -42,9 +42,24 @@ la tarea 1. Se imprime entera, vuelta a vuelta.
 Se ejecuta una sola vez y no se cambia una tarea después de ver el resultado. No se escriben aquí
 tiempos de pared de las tareas: el que se dice es el de la ejecución entera, en la respuesta.
 
+Corrección del 31 de octubre de 2026 (Orden 115), hecha DESPUÉS de ver el resultado y dicha aquí
+para que se sepa: la primera lectura de la tarea 4 («la palabra buena está en la respuesta final»)
+dio por buena la respuesta «muy», porque «Quijote» salía en la frase («el texto de "Don Quijote"»).
+Ahora la respuesta de la tarea 4 es la última palabra entre comillas de la respuesta final y, si no
+hay comillas, la última palabra. Con esa lectura el recuento pasa de 5 a 4 aciertos; el programa
+no se volvió a ejecutar: `--regenerar` rehace `muchas_vueltas.txt` a partir de las ocho
+conversaciones guardadas, que no cambian (solo la última línea de `tarea_4.txt`, el resumen, que
+repite si acierta). Y este experimento se sustituye por `muchas_vueltas_carpeta.py`, porque su
+ejecutor devolvía solo lo que el programa imprime, y los asistentes de hoy funcionan como un
+cuaderno de programación: devuelven también el valor de la última línea aunque no lleve `print`.
+Los cuatro fallos (tareas 1, 4, 5 y 7) fueron exactamente eso: un programa que acababa en una
+expresión sin `print`, a la máquina le volvió un texto vacío y contestó un número o una palabra
+que no salían de ningún cálculo.
+
 Uso (desde codigo/, con HF_HUB_OFFLINE=1 para no descargar nada):
     python muchas_vueltas.py --selftest
     python muchas_vueltas.py > ../datos/salidas/muchas_vueltas.txt
+    python muchas_vueltas.py --regenerar        # sin cargar el modelo: rehace el .txt (Orden 115)
 Las ocho conversaciones completas quedan en ../datos/salidas/muchas_vueltas/tarea_N.txt.
 """
 
@@ -53,6 +68,7 @@ Las ocho conversaciones completas quedan en ../datos/salidas/muchas_vueltas/tare
 QUIJOTE = "../datos/quijote.txt"
 FICHERO = "quijote.txt"             # cómo se llama la copia dentro de la carpeta temporal
 CARPETA_CONVERSACIONES = "../datos/salidas/muchas_vueltas"
+SALIDA_TXT = "../datos/salidas/muchas_vueltas.txt"
 
 PYTHON = "python3"                  # con -I: sin variables PYTHON*, sin paquetes del usuario
 TIEMPO_PROGRAMA = 30                # segundos que puede tardar un programa, como mucho
@@ -273,12 +289,28 @@ def respuestas_buenas():
     return buenas
 
 
+COMILLAS = re.compile(r'«([^»]*)»|"([^"]*)"|“([^”]*)”')
+
+
+def palabra_respondida(final):
+    """La palabra que da una respuesta final como respuesta (tarea 4): la última palabra entre
+    comillas («…», "…" o “…”); si no hay comillas, la última palabra. None si no hay ninguna.
+    (Orden 115: antes bastaba con que la palabra buena estuviera en cualquier sitio de la
+    respuesta; ver la nota del principio.)"""
+    for m in reversed(list(COMILLAS.finditer(final))):
+        palabras = RE_LETRAS.findall(next(g for g in m.groups() if g is not None).lower())
+        if palabras:
+            return palabras[-1]
+    palabras = RE_LETRAS.findall(final.lower())
+    return palabras[-1] if palabras else None
+
+
 def acierta(tipo, buena, final):
     """Si la respuesta final acierta. Sin respuesta final (None), no."""
     if final is None:
         return False
     if tipo == "palabra":
-        return buena in RE_LETRAS.findall(final.lower())
+        return palabra_respondida(final) == buena
     return ultimo_numero(final) == buena
 
 
@@ -364,11 +396,11 @@ def resolver(generar, ejecutar, enunciado):
             "siguio": siguio, "ordenes_mal": ordenes_mal, "rastro": rastro, "mensajes": mensajes}
 
 
-def generador(modelo, tok):
+def generador(modelo, tok, herramienta=HERRAMIENTA):
     def generar(mensajes):
         texto = tok.apply_chat_template(mensajes, tokenize=False, add_generation_prompt=True,
-                                        tools=[HERRAMIENTA])
-        assert f'"{HERRAMIENTA["function"]["name"]}"' in texto and "<tool_call>" in texto, (
+                                        tools=[herramienta])
+        assert f'"{herramienta["function"]["name"]}"' in texto and "<tool_call>" in texto, (
             "Se esperaba la descripción de la herramienta en el enunciado; no está:\n" + texto)
         return escribir(modelo, tok, texto, MAX_NUEVOS)[0]
     return generar
@@ -463,14 +495,20 @@ def selftest():
     errores_bien = e_salida and e_traza and e_tiempo and "tardó más de 2 s" in texto_t
     plantilla_bien = ('"ejecutar_python"' in plantilla
                       and len(tk.encode("<tool_call>", add_special_tokens=False)) == 1)
+    lecturas = [palabra_respondida('El texto de "Don Quijote" es "muy".'),
+                palabra_respondida("La palabra es quijote."),
+                palabra_respondida("«señor» y también «Don Quijote»"),
+                palabra_respondida("1234"), palabra_respondida('Es "muy" y "".')]
+    lectura_bien = lecturas == ["muy", "quijote", "quijote", None, "muy"]
     p3 = (solo_el_quijote and aislado.strip() == "1" and not e_ok and errores_bien and recortado
-          and plantilla_bien)
+          and plantilla_bien and lectura_bien)
     ok &= p3
     print(f"[3] invariante        las dos implementaciones coinciden en las {len(buenas)} tareas; "
           f"carpeta solo con una copia idéntica del Quijote: {solo_el_quijote}; python aislado: "
           f"{aislado.strip() == '1'}; error por código de salida, «Traceback» y tiempo: "
           f"{errores_bien}; sin error si todo va bien: {not e_ok}; salida recortada con aviso: "
-          f"{recortado}; plantilla con la herramienta: {plantilla_bien}: "
+          f"{recortado}; plantilla con la herramienta: {plantilla_bien}; respuesta de la tarea 4: "
+          f"{lectura_bien}: "
           f"{'bien' if p3 else 'MAL'}")
 
     print()
@@ -493,7 +531,7 @@ def lo_que_contesto(r, tipo, buena):
     if r["final"] is None:
         return "sin respuesta"
     if tipo == "palabra":
-        return buena if r["acierta"] else "la palabra buena no está"
+        return palabra_respondida(r["final"]) or "ninguna palabra"
     n = ultimo_numero(r["final"])
     return "ningún número" if n is None else miles(n)
 
@@ -529,7 +567,8 @@ def lineas_de(texto):
 
 
 def informe(resultados):
-    """Las dos tablas y la muestra, a la salida estándar."""
+    """Las dos tablas y la muestra, como lista de renglones."""
+    out = []
     # ---- la tabla
     filas = []
     for r in resultados:
@@ -546,22 +585,22 @@ def informe(resultados):
         notas.append("Alguna orden salió mal escrita y no se ejecutó: "
                      + ", ".join(f"tarea {r['clave']}" for r in resultados if r["ordenes_mal"])
                      + ".")
-    print("\n".join(tabla_editorial(
+    out += (tabla_editorial(
         f"Las {len(resultados)} tareas sobre el Quijote con un programa en bucle: aciertan "
         f"{aciertos}",
-        ["la tarea", "acierta", "vueltas", "con error", "se corrige"], filas, "icddc", notas)))
-    print()
+        ["la tarea", "acierta", "vueltas", "con error", "se corrige"], filas, "icddc", notas))
+    out.append("")
 
     # ---- lo que había que contestar y lo que contestó
     filas = [[f"{r['clave']}. {r['rotulo']}", miles(r["buena"]) if isinstance(r["buena"], int)
               else r["buena"], lo_que_contesto(r, r["tipo"], r["buena"])] for r in resultados]
-    print("\n".join(tabla_editorial(
+    out += (tabla_editorial(
         "Lo que había que contestar y lo que se lee en la respuesta final",
         ["la tarea", "respuesta buena", "lo que contestó"], filas, "idd",
         ["La respuesta buena la calcula un programa antes de preguntar, de dos maneras que tienen "
          "que dar lo mismo. La última columna es el último número de la respuesta final de la "
-         "máquina (en la tarea 4, la palabra buena si aparece)."])))
-    print()
+         "máquina (en la tarea 4, la última palabra entre comillas, o la última palabra)."]))
+    out.append("")
 
     # ---- la muestra
     muestra = next((r for r in resultados if r["errores"] > 0 and r["siguio"]), None)
@@ -570,8 +609,7 @@ def informe(resultados):
     else:
         motivo = (f"la primera, en el orden de la lista, en la que un programa dio error y la "
                   f"máquina siguió (el de la vuelta {muestra['primer_error']})")
-    print(f"muestra elegida: tarea {muestra['clave']}, {motivo}")
-    print()
+    out += [f"muestra elegida: tarea {muestra['clave']}, {motivo}", ""]
     lineas = lineas_de(f"Tarea {muestra['clave']}: {enunciado_de(muestra['clave'])}") + [""]
     vuelta = 0
     for item in muestra["rastro"]:
@@ -591,21 +629,98 @@ def informe(resultados):
     else:
         hecho = (f"Ningún programa dio error; al final "
                  f"{'acierta' if muestra['acierta'] else 'falla'}.")
-    print("\n".join(muestra_editorial(
+    out += (muestra_editorial(
         "Una tarea entera, vuelta a vuelta: lo que escribe la máquina, el programa y lo que vuelve",
         lineas,
         [f"Tarea {muestra['clave']} ({muestra['rotulo']}): "
          f"{plural(muestra['vueltas'], 'vuelta', 'vueltas')} en total, "
-         f"{plural(muestra['errores'], 'programa con error', 'programas con error')}. " + hecho])))
+         f"{plural(muestra['errores'], 'programa con error', 'programas con error')}. " + hecho]))
+    return out
 
+
+SECCION = re.compile(r"^----- (.*?) -----$", re.M)
+
+
+def reconstruir(clave):
+    """Lo que dejó resolver() para una tarea, leído de su fichero de conversación (Orden 115). El
+    texto de cada sección es el que se escribió: entre el título y el siguiente van un salto
+    delante y dos detrás."""
+    with open(os.path.join(CARPETA_CONVERSACIONES, f"tarea_{clave}.txt"), encoding="utf-8") as fh:
+        texto = fh.read()
+    partes = SECCION.split(texto)
+    rastro, vueltas, errores, ordenes_mal = [], 0, 0, 0
+    primer_error, siguio = None, False
+    for titulo, cuerpo in zip(partes[1::2], partes[2::2]):
+        cuerpo = cuerpo[1:-2]
+        if titulo == "La máquina escribe":
+            rastro.append(("escribe", cuerpo))
+            siguio = siguio or primer_error is not None
+            if leer_orden(cuerpo)[0] is None and "<tool_call>" in cuerpo:
+                ordenes_mal += 1
+        elif titulo.startswith("Programa que se ejecuta"):
+            vueltas += 1
+            rastro.append(("programa", cuerpo))
+        elif titulo.startswith("Lo que vuelve a la máquina"):
+            error = titulo.endswith("(con error)")
+            rastro.append(("vuelve", cuerpo, error))
+            if error:
+                errores += 1
+                primer_error = primer_error or vueltas
+    ultima = rastro[-1]
+    final = ultima[1] if (ultima[0] == "escribe" and leer_orden(ultima[1])[0] is None
+                          and "<tool_call>" not in ultima[1]) else None
+    return {"final": final, "vueltas": vueltas, "errores": errores, "primer_error": primer_error,
+            "siguio": siguio, "ordenes_mal": ordenes_mal, "rastro": rastro, "texto": texto}
+
+
+NOTA_ORDEN_115 = [
+    "Nota del 31 de octubre de 2026 (Orden 115). La lectura de la tarea 4 se corrigió después de ver "
+    "el resultado: la primera daba por buena la respuesta «muy» porque «Quijote» salía en la frase; "
+    "ahora la respuesta es la última palabra entre comillas de la respuesta final, o la última "
+    "palabra si no hay comillas. Con la lectura corregida acierta 4 de 8 y no 5.",
+    "Esta salida se ha regenerado a partir de las ocho conversaciones guardadas, que no han cambiado, "
+    "sin volver a ejecutar el modelo. Y el experimento se sustituye por muchas_vueltas_carpeta.py "
+    "porque el ejecutor de este no devolvía el valor de la última línea, como hacen los asistentes de "
+    "hoy: los cuatro fallos son un programa que acaba en una expresión sin print.",
+]
+
+
+def regenerar():
+    """Rehace SALIDA_TXT y los ficheros de conversación con la lectura corregida, sin modelo."""
+    with open(SALIDA_TXT, encoding="utf-8") as fh:
+        cabecera = fh.read().split("\n\n")[0].split("\n")
+    buenas = respuestas_buenas()
+    resultados = []
+    for clave, rotulo, _, tipo in TAREAS:
+        r = evaluar(reconstruir(clave), tipo, buenas[clave])
+        r.update(clave=clave, rotulo=rotulo, tipo=tipo, buena=buenas[clave])
+        antes = r.pop("texto")
+        assert antes.startswith(f"Tarea {clave}: {rotulo}\nRespuesta buena: {buenas[clave]}\n\n"
+                                f"Enunciado:\n{enunciado_de(clave)}\n\n"), (
+            f"Se esperaba el enunciado guardado de la tarea {clave}; es otro")
+        escribir_conversacion(r, clave, rotulo, buenas[clave])
+        with open(os.path.join(CARPETA_CONVERSACIONES, f"tarea_{clave}.txt"), encoding="utf-8") as fh:
+            despues = fh.read()
+        marca = "----- Resultado -----"
+        assert despues.split(marca)[0] == antes.split(marca)[0], (
+            f"Se esperaba la misma conversación en la tarea {clave}; ha cambiado")
+        resultados.append(r)
+    salida = cabecera + [""] + NOTA_ORDEN_115 + [""] + informe(resultados)
+    with open(SALIDA_TXT, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(salida) + "\n")
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--regenerar", action="store_true",
+                    help="rehace la salida desde las conversaciones guardadas, sin cargar el modelo")
     args = ap.parse_args()
     if args.selftest:
         sys.exit(0 if selftest() else 1)
+    if args.regenerar:
+        regenerar()
+        return
 
     t0 = time.time()
     print(f"máquina: {platform.platform()}; Python {platform.python_version()}")
@@ -634,7 +749,8 @@ def main():
               f"errores={r['errores']} ({time.time() - t1:.0f} s)", file=sys.stderr, flush=True)
     print(f"tiempo total: {time.time() - t0:.0f} s", file=sys.stderr, flush=True)
 
-    informe(resultados)
+    print("\n".join(informe(resultados)))
+
 
 if __name__ == "__main__":
     main()

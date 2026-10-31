@@ -1,0 +1,139 @@
+máquina: macOS-26.7.1-arm64-arm-64bit; Python 3.12.14
+mlx 0.32.2; mlx-lm 0.31.3
+modelo: 32.000M adiestrado (mlx-community/Qwen2.5-32B-Instruct-4bit)
+dispositivo de cálculo: Device(gpu, 0)
+herramienta: /opt/homebrew/bin/python3 (Python 3.14.4), con -I, 30 s por vuelta; pandas: no, numpy: no
+
+::: tabla
+Cinco tareas con un cuaderno y una carpeta de ficheros: aciertan 1
+
+| la tarea | acierta | vueltas | con error | se corrige | qué hizo en cada vuelta |
+|:--|:-:|--:|--:|:-:|:--|
+| 1. mayor ventaja, según los hilos | no | 2 | 2 | no | calcula (error); lee los ficheros (error) |
+| 2. mediana de la ventaja en el procesador | no | 1 | 1 | no | lista la carpeta (error) |
+| 3. tarea que ningún modelo acierta | no | 2 | 2 | no | lee los ficheros (error); lee los ficheros (error) |
+| 4. tiempo medio de «solo añadir» | no | 1 | 1 | no | calcula (error) |
+| 5. filas de todos los CSV | sí | 2 | 1 | sí | lista la carpeta (error); lista la carpeta |
+
+La máquina trabaja como en un cuaderno de programación: lo que define en una vuelta sigue ahí en la siguiente, y le vuelve lo que el programa imprime y el valor de su última línea. Solo tiene ocho ficheros de medidas.
+
+Acierta: su respuesta final trae el resultado bueno. Vueltas: los programas que escribió y se ejecutaron antes de contestar. Con error: cuántos acabaron en error. Se corrige: si, habiendo tenido algún error, la respuesta final acierta.
+
+La última columna dice, vuelta por vuelta, qué hacía el programa: «lista la carpeta» si pide los ficheros, «calcula» si usa máximos, medias, sumas, cuentas u ordenaciones, «lee los ficheros» si solo los abre; si no encaja, el programa recortado.
+:::
+
+::: tabla
+Lo que había que contestar y lo que se lee en la respuesta final
+
+| la tarea | respuesta buena | lo que contestó |
+|:--|--:|--:|
+| 1. mayor ventaja, según los hilos | 6,6989 | ningún número |
+| 2. mediana de la ventaja en el procesador | 2,8716 | ningún número |
+| 3. tarea que ningún modelo acierta | seguir un patrón inventado | ninguna de las seis |
+| 4. tiempo medio de «solo añadir» | 804,4737 | ningún número |
+| 5. filas de todos los CSV | 658 | 658 |
+
+La respuesta buena la calcula un programa antes de preguntar, de dos maneras que tienen que dar lo mismo; las decimales se enseñan con 4 decimales. La última columna es el último número de la respuesta final de la máquina, tal como lo escribió (en la tarea 3, las tareas que nombra).
+:::
+
+muestra elegida: tarea 1, ninguna llega a 3 vueltas: la que más usa, con 2 vueltas (la primera, si empatan)
+
+::: muestra
+Una tarea entera, vuelta a vuelta: lo que escribe la máquina, el programa y lo que vuelve
+
+    Tarea 1: En las mediciones hechas con distinto número de hilos,
+    ¿cuál es la mayor ventaja que aparece, contando los dos ficheros (A
+    y B)? Los ficheros están en la carpeta de trabajo. Contesta con el
+    resultado.
+    
+    Escribe la máquina:
+    <tool_call>
+    {"name": "ejecutar_python", "arguments": {"code": "import pandas as
+    pd\n\n# Cargar los datos de ambos archivos\nfile_a =
+    pd.read_csv('mediciones_A.csv')\nfile_b =
+    pd.read_csv('mediciones_B.csv')\n\n# Combinar los
+    datos\ncombined_data = pd.concat([file_a, file_b])\n\n# Encontrar la
+    mayor ventaja en términos de tiempo de ejecución\nmax_advantage =
+    combined_data['ventaja'].max()\n\nmax_advantage"}}
+    </tool_call>
+    
+    Se ejecuta este programa (vuelta 1):
+    import pandas as pd
+    
+    # Cargar los datos de ambos archivos
+    file_a = pd.read_csv('mediciones_A.csv')
+    file_b = pd.read_csv('mediciones_B.csv')
+    
+    # Combinar los datos
+    combined_data = pd.concat([file_a, file_b])
+    
+    # Encontrar la mayor ventaja en términos de tiempo de ejecución
+    max_advantage = combined_data['ventaja'].max()
+    
+    max_advantage
+    
+    Vuelve a la máquina (con error):
+    Traceback (most recent call last):
+      File "<cell 1>", line 1, in <module>
+        import pandas as pd
+    ModuleNotFoundError: No module named 'pandas'
+    
+    Escribe la máquina:
+    Se ha producido un error porque el módulo `pandas` no está
+    disponible en el entorno actual. Para resolver este problema, puedo
+    utilizar la biblioteca estándar de Python para leer los archivos CSV
+    y calcular la mayor ventaja. Vamos a hacerlo de esa manera.
+    <tool_call>
+    {"name": "ejecutar_python", "arguments": {"code": "import
+    csv\n\nmax_advantage = 0\n\n# Leer y procesar el archivo A\nwith
+    open('mediciones_A.csv', newline='') as csvfile:\n    reader =
+    csv.DictReader(csvfile)\n    for row in reader:\n        advantage =
+    float(row['ventaja'])\n        if advantage > max_advantage:\n      
+         max_advantage = advantage\n\n# Leer y procesar el archivo
+    B\nwith open('mediciones_B.csv', newline='') as csvfile:\n    reader
+    = csv.DictReader(csvfile)\n    for row in reader:\n        advantage
+    = float(row['ventaja'])\n        if advantage > max_advantage:\n    
+           max_advantage = advantage\n\nmax_advantage"}}
+    </tool_call>
+    
+    Se ejecuta este programa (vuelta 2):
+    import csv
+    
+    max_advantage = 0
+    
+    # Leer y procesar el archivo A
+    with open('mediciones_A.csv', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            advantage = float(row['ventaja'])
+            if advantage > max_advantage:
+                max_advantage = advantage
+    
+    # Leer y procesar el archivo B
+    with open('mediciones_B.csv', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            advantage = float(row['ventaja'])
+            if advantage > max_advantage:
+                max_advantage = advantage
+    
+    max_advantage
+    
+    Vuelve a la máquina (con error):
+    Traceback (most recent call last):
+      File "<cell 2>", line 6, in <module>
+        with open('mediciones_A.csv', newline='') as csvfile:
+             ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    FileNotFoundError: [Errno 2] No such file or directory:
+    'mediciones_A.csv'
+    
+    Escribe la máquina:
+    Parece que los archivos 'mediciones_A.csv' y 'mediciones_B.csv' no
+    están disponibles en el directorio de trabajo actual. Sin estos
+    archivos, no puedo procesar los datos y calcular la mayor ventaja.
+    Por favor, asegúrate de que los archivos estén en el directorio
+    correcto y vuelve a intentarlo. Si tienes los datos en otro formato
+    o puedes proporcionarlos de otra manera, por favor, infórmame.
+
+Tarea 1 (mayor ventaja, según los hilos): 2 vueltas en total, 2 programas con error. El programa de la vuelta 1 dio error; al final falla.
+:::
