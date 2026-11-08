@@ -1,0 +1,193 @@
+--- selftest ---
+[1] test nulo         letras posibles mirando 2 / sin mirar: barajado=0,83  real=0,47
+                      grupo «qz» (no aparece): palabra de ejemplo = None (sin palabra, como tiene que ser)
+[2] señal implantada  hoja «wñ»: {'k': 300}
+                      palabra de ejemplo en un texto fabricado: la más frecuente (extra, texto), con empate la primera (texte, y exterior al revés)
+[3] invariante        muestras repetidas iguales a las de ngrama.txt: 7 de 7; letras que salieron sin estar en su hoja: 0
+                      las 5 palabras de ejemplo de «xt» contienen el grupo y su letra y salen en el texto; las que no: 0
+[3] invariante        muestra de 1 letra: 12 palabras del Quijote en 40 trozos (casillas_vacias.txt dice 12 en 40)
+
+SELFTEST: las tres pruebas pasan.
+
+########## capítulo 1: la escalera, paso a paso ##########
+fecha: 2026-11-08 19:47 UTC
+máquina: Darwin arm64. La medición no
+depende de la máquina: repite los sorteos de ngrama.py con su
+semilla (20260914) y sale lo mismo en cualquier ordenador
+
+1. CÓMO ARRANCA CADA MUESTRA
+
+Las primeras letras no salen de un sorteo: la máquina coge al azar
+un contexto de la tabla, lo escribe, y detrás empiezan los sorteos.
+
+  selector  arranque    principio de la muestra
+  -------   --------    -----------------------
+  nada      (ninguno)   naahcuuamsea q et icooot…
+  1 letra   «u»         uela eantes jo dentabuem…
+  2 letras  «xt»        xto cómos el quelle y en…
+  3 letras  «jal»       jalmentencajó a los caba…
+  5 letras  «ija t»     ija tan bien, sino con f…
+
+2. EL PRIMER SORTEO DEL SELECTOR EN 2, ENTERO
+
+::: tabla
+Qué letra viene detrás de «xt»
+
+| letra que sigue | veces | de cada cien veces | por ejemplo |
+|:-:|--:|--:|:--|
+| r | 18 | 75,00 % | extraordinario |
+| e | 2 | 8,33 % | exteriores |
+| o | 2 | 8,33 % | texto |
+| a | 1 | 4,17 % | juxta |
+| i | 1 | 4,17 % | extirpar |
+
+Las 24 veces que aparece «xt» en el Quijote.
+
+La máquina arranca con «xt». Sale «o»; escrito: «xto».
+:::
+
+3. LOS PRIMEROS SORTEOS: 3 FILAS Y EL RESULTADO DE LOS 6
+
+::: tabla
+Los primeros sorteos con el selector en 2 letras
+
+| ha escrito | mira | van detrás | la que más sale | sale |
+|:--|:--|--:|:--|:--|
+| «xt» | «xt» | 5 | «r», 75 % | «o» |
+| «xto» | «to» | 26 | espacio, 32 % | espacio |
+| «xto » | «o » | 35 | «d», 14 % | «c» |
+| «xto cómo» | — | — | — | tras 6 sorteos |
+
+Mira: las dos últimas letras escritas, que dicen a qué hoja va. Van detrás: cuántas letras distintas hay en esa hoja. La que más sale: y cuántas veces de cada cien. Se enseñan los 3 primeros sorteos de 6; la última fila es lo escrito al final.
+
+Escrito al final: «xto cómo».
+:::
+
+3 BIS. LA MÁQUINA DE PALABRAS, SELECTOR EN 2: LOS 4 PRIMEROS SORTEOS
+
+::: tabla
+Los 4 primeros sorteos de la máquina de palabras, con el selector en 2
+
+| mira | veces | van detrás | la que más sale | sale |
+|:--|--:|--:|:--|:--|
+| «sitio escogió» | 1 | 1 | «el», 100 % | «el» |
+| «escogió el» | 3 | 3 | 3 empatadas, 33 % | «caballero» |
+| «el caballero» | 97 | 24 | «de», 42 % | «de» |
+| «caballero de» | 94 | 11 | «la», 65 % | «la» |
+
+Arranque: «sitio escogió». Cada sorteo mira las dos últimas palabras; «van detrás» cuenta palabras distintas.
+
+Escrito al final: «sitio escogió el caballero de la».
+:::
+
+4. POR QUÉ AL SUBIR SALEN PALABRAS
+
+::: tabla
+La letra que viene detrás de «quijo», según el selector
+
+| selector | mira | van detrás | la «t», de cada cien |
+|:--|:--|--:|--:|
+| nada | nada | 41 | 3,0 |
+| 1 letra | «o» | 34 | 3,2 |
+| 2 letras | «jo» | 19 | 39,0 |
+| 3 letras | «ijo» | 10 | 52,9 |
+| 5 letras | «quijo» | 2 | 99,9 |
+
+La máquina ha escrito «quijo» y tiene que sacar en un sorteo la letra siguiente. Lo que mira depende del selector.
+:::
+
+::: tabla
+Cuántas letras van detrás, de media, según el selector
+
+| selector | hojas | van detrás, de media |
+|:--|--:|--:|
+| nada | 1 | 41,0 |
+| 1 letra | 41 | 30,8 |
+| 2 letras | 808 | 21,8 |
+| 3 letras | 6.896 | 14,7 |
+| 5 letras | 103.082 | 7,7 |
+
+De media en todos los sorteos: cuántas letras distintas van detrás en la hoja que le toca a la máquina.
+:::
+
+5. PALABRAS DEL QUIJOTE EN CADA MUESTRA
+
+::: tabla
+Palabras del Quijote en cada muestra
+
+| selector | grupos de letras | palabras del Quijote | de cada cien |
+|:--|--:|--:|--:|
+| nada | 32 | 5 | 16 % |
+| 1 letra | 40 | 12 | 30 % |
+| 2 letras | 42 | 16 | 38 % |
+| 3 letras | 39 | 24 | 62 % |
+| 5 letras | 43 | 41 | 95 % |
+
+Grupos de letras: lo que hay entre espacio y espacio, sin los signos pegados.
+
+Las del selector en nada: «et» «o» «es» «o» «es».
+:::
+
+6. LAS MUESTRAS, TAL CUAL
+
+::: muestra
+Lo que escribe sin mirar nada
+
+    naahcuuamsea q et icooot slsrrdenr urs iopies   nat ytoidsta
+    iairenabylaoen osiss   o oppcaao  m es mescdsciee ld oo res onsp ey 
+    yáoqlmpnvosct ,snt errá  vrdsdooeelooe onpeoie o jíentio
+    ríoofanebmiayjeraai es ,oápln cti
+:::
+
+::: muestra
+Lo que escribe con el selector en 1 letra
+
+    uela eantes jo dentabuembas, cio, dosta s, pra; ya y quque perún
+    gerond hono ce torosan llllosa venos quarademo erijos enie gueja de
+    e de astralo y y ccudiólezo, cue rtospeto sue quenció quillate a pia
+    lvios l eana mení
+:::
+
+::: muestra
+Lo que escribe con el selector en 2 letras
+
+    xto cómos el quelle y en cor se coda susporquello; piena, y con ria
+    los to de grachojadas men allo. multu de, con as haberto si buz
+    hichas otestano vue suer se votenes; ertica elle el una
+    comonestrisme y de combla viestr
+:::
+
+::: muestra
+Lo que escribe con el selector en 3 letras
+
+    jalmentencajó a los caba cieremejor suced de la cualero papidierero
+    vues por revinande desta; y, corre estros son que la haner sí que
+    tal muchará más grande sanchastado. cayer de unosotro el cado la
+    mucho. y, valero no l
+:::
+
+::: muestra
+Lo que escribe con el selector en 5 letras
+
+    ija tan bien, sino con fuera cabeza, donde hasta ama y grandiosidad
+    de los puso a su temo que debe de la orden el herreruelo hizo.
+    dígame mañana en ella fama de donde ser parte, todas en día diciendo
+    que recios, su honra
+:::
+
+::: muestra
+Lo que escribe palabra a palabra, sin mirar ninguna
+
+    rompida , que corre el diablo , sancho panza , llevad la presencia
+    cuando le pellizcaron y les abrió los manteles dan ocasión de faltar
+    nada . bien , como yo que , sino a
+:::
+
+::: muestra
+Lo que escribe palabra a palabra, con el selector en 2 palabras
+
+    sitio escogió el caballero de la cual dio dios , soy casado , y
+    cargaron de piedras , y más , que no te dije yo ; mas , hallándose
+    cardenio allí junto , había
+:::
+

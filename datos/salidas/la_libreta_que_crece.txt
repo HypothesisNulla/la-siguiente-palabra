@@ -1,0 +1,120 @@
+--- selftest ---
+[1] test nulo         hojas con algo mirando 3 letras: barajado=23.612  real=5.131
+                      «el caballero» en 200.000 trozos: barajado=7  real=49
+[2] señal implantada  (3, 9, 2, {'a': 2}, {'b': 1, 'c': 1}, {'z': 7})
+[3] invariante        hojas con algo de 1, 2, 3 y 5 letras = las de traza_escalera.txt: True; hojas posibles y con algo de 2 palabras = las de casillas_vacias.txt: True
+                      hojas con algo que pasen de las posibles: 0; «sitio escogió» sale 1 vez y detrás va {'el': 1}
+
+SELFTEST: las tres pruebas pasan.
+
+########## capítulo 1: lo que crece la libreta ##########
+fecha: 2026-11-08 19:47 UTC
+máquina: Darwin arm64. La medición no
+depende de la máquina: cuenta letras y palabras de un fichero
+corpus: datos/quijote.txt, limpiado y troceado como en ngrama.py
+símbolos del alfabeto de las letras: 42 (letras, espacio y signos)
+trozos distintos (palabras y 8 signos): 22.952
+
+A. LA LIBRETA, SEGÚN CUÁNTO CONTEXTO SE MIRE
+
+::: tabla
+Hojas de la libreta según el selector
+
+| selector | hojas posibles | con algo apuntado | una con algo de cada | se multiplica por |
+|:--|--:|--:|--:|--:|
+| 1 letra | 42 | 41 | 1,0 | — |
+| 2 letras | 1.764 | 808 | 2,2 | 42 |
+| 3 letras | 74.088 | 6.896 | 11 | 42 |
+| 4 letras | 3.111.696 | 32.675 | 95 | 42 |
+| 5 letras | 130.691.232 | 103.082 | 1.268 | 42 |
+| 1 palabra | 22.952 | 22.952 | 1,0 | — |
+| 2 palabras | 526.794.304 | 145.986 | 3.609 | 22.952 |
+
+Posibles: una hoja por cada contexto que podría existir. Con algo apuntado: las que de verdad salen en el Quijote con algo detrás.
+
+Una con algo de cada: de cada cuántas hojas posibles, una tiene algo apuntado.
+
+Se multiplica por: lo que crece el número de hojas posibles al añadir una letra, o una palabra, al contexto.
+:::
+
+B. DOS PAREJAS DE PALABRAS, POR DENTRO
+
+Como en el resto del capítulo, los signos de puntuación cuentan como palabras.
+
+::: tabla
+Lo que va detrás de «sitio escogió»
+
+| detrás va | veces | de cada cien veces |
+|:--|--:|--:|
+| «el» | 1 | 100,0 % |
+
+«sitio escogió» sale 1 vez en el Quijote y detrás de ella va 1 palabra distinta.
+:::
+
+::: tabla
+La pareja más frecuente de todas: «, y»
+
+| detrás va | veces | de cada cien veces |
+|:--|--:|--:|
+| «,» | 650 | 10,4 % |
+| «que» | 466 | 7,5 % |
+| «no» | 369 | 5,9 % |
+| «el» | 215 | 3,5 % |
+| «a» | 171 | 2,7 % |
+
+«, y» sale 6.227 veces en el Quijote y detrás de ella van 1.207 palabras distintas.
+
+Las otras 1.202 suman 70,0 %.
+
+Es una pareja con una coma: la más frecuente hecha solo de palabras es otra.
+:::
+
+::: tabla
+Una de las tres parejas de dos palabras más frecuentes: «don quijote»
+
+| detrás va | veces | de cada cien veces |
+|:--|--:|--:|
+| «,» | 834 | 37,4 % |
+| «de» | 185 | 8,3 % |
+| «.» | 177 | 7,9 % |
+| «;» | 106 | 4,7 % |
+| «y» | 103 | 4,6 % |
+
+«don quijote» sale 2.232 veces en el Quijote y detrás de ella van 234 palabras distintas.
+
+Las otras 229 suman 37,1 %.
+:::
+
+::: tabla
+Una de las tres parejas de dos palabras más frecuentes: «de la»
+
+| detrás va | veces | de cada cien veces |
+|:--|--:|--:|
+| «mancha» | 170 | 7,9 % |
+| «tierra» | 49 | 2,3 % |
+| «triste» | 46 | 2,1 % |
+| «venta» | 40 | 1,9 % |
+| «caballería» | 38 | 1,8 % |
+
+«de la» sale 2.157 veces en el Quijote y detrás de ella van 606 palabras distintas.
+
+Las otras 601 suman 84,1 %.
+:::
+
+::: tabla
+Una de las tres parejas de dos palabras más frecuentes: «lo que»
+
+| detrás va | veces | de cada cien veces |
+|:--|--:|--:|
+| «yo» | 74 | 4,7 % |
+| «se» | 71 | 4,5 % |
+| «le» | 68 | 4,3 % |
+| «me» | 47 | 3,0 % |
+| «el» | 43 | 2,7 % |
+
+«lo que» sale 1.572 veces en el Quijote y detrás de ella van 392 palabras distintas.
+
+Las otras 387 suman 80,7 %.
+:::
+
+Las parejas más frecuentes, de mayor a menor (sin contar signos de puntuación): «don quijote» 2.232; «de la» 2.157; «lo que» 1.572; «que no» 1.279; «de los» 995; «en la» 958; «en el» 951; «a la» 916.
