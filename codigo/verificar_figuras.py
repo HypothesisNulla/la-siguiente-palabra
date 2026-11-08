@@ -32,6 +32,17 @@ esté en su página o en la anterior, y (2) que toda cita de más atrás diga en
 figura («Figura N, en la página P», lo que escribe la macro «dondeesta» cuando está lejos). Así el lector
 nunca lee la explicación sin saber dónde está el dibujo.
 
+Y dos cosas de la Orden 140 (8 nov 2026), para el capítulo 1 reformado:
+
+  - 11.10, las remisiones. Un capítulo reformado no usa `\\dondeesta` («en esta misma página») sino
+    `\\remision{etiqueta}`: «la Figura 3, de arriba,», «de abajo», «de la página siguiente», «de la página
+    anterior». Para esos capítulos (los que llevan la macro) se comprueba que el PDF dice exactamente eso
+    tantas veces como remisiones hay, y que ninguna dice «de la página N» (una figura lejana: no se remite a lo
+    que el lector no tiene delante). Los demás capítulos siguen con la regla vieja.
+  - 11.23, los anexos. Una figura de un anexo (`anexo-aNN-…`) no se nombra por su número: cada nota se explica sola
+    y la figura va pegada a la suya. A esas figuras no se les pide cita ni texto que las explique; solo que
+    estén en el PDF (cuentan en el recuento de pies de figura).
+
 Uso:
     python verificar_figuras.py ../../libro-ia-libro ../../PDF/La-siguiente-palabra.pdf
     python verificar_figuras.py ../../libro-ia-libro ../../PDF/La-siguiente-palabra.pdf --selftest
@@ -116,6 +127,7 @@ def figuras_del_manuscrito(raiz):
             # Tampoco una tabla editorial («::: tabla» … «:::»): su título sale en versalitas y
             # sus filas, en columnas, así que no se encuentran tal cual en el PDF. Si la figura va
             # seguida de una tabla, el ancla es la prosa que viene detrás de la tabla.
+            es_anexo = re.match(r"anexo-a\d+", f) is not None
             siguiente, dentro = "", 0
             for x in lineas[i + 1:]:
                 if x.startswith(":::") and x.strip(": ") != "":
@@ -125,6 +137,8 @@ def figuras_del_manuscrito(raiz):
                 elif x.strip() and not dentro and not x.lstrip().startswith("#"):
                     siguiente = x
                     break
+            if es_anexo and not siguiente:
+                siguiente = "(figura de anexo)"      # no hace falta texto detrás: no se busca
             assert siguiente, f"{f}: la figura {m.group(2)} no tiene texto detrás"
             limpia = lambda t: re.sub(r"\s+", " ", re.sub(r"\*\*|\*|`", "", t)).strip()
             # Una cita por número, `\ref{fig-x}`{=latex}, sale en el PDF como un número que aquí no
@@ -133,21 +147,23 @@ def figuras_del_manuscrito(raiz):
             # Desde el 17 de octubre de 2026 detrás de cada cita va su macro \dondeesta{fig-x} («, en la
             # página siguiente,»): se corta también por ella, o su texto sin expandir se colaría en
             # el ancla y no se encontraría en el PDF.
-            trozos = re.split(r"`\\(?:ref|dondeesta)\{[^}]+\}`\{=latex\}", siguiente)
+            # (Orden 140: también las macros de remisión y de notas, `\remision`, `\marca` y `\entrada`.)
+            trozos = re.split(r"`\\(?:ref|dondeesta|remision|marca|entrada)\{[^}]+\}(?:\{[^}]*\})?`\{=latex\}",
+                              siguiente)
             siguiente = max(trozos, key=lambda x: len(limpia(x))) \
                 if len(limpia(trozos[0])) < 15 else trozos[0]
             fl = re.search(FLOTA, l)
             if ".flota" in l:
                 assert fl, f"{f}: figura {m.group(2)} marcada para flotar sin el formato " \
                            f"{{#fig-x .flota}}: {l[-60:]}"
-            if fl:
+            if fl and not es_anexo:
                 citas = sum(x.count("\\ref{" + fl.group(1) + "}") for x in lineas)
                 assert citas >= 1, f"{f}: la figura flotante {fl.group(1)} no se nombra " \
                                    f"por su número en el capítulo"
             salida.append({"fichero": f, "figura": m.group(2),
                            "pie": limpia(m.group(1)),
                            "ancla": limpia(siguiente)[:LARGO_ANCLA],
-                           "flota": bool(fl)})
+                           "flota": bool(fl), "anexo": es_anexo})
     assert salida, f"No encontré ninguna figura en el manuscrito de {raiz}"
     return salida
 
@@ -209,6 +225,12 @@ def revisar(raiz, pdf, desplazar=0):
     for k, f in enumerate(figs):
         ancla = figs[(k + desplazar) % len(figs)]["ancla"]
         pag_img = imgs[k] if k < len(imgs) else None
+        if f.get("anexo") and desplazar == 0:
+            # Figura de un anexo (11.23): no se nombra ni se busca su texto; solo tiene que estar en el PDF.
+            filas.append((f["figura"], pag_img, None))
+            if pag_img is None:
+                fallos.append(f"{f['figura']}: figura de un anexo que no está en el PDF")
+            continue
         pag_txt = next((p for p in paginas if ancla in paginas[p]), None)
         filas.append((f["figura"], pag_img, pag_txt))
         if pag_txt is None:
@@ -234,7 +256,39 @@ def revisar(raiz, pdf, desplazar=0):
     return filas, fallos
 
 
-def imprimir(filas, fallos):
+REMISION = re.compile(r"(?:[Ff]igura|[Tt]abla) \d+, (de arriba|de abajo|de la página siguiente|de la página anterior)")
+REMISION_LEJOS = re.compile(r"(?:[Ff]igura|[Tt]abla) \d+, de la página \d+")
+
+
+def juzgar_remisiones(n_en_manuscrito, texto_pdf):
+    """La 11.10 (Orden 140): el PDF dice «arriba», «abajo», «de la página siguiente» o «de la página anterior»
+    tantas veces como remisiones `\\remision` hay en el manuscrito, y ninguna remite a una página lejana."""
+    t = re.sub(r"(\w)- (\w)", r"\1\2", re.sub(r"\s+", " ", texto_pdf))   # palabras partidas a fin de renglón
+    fallos = []
+    dichas, lejos = len(REMISION.findall(t)), REMISION_LEJOS.findall(t)
+    if dichas != n_en_manuscrito:
+        fallos.append(f"11.10: el manuscrito tiene {n_en_manuscrito} remisiones «\\remision» y el PDF dice «de "
+                      f"arriba», «de abajo», «de la página siguiente» o «de la anterior» {dichas} veces")
+    if lejos:
+        fallos.append(f"11.10: {len(lejos)} remisiones a una página lejana, que el lector no tiene delante: {lejos[:3]}")
+    return fallos
+
+
+def remisiones(raiz, pdf):
+    """Cuántas `\\remision{…}` hay en la prosa del manuscrito y las fallas de la 11.10 en el PDF."""
+    ficheros = [l.strip() for l in open(os.path.join(raiz, ORDEN), encoding="utf-8") if l.strip()]
+    n = 0
+    for f in ficheros:
+        for l in open(os.path.join(raiz, MANUSCRITO, f), encoding="utf-8").read().split("\n"):
+            if not l.lstrip().startswith("!["):
+                n += len(re.findall(r"`\\remision\{[\w-]+\}`\{=latex\}", l))
+    if n == 0:
+        return 0, []
+    texto = " ".join(texto_por_pagina(pdf).values())
+    return n, juzgar_remisiones(n, texto)
+
+
+def imprimir(filas, fallos, n_rem=0):
     print(f"{'figura':<30}{'imagen':>8}{'texto':>8}")
     for fig, a, b in filas:
         print(f"{fig:<30}{str(a):>8}{str(b):>8}")
@@ -245,7 +299,8 @@ def imprimir(filas, fallos):
         return 1
     print(f"PASA: las {len(filas)} figuras caen en la misma página que su explicación, las "
           f"de página entera, justo delante de ella, y las flotantes, con una cita en su página "
-          f"o en la anterior y las citas de más atrás diciendo su página.")
+          f"o en la anterior y las citas de más atrás diciendo su página."
+          + (f" {n_rem} remisiones de la 11.10 («de arriba», «de abajo»…) dichas en el PDF." if n_rem else ""))
     return 0
 
 
@@ -301,6 +356,19 @@ def selftest(raiz, pdf):
         if rc:
             fallos.append(f"señal implantada: una cita lejana con su página no pasó: {rc}")
 
+    # [2 ter] La 11.10: tres textos de juguete. Uno bien (dos remisiones dichas), uno con una que falta y uno con
+    #   una que remite a una página lejana: el primero pasa y los otros dos saltan.
+    bien = "ver la Figura 1, de arriba, y la Figura 2, de la página siguiente, aquí"
+    falta = "ver la Figura 1, de arriba, y la Figura 2 sin más"
+    lejos = "ver la Figura 1, de arriba, y la Figura 2, de la página 99, aquí"
+    partida = "la Figura 4, de la pá- gina anterior, y la Figura 5, de abajo."
+    r = [juzgar_remisiones(2, bien), juzgar_remisiones(2, falta), juzgar_remisiones(2, lejos), juzgar_remisiones(2, partida)]
+    print(f"[2] señal implantada  remisiones de la 11.10: bien {'pasa' if not r[0] else 'NO pasa'}; una que falta "
+          f"{'salta' if r[1] else 'NO salta'}; una lejana {'salta' if r[2] else 'NO salta'}; palabra partida "
+          f"{'pasa' if not r[3] else 'NO pasa'}")
+    if r[0] or not r[1] or not r[2] or r[3]:
+        fallos.append(f"señal implantada: remisiones de la 11.10 mal juzgadas: {r}")
+
     # [3] Invariante del dominio: el libro tal como está, tiene que pasar.
     filas, f3 = revisar(raiz, pdf)
     print(f"[3] invariante        el libro tal como está: {len(f3)} fallos en "
@@ -326,7 +394,9 @@ def main():
     assert os.path.exists(a.pdf), f"Se esperaba el PDF compilado en {a.pdf}; no existe"
     if a.selftest:
         return selftest(a.raiz, a.pdf)
-    return imprimir(*revisar(a.raiz, a.pdf))
+    filas, fallos = revisar(a.raiz, a.pdf)
+    n_rem, f_rem = remisiones(a.raiz, a.pdf)
+    return imprimir(filas, fallos + f_rem, n_rem)
 
 
 if __name__ == "__main__":

@@ -262,6 +262,14 @@ def main():
          "Una con algo de cada: de cada cuántas hojas posibles, una tiene algo apuntado.",
          "Se multiplica por: lo que crece el número de hojas posibles al añadir una letra, o una palabra, al contexto."])
 
+    # La tabla de las letras tal como la pone el anexo A1 del capítulo 1 (Orden 140.3: el programa sirve al libro):
+    # mismos título y rótulos, solo letras.
+    E += [""] + tabla_editorial(
+        "Las hojas de la libreta de letras, según el selector",
+        ["selector", "hojas posibles", "hojas con algo en el Quijote"],
+        [[nombre_selector(o, "letra"), miles(datos[("letras", o)][0]), miles(datos[("letras", o)][1])]
+         for o in SELECTORES_LETRAS], "idd")
+
     E += ["", "B. DOS PAREJAS DE PALABRAS, POR DENTRO", "",
           "Como en el resto del capítulo, los signos de puntuación cuentan como palabras.", ""]
     E += tabla_detras(trozos, PAREJA_UNA_VEZ, f"Lo que va detrás de «{' '.join(PAREJA_UNA_VEZ)}»") + [""]

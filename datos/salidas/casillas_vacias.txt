@@ -10,7 +10,7 @@
 SELFTEST: las tres pruebas pasan.
 
 ########## capítulo 1: lo que no cabe en la libreta ##########
-fecha: 2026-10-20 20:36 UTC
+fecha: 2026-11-08 20:51 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: cuenta letras y palabras de un fichero
 corpus: datos/quijote.txt, limpiado y troceado como en ngrama.py:
@@ -29,7 +29,7 @@ EL TEXTO QUE SE CUENTA
 ::: tabla
 Qué letra viene detrás de «qu»
 
-| letra que sigue | veces | de cada cien veces | por ejemplo |
+| letra que va detrás | veces | de cada cien veces | por ejemplo |
 |:-:|--:|--:|:--|
 | e | 25.972 | 79,40 % | que |
 | i | 5.160 | 15,78 % | quijote |
@@ -39,6 +39,8 @@ Qué letra viene detrás de «qu»
 | o | 1 | menos de 0,01 % | aequo |
 
 Las 32.709 veces que aparece «qu» en el Quijote.
+
+La última columna es una palabra del Quijote donde pasó: la que más veces sale.
 
 Símbolos distintos detrás de «qu»: 6, de los 42 que admite el programa (letras, espacio y signos de puntuación).
 :::

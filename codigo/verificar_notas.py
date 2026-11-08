@@ -21,8 +21,9 @@ MINIMO_UTIL = 400   # caracteres: una nota más corta que esto es un fichero vac
 
 
 def numero_de_capitulo(fichero):
-    """De «cap03-muchos.md» saca «03». Devuelve None si el fichero no es un capítulo numerado."""
-    m = re.match(r'cap(\d+)', fichero)
+    """De «cap03-muchos.md» saca «03»; de «anexo-a03-x.md», también «03» (el anexo A3 va con la nota del capítulo 3,
+    Orden 140.5). Devuelve None si el fichero no es un capítulo ni un anexo numerado."""
+    m = re.match(r'(?:cap|anexo-a)(\d+)', fichero)
     return m.group(1) if m else None
 
 
@@ -69,6 +70,10 @@ def selftest():
     # 3. INVARIANTE DEL DOMINIO — el verificador mira el número del capítulo, no su título ni su
     #    posición: el libro ya se renumeró una vez y los ficheros conservaron su nombre. Con los
     #    mismos capítulos en otro orden, y con el título cambiado, tiene que decir lo mismo.
+    anexos = revisar(['cap01-a.md', 'anexo-a01-x.md', 'anexo-a07-y.md'], {'01': 5000})
+    print(f"                      anexos: «anexo-a01» con la nota 01 pasa y «anexo-a07» sin nota falla: {anexos}")
+    if [c for c, _, _ in anexos] != ['anexo-a07-y.md']:
+        fallos.append(f"invariante: se esperaba solo anexo-a07-y.md sin nota; salió {anexos}")
     a = revisar(['cap01-a.md', 'cap03-c.md'], {'01': 5000})
     b = revisar(['cap03-titulo-nuevo.md', 'cap01-otro.md'], {'01': 5000})
     igual = sorted(f[1:] for f in a) == sorted(f[1:] for f in b)

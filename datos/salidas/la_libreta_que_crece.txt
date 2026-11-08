@@ -8,7 +8,7 @@
 SELFTEST: las tres pruebas pasan.
 
 ########## capítulo 1: lo que crece la libreta ##########
-fecha: 2026-11-08 19:47 UTC
+fecha: 2026-11-08 20:51 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: cuenta letras y palabras de un fichero
 corpus: datos/quijote.txt, limpiado y troceado como en ngrama.py
@@ -35,6 +35,18 @@ Posibles: una hoja por cada contexto que podría existir. Con algo apuntado: las
 Una con algo de cada: de cada cuántas hojas posibles, una tiene algo apuntado.
 
 Se multiplica por: lo que crece el número de hojas posibles al añadir una letra, o una palabra, al contexto.
+:::
+
+::: tabla
+Las hojas de la libreta de letras, según el selector
+
+| selector | hojas posibles | hojas con algo en el Quijote |
+|:--|--:|--:|
+| 1 letra | 42 | 41 |
+| 2 letras | 1.764 | 808 |
+| 3 letras | 74.088 | 6.896 |
+| 4 letras | 3.111.696 | 32.675 |
+| 5 letras | 130.691.232 | 103.082 |
 :::
 
 B. DOS PAREJAS DE PALABRAS, POR DENTRO

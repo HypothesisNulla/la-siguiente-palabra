@@ -16,20 +16,18 @@ esos pasos, con las mismas muestras:
 Las muestras NO se escriben aquí: se repiten los sorteos de `ngrama.py` con su misma semilla, en
 su mismo orden, y el selftest revienta si no salen idénticas a las de `datos/salidas/ngrama.txt`.
 
-Dos presentaciones (Orden 138, 8 nov 2026, regla 11 y notas de Carlos de las p. 15-16 y 21):
+Dos presentaciones (Órdenes 138 y 140, 8 nov 2026; regla 11 y notas de Carlos de las p. 15-16 y 21):
 
-  - la de siempre, que es la que el capítulo 1 cita hoy: `traza_escalera.txt`;
-  - la reformada, con `--reforma`: `traza_escalera_reforma.txt`. Mismos sorteos, mismas cifras;
-    cambian los rótulos y la tabla de los sorteos a mano (ver REFORMA abajo).
-
-Las dos conviven mientras el texto del capítulo 1 no se reescriba: si se cambiara la salida de siempre,
-los bloques del capítulo dejarían de estar literales en ella (`verificar_muestras.py`). Cuando el texto
-nuevo entre, se retira la de siempre.
+  - la de ahora (por defecto): imprime EXACTAMENTE las tablas del capítulo 1 y del anexo A1 reescritos (11.4 y
+    11.5: el programa sirve al libro), con sus títulos, rótulos, filas y notas. Los rótulos de las columnas los
+    escribe el programa y `verificar_muestras.py` no deja que el libro los cambie; el libro puede quitar columnas.
+  - la de antes, con `--antes`: la que citaba el capítulo 1 viejo (copia en
+    `notas/historico/antes-de-programas-cap01-reforma/traza_escalera.txt`). Mismos sorteos, mismas cifras.
 
 Uso:
     python traza_escalera.py --selftest
     python traza_escalera.py > ../datos/salidas/traza_escalera.txt
-    python traza_escalera.py --reforma > ../datos/salidas/traza_escalera_reforma.txt
+    python traza_escalera.py --antes     # solo para reproducir la salida vieja
 """
 
 # ======================= CONSTANTES =======================
@@ -41,10 +39,12 @@ SORTEOS_A_MANO = 6        # cuántos sorteos se enseñan
 SORTEOS_PALABRAS = 4      # cuántos sorteos de la máquina de palabras (selector en dos) se enseñan
 LETRAS_POR_URNA = 4       # cuántas letras de cada urna se enseñan una a una; el resto se agrupa
 
-# REFORMA (`--reforma`; Orden 138, notas de Carlos de las p. 15-16 y 21: «menos filas», «van detrás»
-# en vez de «pueden venir», y una última fila con el resultado):
-FILAS_REFORMA = 3         # de los SORTEOS_A_MANO sorteos del peldaño, cuántos se enseñan fila a fila
-VAN_DETRAS = "van detrás"  # el rótulo que sustituye a «pueden venir» (no es condicional: detrás van tantas)
+# Rótulos de las tablas del capítulo 1 y del anexo A1 (Orden 140.3: los pone el programa, el libro los copia).
+# «Van detrás» y no «pueden venir»: no es condicional, en el Quijote detrás van tantas (notas de las p. 16 y 21).
+ROTULOS_SORTEOS = ["lleva escrito", "mira la hoja de", "letras distintas que van detrás", "sale"]
+ROTULOS_PALABRAS = ["mira", "veces en el Quijote", "palabras distintas detrás", "la que más sale", "sale"]
+ROTULOS_QUIJO = ["selector", "mira", "letras distintas detrás", "la «t», de cada cien"]
+ORDINALES = {3: "tercero", 4: "cuarto", 5: "quinto", 6: "sexto", 7: "séptimo", 8: "octavo"}
 
 # El mismo momento de escribir, visto con el selector en cada posición: la máquina acaba de
 # escribir «quijo» y va a sacar en un sorteo la letra siguiente. Con el selector en uno solo ve «o»; en dos,
@@ -73,8 +73,8 @@ from formato import (ANCHO_CAJA, coma, comprobar_ancho, miles, muestra_editorial
                      tabla_editorial)
 
 AQUI = Path(__file__).resolve().parent
-REFORMA = "--reforma" in sys.argv
-DETRAS = VAN_DETRAS if REFORMA else "pueden venir"    # el rótulo de la columna en las tablas
+REFORMA = "--antes" not in sys.argv      # la presentación de ahora; con --antes, la vieja
+DETRAS = "van detrás" if REFORMA else "pueden venir"    # el rótulo de la media, en las tablas de hojas
 
 
 def rotulo(orden):
@@ -349,10 +349,10 @@ def main():
          f"La máquina arranca con «{arranque}». Sale {letra(sale)}; escrito: «{arranque + sale}»."])
 
     if REFORMA:
-        # Se hacen los mismos SORTEOS_A_MANO sorteos, se enseñan FILAS_REFORMA y una última fila con
-        # lo escrito al final. «Ha escrito» es lo escrito ANTES de cada sorteo, así que la letra
-        # del último sorteo no aparece en esa columna de ninguna fila: la fila final la enseña.
-        E += ["", f"3. LOS PRIMEROS SORTEOS: {FILAS_REFORMA} FILAS Y EL RESULTADO DE LOS {SORTEOS_A_MANO}", ""]
+        # Los SORTEOS_A_MANO sorteos, una fila cada uno, y una última fila, en negrita, con lo escrito al
+        # final. «Lleva escrito» es lo escrito ANTES de cada sorteo, así que la letra del último sorteo no
+        # aparece en esa columna de ninguna fila de sorteo: la fila final la enseña (notas de la p. 16).
+        E += ["", f"3. LOS {SORTEOS_A_MANO} PRIMEROS SORTEOS Y LO ESCRITO AL FINAL", ""]
     else:
         E += ["", f"3. LOS {SORTEOS_A_MANO} PRIMEROS SORTEOS, UNO POR FILA", ""]
     filas, escrito = [], arranque
@@ -361,14 +361,13 @@ def main():
                       letra(sale)])
         escrito += sale
     if REFORMA:
-        filas = filas[:FILAS_REFORMA] + [[f"«{escrito}»", "—", "—", "—", f"tras {SORTEOS_A_MANO} sorteos"]]
+        assert SORTEOS_A_MANO in ORDINALES, f"Se esperaba un ordinal para {SORTEOS_A_MANO} sorteos; no lo hay"
+        filas = [[f[0], f[1], f[2], f[4]] for f in filas] + [[f"**«{escrito}»**", "", "", ""]]
         E += tabla_editorial(
-            f"Los primeros sorteos con el selector en {selector(PELDANO_A_MANO)}",
-            ["ha escrito", "mira", VAN_DETRAS, "la que más sale", "sale"], filas, "iidii",
-            [f"Mira: las dos últimas letras escritas, que dicen a qué hoja va. Van detrás: "
-             f"cuántas letras distintas hay en esa hoja. La que más sale: y cuántas veces de "
-             f"cada cien. Se enseñan los {FILAS_REFORMA} primeros sorteos de {SORTEOS_A_MANO}; la última fila "
-             f"es lo escrito al final.", f"Escrito al final: «{escrito}»."])
+            f"Los {SORTEOS_A_MANO} primeros sorteos con el selector en {selector(PELDANO_A_MANO)}",
+            ROTULOS_SORTEOS, filas, "iidi",
+            [f"Cada fila es un sorteo. La última fila es lo que queda escrito después del "
+             f"{ORDINALES[SORTEOS_A_MANO]}."])
     else:
         E += tabla_editorial(
             f"Los {SORTEOS_A_MANO} primeros sorteos con el selector en {selector(PELDANO_A_MANO)}",
@@ -388,9 +387,10 @@ def main():
         escrito.append(sale)
     E += tabla_editorial(
         f"Los {SORTEOS_PALABRAS} primeros sorteos de la máquina de palabras, con el selector en 2",
-        ["mira", "veces", DETRAS, "la que más sale", "sale"], filas, "iddii",
-        [f"Arranque: «{' '.join(arranque)}». Cada sorteo mira las dos últimas palabras; "
-         f"«{DETRAS}» cuenta palabras distintas.",
+        ROTULOS_PALABRAS if REFORMA else ["mira", "veces", "pueden venir", "la que más sale", "sale"],
+        filas, "iddii",
+        [f"Arranque: «{' '.join(arranque)}». Cada sorteo mira las dos últimas palabras"
+         + ("." if REFORMA else "; «pueden venir» cuenta palabras distintas."),
          f"Escrito al final: «{' '.join(escrito)}»."])
 
     E += ["", "4. POR QUÉ AL SUBIR SALEN PALABRAS", ""]
@@ -402,8 +402,8 @@ def main():
         filas.append([selector(orden), "nada" if orden == 0 else "«" + "".join(clave) + "»",
                       str(len(u)), coma(100 * u["t"] / sum(u.values()), 1)])
     E += tabla_editorial(
-        f"La letra que viene detrás de «{MOMENTO}», según el selector",
-        ["selector", "mira", DETRAS, "la «t», de cada cien"], filas, "iidd",
+        f"La letra que {'va' if REFORMA else 'viene'} detrás de «{MOMENTO}», según el selector",
+        ROTULOS_QUIJO if REFORMA else ["selector", "mira", "pueden venir", "la «t», de cada cien"], filas, "iidd",
         [f"La máquina ha escrito «{MOMENTO}» y tiene que sacar en un sorteo la letra siguiente. "
          "Lo que mira depende del selector."])
     E += [""] + tabla_editorial(
@@ -446,9 +446,9 @@ def main():
         f"muestra del selector en {PELDANO_A_MANO} que imprime ngrama.py; no sale")
     if REFORMA:
         assert "pueden venir" not in texto_editorial, (
-            "Se esperaba ningún «pueden venir» en la presentación reformada; queda alguno")
-        assert f"«{escrito_final}»" in texto_editorial.split("3. LOS PRIMEROS SORTEOS")[1].split("3 BIS")[0], (
-            f"Se esperaba la fila final con «{escrito_final}» en la tabla de los sorteos a mano")
+            "Se esperaba ningún «pueden venir» en la presentación de ahora; queda alguno")
+        assert f"| **«{escrito_final}»** |" in texto_editorial.split("3. LOS ")[1].split("3 BIS")[0], (
+            f"Se esperaba la fila final en negrita con «{escrito_final}» en la tabla de los sorteos a mano")
     else:
         assert "van detrás" not in texto_editorial, (
             "Se esperaba la presentación de siempre sin «van detrás»; hay alguno")

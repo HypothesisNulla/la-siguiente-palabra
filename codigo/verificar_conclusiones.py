@@ -18,6 +18,9 @@ Qué es cada cosa, mirando el texto crudo:
     destacado («:::»), una tabla de barras («|») ni otro bloque o figura. El texto de dentro de un
     destacado sí cuenta como prosa: es una frase del autor (regla 6 bis).
 
+La regla no se aplica a los anexos (`anexo-aNN-…`): por la 11.23 cada nota se explica sola y puede acabar en su
+tabla (Orden 140.4). `es_anexo` los reconoce por el nombre y el programa los salta, diciéndolo.
+
 Las tablas de barras del capítulo 15 no son salida de máquina: son la lista de nombres, y no
 entran en la regla.
 """
@@ -124,6 +127,11 @@ def huecos(texto, excepciones=frozenset()):
     return fallos
 
 
+def es_anexo(ruta):
+    """Si el fichero es un anexo («anexo-a01-shannon.md»): la 9 bis no se le aplica (11.23)."""
+    return re.match(r"anexo-a\d+", ruta.split("/")[-1]) is not None
+
+
 def selftest():
     fallos = []
 
@@ -169,6 +177,12 @@ def selftest():
     if malos:
         fallos.append(f"invariante: {malos}")
 
+    anexos = [es_anexo("x/anexo-a01-shannon.md"), es_anexo("anexo-a12-y.md"), es_anexo("cap01-shannon.md"),
+              es_anexo("98-epilogo.md")]
+    print(f"                      es_anexo: {anexos} (esperado: True, True, False, False)")
+    if anexos != [True, True, False, False]:
+        fallos.append(f"invariante: es_anexo salió {anexos}")
+
     print()
     if fallos:
         print("SELFTEST: FALLA.")
@@ -189,7 +203,10 @@ def main():
     assert args.capitulos, "Se esperaba al menos un capítulo; no se ha dado ninguno"
     total = 0
     excepciones = leer_excepciones()
+    saltados = [r for r in args.capitulos if es_anexo(r)]
     for ruta in args.capitulos:
+        if es_anexo(ruta):
+            continue
         with open(ruta, encoding="utf-8") as fh:
             h = huecos(fh.read(), excepciones)
         for linea, que, detras in h:
@@ -199,9 +216,10 @@ def main():
     if total:
         print(f"\n{total} hueco(s): falta la conclusión en palabras (regla 9 bis).")
         sys.exit(1)
-    print(f"PASA: {len(args.capitulos)} fichero(s); detrás de cada bloque y de cada figura hay "
+    print(f"PASA: {len(args.capitulos) - len(saltados)} fichero(s); detrás de cada bloque y de cada figura hay "
           f"prosa (regla 9 bis), salvo {len(excepciones)} figura(s) declarada(s) con la "
-          f"conclusión justo antes. Que diga la conclusión se mira al leer.")
+          f"conclusión justo antes. Que diga la conclusión se mira al leer."
+          + (f" Anexos saltados (11.23): {len(saltados)}." if saltados else ""))
 
 
 if __name__ == "__main__":

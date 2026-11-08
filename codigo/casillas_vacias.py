@@ -299,8 +299,9 @@ def main():
                          palabra_de_ejemplo(secuencia, PAR_VIGILADO, letra)])
     lineas += tabla_editorial(
         f"Qué letra viene detrás de «{PAR_VIGILADO}»",
-        ["letra que sigue", "veces", "de cada cien veces", "por ejemplo"], filas_qu, "cddi",
+        ["letra que va detrás", "veces", "de cada cien veces", "por ejemplo"], filas_qu, "cddi",
         [f"Las {miles(total_par)} veces que aparece «{PAR_VIGILADO}» en el Quijote.",
+         "La última columna es una palabra del Quijote donde pasó: la que más veces sale.",
          f"Símbolos distintos detrás de «{PAR_VIGILADO}»: {len(t)}, de los {len(ALFABETO)} que "
          "admite el programa (letras, espacio y signos de puntuación)."])
     lineas += [

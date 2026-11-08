@@ -10,7 +10,7 @@
 SELFTEST: las tres pruebas pasan.
 
 ########## capítulo 1: la escalera, paso a paso ##########
-fecha: 2026-10-20 20:36 UTC
+fecha: 2026-11-08 20:51 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: repite los sorteos de ngrama.py con su
 semilla (20260914) y sale lo mismo en cualquier ordenador
@@ -46,23 +46,22 @@ Las 24 veces que aparece «xt» en el Quijote.
 La máquina arranca con «xt». Sale «o»; escrito: «xto».
 :::
 
-3. LOS 6 PRIMEROS SORTEOS, UNO POR FILA
+3. LOS 6 PRIMEROS SORTEOS Y LO ESCRITO AL FINAL
 
 ::: tabla
 Los 6 primeros sorteos con el selector en 2 letras
 
-| ha escrito | mira | pueden venir | la que más sale | sale |
-|:--|:--|--:|:--|:--|
-| «xt» | «xt» | 5 | «r», 75 % | «o» |
-| «xto» | «to» | 26 | espacio, 32 % | espacio |
-| «xto » | «o » | 35 | «d», 14 % | «c» |
-| «xto c» | « c» | 14 | «o», 47 % | «ó» |
-| «xto có» | «có» | 10 | espacio, 43 % | «m» |
-| «xto cóm» | «óm» | 5 | «o», 80 % | «o» |
+| lleva escrito | mira la hoja de | letras distintas que van detrás | sale |
+|:--|:--|--:|:--|
+| «xt» | «xt» | 5 | «o» |
+| «xto» | «to» | 26 | espacio |
+| «xto » | «o » | 35 | «c» |
+| «xto c» | « c» | 14 | «ó» |
+| «xto có» | «có» | 10 | «m» |
+| «xto cóm» | «óm» | 5 | «o» |
+| **«xto cómo»** |  |  |  |
 
-Mira: las dos últimas letras escritas, que dicen a qué hoja va. Pueden venir: cuántas letras distintas hay en esa hoja. La que más sale: y cuántas veces de cada cien.
-
-Escrito al final: «xto cómo».
+Cada fila es un sorteo. La última fila es lo que queda escrito después del sexto.
 :::
 
 3 BIS. LA MÁQUINA DE PALABRAS, SELECTOR EN 2: LOS 4 PRIMEROS SORTEOS
@@ -70,14 +69,14 @@ Escrito al final: «xto cómo».
 ::: tabla
 Los 4 primeros sorteos de la máquina de palabras, con el selector en 2
 
-| mira | veces | pueden venir | la que más sale | sale |
+| mira | veces en el Quijote | palabras distintas detrás | la que más sale | sale |
 |:--|--:|--:|:--|:--|
 | «sitio escogió» | 1 | 1 | «el», 100 % | «el» |
 | «escogió el» | 3 | 3 | 3 empatadas, 33 % | «caballero» |
 | «el caballero» | 97 | 24 | «de», 42 % | «de» |
 | «caballero de» | 94 | 11 | «la», 65 % | «la» |
 
-Arranque: «sitio escogió». Cada sorteo mira las dos últimas palabras; «pueden venir» cuenta palabras distintas.
+Arranque: «sitio escogió». Cada sorteo mira las dos últimas palabras.
 
 Escrito al final: «sitio escogió el caballero de la».
 :::
@@ -85,9 +84,9 @@ Escrito al final: «sitio escogió el caballero de la».
 4. POR QUÉ AL SUBIR SALEN PALABRAS
 
 ::: tabla
-La letra que viene detrás de «quijo», según el selector
+La letra que va detrás de «quijo», según el selector
 
-| selector | mira | pueden venir | la «t», de cada cien |
+| selector | mira | letras distintas detrás | la «t», de cada cien |
 |:--|:--|--:|--:|
 | nada | nada | 41 | 3,0 |
 | 1 letra | «o» | 34 | 3,2 |
@@ -99,9 +98,9 @@ La máquina ha escrito «quijo» y tiene que sacar en un sorteo la letra siguien
 :::
 
 ::: tabla
-Cuántas letras pueden venir, de media, según el selector
+Cuántas letras van detrás, de media, según el selector
 
-| selector | hojas | pueden venir, de media |
+| selector | hojas | van detrás, de media |
 |:--|--:|--:|
 | nada | 1 | 41,0 |
 | 1 letra | 41 | 30,8 |
@@ -109,7 +108,7 @@ Cuántas letras pueden venir, de media, según el selector
 | 3 letras | 6.896 | 14,7 |
 | 5 letras | 103.082 | 7,7 |
 
-De media en todos los sorteos: cuántas letras distintas pueden venir en la hoja que le toca a la máquina.
+De media en todos los sorteos: cuántas letras distintas van detrás en la hoja que le toca a la máquina.
 :::
 
 5. PALABRAS DEL QUIJOTE EN CADA MUESTRA

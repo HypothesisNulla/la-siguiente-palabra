@@ -60,6 +60,14 @@ EXENCIONES (Orden 137.2: «nada de exenciones genéricas»). Solo de la lista `c
   - «referencia» (número de capítulo, figura, tabla, página, apartado);
   - «inventado»: el ejemplo lo declara inventado; el párrafo tiene que decirlo con alguna de las palabras
     «inventad», «imagina», «supón», «ficticio».
+  - «fuente»: una cifra que no es un año ni una fecha y viene de una fuente de fuera (la de un artículo): con
+    «fuente: notas/fuentes/…», y el fichero tiene que existir.
+  - «redondeo: de 79,40 %»: el número de la prosa es el redondeo de un valor exacto que SÍ está en una salida
+    guardada. El valor exacto tiene que estar en las salidas del capítulo y, redondeado a los decimales del
+    número de la prosa, tiene que dar ese número (Orden 140.1).
+  - «suma a la vista: 5 + 1 + 7»: el número es una cuenta hecha delante del lector con números que están en el
+    mismo párrafo. Los sumandos, escritos en la exención, tienen que salir en el párrafo (con cifra o con
+    letra, del uno al nueve) y sumar el número exento (Orden 140.2).
   Una exención que no casa con ningún número (porque el texto cambió) es un error: la lista no puede quedarse vieja.
 
 Los capítulos que no están reformados no se corrigen: `--recuento` dice cuántos números sin salida tienen, separados en
@@ -74,7 +82,7 @@ FICHERO_SALIDAS = "salidas-por-capitulo.md"
 FICHERO_EXENTAS = "cifras-exentas.md"
 
 MIN_FRAGMENTO = 12                      # caracteres del trozo de frase de una exención
-MOTIVOS = ("año", "fecha", "referencia", "inventado")
+MOTIVOS = ("año", "fecha", "referencia", "inventado", "fuente", "redondeo", "suma a la vista")
 DECLARA_INVENTADO = ("inventad", "imagina", "supón", "ficticio")
 REFERENCIAS = {"capítulo", "capítulos", "cap.", "caps.", "figura", "figuras", "tabla", "tablas", "página", "páginas",
                "pág.", "págs.", "apartado", "regla", "anexo", "nota", "paso", "punto", "línea"}
@@ -323,11 +331,17 @@ def leer_exenciones(raiz):
         if base not in MOTIVOS:
             errores.append(f"exención con un motivo que no es uno de {MOTIVOS}: «{motivo}» en {l}")
             continue
-        if base in ("año", "fecha"):
+        if base in ("año", "fecha", "fuente"):
             f = re.search(r"fuente:\s*(notas/fuentes/\S+)", motivo)
             if not f or not (Path(raiz) / f.group(1).rstrip(".,;")).exists():
                 errores.append(f"exención de {base} sin «fuente: notas/fuentes/…» que exista en {raiz}: {l}")
                 continue
+        if base == "redondeo" and not re.search(r"redondeo:\s*de\s+\d[\d.]*(?:,\d+)?", motivo):
+            errores.append(f"exención de redondeo sin «redondeo: de 79,40 %» (el valor exacto): {l}")
+            continue
+        if base == "suma a la vista" and not re.search(r"suma a la vista:\s*\d+(?:\s*\+\s*\d+)+", motivo):
+            errores.append(f"exención de suma sin «suma a la vista: 5 + 1 + 7» (los sumandos): {l}")
+            continue
         exenciones.append((cap, numero, fragmento, motivo, base, l))
     return exenciones, errores
 
@@ -381,6 +395,39 @@ def salidas_del_capitulo(cap, texto_cap, declaradas, todas):
     return [n for n, t in todas.items() if any(l in t for l in lineas)], True
 
 
+PEQUENOS = {1: ("uno", "un", "una"), 2: ("dos",), 3: ("tres",), 4: ("cuatro",), 5: ("cinco",), 6: ("seis",),
+            7: ("siete",), 8: ("ocho",), 9: ("nueve",)}
+
+
+def aparece_valor(parrafo, v):
+    """Si el valor entero v sale en el párrafo, escrito con cifra o, del uno al nueve, con letra."""
+    if any(h["valor"] == v for h in numeros_de(parrafo)):
+        return True
+    palabras = re.findall(r"[a-záéíóúü]+", parrafo.lower())
+    return int(v) in PEQUENOS and any(w in palabras for w in PEQUENOS[int(v)])
+
+
+def exencion_no_vale(e, h, parrafo, valores):
+    """Por qué una exención concreta no vale para este número ('' si vale). Cada motivo tiene su prueba."""
+    base, motivo = e[4], e[3]
+    if base == "inventado" and not any(p in parrafo.lower() for p in DECLARA_INVENTADO):
+        return f"el párrafo no declara el ejemplo inventado ({'/'.join(DECLARA_INVENTADO)})"
+    if base == "redondeo":
+        exacto, dec = valor_de(re.search(r"redondeo:\s*de\s+(\d[\d.]*(?:,\d+)?)", motivo).group(1))
+        if exacto not in valores:
+            return f"el valor exacto {exacto} no está en las salidas guardadas del capítulo"
+        if exacto.quantize(Decimal(1).scaleb(-h["dec"]), rounding=ROUND_HALF_UP) != h["valor"]:
+            return f"{exacto} redondeado a {h['dec']} decimales no da {h['valor']}"
+    if base == "suma a la vista":
+        sumandos = [int(x) for x in re.findall(r"\d+", re.search(r"suma a la vista:([^;]*)", motivo).group(1))]
+        if sum(sumandos) != h["valor"]:
+            return f"{' + '.join(map(str, sumandos))} da {sum(sumandos)}, no {h['valor']}"
+        faltan = [x for x in sumandos if not aparece_valor(parrafo, Decimal(x))]
+        if faltan:
+            return f"los sumandos {faltan} no salen en el párrafo"
+    return ""
+
+
 def revisar_capitulo(tl, raiz, cap, fichero, declaradas, todas, exenciones):
     """Devuelve (números, errores): cada número con su clase y si tiene salida, exención o ninguna."""
     texto = Path(fichero).read_text(encoding="utf-8")
@@ -393,15 +440,18 @@ def revisar_capitulo(tl, raiz, cap, fichero, declaradas, todas, exenciones):
             h.update(linea=linea, frase=frase)
             if h["forma"] in ("unidad", "letra_pequena"):
                 h["estado"] = h["forma"]
-            elif tiene_salida(h, valores):
-                h["estado"] = "con salida"
             else:
+                # Una exención escrita a mano manda sobre una coincidencia casual con una salida: «casi setenta
+                # años» de 1948 a 2017 no sale de ninguna salida aunque haya un 69 en alguna (Orden 140).
                 exenta = [e for e in exenciones if e[0] == cap and e[1] == h["texto"] and norm(e[2]) in norm(frase)]
                 if exenta:
                     e = exenta[0]
                     usadas.add(e[5])
-                    ok = e[4] != "inventado" or any(p in parrafo.lower() for p in DECLARA_INVENTADO)
-                    h["estado"] = "exento" if ok else "exención sin declarar inventado"
+                    porque = exencion_no_vale(e, h, parrafo, valores)
+                    h["estado"] = "exento" if not porque else "exención no vale"
+                    h["porque"] = porque
+                elif tiene_salida(h, valores):
+                    h["estado"] = "con salida"
                 else:
                     h["estado"] = "sin salida"
                     h["en_ninguna"] = not tiene_salida(h, valores_todos)
@@ -451,7 +501,7 @@ def correr(raiz, carpeta_salidas, capitulos, estricto=True, recuento=False):
         for h in numeros:
             cuenta[h["estado"]] = cuenta.get(h["estado"], 0) + 1
         sin = [h for h in numeros if h["estado"] == "sin salida"]
-        mal = [h for h in numeros if h["estado"] == "exención sin declarar inventado"]
+        mal = [h for h in numeros if h["estado"] == "exención no vale"]
         por_clase = {c: sum(1 for h in sin if h["clase"] == c) for c in ("año", "fecha", "referencia", "cifra")}
         filas.append((cap, len(numeros), cuenta, por_clase, sum(1 for h in sin if h.get("en_ninguna")), nombres, derivadas))
         if estricto:
@@ -459,8 +509,8 @@ def correr(raiz, carpeta_salidas, capitulos, estricto=True, recuento=False):
                 fallos.append(f"capítulo {cap}, línea {h['linea']}: «{h['texto']}» ({h['clase']}) no está en las salidas "
                               f"de su capítulo; frase: «{h['frase'][:110]}»")
             for h in mal:
-                fallos.append(f"capítulo {cap}, línea {h['linea']}: «{h['texto']}» está exento como inventado y su párrafo "
-                              f"no lo declara ({'/'.join(DECLARA_INVENTADO)})")
+                fallos.append(f"capítulo {cap}, línea {h['linea']}: «{h['texto']}» está exento y la exención no vale: "
+                              f"{h['porque']}")
     return filas, fallos
 
 
@@ -591,6 +641,36 @@ def _selftest():
         vieja = [e for e in e3 if "no casa con ningún número" in e]
         if len(vieja) != 1:
             fallos.append(f"invariante: una exención vieja debía dar error; salió {e3}")
+    # Los motivos de la Orden 140: redondeo (79 de 79,40 %), suma a la vista (5 + 1 + 7) y fuente.
+    capitulo2 = ("# Otro\n\nLleva 79 papeletas la hoja. Cinco, uno y siete suman 13. "
+                 "Y 1913 fue el año del artículo.\n")
+    buenas = ("- cap01 | 79 | Lleva 79 papeletas la hoja | redondeo: de 79,40 %\n"
+              "- cap01 | 13 | Cinco, uno y siete suman 13 | suma a la vista: 5 + 1 + 7\n"
+              "- cap01 | 1913 | fue el año del artículo | año; fuente: notas/fuentes/shannon.md\n")
+    malas = {
+        "redondeo con un valor que no está en la salida": ("- cap01 | 79 | Lleva 79 papeletas la hoja | redondeo: de 78,40 %\n", "no está en las salidas"),
+        "redondeo que no redondea al número": ("- cap01 | 79 | Lleva 79 papeletas la hoja | redondeo: de 79,60 %\n", "no está en las salidas"),
+        "suma que no da": ("- cap01 | 13 | Cinco, uno y siete suman 13 | suma a la vista: 5 + 1 + 6\n", "da 12"),
+        "suma con un sumando que no sale": ("- cap01 | 13 | Cinco, uno y siete suman 13 | suma a la vista: 5 + 2 + 6\n", "no salen en el párrafo"),
+        "fuente que no existe": ("- cap01 | 1913 | fue el año del artículo | fuente: notas/fuentes/no_existe.pdf\n", "sin «fuente"),
+    }
+    with tempfile.TemporaryDirectory() as d2:
+        raiz2, sal2 = _libro_de_mentira(d2, capitulo2, "hoja 79,40 %\n")
+        ruta = raiz2 / "notas" / "reforma-nov" / FICHERO_EXENTAS
+        ruta.write_text("# x\n\n" + buenas, encoding="utf-8")
+        _, ok = correr(raiz2, sal2, [1], estricto=True)
+        print(f"                      redondeo, suma a la vista y fuente, bien escritos: fallos {len(ok)} (esperado 0)")
+        if ok:
+            fallos.append(f"invariante: las exenciones buenas de redondeo, suma y fuente debían valer; salió {ok}")
+        rotas = []
+        for nombre, (linea, quiero) in malas.items():
+            ruta.write_text("# x\n\n" + linea, encoding="utf-8")
+            _, e = correr(raiz2, sal2, [1], estricto=True)
+            if not any(quiero in x for x in e):
+                rotas.append((nombre, e))
+        print(f"                      cinco exenciones malas de los motivos nuevos: sin rechazar {len(rotas)} (esperado 0)")
+        if rotas:
+            fallos.append(f"invariante: estas exenciones malas debían rechazarse: {rotas}")
     print()
     if fallos:
         for f in fallos:
