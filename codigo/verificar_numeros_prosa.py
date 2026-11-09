@@ -65,6 +65,13 @@ EXENCIONES (Orden 137.2: «nada de exenciones genéricas»). Solo de la lista `c
   - «redondeo: de 79,40 %»: el número de la prosa es el redondeo de un valor exacto que SÍ está en una salida
     guardada. El valor exacto tiene que estar en las salidas del capítulo y, redondeado a los decimales del
     número de la prosa, tiene que dar ese número (Orden 140.1).
+  - «cálculo: (8.638 / 20.000) * 20.000; fuente: notas/fuentes/x.pdf»: el número es el resultado de una cuenta (Orden 141).
+    La cuenta se escribe con + - * / ^ y paréntesis, y tiene que dar el número (con las mismas reglas de redondeo y de
+    aproximación de arriba: «casi setenta» vale 2017 - 1948 = 69). Cada cifra de la cuenta tiene que estar en las
+    salidas del capítulo o en el texto de alguna de las fuentes que se citan.
+  - Con `año`, `fecha` o `fuente` el número tiene además que SALIR EN EL TEXTO de la fuente citada (los .pdf se leen con
+    `pdftotext`; un .pdf sin texto, un escaneo sin capa de texto, no se puede comprobar y pasa): «1.104» se busca como
+    «1,104» y como «1104», que es como lo escriben los artículos en inglés.
   - «suma a la vista: 5 + 1 + 7»: el número es una cuenta hecha delante del lector con números que están en el
     mismo párrafo. Los sumandos, escritos en la exención, tienen que salir en el párrafo (con cifra o con
     letra, del uno al nueve) y sumar el número exento (Orden 140.2).
@@ -82,7 +89,7 @@ FICHERO_SALIDAS = "salidas-por-capitulo.md"
 FICHERO_EXENTAS = "cifras-exentas.md"
 
 MIN_FRAGMENTO = 12                      # caracteres del trozo de frase de una exención
-MOTIVOS = ("año", "fecha", "referencia", "inventado", "fuente", "redondeo", "suma a la vista")
+MOTIVOS = ("año", "fecha", "referencia", "inventado", "fuente", "redondeo", "suma a la vista", "cálculo")
 DECLARA_INVENTADO = ("inventad", "imagina", "supón", "ficticio")
 REFERENCIAS = {"capítulo", "capítulos", "cap.", "caps.", "figura", "figuras", "tabla", "tablas", "página", "páginas",
                "pág.", "págs.", "apartado", "regla", "anexo", "nota", "paso", "punto", "línea"}
@@ -331,11 +338,14 @@ def leer_exenciones(raiz):
         if base not in MOTIVOS:
             errores.append(f"exención con un motivo que no es uno de {MOTIVOS}: «{motivo}» en {l}")
             continue
-        if base in ("año", "fecha", "fuente"):
-            f = re.search(r"fuente:\s*(notas/fuentes/\S+)", motivo)
-            if not f or not (Path(raiz) / f.group(1).rstrip(".,;")).exists():
+        if base in ("año", "fecha", "fuente") or (base == "cálculo" and "fuente:" in motivo):
+            rutas = fuentes_de(motivo)
+            if not rutas or not all((Path(raiz) / r).exists() for r in rutas):
                 errores.append(f"exención de {base} sin «fuente: notas/fuentes/…» que exista en {raiz}: {l}")
                 continue
+        if base == "cálculo" and not re.search(r"cálculo:\s*[^;]*\d", motivo):
+            errores.append(f"exención de cálculo sin «cálculo: la cuenta»: {l}")
+            continue
         if base == "redondeo" and not re.search(r"redondeo:\s*de\s+\d[\d.]*(?:,\d+)?", motivo):
             errores.append(f"exención de redondeo sin «redondeo: de 79,40 %» (el valor exacto): {l}")
             continue
@@ -344,6 +354,82 @@ def leer_exenciones(raiz):
             continue
         exenciones.append((cap, numero, fragmento, motivo, base, l))
     return exenciones, errores
+
+
+def fuentes_de(motivo):
+    """Las rutas «notas/fuentes/…» que cita un motivo, sin la puntuación de detrás."""
+    return [r.rstrip(".,;") for r in re.findall(r"notas/fuentes/[^\s,;]+", motivo)]
+
+
+_TEXTOS_DE_FUENTE = {}
+
+
+def texto_de_fuente(raiz, ruta):
+    """El texto de una fuente: un .pdf, con `pdftotext`; lo demás, tal cual. Vacío si no se pudo leer."""
+    clave = (str(raiz), ruta)
+    if clave not in _TEXTOS_DE_FUENTE:
+        f = Path(raiz) / ruta
+        try:
+            if f.suffix.lower() == ".pdf":
+                import subprocess
+                t = subprocess.run(["pdftotext", "-layout", str(f), "-"], capture_output=True, text=True).stdout
+            else:
+                t = f.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            t = ""
+        _TEXTOS_DE_FUENTE[clave] = re.sub(r"\s+", " ", t)
+    return _TEXTOS_DE_FUENTE[clave]
+
+
+def formas_en_ingles(escrito):
+    """«1.104» -> «1,104», «1104»; «0,43» -> «0.43»: como lo escribiría un artículo en inglés."""
+    v, dec = valor_de(escrito)
+    entero = int(v)
+    formas = {str(entero)} if dec == 0 else {str(v)}
+    if dec == 0 and entero >= 1000:
+        formas.add(f"{entero:,}")
+    return formas
+
+
+def numero_en_fuente(raiz, rutas, escrito):
+    """True si el número sale en el texto de alguna de las fuentes; None si ninguna tiene texto que mirar."""
+    textos = [texto_de_fuente(raiz, r) for r in rutas]
+    textos = [t for t in textos if t.strip()]
+    if not textos:
+        return None
+    formas = formas_en_ingles(escrito)
+    return any(re.search(r"(?<![\d.,])" + re.escape(f) + r"(?![\d]|[.,]\d)", t) for f in formas for t in textos)
+
+
+def evaluar_cuenta(cuenta):
+    """Evalúa una cuenta con + - * / ^ y paréntesis, con los números escritos como en el libro. Devuelve
+    (resultado, [cifras de la cuenta]). Solo aritmética: no ejecuta nada más."""
+    import ast
+    cifras = re.findall(r"\d[\d.]*(?:,\d+)?", cuenta)
+    expr = re.sub(r"\d[\d.]*(?:,\d+)?", lambda m: f"({valor_de(m.group())[0]})", cuenta).replace("^", "**")
+    assert re.fullmatch(r"[\d\s+\-*/().]+", expr), f"Se esperaba una cuenta solo con cifras y + - * / ^ ( ); es «{cuenta}»"
+
+    def ev(n):
+        if isinstance(n, ast.Expression):
+            return ev(n.body)
+        if isinstance(n, ast.Constant) and isinstance(n.value, (int, float)):
+            return Decimal(str(n.value))
+        if isinstance(n, ast.UnaryOp) and isinstance(n.op, ast.USub):
+            return -ev(n.operand)
+        if isinstance(n, ast.BinOp):
+            a, b = ev(n.left), ev(n.right)
+            if isinstance(n.op, ast.Add):
+                return a + b
+            if isinstance(n.op, ast.Sub):
+                return a - b
+            if isinstance(n.op, ast.Mult):
+                return a * b
+            if isinstance(n.op, ast.Div):
+                return a / b
+            if isinstance(n.op, ast.Pow):
+                return a ** int(b)
+        raise AssertionError(f"Se esperaba solo aritmética en «{cuenta}»")
+    return ev(ast.parse(expr, mode="eval")), cifras
 
 
 def norm(s):
@@ -407,9 +493,30 @@ def aparece_valor(parrafo, v):
     return int(v) in PEQUENOS and any(w in palabras for w in PEQUENOS[int(v)])
 
 
-def exencion_no_vale(e, h, parrafo, valores):
+def exencion_no_vale(e, h, parrafo, valores, raiz="."):
     """Por qué una exención concreta no vale para este número ('' si vale). Cada motivo tiene su prueba."""
     base, motivo = e[4], e[3]
+    if base in ("año", "fecha", "fuente"):
+        # el número tiene que salir en el texto de su fuente (Orden 141); un escaneo sin texto no se puede mirar
+        esta = numero_en_fuente(raiz, fuentes_de(motivo), h["texto"])
+        if esta is False:
+            return f"«{h['texto']}» no sale en el texto de {', '.join(fuentes_de(motivo))}"
+    if base == "cálculo":
+        cuenta = re.search(r"cálculo:\s*([^;]+)", motivo).group(1).strip()
+        try:
+            resultado, cifras = evaluar_cuenta(cuenta)
+        except (AssertionError, SyntaxError, ZeroDivisionError) as err:
+            return f"la cuenta «{cuenta}» no se puede hacer: {err}"
+        if not tiene_salida(h, {resultado}):
+            return f"la cuenta «{cuenta}» da {resultado.quantize(Decimal('0.01'))} y no es «{h['texto']}»"
+        rutas = fuentes_de(motivo)
+        for c in cifras:
+            v, _ = valor_de(c)
+            if v in valores:
+                continue
+            esta = numero_en_fuente(raiz, rutas, c) if rutas else False
+            if not esta:
+                return f"la cifra «{c}» de la cuenta no está en las salidas del capítulo ni en el texto de la fuente"
     if base == "inventado" and not any(p in parrafo.lower() for p in DECLARA_INVENTADO):
         return f"el párrafo no declara el ejemplo inventado ({'/'.join(DECLARA_INVENTADO)})"
     if base == "redondeo":
@@ -447,7 +554,7 @@ def revisar_capitulo(tl, raiz, cap, fichero, declaradas, todas, exenciones):
                 if exenta:
                     e = exenta[0]
                     usadas.add(e[5])
-                    porque = exencion_no_vale(e, h, parrafo, valores)
+                    porque = exencion_no_vale(e, h, parrafo, valores, raiz)
                     h["estado"] = "exento" if not porque else "exención no vale"
                     h["porque"] = porque
                 elif tiene_salida(h, valores):
@@ -539,7 +646,8 @@ def _libro_de_mentira(d, capitulo, salida, extra=None):
     (raiz / "manuscript" / "cap01-x.md").write_text(capitulo, encoding="utf-8")
     (raiz / "notas" / "reforma-nov").mkdir(parents=True)
     (raiz / "notas" / "fuentes").mkdir(parents=True)
-    (raiz / "notas" / "fuentes" / "shannon.md").write_text("fuente de prueba\n", encoding="utf-8")
+    (raiz / "notas" / "fuentes" / "shannon.md").write_text(
+        "fuente de prueba: en 1948 y en 1913 y en 2017; 20,000 letras, 8,638 vocales, 1,104 parejas\n", encoding="utf-8")
     (raiz / "herramientas").mkdir()
     origen = Path(d).parent
     real = None
@@ -654,6 +762,35 @@ def _selftest():
         "suma con un sumando que no sale": ("- cap01 | 13 | Cinco, uno y siete suman 13 | suma a la vista: 5 + 2 + 6\n", "no salen en el párrafo"),
         "fuente que no existe": ("- cap01 | 1913 | fue el año del artículo | fuente: notas/fuentes/no_existe.pdf\n", "sin «fuente"),
     }
+    # El motivo «cálculo» (Orden 141) y el texto de la fuente.
+    capitulo3 = "# Otro más\n\nEsperaba unas 3.731 parejas. Pasaron casi setenta años. Y salieron 9.999 cosas.\n"
+    buenas3 = ("- cap01 | 3.731 | Esperaba unas 3.731 | cálculo: (8.638 / 20.000) * (8.638 / 20.000) * 20.000; fuente: notas/fuentes/shannon.md\n"
+               "- cap01 | setenta | casi setenta años | cálculo: 2017 - 1948; fuente: notas/fuentes/shannon.md\n"
+               "- cap01 | 9.999 | salieron 9.999 cosas | fuente: notas/fuentes/shannon.md\n")
+    malas3 = {
+        "cálculo que no da el número": ("- cap01 | setenta | casi setenta años | cálculo: 2017 - 1900; fuente: notas/fuentes/shannon.md\n", "da 117"),
+        "cifra de la cuenta que no está en la fuente": ("- cap01 | setenta | casi setenta años | cálculo: 2017 - 1947; fuente: notas/fuentes/shannon.md\n", "«1947» de la cuenta"),
+        "cifra exenta que no sale en su fuente": ("- cap01 | 9.999 | salieron 9.999 cosas | fuente: notas/fuentes/shannon.md\n", "no sale en el texto"),
+    }
+    with tempfile.TemporaryDirectory() as d3:
+        raiz3, sal3 = _libro_de_mentira(d3, capitulo3, "nada 1\n")
+        ruta3 = raiz3 / "notas" / "reforma-nov" / FICHERO_EXENTAS
+        ruta3.write_text("# x\n\n" + buenas3.replace("- cap01 | 9.999 | salieron 9.999 cosas | fuente: notas/fuentes/shannon.md\n", ""),
+                         encoding="utf-8")
+        _, ok3 = correr(raiz3, sal3, [1], estricto=True)
+        quedan = [x for x in ok3 if "9.999" not in x]
+        print(f"                      cálculo (3.731 y casi setenta) bien escrito: fallos {len(quedan)} (esperado 0; el 9.999 queda sin exención)")
+        if quedan:
+            fallos.append(f"invariante: las exenciones de cálculo buenas debían valer; salió {quedan}")
+        rotas3 = []
+        for nombre, (linea, quiero) in malas3.items():
+            ruta3.write_text("# x\n\n" + linea, encoding="utf-8")
+            _, e = correr(raiz3, sal3, [1], estricto=True)
+            if not any(quiero in x for x in e):
+                rotas3.append((nombre, e))
+        print(f"                      tres exenciones malas (cuenta, cifra, fuente): sin rechazar {len(rotas3)} (esperado 0)")
+        if rotas3:
+            fallos.append(f"invariante: estas exenciones de cálculo malas debían rechazarse: {rotas3}")
     with tempfile.TemporaryDirectory() as d2:
         raiz2, sal2 = _libro_de_mentira(d2, capitulo2, "hoja 79,40 %\n")
         ruta = raiz2 / "notas" / "reforma-nov" / FICHERO_EXENTAS
