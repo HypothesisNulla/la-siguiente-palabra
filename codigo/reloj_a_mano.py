@@ -41,7 +41,7 @@ PESOS = {
 LISTON = 0.5                     # para decir «par», el total tiene que pasar de aquí
 LISTON_DE_LA_MAQUETA = 1         # la maqueta decía «si el total llega a 1»
 
-EN_LETRA = {3: "tres"}   # la nota de «La cuenta de los diez dígitos» lo dice con letra (Orden 50)
+EN_LETRA = {3: "tres", 4: "cuatro"}   # la nota de «La cuenta de los diez dígitos» lo dice con letra (Orden 50)
 
 # ==========================================================
 
@@ -158,10 +158,10 @@ def bloques(X):
     bien = int(np.sum(dice == es_par))
     out.append(tabla_editorial(
         "La cuenta de los diez dígitos",
-        ["dígito"] + [f"puntos que suma el segmento de: {s.removeprefix('el de ')}" for s in cols]
+        ["dígito"] + [f"{s.removeprefix('el de ')} ({signo(PESOS[s]).replace('-', '−')})" for s in cols]
         + ["total", "dice"],
         filas, "c" + "d" * len(cols) + "dc",
-        [f"Un segmento encendido aporta sus puntos al total, y uno apagado, nada. Con el listón en "
+        [f"Los otros {EN_LETRA[len(SEGMENTOS) - len(cols)]} segmentos no suman nada. Con el listón en "
          f"{coma(LISTON)}, estos {EN_LETRA[len(cols)]} pesos aciertan "
          + ("los diez dígitos." if bien == 10 else f"{bien} de los diez dígitos.")]))
     return out

@@ -47,7 +47,10 @@ QUÉ SIGNIFICA «TIENE SALIDA»
      propio número: «treinta» redondea a decenas, «quinientos millones» a cientos de millones, «cinco» a unidades.
      «Unas/unos/cerca de/alrededor de/aproximadamente»: a menos de medio redondeo. «Más de/algo más de/poco más
      de»: el valor, por encima, a menos de un redondeo. «Menos de/casi/apenas»: el valor, por debajo.
-  Un número sin marcar y entero se compara exacto: «treinta» NO tiene salida si la salida dice 29,8.
+  No son cifras (Orden 143): las décadas («los años sesenta») ni las palabras de tamaño sueltas, sin número delante
+(«millones», «cientos de miles de millones»). Se salta, y no se cuenta.
+
+Un número sin marcar y entero se compara exacto: «treinta» NO tiene salida si la salida dice 29,8.
 
 EXENCIONES (Orden 137.2: «nada de exenciones genéricas»). Solo de la lista `cifras-exentas.md`, una línea por número:
 
@@ -70,8 +73,20 @@ EXENCIONES (Orden 137.2: «nada de exenciones genéricas»). Solo de la lista `c
     aproximación de arriba: «casi setenta» vale 2017 - 1948 = 69). Cada cifra de la cuenta tiene que estar en las
     salidas del capítulo o en el texto de alguna de las fuentes que se citan.
   - Con `año`, `fecha` o `fuente` el número tiene además que SALIR EN EL TEXTO de la fuente citada (los .pdf se leen con
-    `pdftotext`; un .pdf sin texto, un escaneo sin capa de texto, no se puede comprobar y pasa): «1.104» se busca como
+    `pdftotext`; un .pdf sin texto, un escaneo sin capa de texto —menos de cien caracteres por página—, no se puede
+    comprobar y pasa): «1.104» se busca como
     «1,104» y como «1104», que es como lo escriben los artículos en inglés.
+  - «cálculo: …; supuestos: 100.000.000.000 = «cien mil millones»; 2 = «dos veces»»: una cuenta cuyas cifras son los SUPUESTOS
+    del propio texto (Orden 143). Cada supuesto es «valor = «frase»», y la frase tiene que estar copiada del anexo del
+    capítulo (`anexo-aNN-…`); las cifras de la cuenta tienen que ser esos valores (o salir de las salidas o de la fuente).
+  - «ejemplo: «¿Y si lo probamos al revés?»»: el número es de un ejemplo inventado que el texto plantea como hipótesis. La
+    exención copia la frase que plantea la hipótesis, y esa frase tiene que estar en el MISMO APARTADO (Orden 143).
+  - «fuente-no-libre: fichas/x.md»: la fuente no es libre y no está en el repositorio, solo su ficha en `notas/fuentes/fichas/`.
+    La ficha lleva tres líneas, «Cita: …» (autor, título, editorial, año), «Página: N» y «Frase: «…»» (de donde sale el dato),
+    y el número tiene que salir en esa frase. Se cuentan APARTE en la salida: son datos que un programa no puede comprobar.
+  - Con `año`, `fecha`, `fuente` y `cálculo` se puede añadir «frase: «…»»: si el número no sale tal cual en la fuente (una
+    conversión, o escrito de otra manera), lo que se exige es que esa frase salga en su texto. Las fuentes `.html` se leen
+    sin las etiquetas.
   - «suma a la vista: 5 + 1 + 7»: el número es una cuenta hecha delante del lector con números que están en el
     mismo párrafo. Los sumandos, escritos en la exención, tienen que salir en el párrafo (con cifra o con
     letra, del uno al nueve) y sumar el número exento (Orden 140.2).
@@ -89,7 +104,8 @@ FICHERO_SALIDAS = "salidas-por-capitulo.md"
 FICHERO_EXENTAS = "cifras-exentas.md"
 
 MIN_FRAGMENTO = 12                      # caracteres del trozo de frase de una exención
-MOTIVOS = ("año", "fecha", "referencia", "inventado", "fuente", "redondeo", "suma a la vista", "cálculo")
+MOTIVOS = ("año", "fecha", "referencia", "inventado", "fuente", "redondeo", "suma a la vista", "cálculo", "ejemplo",
+           "fuente-no-libre")
 DECLARA_INVENTADO = ("inventad", "imagina", "supón", "ficticio")
 REFERENCIAS = {"capítulo", "capítulos", "cap.", "caps.", "figura", "figuras", "tabla", "tablas", "página", "páginas",
                "pág.", "págs.", "apartado", "regla", "anexo", "nota", "paso", "punto", "línea"}
@@ -170,6 +186,13 @@ def numeros_con_letra(texto):
                 j += 1
             if run and run[-1] == "y":
                 run, j = run[:-1], j - 1
+            anterior = palabras[i - 1][0] if i > 0 else ""
+            if run and all(w in ("millón", "millones", "billón", "billones") for w in run):
+                i = j                                   # «miles de millones»: una palabra de tamaño, no una cifra
+                continue
+            if len(run) == 1 and run[0] in DECENAS and anterior in ("años", "década", "décadas"):
+                i = j                                   # «los años sesenta»: una década, no una cifra
+                continue
             total, cur = 0, 0
             for w in run:
                 if w == "y":
@@ -343,6 +366,14 @@ def leer_exenciones(raiz):
             if not rutas or not all((Path(raiz) / r).exists() for r in rutas):
                 errores.append(f"exención de {base} sin «fuente: notas/fuentes/…» que exista en {raiz}: {l}")
                 continue
+        if base == "ejemplo" and not re.search(r"ejemplo:\s*«[^»]{12,}»", motivo):
+            errores.append(f"exención de ejemplo sin «ejemplo: «la frase que plantea la hipótesis»»: {l}")
+            continue
+        if base == "fuente-no-libre":
+            fi = re.search(r"fuente-no-libre:\s*(fichas/[^\s;]+)", motivo)
+            if not fi or not (Path(raiz) / "notas" / "fuentes" / fi.group(1)).exists():
+                errores.append(f"exención de fuente-no-libre sin «fichas/…» que exista en notas/fuentes/: {l}")
+                continue
         if base == "cálculo" and not re.search(r"cálculo:\s*[^;]*\d", motivo):
             errores.append(f"exención de cálculo sin «cálculo: la cuenta»: {l}")
             continue
@@ -373,8 +404,16 @@ def texto_de_fuente(raiz, ruta):
             if f.suffix.lower() == ".pdf":
                 import subprocess
                 t = subprocess.run(["pdftotext", "-layout", str(f), "-"], capture_output=True, text=True).stdout
+                paginas = int(re.search(r"Pages:\s+(\d+)", subprocess.run(["pdfinfo", str(f)], capture_output=True,
+                                                                        text=True).stdout).group(1))
+                if len(t.strip()) < 100 * paginas:
+                    t = ""      # un escaneo: algo de texto suelto (la cubierta de Google) pero no el texto del libro
             else:
                 t = f.read_text(encoding="utf-8", errors="ignore")
+                if f.suffix.lower() in (".html", ".htm"):
+                    import html as _html
+                    t = re.sub(r"<(script|style).*?</\1>", " ", t, flags=re.S)
+                    t = _html.unescape(re.sub(r"<[^>]+>", " ", t))
         except OSError:
             t = ""
         _TEXTOS_DE_FUENTE[clave] = re.sub(r"\s+", " ", t)
@@ -391,13 +430,25 @@ def formas_en_ingles(escrito):
     return formas
 
 
-def numero_en_fuente(raiz, rutas, escrito):
-    """True si el número sale en el texto de alguna de las fuentes; None si ninguna tiene texto que mirar."""
+def formas_de_valor(v):
+    """Las formas en que un valor entero sale en un texto en inglés: 43, 1104, 1,104."""
+    if v != v.to_integral_value():
+        return {str(v.normalize())}
+    n = int(v)
+    return {str(n), f"{n:,}"} if n >= 1000 else {str(n)}
+
+
+def numero_en_fuente(raiz, rutas, escrito, valor=None, frase=None):
+    """True si el número (o, si se da, la frase) sale en el texto de alguna de las fuentes; None si ninguna tiene texto."""
     textos = [texto_de_fuente(raiz, r) for r in rutas]
     textos = [t for t in textos if t.strip()]
     if not textos:
         return None
-    formas = formas_en_ingles(escrito)
+    if frase:
+        buscada = re.sub(r"\s+", " ", frase).strip().lower()
+        return any(buscada in t.lower() for t in textos)
+    formas = formas_de_valor(valor) if (valor is not None and not re.fullmatch(r"[\d.,]+", escrito)) \
+        else formas_en_ingles(escrito)
     return any(re.search(r"(?<![\d.,])" + re.escape(f) + r"(?![\d]|[.,]\d)", t) for f in formas for t in textos)
 
 
@@ -493,14 +544,49 @@ def aparece_valor(parrafo, v):
     return int(v) in PEQUENOS and any(w in palabras for w in PEQUENOS[int(v)])
 
 
-def exencion_no_vale(e, h, parrafo, valores, raiz="."):
+def apartado_de(texto_md, linea):
+    """El texto del apartado (hasta el título de nivel 1 o 2 siguiente) en el que cae la línea (empieza en 1)."""
+    ls = texto_md.split("\n")
+    i = min(max(linea - 1, 0), len(ls) - 1)
+    ini = next((k for k in range(i, -1, -1) if re.match(r"#{1,2}\s", ls[k])), 0)
+    fin = next((k for k in range(i + 1, len(ls)) if re.match(r"#{1,2}\s", ls[k])), len(ls))
+    return re.sub(r"[*`]", "", " ".join(ls[ini:fin]))
+
+
+def frase_de(motivo):
+    m = re.search(r"frase:\s*«([^»]+)»", motivo)
+    return m.group(1) if m else None
+
+
+def exencion_no_vale(e, h, parrafo, valores, raiz=".", cap=None, apartado=""):
     """Por qué una exención concreta no vale para este número ('' si vale). Cada motivo tiene su prueba."""
     base, motivo = e[4], e[3]
     if base in ("año", "fecha", "fuente"):
-        # el número tiene que salir en el texto de su fuente (Orden 141); un escaneo sin texto no se puede mirar
-        esta = numero_en_fuente(raiz, fuentes_de(motivo), h["texto"])
+        # el número tiene que salir en el texto de su fuente (Orden 141) o, si no sale tal cual, la frase (Orden 143);
+        # un escaneo sin texto no se puede mirar
+        frase = frase_de(motivo)
+        esta = numero_en_fuente(raiz, fuentes_de(motivo), h["texto"], h["valor"], frase)
         if esta is False:
-            return f"«{h['texto']}» no sale en el texto de {', '.join(fuentes_de(motivo))}"
+            return (f"la frase «{frase}» no sale en el texto de {', '.join(fuentes_de(motivo))}" if frase else
+                    f"«{h['texto']}» no sale en el texto de {', '.join(fuentes_de(motivo))}")
+    if base == "ejemplo":
+        hip = re.search(r"ejemplo:\s*«([^»]+)»", motivo).group(1)
+        if norm(hip) not in norm(apartado):
+            return f"la frase de la hipótesis «{hip[:50]}…» no está en el mismo apartado que el número"
+    if base == "fuente-no-libre":
+        ficha = Path(raiz) / "notas" / "fuentes" / re.search(r"fuente-no-libre:\s*(fichas/[^\s;]+)", motivo).group(1)
+        t = ficha.read_text(encoding="utf-8")
+        cita, pagina, fr = (re.search(rf"^{k}:\s*(.+)$", t, re.M) for k in ("Cita", "Página", "Frase"))
+        if not (cita and pagina and fr) or not re.search(r"\d", pagina.group(1)):
+            return "la ficha tiene que llevar «Cita: …», «Página: N» (con número) y «Frase: «…»»"
+        frase = frase_de(motivo)
+        if frase:
+            if re.sub(r"\s+", " ", frase).lower() not in re.sub(r"\s+", " ", fr.group(1)).lower():
+                return f"la frase «{frase}» no está en la línea «Frase:» de la ficha"
+        elif not any(re.search(r"(?<![\d.,])" + re.escape(f) + r"(?![\d])", fr.group(1))
+                     for f in (formas_de_valor(h["valor"]) | {h["texto"]})):
+            return f"«{h['texto']}» no sale en la línea «Frase:» de la ficha"
+        h["no_libre"] = True
     if base == "cálculo":
         cuenta = re.search(r"cálculo:\s*([^;]+)", motivo).group(1).strip()
         try:
@@ -510,9 +596,20 @@ def exencion_no_vale(e, h, parrafo, valores, raiz="."):
         if not tiene_salida(h, {resultado}):
             return f"la cuenta «{cuenta}» da {resultado.quantize(Decimal('0.01'))} y no es «{h['texto']}»"
         rutas = fuentes_de(motivo)
+        supuestos = {}
+        if "supuestos:" in motivo:
+            anexo = sorted((Path(raiz) / "manuscript").glob(f"anexo-a{int(cap or 0):02d}-*.md")) if cap else []
+            texto_anexo = norm(re.sub(r"[*`]", "", anexo[0].read_text(encoding="utf-8"))).lower() if anexo else ""
+            for par in motivo.split("supuestos:", 1)[1].split(";"):
+                m = re.match(r"\s*(\d[\d.,]*)\s*=\s*«([^»]+)»", par)
+                if not m:
+                    return f"un supuesto mal escrito (se esperaba «valor = «frase»»): {par.strip()[:60]}"
+                if norm(m.group(2)).lower() not in texto_anexo:
+                    return f"el supuesto «{m.group(2)}» no está en el anexo del capítulo {cap}"
+                supuestos[valor_de(m.group(1))[0]] = m.group(2)
         for c in cifras:
             v, _ = valor_de(c)
-            if v in valores:
+            if v in valores or v in supuestos:
                 continue
             esta = numero_en_fuente(raiz, rutas, c) if rutas else False
             if not esta:
@@ -554,7 +651,7 @@ def revisar_capitulo(tl, raiz, cap, fichero, declaradas, todas, exenciones):
                 if exenta:
                     e = exenta[0]
                     usadas.add(e[5])
-                    porque = exencion_no_vale(e, h, parrafo, valores, raiz)
+                    porque = exencion_no_vale(e, h, parrafo, valores, raiz, cap, apartado_de(texto, linea))
                     h["estado"] = "exento" if not porque else "exención no vale"
                     h["porque"] = porque
                 elif tiene_salida(h, valores):
@@ -610,6 +707,7 @@ def correr(raiz, carpeta_salidas, capitulos, estricto=True, recuento=False):
         sin = [h for h in numeros if h["estado"] == "sin salida"]
         mal = [h for h in numeros if h["estado"] == "exención no vale"]
         por_clase = {c: sum(1 for h in sin if h["clase"] == c) for c in ("año", "fecha", "referencia", "cifra")}
+        cuenta["no_libre"] = sum(1 for h in numeros if h.get("no_libre"))
         filas.append((cap, len(numeros), cuenta, por_clase, sum(1 for h in sin if h.get("en_ninguna")), nombres, derivadas))
         if estricto:
             for h in sin:
@@ -791,6 +889,65 @@ def _selftest():
         print(f"                      tres exenciones malas (cuenta, cifra, fuente): sin rechazar {len(rotas3)} (esperado 0)")
         if rotas3:
             fallos.append(f"invariante: estas exenciones de cálculo malas debían rechazarse: {rotas3}")
+    # Orden 143: décadas y escalas sueltas, ejemplo, supuestos, fuente no libre y frase.
+    sueltas = numeros_de("Fue en los años sesenta; hay cientos de miles de millones de pesos.")
+    print(f"                      décadas y palabras de tamaño sueltas no son cifras: {len(sueltas)} números (esperado 0)")
+    if sueltas:
+        fallos.append(f"invariante: las décadas y las escalas sueltas no debían contar; salió {[h['texto'] for h in sueltas]}")
+    cap143 = ("# Cap\n\n## El colegio\n\nImagina que entra un abuelo. Y tu abuelo, con ochenta, entra el primero.\n\n"
+              "## Otro apartado\n\nCon tantos pesos pasarían más de seis mil años. El mástil medía metro ochenta.\n"
+              "Lo dijo en 1988 y sigue.\n")
+    anexo143 = ("# A1. Cuentas\n\n## Otro apartado\n\nCon cien mil millones de pesos, dos pruebas por peso, a un segundo cada una, "
+                "y un año de unos treinta y un millones y medio de segundos.\n")
+    buenas143 = {
+        "ejemplo": "- cap01 | ochenta | tu abuelo, con ochenta | ejemplo: «Imagina que entra un abuelo»\n",
+        "supuestos": ("- cap01 | seis mil | pasarían más de seis mil años | cálculo: 100.000.000.000 * 2 / 31.500.000; supuestos: "
+                      "100.000.000.000 = «cien mil millones de pesos»; 2 = «dos pruebas por peso»; 31.500.000 = "
+                      "«treinta y un millones y medio de segundos»\n"),
+        "no libre": "- cap01 | 1988 | Lo dijo en 1988 | fuente-no-libre: fichas/f.md\n",
+        "frase": ("- cap01 | ochenta | medía metro ochenta | fuente: notas/fuentes/s.html; frase: «six feet high»\n"),
+    }
+    malas143 = {
+        "ejemplo con la hipótesis en otro apartado": ("- cap01 | ochenta | tu abuelo, con ochenta | ejemplo: «El mástil medía metro ochenta»\n", "no está en el mismo apartado"),
+        "supuesto que no está en el anexo": ("- cap01 | seis mil | pasarían más de seis mil años | cálculo: 100.000.000.000 * 2 / 31.500.000; supuestos: "
+                                             "100.000.000.000 = «cien mil millones de pesos»; 2 = «tres pruebas por peso»; 31.500.000 = "
+                                             "«treinta y un millones y medio de segundos»\n", "no está en el anexo"),
+        "cuenta con una cifra que no es supuesto": ("- cap01 | seis mil | pasarían más de seis mil años | cálculo: 100.000.000.000 * 3 / 31.500.000; supuestos: "
+                                                    "100.000.000.000 = «cien mil millones de pesos»; 2 = «dos pruebas por peso»; 31.500.000 = "
+                                                    "«treinta y un millones y medio de segundos»\n", "no está en las salidas"),
+        "frase que no sale en la fuente": ("- cap01 | ochenta | medía metro ochenta | fuente: notas/fuentes/s.html; frase: «seven feet high»\n", "no sale en el texto"),
+    }
+    with tempfile.TemporaryDirectory() as d4:
+        raiz4, sal4 = _libro_de_mentira(d4, cap143, "nada 1\n")
+        (raiz4 / "manuscript" / "anexo-a01-x.md").write_text(anexo143, encoding="utf-8")
+        (raiz4 / "notas" / "fuentes" / "s.html").write_text("<html><body><p>racks, <b>six feet</b> high</p></body></html>", encoding="utf-8")
+        (raiz4 / "notas" / "fuentes" / "fichas").mkdir()
+        (raiz4 / "notas" / "fuentes" / "fichas" / "f.md").write_text(
+            "Cita: A. Autor, Libro, Editorial, 1988.\nPágina: 12\nFrase: «Lo dijo en 1988 y sigue.»\n", encoding="utf-8")
+        ruta4 = raiz4 / "notas" / "reforma-nov" / FICHERO_EXENTAS
+        ruta4.write_text("# x\n\n" + "".join(buenas143.values()), encoding="utf-8")
+        filas4, e4 = correr(raiz4, sal4, [1], estricto=True)
+        print(f"                      ejemplo, supuestos, fuente no libre y frase, bien escritos: fallos {len(e4)} (esperado 0); "
+              f"fuentes no libres contadas aparte: {filas4[0][2].get('no_libre')} (esperado 1)")
+        if e4 or filas4[0][2].get("no_libre") != 1:
+            fallos.append(f"invariante: las exenciones de la Orden 143 debían valer y contar una no libre; salió {e4}")
+        rotas4 = []
+        for nombre, (linea, quiero) in malas143.items():
+            ruta4.write_text("# x\n\n" + linea, encoding="utf-8")
+            _, e = correr(raiz4, sal4, [1], estricto=True)
+            if not any(quiero in x for x in e):
+                rotas4.append((nombre, e))
+        # una ficha sin página y otra con la frase sin el número
+        for nombre, ficha in {"ficha sin página": "Cita: A.\nFrase: «Lo dijo en 1988 y sigue.»\n",
+                              "ficha sin el número en la frase": "Cita: A.\nPágina: 3\nFrase: «Lo dijo hace tiempo.»\n"}.items():
+            (raiz4 / "notas" / "fuentes" / "fichas" / "f.md").write_text(ficha, encoding="utf-8")
+            ruta4.write_text("# x\n\n" + buenas143["no libre"], encoding="utf-8")
+            _, e = correr(raiz4, sal4, [1], estricto=True)
+            if not any("ficha" in x or "Frase" in x for x in e):
+                rotas4.append((nombre, e))
+        print(f"                      seis exenciones malas de la Orden 143: sin rechazar {len(rotas4)} (esperado 0)")
+        if rotas4:
+            fallos.append(f"invariante: estas exenciones malas de la 143 debían rechazarse: {rotas4}")
     with tempfile.TemporaryDirectory() as d2:
         raiz2, sal2 = _libro_de_mentira(d2, capitulo2, "hoja 79,40 %\n")
         ruta = raiz2 / "notas" / "reforma-nov" / FICHERO_EXENTAS
@@ -839,7 +996,7 @@ def main():
         sys.exit(0)
     filas, fallos = correr(a.raiz, a.salidas, capitulos, estricto=True)
     for cap, n, cuenta, clase, ninguna, nombres, derivadas in filas:
-        print(f"capítulo {cap}: {n} números; con salida {cuenta.get('con salida', 0)}, exentos {cuenta.get('exento', 0)}, "
+        print(f"capítulo {cap}: {n} números; con salida {cuenta.get('con salida', 0)}, exentos {cuenta.get('exento', 0)} (con fuente no libre, que un programa no puede comprobar: {cuenta.get('no_libre', 0)}), "
               f"del dos al nueve con letra (no se comprueban) {cuenta.get('letra_pequena', 0)}, «de cada cien» "
               f"{cuenta.get('unidad', 0)}, sin salida {cuenta.get('sin salida', 0)}; salidas: {', '.join(nombres)}")
     if fallos:

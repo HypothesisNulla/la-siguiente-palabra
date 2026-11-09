@@ -373,8 +373,8 @@ def main():
          ["puntos donde peso y diferencia empujan al mismo lado", f"{iguales} de {vivos}"]],
          "id",
         ["La columna «cuánto se parecen» va de −1 a 1: 1 quiere decir que las dos cuadrículas son "
-         "iguales salvo el tamaño de los números, y 0, que no tienen nada que ver. La última fila "
-         f"cuenta solo los {vivos} puntos en los que ni el peso ni la diferencia valen cero."])))
+         "iguales salvo el tamaño de los números, y 0, que no tienen nada que ver.",
+         f"La última fila cuenta solo los {vivos} puntos en los que ni el peso ni la diferencia valen cero."])))
     de_donde_salen_los_pesos(m, casos, liston)
 
 

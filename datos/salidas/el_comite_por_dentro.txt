@@ -8,7 +8,7 @@
 SELFTEST: las tres pruebas pasan.
 
 ########## capítulo 3: el comité real, por dentro ##########
-máquina: Darwin arm64. Medido el 2026-10-28.
+máquina: Darwin arm64. Medido el 2026-11-09.
 La pregunta: ¿es un 4? Un solo comité, con los otros
 nueve dígitos enfrente. Es el de «¿Es un cuatro?» del capítulo 2.
 Aprende con 1.257 dibujos (131 cuatros) y acierta 99,4 %
@@ -133,7 +133,9 @@ Cuánto se parecen los pesos a cada cosa
 | la diferencia | 0,70 |
 | puntos donde peso y diferencia empujan al mismo lado | 36 de 44 |
 
-La columna «cuánto se parecen» va de −1 a 1: 1 quiere decir que las dos cuadrículas son iguales salvo el tamaño de los números, y 0, que no tienen nada que ver. La última fila cuenta solo los 44 puntos en los que ni el peso ni la diferencia valen cero.
+La columna «cuánto se parecen» va de −1 a 1: 1 quiere decir que las dos cuadrículas son iguales salvo el tamaño de los números, y 0, que no tienen nada que ver.
+
+La última fila cuenta solo los 44 puntos en los que ni el peso ni la diferencia valen cero.
 :::
 
 5. DE DÓNDE SALEN LOS PESOS

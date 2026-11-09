@@ -11,7 +11,9 @@ Los diez dígitos de un reloj digital, segmento a segmento
 | el de abajo derecha | sí | no | sí | sí | sí | sí | sí | sí | sí | sí |
 | el de abajo | sí | sí | no | sí | sí | no | sí | sí | no | sí |
 
-Un «sí» quiere decir que ese segmento está encendido en ese dígito. No hay ningún segmento que esté en «sí» en las cinco columnas de los pares y en «no» en las cinco de los impares.
+Un «sí» quiere decir que ese segmento está encendido en ese dígito.
+
+No hay ningún segmento que esté en «sí» en las cinco columnas de los pares y en «no» en las cinco de los impares.
 :::
 
 ::: tabla

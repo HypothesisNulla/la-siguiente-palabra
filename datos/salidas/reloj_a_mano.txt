@@ -68,7 +68,7 @@ Para decir «par», el total tiene que pasar de 0,5.
 ::: tabla
 La cuenta de los diez dígitos
 
-| dígito | puntos que suma el segmento de: arriba | puntos que suma el segmento de: arriba izquierda | puntos que suma el segmento de: abajo izquierda | total | dice |
+| dígito | arriba (−1) | arriba izquierda (+1) | abajo izquierda (+2) | total | dice |
 |:-:|--:|--:|--:|--:|:-:|
 | 0 | -1 | +1 | +2 | +2 | par |
 | 1 | 0 | 0 | 0 | 0 | impar |
@@ -81,6 +81,6 @@ La cuenta de los diez dígitos
 | 8 | -1 | +1 | +2 | +2 | par |
 | 9 | -1 | +1 | 0 | 0 | impar |
 
-Un segmento encendido aporta sus puntos al total, y uno apagado, nada. Con el listón en 0,5, estos tres pesos aciertan los diez dígitos.
+Los otros cuatro segmentos no suman nada. Con el listón en 0,5, estos tres pesos aciertan los diez dígitos.
 :::
 

@@ -150,8 +150,8 @@ def bloque_tabla(X, nombre_solo):
         "Los diez dígitos de un reloj digital, segmento a segmento",
         [(nombre, ["sí" if X[d, j] else "no" for d in range(10)])
          for j, nombre in enumerate(SEGMENTOS)],
-        ["Un «sí» quiere decir que ese segmento está encendido en ese dígito. "
-         + (f"Un solo segmento está encendido en los cinco pares y apagado en los cinco impares: "
+        ["Un «sí» quiere decir que ese segmento está encendido en ese dígito.",
+         (f"Un solo segmento está encendido en los cinco pares y apagado en los cinco impares: "
             f"{nombre_solo}." if nombre_solo else
             "No hay ningún segmento que esté en «sí» en las cinco columnas de los pares y en «no» en las "
             "cinco de los impares.")])

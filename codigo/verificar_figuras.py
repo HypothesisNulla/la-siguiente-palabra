@@ -43,6 +43,10 @@ Y dos cosas de la Orden 140 (8 nov 2026), para el capítulo 1 reformado:
     y la figura va pegada a la suya. A esas figuras no se les pide cita ni texto que las explique; solo que
     estén en el PDF (cuentan en el recuento de pies de figura).
 
+Y una de la Orden 143: una figura del cuerpo que el texto no nombra por su número, la foto del Mark I del cap. 2 (el
+pie «El Mark I. Foto: Marina de los Estados Unidos, 1960.» basta), puede declararse en `notas/FIGURAS-SIN-CITA.md`, una
+línea «figuras/x.png | motivo». Se trata como las de los anexos: solo tiene que estar en el PDF.
+
 Uso:
     python verificar_figuras.py ../../libro-ia-libro ../../PDF/La-siguiente-palabra.pdf
     python verificar_figuras.py ../../libro-ia-libro ../../PDF/La-siguiente-palabra.pdf --selftest
@@ -109,6 +113,15 @@ def paginas_con_figura(pdf):
     return [pie[k] for k in range(1, len(pie) + 1)]
 
 
+def sin_cita_declaradas(raiz):
+    """Las figuras que `notas/FIGURAS-SIN-CITA.md` declara sin cita por número: {«figuras/x.png»}."""
+    ruta = os.path.join(raiz, "notas", "FIGURAS-SIN-CITA.md")
+    if not os.path.exists(ruta):
+        return set()
+    return {l.split("|")[0].strip() for l in open(ruta, encoding="utf-8")
+            if re.match(r"figuras/\S+\.png\s*\|", l)}
+
+
 def figuras_del_manuscrito(raiz):
     """Cada figura del libro, en orden de lectura, con la frase que la explica:
     la primera línea de texto que viene después."""
@@ -127,7 +140,7 @@ def figuras_del_manuscrito(raiz):
             # Tampoco una tabla editorial («::: tabla» … «:::»): su título sale en versalitas y
             # sus filas, en columnas, así que no se encuentran tal cual en el PDF. Si la figura va
             # seguida de una tabla, el ancla es la prosa que viene detrás de la tabla.
-            es_anexo = re.match(r"anexo-a\d+", f) is not None
+            es_anexo = re.match(r"anexo-a\d+", f) is not None or m.group(2) in sin_cita_declaradas(raiz)
             siguiente, dentro = "", 0
             for x in lineas[i + 1:]:
                 if x.startswith(":::") and x.strip(": ") != "":
@@ -257,15 +270,36 @@ def revisar(raiz, pdf, desplazar=0):
 
 
 REMISION = re.compile(r"(?:[Ff]igura|[Tt]abla) \d+, (de arriba|de abajo|de la página siguiente|de la página anterior)")
-REMISION_LEJOS = re.compile(r"(?:[Ff]igura|[Tt]abla) \d+, de la página \d+")
+REMISION_LEJOS = re.compile(r"(?:[Ff]igura|[Tt]abla) \d+, de la página (\d+)")
+DISTANCIA_MAXIMA = 2     # Orden 144.2: «de la página N» vale si la figura cae a dos páginas de su cita, no a más
 
 
-def juzgar_remisiones(n_en_manuscrito, texto_pdf):
+def folio_de(texto_pagina):
+    """El número de página impreso: el último número de la página (el pie). None si no acaba en un número."""
+    m = re.search(r"(\d+)\s*$", texto_pagina)
+    return int(m.group(1)) if m else None
+
+
+def juzgar_remisiones(n_en_manuscrito, texto_pdf, paginas=None):
     """La 11.10 (Orden 140): el PDF dice «arriba», «abajo», «de la página siguiente» o «de la página anterior»
-    tantas veces como remisiones `\\remision` hay en el manuscrito, y ninguna remite a una página lejana."""
+    tantas veces como remisiones `\\remision` hay en el manuscrito, y ninguna remite a una página lejana.
+    Desde la Orden 144.2 también vale «de la página N» si N está a DOS páginas de la página donde se dice (el
+    folio de la página de la cita, contra N): hace falta `paginas` ({página del PDF: texto}) para saber dónde se
+    dice; sin ella, todo «de la página N» se da por lejano."""
     t = re.sub(r"(\w)- (\w)", r"\1\2", re.sub(r"\s+", " ", texto_pdf))   # palabras partidas a fin de renglón
     fallos = []
-    dichas, lejos = len(REMISION.findall(t)), REMISION_LEJOS.findall(t)
+    dichas, lejos = len(REMISION.findall(t)), []
+    if paginas is None:
+        lejos = [m.group(0) for m in REMISION_LEJOS.finditer(t)]
+    else:
+        for tx in paginas.values():
+            tp = re.sub(r"(\w)- (\w)", r"\1\2", re.sub(r"\s+", " ", tx))
+            for m in REMISION_LEJOS.finditer(tp):
+                f = folio_de(tp)
+                if f is not None and abs(int(m.group(1)) - f) <= DISTANCIA_MAXIMA:
+                    dichas += 1               # «de la página 32», dicho en la 30: la figura cae a dos páginas
+                else:
+                    lejos.append(m.group(0) + (f"  (dicho en la página {f})" if f else ""))
     if dichas != n_en_manuscrito:
         fallos.append(f"11.10: el manuscrito tiene {n_en_manuscrito} remisiones «\\remision» y el PDF dice «de "
                       f"arriba», «de abajo», «de la página siguiente» o «de la anterior» {dichas} veces")
@@ -284,8 +318,9 @@ def remisiones(raiz, pdf):
                 n += len(re.findall(r"`\\remision\{[\w-]+\}`\{=latex\}", l))
     if n == 0:
         return 0, []
-    texto = " ".join(texto_por_pagina(pdf).values())
-    return n, juzgar_remisiones(n, texto)
+    paginas = texto_por_pagina(pdf)
+    texto = " ".join(paginas.values())
+    return n, juzgar_remisiones(n, texto, paginas)
 
 
 def imprimir(filas, fallos, n_rem=0):
@@ -363,6 +398,15 @@ def selftest(raiz, pdf):
     lejos = "ver la Figura 1, de arriba, y la Figura 2, de la página 99, aquí"
     partida = "la Figura 4, de la pá- gina anterior, y la Figura 5, de abajo."
     r = [juzgar_remisiones(2, bien), juzgar_remisiones(2, falta), juzgar_remisiones(2, lejos), juzgar_remisiones(2, partida)]
+    # Orden 144.2: «de la página N» vale a dos páginas de la cita (folio 30 → 32) y no a tres (30 → 33)
+    dos = {1: "ver la Figura 1, de arriba, y la Figura 2, de la página 32, aquí 30"}
+    tres = {1: "ver la Figura 1, de arriba, y la Figura 2, de la página 33, aquí 30"}
+    sinfolio = {1: "ver la Figura 1, de arriba, y la Figura 2, de la página 32, aquí"}
+    r2 = [juzgar_remisiones(2, " ".join(d.values()), d) for d in (dos, tres, sinfolio)]
+    print(f"[2] señal implantada  «de la página N» (Orden 144.2): a dos páginas {'pasa' if not r2[0] else 'NO pasa'}; "
+          f"a tres {'salta' if r2[1] else 'NO salta'}; sin folio donde se dice {'salta' if r2[2] else 'NO salta'}")
+    if r2[0] or not r2[1] or not r2[2]:
+        fallos.append(f"señal implantada: «de la página N» a dos páginas mal juzgado: {r2}")
     print(f"[2] señal implantada  remisiones de la 11.10: bien {'pasa' if not r[0] else 'NO pasa'}; una que falta "
           f"{'salta' if r[1] else 'NO salta'}; una lejana {'salta' if r[2] else 'NO salta'}; palabra partida "
           f"{'pasa' if not r[3] else 'NO pasa'}")

@@ -182,10 +182,9 @@ def nota_media(filas):
     """La nota de las dos tablas de medias («¿Es par…?» y «¿Y si en la primera capa…?»); `filas`
     es cómo se dicen las filas que comparten semillas: «las dos filas» o «todas las filas»."""
     cinco = EN_LETRA[REPETICIONES]
-    return ("Cada número es cuántos dígitos acierta de cada 100 que nunca había visto. Cada "
+    return ("Cuántos dígitos acierta de cada 100 que nunca había visto. Cada "
             f"máquina se entrenó {cinco} veces desde cero, con {cinco} semillas distintas, las "
-            f"mismas en {filas}: la columna «media» es la media de las {cinco}, y al lado están "
-            "la peor y la mejor.")
+            f"mismas en {filas}.")
 
 
 def imprimir(m, aciertos, parecido, sola, con_capa):

@@ -6,7 +6,7 @@
 | una capa de un solo comité | 91,9 % | 90,4 % | 93,0 % |
 | dos capas: ocho comités en la primera | 97,9 % | 96,3 % | 98,7 % |
 
-Cada número es cuántos dígitos acierta de cada 100 que nunca había visto. Cada máquina se entrenó cinco veces desde cero, con cinco semillas distintas, las mismas en las dos filas: la columna «media» es la media de las cinco, y al lado están la peor y la mejor.
+Cuántos dígitos acierta de cada 100 que nunca había visto. Cada máquina se entrenó cinco veces desde cero, con cinco semillas distintas, las mismas en las dos filas.
 :::
 
 ::: tabla
@@ -49,7 +49,7 @@ Cuánto se parecen entre sí esos ocho comités
 | 8 comités en la primera capa | 97,9 % | 96,3 % | 98,7 % |
 | 16 comités en la primera capa | 98,6 % | 98,0 % | 99,1 % |
 
-Cada número es cuántos dígitos acierta de cada 100 que nunca había visto. Cada máquina se entrenó cinco veces desde cero, con cinco semillas distintas, las mismas en todas las filas: la columna «media» es la media de las cinco, y al lado están la peor y la mejor.
+Cuántos dígitos acierta de cada 100 que nunca había visto. Cada máquina se entrenó cinco veces desde cero, con cinco semillas distintas, las mismas en todas las filas.
 :::
 
 ::: tabla
