@@ -68,6 +68,8 @@ EXENCIONES (Orden 137.2: «nada de exenciones genéricas»). Solo de la lista `c
   - «redondeo: de 79,40 %»: el número de la prosa es el redondeo de un valor exacto que SÍ está en una salida
     guardada. El valor exacto tiene que estar en las salidas del capítulo y, redondeado a los decimales del
     número de la prosa, tiene que dar ese número (Orden 140.1).
+  - «redondeo: de 15.048.831» con un número escrito con letra («quince millones»): vale si el exacto, redondeado a la escala de la
+    última palabra (millones: 10^6), da ese número (Orden 148).
   - «cálculo: (8.638 / 20.000) * 20.000; fuente: notas/fuentes/x.pdf»: el número es el resultado de una cuenta (Orden 141).
     La cuenta se escribe con + - * / ^ y paréntesis, y tiene que dar el número (con las mismas reglas de redondeo y de
     aproximación de arriba: «casi setenta» vale 2017 - 1948 = 69). Cada cifra de la cuenta tiene que estar en las
@@ -291,6 +293,14 @@ def valores_de_salidas(textos):
 def redondeo(n):
     """El tamaño del redondeo con que se escribió un número entero: 30 -> 10, 500.000.000 -> 100.000.000."""
     return Decimal(10) ** cuantos_ceros(n) if n == n.to_integral_value() and n != 0 else Decimal(1)
+
+
+def escala_de_la_palabra(texto):
+    """La escala de un número escrito con letra, por su última palabra: «quince millones» → 10^6; None si no acaba en
+    una palabra de escala (millones, billones)."""
+    ultima = (re.findall(r"[a-záéíóúñ]+", texto.lower()) or [""])[-1]
+    return {"millón": Decimal(10) ** 6, "millones": Decimal(10) ** 6, "billón": Decimal(10) ** 12,
+            "billones": Decimal(10) ** 12}.get(ultima)
 
 
 def tiene_salida(h, valores):
@@ -621,7 +631,11 @@ def exencion_no_vale(e, h, parrafo, valores, raiz=".", cap=None, apartado=""):
         if exacto not in valores:
             return f"el valor exacto {exacto} no está en las salidas guardadas del capítulo"
         if exacto.quantize(Decimal(1).scaleb(-h["dec"]), rounding=ROUND_HALF_UP) != h["valor"]:
-            return f"{exacto} redondeado a {h['dec']} decimales no da {h['valor']}"
+            # Orden 148: un número escrito con la palabra de su escala («quince millones») es el redondeo del exacto a
+            # esa escala (15.048.831 → 15.000.000), no a los decimales
+            escala = escala_de_la_palabra(h["texto"])
+            if not (escala and (exacto / escala).quantize(Decimal(1), rounding=ROUND_HALF_UP) * escala == h["valor"]):
+                return f"{exacto} redondeado a {h['dec']} decimales no da {h['valor']}"
     if base == "suma a la vista":
         sumandos = [int(x) for x in re.findall(r"\d+", re.search(r"suma a la vista:([^;]*)", motivo).group(1))]
         if sum(sumandos) != h["valor"]:
@@ -806,6 +820,16 @@ def _selftest():
           f"mal resueltos {len(malos)}")
     if malos:
         fallos.append(f"señal implantada: {malos}")
+    # Orden 148: «quince millones» es el redondeo a millones de 15.048.831; «cuarenta» no tiene escala; 14,5 millones
+    # no valdría por «quince millones» (14.500.000 redondeado a millones es 15.000.000 con ROUND_HALF_UP: se usa 14.400.000)
+    esc = escala_de_la_palabra("quince millones")
+    redondea = esc is not None and (Decimal(15048831) / esc).quantize(Decimal(1), rounding=ROUND_HALF_UP) * esc == Decimal(15000000)
+    no_redondea = (Decimal(14400000) / esc).quantize(Decimal(1), rounding=ROUND_HALF_UP) * esc != Decimal(15000000)
+    print(f"[2] señal implantada  escala de «quince millones»: {esc}; 15.048.831 se redondea a quince millones: "
+          f"{'sí' if redondea else 'NO'}; 14.400.000, no: {'sí' if no_redondea else 'NO'}; «cuarenta» sin escala: "
+          f"{'sí' if escala_de_la_palabra('cuarenta') is None else 'NO'}")
+    if not redondea or not no_redondea or escala_de_la_palabra("cuarenta") is not None:
+        fallos.append("señal implantada: la escala de una palabra («quince millones») mal juzgada")
 
     # 3. INVARIANTES: de extremo a extremo, con un libro de mentira; exenciones concretas, genéricas y viejas.
     capitulo = ("# Un capítulo\n\n"

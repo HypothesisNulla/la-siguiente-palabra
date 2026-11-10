@@ -1,9 +1,9 @@
 ::: tabla
-¿De qué depende que la culpa se desvanezca?
+Como en los 80
 
-| cómo se arma | capas: 3 | capas: 6 | capas: 11 | capas: 21 |
+| capas | 3 | 6 | 11 | 21 |
 |:--|--:|--:|--:|--:|
-| como en los 80 | 65 | 777 | 7.192 | 15.048.831 |
+| veces menos | 65 | 777 | 7.192 | 15.048.831 |
 
 Cada número es cuántas veces menos culpa le llega a la primera capa de líneas, la que sale de la entrada, que a la última, la que llega a la final. Las redes están recién arrancadas, sin entrenar, y armadas como en los 80: los pesos de arranque, al azar entre −1 y +1, y la rampa corta en cada neurona.
 :::
@@ -18,9 +18,7 @@ Cada número es cuántas veces menos culpa le llega a la primera capa de líneas
 | el codo | 2,8 | 5,7 | 0,4 | 11 |
 | las dos cosas | 3,1 | 1,4 | 1,1 | 1,3 |
 
-Cada número es cuántas veces menos culpa le llega a la primera capa de líneas que a la última; si es menor que 1, a la primera le llega más. En las cuatro filas la culpa se reparte hacia atrás exactamente igual: solo cambian los pesos de arranque y lo que hay dentro de cada neurona, menos la final.
-
-La primera fila, «como en los 80», es la de antes: los pesos de arranque, al azar entre −1 y +1, y la rampa corta. La segunda encoge esos pesos según cuántas entradas tiene cada neurona: aquí quedan entre −0,25 y +0,25. La tercera deja los pesos de los 80 y cambia la rampa por el codo. La cuarta hace las dos cosas, con los pesos entre −0,35 y +0,35.
+«Más pequeños»: los pesos de arranque, entre −0,25 y +0,25. «El codo»: los pesos de los 80 y el codo en vez de la rampa. «Las dos cosas»: el codo, con los pesos entre −0,35 y +0,35. Si el número es menor que 1, a la primera capa le llega más culpa que a la última.
 :::
 
 Escrito culpa_que_se_desvanece.csv

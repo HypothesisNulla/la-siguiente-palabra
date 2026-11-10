@@ -57,6 +57,7 @@ TITULO = "¿De qué depende que la culpa se desvanezca?"
 # tiene); «uniformes» se dice con palabras, y los pesos de arranque llevan su tamaño.
 # L24 (9 de octubre): tabla editorial (regla 6 ter); el subtítulo y el pie pasan a notas.
 CAB_CAPAS = "capas"
+TITULO_UNA = "Como en los 80"                 # la tabla de una sola fila (Orden 148)
 CAB_MONTAJE = "cómo se arma"
 CAB = {"ochenta": "como en los 80", "repartida": "más pequeños",
        "funcion": "el codo", "las_dos": "las dos cosas"}
@@ -75,16 +76,11 @@ def notas():
     chico = _entre(MONTAJES[1])
     doble = _entre(MONTAJES[3])
     c = lambda x: f"{x:.2f}".replace(".", ",")
+    # Orden 148: la nota es la del anexo A4, literal, con los dos tamaños calculados
     return [
-        "Cada número es cuántas veces menos culpa le llega a la primera capa de líneas que a la "
-        "última; si es menor que 1, a la primera le llega más. En las cuatro filas la culpa se "
-        "reparte hacia atrás exactamente igual: solo cambian los pesos de arranque y lo que hay "
-        "dentro de cada neurona, menos la final.",
-        "La primera fila, «como en los 80», es la de antes: los pesos de arranque, al azar entre "
-        "−1 y +1, y la rampa corta. La segunda encoge esos pesos según cuántas entradas tiene "
-        f"cada neurona: aquí quedan entre −{c(chico)} y +{c(chico)}. La tercera deja los pesos de "
-        "los 80 y cambia la rampa por el codo. La cuarta hace las dos cosas, con los pesos entre "
-        f"−{c(doble)} y +{c(doble)}."]
+        f"«Más pequeños»: los pesos de arranque, entre −{c(chico)} y +{c(chico)}. «El codo»: los pesos de los 80 "
+        f"y el codo en vez de la rampa. «Las dos cosas»: el codo, con los pesos entre −{c(doble)} y +{c(doble)}. "
+        "Si el número es menor que 1, a la primera capa le llega más culpa que a la última."]
 
 # ==========================================================
 
@@ -224,8 +220,11 @@ def imprimir(tabla):
     rotulos = [CAB_MONTAJE] + [f"{CAB_CAPAS}: {p + 1}" for p in PROFUNDIDADES]   # N capas en medio + la final
     # Orden 51: primero, la tabla de una sola fila («como en los 80»), la que el capítulo 4 enseña
     # antes de las cuatro; las cifras son las de la primera fila de la de abajo, no se recalculan.
-    print("\n".join(tabla_editorial(TITULO, rotulos, filas[:1], "i" + "d" * len(PROFUNDIDADES),
-                                    [nota_de_una_fila()])))
+    # Orden 148 (148.3): la tabla de una fila sale como en el anexo A4: «Como en los 80», capas 3, 6, 11 y 21, y
+    # «veces menos»; las cifras son las mismas
+    una = ["veces menos"] + filas[0][1:]
+    print("\n".join(tabla_editorial(TITULO_UNA, [CAB_CAPAS] + [str(p + 1) for p in PROFUNDIDADES], [una],
+                                    "i" + "d" * len(PROFUNDIDADES), [nota_de_una_fila()])))
     print()
     print("\n".join(tabla_editorial(TITULO, rotulos, filas, "i" + "d" * len(PROFUNDIDADES),
                                     notas())))

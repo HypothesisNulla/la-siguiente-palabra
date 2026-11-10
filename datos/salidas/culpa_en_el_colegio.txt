@@ -1,5 +1,5 @@
 ######## la culpa, en la red del colegio (Orden 20) ########
-fecha: 2026-10-28
+fecha: 2026-11-10
 máquina: Darwin arm64
 python 3.12.14, numpy 2.5.3
 GPU: no se usa (todo en numpy). Nada de lo que sigue
@@ -29,7 +29,7 @@ Lo que dice la red entrenada, edad por edad
 | 14 | 0 | 0,001 | +0,001 |
 | 15 | 0 | 0,001 | +0,001 |
 
-Lo que tendría que decir es 1 para los siete de primaria y 0 para los demás. La última columna, «lo que falla», es lo que dice la red menos lo que tendría que decir.
+Lo que falla es lo que dice la red menos lo que tendría que decir.
 :::
 
 ::: tabla
@@ -56,13 +56,7 @@ La primera: «sí desde los 6 años»
 | 6 | 15,42 | sí | 0,759 |
 | 7 | 17,99 | sí | 0,976 |
 | 8 | 20,56 | sí | 0,998 |
-| 9 | 23,13 | sí | 1,000 |
-| 10 | 25,70 | sí | 1,000 |
-| 11 | 28,27 | sí | 1,000 |
-| 12 | 30,84 | sí | 1,000 |
-| 13 | 33,42 | sí | 1,000 |
-| 14 | 35,99 | sí | 1,000 |
-| 15 | 38,56 | sí | 1,000 |
+| 9 a 15 | de 23,13 a 38,56 | sí | 1,000 |
 
 La primera neurona necesita que le lleguen más de 14,28, su listón. Lo que le llega es su peso por la edad. Lo que dice está cerca de 1 si le llega más que su listón, y cerca de 0 si le llega menos.
 :::
@@ -72,12 +66,7 @@ La segunda: «sí desde los 13 años»
 
 | edad | le llega | ¿pasa del listón? | dice |
 |:--|--:|:-:|--:|
-| 3 | 6,43 | no | 0,000 |
-| 4 | 8,57 | no | 0,000 |
-| 5 | 10,71 | no | 0,000 |
-| 6 | 12,85 | no | 0,000 |
-| 7 | 14,99 | no | 0,000 |
-| 8 | 17,14 | no | 0,000 |
+| 3 a 8 | de 6,43 a 17,14 | no | 0,000 |
 | 9 | 19,28 | no | 0,001 |
 | 10 | 21,42 | no | 0,005 |
 | 11 | 23,56 | no | 0,039 |
@@ -209,8 +198,8 @@ Tramo 1: la culpa de la final
 | el doble de lo que falla | 1,214 |
 | lo que dice | 0,6068 |
 | lo que le falta para 1 | 0,3932 |
-| lo que deja pasar su rampa: lo que dice, por lo que le falta para 1 | 0,2386 |
-| **la culpa de la final: el doble de lo que falla, por lo que deja pasar su rampa** | **0,2897** |
+| lo que deja pasar su rampa: 0,6068 por 0,3932 | 0,2386 |
+| **la culpa de la final** | **0,2897** |
 
 Cada cuenta está hecha con los números redondeados a cuatro cifras, para que se pueda repetir con el dedo.
 :::
@@ -261,7 +250,7 @@ La misma culpa, a lo bruto
 | la segunda, de la edad | -0,5935879966 | -0,5935879967 |
 | la final, de la segunda | 0,2266538661 | 0,2266538661 |
 
-La columna «a lo bruto» se calcula sin atajo: se mueve el peso una cienmilésima hacia arriba y otra hacia abajo, y se mira cuánto cambia el error. Coincide con la del atajo hasta el noveno decimal.
+«A lo bruto»: se mueve el peso una cienmilésima hacia arriba y otra hacia abajo, y se mira cuánto cambia el error.
 :::
 
 ::: tabla
@@ -304,13 +293,7 @@ La culpa de la segunda, de la edad, edad a edad
 | 3 | -0,0913 |
 | 4 | -0,1675 |
 | 5 | -0,2578 |
-| 6 | +0,2984 |
-| 7 | +0,3037 |
-| 8 | +0,3127 |
-| 9 | +0,3260 |
-| 10 | +0,3416 |
-| 11 | +0,3575 |
-| 12 | +0,3722 |
+| 6 a 12 | de +0,2984 a +0,3722 |
 | 13 | -0,5936 |
 | 14 | -0,6011 |
 | 15 | -0,6036 |

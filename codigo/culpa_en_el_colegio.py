@@ -200,6 +200,19 @@ def tabla(*bloques):
         EMITIR([""])
 
 
+def agrupar(filas, clave, rotulo, minimo=3):
+    """Orden 148 (148.3): las filas seguidas con la misma `clave`, si son `minimo` o más, salen en una sola, con
+    `rotulo(primera, ultima)`; las demás, tal cual. `clave(fila)` y `rotulo(filas)` los pone cada tabla."""
+    salida, i = [], 0
+    while i < len(filas):
+        j = i
+        while j + 1 < len(filas) and clave(filas[j + 1]) == clave(filas[i]):
+            j += 1
+        salida.extend([rotulo(filas[i:j + 1])] if j - i + 1 >= minimo else filas[i:j + 1])
+        i = j + 1
+    return salida
+
+
 def bloque_a(red):
     act = red.adelante(X)
     medio, dice = act[1], act[2].ravel()
@@ -211,9 +224,7 @@ def bloque_a(red):
             ["edad", "tendría que decir", "la red dice", "lo que falla"],
             [[str(int(e)), str(int(Y[i])), c3(dice[i]), firmado(dice[i] - Y[i], 3)]
              for i, e in enumerate(EDADES)], "iddd",
-            [f"Lo que tendría que decir es 1 para los {letra(int(sum(Y)))} de primaria y 0 para los "
-             "demás. La última columna, «lo que falla», es lo que dice la red menos lo que tendría "
-             "que decir."]),
+            ["Lo que falla es lo que dice la red menos lo que tendría que decir."]),
         tabla_editorial(
             "Los pesos y los listones de la red entrenada",
             ["neurona", "la línea que viene de", "peso", "listón"],
@@ -228,11 +239,17 @@ def bloque_a(red):
     T = []
     for j in range(2):
         llega = X[:, 0] * W0[j]
+        # Orden 148.3: las edades seguidas que dan lo mismo («sí», 1,000) salen en una fila, «9 a 15»
+        filas_j = [[str(int(e)), coma(llega[i], 2), "sí" if llega[i] - (-b0[j]) > 0 else "no", c3(medio[i, j]),
+                    llega[i]] for i, e in enumerate(EDADES)]
+        filas_j = agrupar(filas_j, lambda f: (f[2], f[3]),
+                          lambda g: [f"{g[0][0]} a {g[-1][0]}",
+                                     f"de {coma(min(f[4] for f in g), 2)} a {coma(max(f[4] for f in g), 2)}",
+                                     g[0][2], g[0][3], g[0][4]])
         T.append(tabla_editorial(
             f"{NEURONAS[j].capitalize()}: «{nombres[j]}»",
             ["edad", "le llega", "¿pasa del listón?", "dice"],
-            [[str(int(e)), coma(llega[i], 2), "sí" if llega[i] - (-b0[j]) > 0 else "no", c3(medio[i, j])]
-             for i, e in enumerate(EDADES)], "idcd",
+            [f[:4] for f in filas_j], "idcd",
             [f"{NEURONAS[j].capitalize()} neurona necesita que le lleguen más de {coma(-b0[j], 2)}, su "
              "listón. Lo que le llega es su peso por la edad. Lo que dice está cerca de 1 si le "
              "llega más que su listón, y cerca de 0 si le llega menos."]))
@@ -321,9 +338,9 @@ def bloque_b(red, p):
             "Tramo 1: la culpa de la final", ["", "cuánto"],
             [["lo que falla", s4(m["falla"])], ["el doble de lo que falla", s4(m["doble"])],
              ["lo que dice", dice_s(c["dice_final"])], ["lo que le falta para 1", s4(m["falta_final"])],
-             ["lo que deja pasar su rampa: lo que dice, por lo que le falta para 1", s4(m["pasa_final"])],
-             ["**la culpa de la final: el doble de lo que falla, por lo que deja pasar su rampa**",
-              f"**{s4(m['culpa_final'])}**"]], "id",
+             [f"lo que deja pasar su rampa: {dice_s(c['dice_final'])} por {s4(m['falta_final'])}",
+              s4(m["pasa_final"])],
+             ["**la culpa de la final**", f"**{s4(m['culpa_final'])}**"]], "id",
             ["Cada cuenta está hecha con los números redondeados a cuatro cifras, para que se pueda "
              "repetir con el dedo."]),
         tabla_editorial(
@@ -361,9 +378,9 @@ def bloque_b(red, p):
     tabla(tabla_editorial(
         "La misma culpa, a lo bruto", ["peso", "por el atajo", "a lo bruto"],
         [[n, coma(a, 10), coma(b, 10)] for n, a, b, _, _ in filas], "idd",
-        ["La columna «a lo bruto» se calcula sin atajo: se mueve el peso una cienmilésima hacia "
-         "arriba y otra hacia abajo, y se mira cuánto cambia el error. Coincide con la del atajo "
-         f"hasta el {EN_ORDINAL[min(juntas)]} decimal."]))
+        # Orden 148: la nota es la del anexo A4, literal (que coincide hasta el noveno decimal lo dice el capítulo)
+        ["«A lo bruto»: se mueve el peso una cienmilésima hacia arriba y otra hacia abajo, y se mira "
+         "cuánto cambia el error."]))
     for n, _, _, mas, menos in filas:
         tabla(tabla_editorial(
             f"El error, con {n} movido", ["el peso", "el error"],
@@ -398,7 +415,13 @@ def bloque_c(red, p):
     EMITIR(["--- c) EL PASO: CADA PESO SE MUEVE CONTRA SU CULPA ---", ""])
     tabla(tabla_editorial(
         "La culpa de la segunda, de la edad, edad a edad", ["edad", "culpa"],
-        [[str(int(e)), firmado(por_edad[i], 4)] for i, e in enumerate(EDADES)]
+        # Orden 148.3: las siete edades que entran (de 6 a 12) salen en una fila, con la menor y la mayor culpa
+        [f[:2] for f in agrupar(
+            [[str(int(e)), firmado(por_edad[i], 4), bool(Y[i] == 1), por_edad[i]] for i, e in enumerate(EDADES)],
+            lambda f: f[2],
+            lambda g: [f"{g[0][0]} a {g[-1][0]}",
+                       f"de {firmado(min(f[3] for f in g), 4)} a {firmado(max(f[3] for f in g), 4)}", True, 0],
+            minimo=7)]
         + [["**la media**", f"**{firmado(media, 4)}**"]], "id",
         [f"La culpa con la que se mueve el peso es la media de las {letra(len(EDADES))}: se "
          f"suman y se divide entre {len(EDADES)}."]))

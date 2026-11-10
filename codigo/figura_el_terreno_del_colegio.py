@@ -20,6 +20,7 @@ DATOS = "../datos/salidas/culpa_en_el_colegio_datos.csv"   # los números, que e
 SALIDA = "../datos/salidas/culpa_en_el_colegio.txt"
 DESTINO = "../figuras/el_terreno_del_colegio.png"
 ALTO = 3.3                     # pulgadas
+ROTULO_X = "el peso de la línea de la primera a la final:  menos  ←  →  más"
 
 # ==========================================================
 
@@ -50,10 +51,12 @@ def coma(x, n=1):
 
 def dibujar(d, paleta, ruta):
     t, c, cada = curvas(d)
+    # Orden 148 (regla 11.9): sin cifras que el cuerpo no explique. El eje horizontal, sin cifras y con un rótulo
+    # que dice hacia dónde crece el peso; el vertical, solo con el 0; y fuera «uno cada 100».
     L = Lienzo("El terreno del error, con un peso",
                "La red del colegio, ya entrenada. Se mueve solo la línea de la primera a la final;\n"
-               "los demás pesos se quedan quietos. La altura es el error: la media de las trece\n"
-               f"edades. Los puntos, los pasos cuesta abajo moviendo solo ese peso, uno cada {cada}.",
+               "los demás pesos se quedan quietos. La altura es el error, con las trece edades.\n"
+               "Los puntos, los pasos cuesta abajo moviendo solo ese peso.",
                paleta, alto=ALTO)
     p = L.p
     a = L.fig.add_axes([0.12, 0.17, 0.84, 0.50])
@@ -68,16 +71,16 @@ def dibujar(d, paleta, ruta):
                color=p.tinta, arrowprops=dict(arrowstyle="-", color=p.suave, lw=0.6))
     a.text(-4.7, 0.70, "llano: la culpa\nes casi cero", fontsize=7.0, color=p.suave, va="top",
            linespacing=1.1)
-    a.set_xlabel("lo que vale el peso de la línea de la primera a la final", fontsize=7.4, color=p.tinta)
+    a.set_xlabel(ROTULO_X, fontsize=7.4, color=p.tinta)
     a.set_ylabel("error", fontsize=7.4, color=p.tinta)
     a.set_ylim(-0.02, 0.71)
-    a.set_yticks([0, 0.25, 0.5]); a.set_yticklabels(["0", "0,25", "0,5"])
-    xt = [0, 10, 20, 30]
-    a.set_xticks(xt); a.set_xticklabels([coma(x, 0) for x in xt])
+    a.set_yticks([0]); a.set_yticklabels(["0"])
+    a.set_xticks([])
     a.tick_params(labelsize=7.0)
     for s in ("top", "right"):
         a.spines[s].set_visible(False)
     L.guardar(ruta)
+    return a
 
 
 def selftest():
@@ -115,11 +118,16 @@ def selftest():
     #    para respuestas entre 0 y 1) y se dibuja en las dos paletas.
     ok = bool(np.all((t[:, 1] >= 0) & (t[:, 1] <= 1)) and np.all((c[:, 2] >= 0) & (c[:, 2] <= 1)))
     for pal in (COLOR, GRIS):
-        dibujar(d, pal, "/dev/null")
+        ejes = dibujar(d, pal, "/dev/null")
+    # la 11.9 (Orden 148): el eje horizontal no lleva cifras, y el vertical, solo el 0
+    cifras_x = [x.get_text() for x in ejes.get_xticklabels()]
+    cifras_y = [x.get_text() for x in ejes.get_yticklabels()]
     print(f"[3] invariante        {len(t)} puntos de curva y {len(c)} del camino, todos con error entre 0 y 1: "
-          f"{'sí' if ok else 'NO'}")
+          f"{'sí' if ok else 'NO'}; cifras del eje horizontal: {cifras_x or 'ninguna'}; del vertical: {cifras_y}")
     if not ok:
         fallos.append("invariante: algún error está fuera de 0 a 1")
+    if cifras_x or cifras_y != ["0"]:
+        fallos.append(f"invariante: la figura lleva cifras en los ejes ({cifras_x}, {cifras_y})")
     print()
     if fallos:
         for x in fallos:

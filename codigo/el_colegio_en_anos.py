@@ -318,11 +318,8 @@ def bloque_194(res, tabla, emitir):
     emitir(tabla_editorial(
         "Lo que acaban haciendo las dos neuronas de la primera capa",
         ["una", "la otra", "de cada 100", "redes"], filas, "iidd",
-        [f"De 200 redes entrenadas desde cero, cada una con su propio arranque, {resueltas} lo "
-         f"resolvieron, y todas con una de estas {EN_LETRA.get(len(orden), len(orden))} parejas; "
-         f"«de cada 100» se cuenta sobre esas {resueltas}. «Sí desde los 6 años» quiere decir que "
-         "la neurona dice más de 0,5 de los seis años en adelante y menos a los más pequeños; «sí "
-         "hasta los 5 años» es al revés."]))
+        # Orden 148: la nota es la del anexo A4, literal
+        [f"De cada 100 redes de las {resueltas} que lo resolvieron."]))
     emitir([""])
     mas = cuenta[orden[0]]
     elegida = min((c for c in orden if cuenta[c] == mas), key=lambda c: primera[c])

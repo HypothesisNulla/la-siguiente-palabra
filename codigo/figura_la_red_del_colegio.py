@@ -11,6 +11,13 @@ Los números NO se deciden aquí: se leen de `datos/salidas/culpa_en_el_colegio_
 `culpa_en_el_colegio.py`. Las preguntas de los rótulos salen de esos números (el corte de cada
 neurona es su listón entre su peso), no están escritas a mano.
 
+Desde la Orden 148 (10 nov 2026, regla 11.9: una figura del cuerpo no lleva números que el cuerpo no explique)
+salen DOS figuras:
+  - `la_red_del_colegio.png`, la del cuerpo del capítulo 4: sin pesos ni listones y sin el texto de arriba; junto a
+    cada neurona, su pregunta («¿tiene 6 o más?», «¿tiene 13 o más?», «¿entra en el colegio?»), que sale de sus
+    números como siempre; debajo de la edad, «en años»;
+  - `la_red_del_colegio_numeros.png`, la de antes, con sus números, para el anexo A4.
+
 Uso:
     python figura_la_red_del_colegio.py --selftest
     python figura_la_red_del_colegio.py
@@ -19,7 +26,9 @@ Uso:
 # ======================= CONSTANTES =======================
 
 DATOS = "../datos/salidas/culpa_en_el_colegio_datos.csv"
-DESTINO = "../figuras/la_red_del_colegio.png"
+DESTINO = "../figuras/la_red_del_colegio.png"                     # la del cuerpo, sin números
+DESTINO_NUMEROS = "../figuras/la_red_del_colegio_numeros.png"      # la del anexo, con sus números
+ALTO_CUERPO = 3.0              # pulgadas
 ALTO = 3.7                     # pulgadas
 GROSOR_MAXIMO = 3.2            # grosor de la línea del peso más grande
 RADIO = 5.2                    # radio de cada neurona, en unidades del lienzo
@@ -150,7 +159,21 @@ def preguntas(pesos, listones):
     return out
 
 
+def dibujar_cuerpo(d, paleta, ruta):
+    """La figura del cuerpo (Orden 148): la red sin pesos ni listones, con la pregunta de cada neurona."""
+    pesos, listones = red_de(d)
+    q = preguntas(pesos, listones)
+    L = Lienzo("La red del colegio, entrenada", "", paleta, alto=ALTO_CUERPO)
+    y_arriba, y_abajo = L.y - 9.0, L.y - 37.0
+    txt = {"la primera": q[0], "la segunda": q[1], "la final": "«¿entra en\nel colegio?»"}
+    dibujar_red(L, pesos, listones, y_arriba, y_abajo, None, txt, texto_entrada="en años")
+    L.pie("Línea continua: suma; de puntos: resta. Cuanto más gruesa, más pesa.")
+    L.guardar(ruta)
+    return q
+
+
 def dibujar(d, paleta, ruta):
+    """La figura del anexo: la red con lo que aprendió escrito encima."""
     pesos, listones = red_de(d)
     L = Lienzo("La red del colegio, entrenada",
                "La edad en años, tal cual; la primera capa, con dos neuronas, y la final. Cada\n"
@@ -207,9 +230,14 @@ def selftest():
             malas += int(si_pasa != dice or dice != (e >= desde))
     for pal in (COLOR, GRIS):
         dibujar(d, pal, "/dev/null")
-    print(f"[3] invariante        edades en que la cuenta, lo que dicen y el rótulo no coinciden: {malas}")
+        q = dibujar_cuerpo(d, pal, "/dev/null")
+    # la figura del cuerpo lleva las dos preguntas que salen de los números, y ningún número más que ellas
+    print(f"[3] invariante        edades en que la cuenta, lo que dicen y el rótulo no coinciden: {malas}; "
+          f"preguntas de la figura del cuerpo: {q}")
     if malas:
         fallos.append("invariante: los datos, la cuenta y el rótulo no dicen lo mismo")
+    if q != ["«¿tiene 6 o más?»", "«¿tiene 13 o más?»"]:
+        fallos.append(f"invariante: las preguntas de la figura del cuerpo no son las de los números: {q}")
     print()
     if fallos:
         for x in fallos:
@@ -226,8 +254,11 @@ def main():
     codigo = selftest()
     if codigo or args.selftest:
         sys.exit(codigo)
-    dibujar(leer_datos(), GRIS, str(AQUI / DESTINO))
+    d = leer_datos()
+    dibujar_cuerpo(d, GRIS, str(AQUI / DESTINO))
     print(f"escrita {DESTINO}")
+    dibujar(d, GRIS, str(AQUI / DESTINO_NUMEROS))
+    print(f"escrita {DESTINO_NUMEROS}")
 
 
 if __name__ == "__main__":

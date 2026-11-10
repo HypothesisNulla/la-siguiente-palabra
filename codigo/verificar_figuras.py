@@ -47,6 +47,14 @@ Y una de la Orden 143: una figura del cuerpo que el texto no nombra por su núme
 pie «El Mark I. Foto: Marina de los Estados Unidos, 1960.» basta), puede declararse en `notas/FIGURAS-SIN-CITA.md`, una
 línea «figuras/x.png | motivo». Se trata como las de los anexos: solo tiene que estar en el PDF.
 
+Y una de la Orden 148 (10 nov 2026), la regla 11.9 nueva: «Una figura del cuerpo no lleva números que el cuerpo no
+explique». Lo que se puede comprobar: que ninguna figura del cuerpo de los capítulos reformados (los de
+`notas/reforma-nov/capitulos-reformados.md`) lleve una cifra con decimales en sus rótulos. Se lee el texto de la imagen
+con `tesseract` (si no está instalado, el verificador lo dice y no puede comprobarlo) y se busca una cifra con coma
+decimal («0,25»; «3.609» es un millar, no un decimal). Las figuras de los capítulos 1 y 3 que ya la llevaban se declaran,
+mientras no se rehagan, en `notas/FIGURAS-CON-DECIMALES.md` (una línea «figuras/x.png | motivo»); una declarada que ya
+no lleva decimales sale como fallo, para que se quite de la lista.
+
 Uso:
     python verificar_figuras.py ../../libro-ia-libro ../../PDF/La-siguiente-palabra.pdf
     python verificar_figuras.py ../../libro-ia-libro ../../PDF/La-siguiente-palabra.pdf --selftest
@@ -70,8 +78,13 @@ SOBRA_PAGINA_ENTERA = 120 # caracteres que quedan en una página, quitados los d
 import argparse
 import os
 import re
+import shutil
 import subprocess
 import sys
+
+CON_DECIMALES = "notas/FIGURAS-CON-DECIMALES.md"
+REFORMADOS = "notas/reforma-nov/capitulos-reformados.md"
+DECIMAL = re.compile(r"(?<![\d.,])\d+,\d+(?!\d)")    # «0,25»; no «3.609» (un millar) ni «1.019»
 
 
 def texto_por_pagina(pdf):
@@ -274,6 +287,69 @@ REMISION_LEJOS = re.compile(r"(?:[Ff]igura|[Tt]abla) \d+, de la página (\d+)")
 DISTANCIA_MAXIMA = 2     # Orden 144.2: «de la página N» vale si la figura cae a dos páginas de su cita, no a más
 
 
+def texto_de_imagen(ruta):
+    """El texto que lleva una imagen, con tesseract; None si tesseract no está instalado."""
+    if not shutil.which("tesseract"):
+        return None
+    return subprocess.run(["tesseract", str(ruta), "-", "-l", "eng", "--psm", "11"], capture_output=True,
+                          text=True).stdout
+
+
+def decimales_de(texto):
+    """Las cifras con coma decimal que salen en un texto."""
+    return DECIMAL.findall(texto or "")
+
+
+def declaradas_con_decimales(raiz):
+    """{figuras/x.png: motivo} de notas/FIGURAS-CON-DECIMALES.md."""
+    ruta = os.path.join(raiz, CON_DECIMALES)
+    if not os.path.exists(ruta):
+        return {}
+    return {a.strip(): b.strip() for a, _, b in (l.partition("|") for l in open(ruta, encoding="utf-8").read().split("\n")
+            if l.startswith("figuras/"))}
+
+
+def figuras_del_cuerpo_reformado(raiz):
+    """Las figuras (figuras/x.png) que cita el cuerpo de los capítulos reformados, en orden y sin repetir."""
+    ruta = os.path.join(raiz, REFORMADOS)
+    caps = [int(m.group(1)) for l in open(ruta, encoding="utf-8") for m in [re.match(r"-\s*cap(\d+)\b", l)] if m] \
+        if os.path.exists(ruta) else []
+    figs = []
+    for n in caps:
+        for f in sorted(os.listdir(os.path.join(raiz, MANUSCRITO))):
+            if re.match(rf"cap{n:02d}-.*\.md$", f):
+                for l in open(os.path.join(raiz, MANUSCRITO, f), encoding="utf-8"):
+                    m = re.match(FIGURA, l)
+                    if m and m.group(2) not in figs:
+                        figs.append(m.group(2))
+    return figs
+
+
+def juzgar_decimales(con_decimales, declaradas):
+    """La 11.9 de la Orden 148. `con_decimales` = {figura: [cifras con decimales]} de las del cuerpo reformado.
+    Falla una con decimales que no está declarada, y una declarada que ya no los lleva."""
+    fallos = []
+    for fig, cifras in con_decimales.items():
+        if cifras and fig not in declaradas:
+            fallos.append(f"11.9: {fig} lleva en sus rótulos cifras con decimales ({', '.join(cifras[:3])}), y una "
+                          f"figura del cuerpo no lleva números que el cuerpo no explique")
+        if not cifras and fig in declaradas:
+            fallos.append(f"11.9: {fig} está en {CON_DECIMALES} y ya no lleva decimales: quítala de la lista")
+    for fig in declaradas:
+        if fig not in con_decimales:
+            fallos.append(f"11.9: {fig} está en {CON_DECIMALES} y no es una figura del cuerpo de un capítulo reformado")
+    return fallos
+
+
+def sin_decimales(raiz):
+    """(cuántas figuras se han leído, fallos, aviso): lee el texto de cada figura del cuerpo reformado."""
+    figs = figuras_del_cuerpo_reformado(raiz)
+    if not shutil.which("tesseract"):
+        return 0, [], "AVISO: tesseract no está instalado: no se han podido comprobar los decimales de las figuras (11.9)"
+    d = {f: decimales_de(texto_de_imagen(os.path.join(raiz, f))) for f in figs}
+    return len(figs), juzgar_decimales(d, declaradas_con_decimales(raiz)), ""
+
+
 def folio_de(texto_pagina):
     """El número de página impreso: el último número de la página (el pie). None si no acaba en un número."""
     m = re.search(r"(\d+)\s*$", texto_pagina)
@@ -323,7 +399,7 @@ def remisiones(raiz, pdf):
     return n, juzgar_remisiones(n, texto, paginas)
 
 
-def imprimir(filas, fallos, n_rem=0):
+def imprimir(filas, fallos, n_rem=0, n_dec=0, aviso=""):
     print(f"{'figura':<30}{'imagen':>8}{'texto':>8}")
     for fig, a, b in filas:
         print(f"{fig:<30}{str(a):>8}{str(b):>8}")
@@ -335,7 +411,10 @@ def imprimir(filas, fallos, n_rem=0):
     print(f"PASA: las {len(filas)} figuras caen en la misma página que su explicación, las "
           f"de página entera, justo delante de ella, y las flotantes, con una cita en su página "
           f"o en la anterior y las citas de más atrás diciendo su página."
-          + (f" {n_rem} remisiones de la 11.10 («de arriba», «de abajo»…) dichas en el PDF." if n_rem else ""))
+          + (f" {n_rem} remisiones de la 11.10 («de arriba», «de abajo»…) dichas en el PDF." if n_rem else "")
+          + (f" {n_dec} figuras del cuerpo reformado, sin cifras con decimales (11.9)." if n_dec else ""))
+    if aviso:
+        print(aviso)
     return 0
 
 
@@ -413,6 +492,39 @@ def selftest(raiz, pdf):
     if r[0] or not r[1] or not r[2] or r[3]:
         fallos.append(f"señal implantada: remisiones de la 11.10 mal juzgadas: {r}")
 
+    # [2 quater] La 11.9 de la Orden 148, sobre dos imágenes de juguete (una con «0,25» y otra sin cifras con
+    #   decimales) y sobre listas de juguete: una figura con decimales sin declarar salta; una declarada que ya
+    #   no los lleva salta; una con decimales y declarada pasa; un millar («3.609») no es un decimal.
+    d1 = {"figuras/a.png": ["0,25"], "figuras/b.png": []}
+    r1 = [juzgar_decimales(d1, {}), juzgar_decimales(d1, {"figuras/a.png": "x"}),
+          juzgar_decimales({"figuras/a.png": ["0,25"]}, {"figuras/a.png": "x", "figuras/b.png": "y"}),
+          juzgar_decimales({"figuras/b.png": []}, {"figuras/b.png": "x"})]
+    mil = decimales_de("526.794.304 hojas y 3.609 y 1.019 palabras") + decimales_de("de 0 a 1")
+    con = decimales_de("el parecido es 0,25 y el otro, 0,70")
+    print(f"[2] señal implantada  decimales de la 11.9: sin declarar {'salta' if r1[0] else 'NO salta'}; declarada pasa "
+          f"{'sí' if not juzgar_decimales({'figuras/a.png': ['0,25']}, {'figuras/a.png': 'x'}) else 'NO'}; declarada sin "
+          f"decimales {'salta' if r1[3] else 'NO salta'}; un millar cuenta como decimal: {'sí, mal' if mil else 'no, bien'}; "
+          f"«0,25 y 0,70»: {len(con)} cifras")
+    if not r1[0] or juzgar_decimales({"figuras/a.png": ["0,25"]}, {"figuras/a.png": "x"}) or not r1[3] or mil or len(con) != 2:
+        fallos.append(f"señal implantada: los decimales de la 11.9 mal juzgados: {r1} {mil} {con}")
+    if shutil.which("tesseract"):
+        import tempfile
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        res = []
+        for rotulo in ("el parecido: 0,25", "el parecido: casi nada"):
+            fig_, ax_ = plt.subplots(figsize=(4, 1.2))
+            ax_.axis("off")
+            ax_.text(0.5, 0.5, rotulo, ha="center", va="center", fontsize=20)
+            with tempfile.TemporaryDirectory() as t_:
+                fig_.savefig(os.path.join(t_, "x.png"), dpi=150)
+                res.append(decimales_de(texto_de_imagen(os.path.join(t_, "x.png"))))
+            plt.close(fig_)
+        print(f"[2] señal implantada  imagen con «0,25»: {res[0]}; imagen sin decimales: {res[1]}")
+        if not res[0] or res[1]:
+            fallos.append(f"señal implantada: tesseract y los decimales mal leídos en imágenes de juguete: {res}")
+
     # [3] Invariante del dominio: el libro tal como está, tiene que pasar.
     filas, f3 = revisar(raiz, pdf)
     print(f"[3] invariante        el libro tal como está: {len(f3)} fallos en "
@@ -440,7 +552,8 @@ def main():
         return selftest(a.raiz, a.pdf)
     filas, fallos = revisar(a.raiz, a.pdf)
     n_rem, f_rem = remisiones(a.raiz, a.pdf)
-    return imprimir(filas, fallos + f_rem, n_rem)
+    n_dec, f_dec, aviso = sin_decimales(a.raiz)
+    return imprimir(filas, fallos + f_rem + f_dec, n_rem, n_dec, aviso)
 
 
 if __name__ == "__main__":

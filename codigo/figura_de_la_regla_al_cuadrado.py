@@ -89,7 +89,7 @@ def dibujar(d, paleta, ruta):
     pesos, listones = red_de(d)
     pts = puntos(d)
     L = Lienzo("De la regla al cuadrado",
-               "A la izquierda, las edades en una regla: los siete de primaria quedan en medio y ningún\n"
+               "A la izquierda, las edades en una regla: las edades de 6 a 12 quedan en medio y ningún\n"
                "corte los deja solos. A la derecha, las mismas edades colocadas por lo que dicen las\n"
                "dos neuronas de la primera capa: ahora una raya los deja solos.", paleta, alto=ALTO)
     p, fig = L.p, L.fig
