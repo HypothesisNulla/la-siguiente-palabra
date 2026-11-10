@@ -68,8 +68,9 @@ EXENCIONES (Orden 137.2: «nada de exenciones genéricas»). Solo de la lista `c
   - «redondeo: de 79,40 %»: el número de la prosa es el redondeo de un valor exacto que SÍ está en una salida
     guardada. El valor exacto tiene que estar en las salidas del capítulo y, redondeado a los decimales del
     número de la prosa, tiene que dar ese número (Orden 140.1).
-  - «redondeo: de 15.048.831» con un número escrito con letra («quince millones»): vale si el exacto, redondeado a la escala de la
-    última palabra (millones: 10^6), da ese número (Orden 148).
+  - «redondeo: de 15.048.831» con un número escrito con letra («más de quince millones»): vale si el exacto, redondeado a la
+    escala de la última palabra (millones: 10^6), da ese número (Orden 148), y además el número lleva su marcador delante
+    («unos», «más de», «casi»…) y el marcador dice la verdad: «más de» pide un exacto mayor, «casi» uno menor (Orden 149).
   - «cálculo: (8.638 / 20.000) * 20.000; fuente: notas/fuentes/x.pdf»: el número es el resultado de una cuenta (Orden 141).
     La cuenta se escribe con + - * / ^ y paréntesis, y tiene que dar el número (con las mismas reglas de redondeo y de
     aproximación de arriba: «casi setenta» vale 2017 - 1948 = 69). Cada cifra de la cuenta tiene que estar en las
@@ -301,6 +302,26 @@ def escala_de_la_palabra(texto):
     ultima = (re.findall(r"[a-záéíóúñ]+", texto.lower()) or [""])[-1]
     return {"millón": Decimal(10) ** 6, "millones": Decimal(10) ** 6, "billón": Decimal(10) ** 12,
             "billones": Decimal(10) ** 12}.get(ultima)
+
+
+def redondeo_a_la_escala(texto, valor, marca, exacto):
+    """Orden 149: un número escrito con letra que acaba en una palabra de escala («quince millones») es un redondeo, y
+    como todo redondeo lleva su marcador delante («unos», «más de», «casi»…), y el marcador tiene que decir la
+    verdad: con «más de», el exacto es mayor que el número (y menos de una escala más); con «casi» o «menos de», menor
+    (y menos de una escala menos); con «unos», a menos de media escala. '' si vale; si no, por qué no."""
+    escala = escala_de_la_palabra(texto)
+    if not escala:
+        return f"{exacto} redondeado no da {valor}"
+    if (exacto / escala).quantize(Decimal(1), rounding=ROUND_HALF_UP) * escala != valor:
+        return f"{exacto} redondeado a {escala:,.0f} no da {valor}"
+    if not marca:
+        return (f"«{texto}» es un redondeo de {exacto} a la escala de su palabra y tiene que llevar «unos», «más de» "
+                "o «casi» delante")
+    bien = {"mas": valor <= exacto < valor + escala, "menos": valor - escala < exacto <= valor,
+            "aprox": abs(exacto - valor) <= escala / 2}[marca]
+    if not bien:
+        return f"el marcador de «{texto}» no dice la verdad: el exacto es {exacto}"
+    return ""
 
 
 def tiene_salida(h, valores):
@@ -633,9 +654,9 @@ def exencion_no_vale(e, h, parrafo, valores, raiz=".", cap=None, apartado=""):
         if exacto.quantize(Decimal(1).scaleb(-h["dec"]), rounding=ROUND_HALF_UP) != h["valor"]:
             # Orden 148: un número escrito con la palabra de su escala («quince millones») es el redondeo del exacto a
             # esa escala (15.048.831 → 15.000.000), no a los decimales
-            escala = escala_de_la_palabra(h["texto"])
-            if not (escala and (exacto / escala).quantize(Decimal(1), rounding=ROUND_HALF_UP) * escala == h["valor"]):
-                return f"{exacto} redondeado a {h['dec']} decimales no da {h['valor']}"
+            porque = redondeo_a_la_escala(h["texto"], h["valor"], h["marca"], exacto)
+            if porque:
+                return porque or f"{exacto} redondeado a {h['dec']} decimales no da {h['valor']}"
     if base == "suma a la vista":
         sumandos = [int(x) for x in re.findall(r"\d+", re.search(r"suma a la vista:([^;]*)", motivo).group(1))]
         if sum(sumandos) != h["valor"]:
@@ -820,16 +841,21 @@ def _selftest():
           f"mal resueltos {len(malos)}")
     if malos:
         fallos.append(f"señal implantada: {malos}")
-    # Orden 148: «quince millones» es el redondeo a millones de 15.048.831; «cuarenta» no tiene escala; 14,5 millones
-    # no valdría por «quince millones» (14.500.000 redondeado a millones es 15.000.000 con ROUND_HALF_UP: se usa 14.400.000)
-    esc = escala_de_la_palabra("quince millones")
-    redondea = esc is not None and (Decimal(15048831) / esc).quantize(Decimal(1), rounding=ROUND_HALF_UP) * esc == Decimal(15000000)
-    no_redondea = (Decimal(14400000) / esc).quantize(Decimal(1), rounding=ROUND_HALF_UP) * esc != Decimal(15000000)
-    print(f"[2] señal implantada  escala de «quince millones»: {esc}; 15.048.831 se redondea a quince millones: "
-          f"{'sí' if redondea else 'NO'}; 14.400.000, no: {'sí' if no_redondea else 'NO'}; «cuarenta» sin escala: "
-          f"{'sí' if escala_de_la_palabra('cuarenta') is None else 'NO'}")
-    if not redondea or not no_redondea or escala_de_la_palabra("cuarenta") is not None:
-        fallos.append("señal implantada: la escala de una palabra («quince millones») mal juzgada")
+    # Orden 149: «quince millones» es un redondeo a millones de 15.048.831 y lleva marcador, y el marcador dice la verdad.
+    exacto = Decimal(15048831)
+    quince = Decimal(15000000)
+    casos_e = [("quince millones", None, False),               # a secas: falla (sin marcador)
+               ("quince millones", "mas", True),               # «más de quince millones»: bien
+               ("quince millones", "menos", False),            # «casi quince millones»: el exacto es mayor: miente
+               ("quince millones", "aprox", True),             # «unos quince millones»: a menos de medio millón
+               ("dieciséis millones", "mas", False)]           # «más de dieciséis millones»: no es su redondeo
+    r_e = [not redondeo_a_la_escala(t, Decimal(16000000) if "dieciséis" in t else quince, m, exacto) for t, m, _ in casos_e]
+    print(f"[2] señal implantada  «quince millones» (15.048.831): a secas {'falla' if not r_e[0] else 'PASA'}; con «más de» "
+          f"{'pasa' if r_e[1] else 'FALLA'}; con «casi» {'falla' if not r_e[2] else 'PASA'}; con «unos» "
+          f"{'pasa' if r_e[3] else 'FALLA'}; «más de dieciséis millones» {'falla' if not r_e[4] else 'PASA'}; «cuarenta» "
+          f"sin escala: {'sí' if escala_de_la_palabra('cuarenta') is None else 'NO'}")
+    if r_e != [c[2] for c in casos_e] or escala_de_la_palabra("cuarenta") is not None:
+        fallos.append(f"señal implantada: el redondeo a la escala de una palabra mal juzgado: {r_e}")
 
     # 3. INVARIANTES: de extremo a extremo, con un libro de mentira; exenciones concretas, genéricas y viejas.
     capitulo = ("# Un capítulo\n\n"
