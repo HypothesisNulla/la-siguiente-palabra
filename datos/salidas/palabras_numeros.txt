@@ -1,6 +1,6 @@
 
 ::: tabla
-Las vecinas más próximas, con un libro (el Quijote)
+Las cinco vecinas más próximas, con un libro (el Quijote)
 
 | palabra | sus 5 vecinas más próximas, de la más parecida a la menos |
 |:--|:--|
@@ -33,7 +33,7 @@ Aciertos: 0 de 4 evaluadas.
 :::
 
 ::: tabla
-Las vecinas más próximas, con una biblioteca (300 libros)
+Las cinco vecinas más próximas, con una biblioteca (300 libros)
 
 | palabra | sus 5 vecinas más próximas, de la más parecida a la menos |
 |:--|:--|
@@ -49,6 +49,14 @@ Las vecinas más próximas, con una biblioteca (300 libros)
 El modelo aprendió con los trescientos libros, 21.313.324 palabras de texto, y le dio una lista de números a 68.927 palabras distintas.
 
 Una palabra que sale menos de 10 veces en el texto no tiene lista de números propia, y la tabla lo dice con «no aparece bastante».
+:::
+
+::: tabla
+Las cinco vecinas más próximas de «mujer»
+
+| palabra | sus 5 vecinas más próximas, de la más parecida a la menos |
+|:--|:--|
+| mujer | criatura, casada, hija, muchacha, marido |
 :::
 
 ::: tabla

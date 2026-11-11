@@ -218,7 +218,7 @@ def entrenar_guardando_el_arranque(frases, palabras):
 def vecinas_del_libro(ruta):
     """Las vecinas de la biblioteca en la salida de palabras_numeros.py (su tabla editorial)."""
     tablas = leer_tablas(open(ruta, encoding="utf-8").read())
-    titulo = "Las vecinas más próximas, con una biblioteca (300 libros)"
+    titulo = "Las cinco vecinas más próximas, con una biblioteca (300 libros)"
     assert titulo in tablas, f"se esperaba la tabla «{titulo}» en {ruta}"
     out = {f[0]: [x.strip() for x in f[1].split(",")] for f in tablas[titulo][1]}
     assert set(out) == set(SONDAS), f"se esperaban las vecinas de {SONDAS}; hay {sorted(out)}"
@@ -276,7 +276,8 @@ def bloque_tarea(m, frases, antes_sal, rng):
     tabla_ = tabla_editorial(
         f"¿Van juntas «{PALABRA_TAREA}» y esta palabra?",
         ["de dónde sale", "la palabra", "antes de entrenar", "después de entrenar"], tabla, "iidd",
-        ["Cada número es lo que contesta la máquina, de 0, seguro que no, a 100, seguro que sí. "
+        # Orden 150: la nota del cuerpo, literal, en su propio párrafo; lo de las medias, en otro
+        ["Cada número es lo que contesta la máquina, de 0, seguro que no, a 100, seguro que sí.",
          f"Después de entrenar, las palabras de alrededor sacan de media {coma(media(True), 1)}, "
          f"y las sacadas al azar, {coma(media(False), 1)}."])
     return [muestra, tabla_], filas
@@ -324,14 +325,15 @@ def bloque_parecido(m, antes):
     orden = [i for i in np.argsort(-s_) if m.wv.index_to_key[i] != a0]
     medio = (len(orden) + 1) // 2
     w_medio = m.wv.index_to_key[orden[medio - 1]]
-    A, D = "antes de entrenar", "después de entrenar"
+    A, D = "antes", "después"                     # Orden 150: los rótulos del anexo A5
     return [tabla_editorial(
         "Cómo se parecen dos listas",
         ["pareja", f"{A}: signo", f"{A}: parecido", f"{D}: signo", f"{D}: parecido", f"{D}: puesto"],
         filas, "iddddd",
         [f"«Signo» cuenta en cuántas de las {letra(DIMENSION)} posiciones coinciden de signo las "
-         "dos listas; «parecido» es la cuenta entera, de -1 a 1, y «puesto», el lugar de la "
-         f"segunda palabra entre las {miles(n - 1)} vecinas de la primera. Para comparar: a media "
+         "dos listas; «parecido» es la cuenta entera, de -1 a 1; y «puesto», el lugar de la "
+         f"segunda palabra entre las {miles(n - 1)} vecinas de la primera.",
+         f"Para comparar: a media "
          f"tabla de las vecinas de «{a0}», en el puesto {miles(medio)}, está «{w_medio}», con un "
          f"parecido de {coma(parecido(m.wv[a0], m.wv[w_medio]), 2)}."])], valores
 
@@ -383,7 +385,11 @@ def bloque_resta(m):
             i += 1
             filas.append([str(i), p, coma(s, 2)])
     parecidas = tabla_editorial(
-        "Las más parecidas al resultado, de todas", ["puesto", "palabra", "parecido"], filas, "cid",
+        "Las más parecidas al resultado, con su parecido", ["puesto", "palabra", "parecido"], filas, "cid",
+        ["Las tres palabras de la pregunta no cuentan, y por eso no llevan puesto."])
+    # Orden 150: la misma tabla, sin la columna «parecido», para el cuerpo del capítulo (regla 11.9)
+    parecidas_cuerpo = tabla_editorial(
+        f"Las más parecidas a {a} − {b} + {c}, de todas", ["puesto", "palabra"], [f[:2] for f in filas], "ci",
         ["Las tres palabras de la pregunta no cuentan, y por eso no llevan puesto."])
     puestos, filas = [], []
     for a2, b2, c2, bus in RESTAS:
@@ -393,7 +399,7 @@ def bloque_resta(m):
     donde = tabla_editorial(
         "En qué puesto sale la palabra buscada", ["la cuenta", "la buscada", "puesto"], filas, "iid",
         ["El puesto se cuenta sin las tres palabras de la pregunta."])
-    return [numeros, resultado, parecidas, donde], puestos
+    return [numeros, resultado, parecidas, parecidas_cuerpo, donde], puestos
 
 
 def nombre_camino(x, y):
@@ -482,8 +488,8 @@ def bloque_cuenta(m):
         [["cada número por sí mismo, sumados", coma(ta2, 3), coma(tb2, 3)],
          ["**el tamaño: la raíz cuadrada de esa suma**", f"**{coma(ta, 4)}**", f"**{coma(tb, 4)}**"]],
         "idd",
-        ["El tamaño es la raíz cuadrada de la suma: el número que, multiplicado por sí mismo, da "
-         f"esa suma. Por ejemplo, {coma(ta, 4)} por {coma(ta, 4)} da {coma(ta * ta, 3)}."])
+        ["La raíz cuadrada es el número que, multiplicado por sí mismo, da esa suma: "
+         f"{coma(ta, 4)} por {coma(ta, 4)} da {coma(ta * ta, 3)}."])
     final = tabla_editorial(
         f"El parecido de «{a}» y «{b}»", ["", "cuánto"],
         [["la suma de «uno por otro»", coma(sum(prod), 3)],

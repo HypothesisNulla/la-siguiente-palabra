@@ -5,7 +5,7 @@
 SELFTEST: las tres pruebas pasan.
 
 Máquina: arm64, Darwin 25.6.0.
-Medido el 2026-10-28. Semilla: 20260914.
+Medido el 2026-11-11. Semilla: 20260914.
 Biblioteca: 21.313.324 palabras, 68.927 distintas.
 Mismo modelo que palabras_numeros.txt: las vecinas de las ocho palabras coinciden.
 
@@ -41,7 +41,9 @@ Las cinco palabras de cada lado de «caballo», que va entre corchetes.
 |  | eramos | 50 | 33 |
 |  | desconocidos | 50 | 11 |
 
-Cada número es lo que contesta la máquina, de 0, seguro que no, a 100, seguro que sí. Después de entrenar, las palabras de alrededor sacan de media 31,4, y las sacadas al azar, 21,7.
+Cada número es lo que contesta la máquina, de 0, seguro que no, a 100, seguro que sí.
+
+Después de entrenar, las palabras de alrededor sacan de media 31,4, y las sacadas al azar, 21,7.
 :::
 
 --- 2. LOS NÚMEROS DE TRES PALABRAS ---
@@ -73,13 +75,15 @@ Los 6 primeros de sus 100 números, después de entrenar
 ::: tabla
 Cómo se parecen dos listas
 
-| pareja | antes de entrenar: signo | antes de entrenar: parecido | después de entrenar: signo | después de entrenar: parecido | después de entrenar: puesto |
+| pareja | antes: signo | antes: parecido | después: signo | después: parecido | después: puesto |
 |:--|--:|--:|--:|--:|--:|
 | caballo y corcel | 44 | -0,08 | 74 | 0,70 | 119 |
 | caballo y galope | 52 | 0,10 | 82 | 0,80 | 2 |
 | caballo y lunes | 51 | 0,04 | 66 | 0,51 | 32.040 |
 
-«Signo» cuenta en cuántas de las cien posiciones coinciden de signo las dos listas; «parecido» es la cuenta entera, de -1 a 1, y «puesto», el lugar de la segunda palabra entre las 68.926 vecinas de la primera. Para comparar: a media tabla de las vecinas de «caballo», en el puesto 34.463, está «manan», con un parecido de 0,50.
+«Signo» cuenta en cuántas de las cien posiciones coinciden de signo las dos listas; «parecido» es la cuenta entera, de -1 a 1; y «puesto», el lugar de la segunda palabra entre las 68.926 vecinas de la primera.
+
+Para comparar: a media tabla de las vecinas de «caballo», en el puesto 34.463, está «manan», con un parecido de 0,50.
 :::
 
 --- 4. LAS VECINAS DE «CABALLO», CON SU PARECIDO ---
@@ -145,7 +149,7 @@ El resultado, con los 100 números
 :::
 
 ::: tabla
-Las más parecidas al resultado, de todas
+Las más parecidas al resultado, con su parecido
 
 | puesto | palabra | parecido |
 |:-:|:--|--:|
@@ -154,6 +158,20 @@ Las más parecidas al resultado, de todas
 | 2 | isabel | 0,65 |
 | 3 | muger | 0,62 |
 | 4 | reina | 0,62 |
+
+Las tres palabras de la pregunta no cuentan, y por eso no llevan puesto.
+:::
+
+::: tabla
+Las más parecidas a rey − hombre + mujer, de todas
+
+| puesto | palabra |
+|:-:|:--|
+| no cuenta | rey |
+| 1 | esposa |
+| 2 | isabel |
+| 3 | muger |
+| 4 | reina |
 
 Las tres palabras de la pregunta no cuentan, y por eso no llevan puesto.
 :::
@@ -278,7 +296,7 @@ El tamaño de cada lista
 | cada número por sí mismo, sumados | 0,620 | 0,219 |
 | **el tamaño: la raíz cuadrada de esa suma** | **0,7872** | **0,4680** |
 
-El tamaño es la raíz cuadrada de la suma: el número que, multiplicado por sí mismo, da esa suma. Por ejemplo, 0,7872 por 0,7872 da 0,620.
+La raíz cuadrada es el número que, multiplicado por sí mismo, da esa suma: 0,7872 por 0,7872 da 0,620.
 :::
 
 ::: tabla

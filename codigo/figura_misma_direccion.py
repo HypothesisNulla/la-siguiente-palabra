@@ -6,7 +6,12 @@ Un «camino» es la resta de dos listas de cien números (de «padre» a «madre
 pueden dibujar a la vez sin aplanar nada: dos flechas que salen del mismo punto están siempre en
 un plano, y en ese plano el ángulo entre ellas es el de verdad. La figura dibuja tres parejas de
 flechas: la pareja de caminos del género que más se parece, la que menos, y lo que dan, de media,
-dos caminos entre palabras sacadas al azar. Debajo de cada una, su «parecido».
+dos caminos entre palabras sacadas al azar.
+
+Desde la Orden 150 (11 nov 2026, regla 11.9) salen DOS figuras:
+  - `misma_direccion.png`, la del cuerpo del capítulo 5: sin los «parecido 0,59 / 0,28 / 0,008», y con la clave «Cómo se
+    lee: flechas una encima de otra, al mismo lado; en escuadra, nada que ver.»;
+  - `misma_direccion_numeros.png`, la de antes, con el «parecido» de cada pareja, para el anexo A5.
 
 Nada se calcula aquí: parecidos y largos se leen del bloque 7 de
 `datos/salidas/palabras_de_cerca.txt`.
@@ -19,7 +24,9 @@ Uso:
 # ======================= CONSTANTES =======================
 
 SALIDA = "../datos/salidas/palabras_de_cerca.txt"
-DESTINO = "../figuras/misma_direccion.png"
+DESTINO = "../figuras/misma_direccion.png"                    # la del cuerpo, sin números
+DESTINO_NUMEROS = "../figuras/misma_direccion_numeros.png"    # la del anexo, con el parecido de cada pareja
+PIE_CUERPO = "Cómo se lee: flechas una encima de otra, al mismo lado; en escuadra, nada que ver."
 ALTO = 2.75
 LARGO_MAXIMO = 17.0          # unidades del lienzo para la flecha más larga
 
@@ -71,7 +78,7 @@ def paneles(largos, pares, azar):
             ("un camino al azar", "otro al azar", azar, None, None, "dos al azar, de media")]
 
 
-def dibujar(largos, pares, azar, paleta, ruta):
+def dibujar(largos, pares, azar, paleta, ruta, con_numeros=True):
     L = Lienzo("¿Apuntan al mismo lado?",
                "Cada flecha es un camino: la resta de dos listas de cien números.\n"
                "El ángulo entre dos flechas es el de verdad, sin aplanar nada.", paleta, alto=ALTO)
@@ -93,9 +100,13 @@ def dibujar(largos, pares, azar, paleta, ruta):
                     rot.replace("->", "→"), tam=6.8,
                     ha="left" if th < 0.3 else "center")
         L.texto(x0 + 13, 13.0, titulo, tam=7.2, ha="center", negrita=True)
-        L.texto(x0 + 13, 9.5, f"parecido {str(s).replace('.', ',')}", tam=7.2, ha="center")
-    L.pie("Cómo se lee: flechas encima una de otra, parecido 1; en ángulo recto, 0; opuestas, -1.\n"
-          "Largo de cada flecha: el tamaño del camino.")
+        if con_numeros:
+            L.texto(x0 + 13, 9.5, f"parecido {str(s).replace('.', ',')}", tam=7.2, ha="center")
+    if con_numeros:
+        L.pie("Cómo se lee: flechas encima una de otra, parecido 1; en ángulo recto, 0; opuestas, -1.\n"
+              "Largo de cada flecha: el tamaño del camino.")
+    else:
+        L.pie(PIE_CUERPO)
     L.guardar(ruta)
     return angulos
 
@@ -121,8 +132,10 @@ def selftest():
     pan = paneles(largos, pares, azar)
     ang = dibujar(largos, pares, azar, GRIS, "/dev/null")
     dibujar(largos, pares, azar, COLOR, "/dev/null")
+    # Orden 150: la figura del cuerpo no lleva ninguna cifra con decimales (11.9), y sus ángulos son los mismos
+    ang_cuerpo = dibujar(largos, pares, azar, GRIS, "/dev/null", con_numeros=False)
     ok = (pan[0][2] == max(t[2] for t in pares) and pan[1][2] == min(t[2] for t in pares)
-          and ang[0] <= ang[1] <= ang[2])
+          and ang[0] <= ang[1] <= ang[2] and ang_cuerpo == ang)
     print(f"[3] invariante        orden de los paneles y de los ángulos: {ok}")
     if not ok:
         fallos.append("invariante: paneles o ángulos fuera de orden")
@@ -142,8 +155,11 @@ def main():
     codigo = selftest()
     if codigo or args.selftest:
         sys.exit(codigo)
-    dibujar(*leer(AQUI / SALIDA), GRIS, str(AQUI / DESTINO))
+    datos = leer(AQUI / SALIDA)
+    dibujar(*datos, GRIS, str(AQUI / DESTINO), con_numeros=False)
     print(f"escrita {DESTINO}")
+    dibujar(*datos, GRIS, str(AQUI / DESTINO_NUMEROS))
+    print(f"escrita {DESTINO_NUMEROS}")
 
 
 if __name__ == "__main__":

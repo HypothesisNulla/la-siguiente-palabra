@@ -25,6 +25,7 @@ HILOS = 1                  # 1 hilo: reproducible. Con más, el resultado varía
 
 SONDAS = ["caballo", "rey", "espada", "noche", "mujer", "dinero", "banco", "cura"]
 VECINOS = 5
+LETRA_VECINOS = "cinco"    # Orden 150: los títulos de las tablas lo dicen con letra, como el libro
 
 ANALOGIAS = [
     ("rey", "hombre", "mujer", "reina"),
@@ -214,12 +215,22 @@ def main():
             filas.append([sonda, ", ".join(v) if v else "no aparece bastante"])
         print()
         print("\n".join(tabla_editorial(
-            f"Las vecinas más próximas, {etiqueta}",
+            f"Las {LETRA_VECINOS} vecinas más próximas, {etiqueta}",
             ["palabra", f"sus {VECINOS} vecinas más próximas, de la más parecida a la menos"],
             filas, "ii",
             [cuantas,
              f"Una palabra que sale menos de {MIN_APARICIONES} veces en el texto no tiene lista de "
              "números propia, y la tabla lo dice con «no aparece bastante»."])))
+
+        # Orden 150: la fila de «mujer» sola, con su título, para la tabla suelta del capítulo (la del texto)
+        for sonda in SONDAS:
+            if sonda == "mujer" and "biblioteca" in etiqueta:       # la del cuerpo sale de los trescientos libros
+                v = vecinos(modelo, sonda)
+                print()
+                print("\n".join(tabla_editorial(
+                    f"Las {LETRA_VECINOS} vecinas más próximas de «{sonda}»",
+                    ["palabra", f"sus {VECINOS} vecinas más próximas, de la más parecida a la menos"],
+                    [[sonda, ", ".join(v) if v else "no aparece bastante"]], "ii")))
 
         aciertos, evaluadas, detalle = probar_analogias(modelo)
         filas = []

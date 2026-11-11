@@ -40,6 +40,8 @@ MUEBLE = ["asiento", "respaldo", "personas",                                   #
           "madero", "pies", "mesa", "labores", "carpinteros", "artesanos"]     # acepción 2
 DINERO = ["empresa", "operaciones", "dinero", "accionistas", "depósitos", "clientes"]  # acep. 5
 VECINAS = 5
+UMBRAL_PUESTO = 1000        # Orden 150: «entre las mil primeras», de la prosa del capítulo 5
+LETRA_VECINAS = "cinco"      # Orden 150: el título de la tabla lo dice con letra, como el libro
 
 # ==========================================================
 
@@ -106,7 +108,8 @@ def informe(tiradas):
         ["sentido", "palabra"] + [f"tirada: {k + 1}" for k in range(len(tiradas))], filas,
         "ii" + "d" * len(tiradas),
         [f"Cada número es el puesto de esa palabra entre las {miles(n)} vecinas de «{PALABRA}»: el 1 "
-         "es la más parecida. Las dos filas de la mediana dan el puesto del medio de cada grupo, y "
+         "es la más parecida.",
+         "Las dos filas de la mediana dan el puesto del medio de cada grupo, y "
          "la última, el que saca una palabra cualquiera.",
          # Orden 97: la nota ya no lleva la dirección ni la fecha de consulta del diccionario (están
          # en FUENTE y CONSULTADO, y en la bibliografía del capítulo 16), ni dice que las palabras
@@ -116,10 +119,28 @@ def informe(tiradas):
          "carpintero, para el mueble, y la 5, la empresa de operaciones financieras, para el dinero."
          + (f" Faltan en el modelo: {', '.join(fuera)}." if fuera else "")])
     vecinas = tabla_editorial(
-        f"Las {VECINAS} vecinas de «{PALABRA}» en cada tirada",
+        f"Las {LETRA_VECINAS} vecinas de «{PALABRA}» en cada tirada",
         ["tirada", f"las {VECINAS} más parecidas"],
         [[str(k), ", ".join(t["vecinas"])] for k, t in enumerate(tiradas, 1)], "ci")
-    return puestos_ + [""] + vecinas
+    # Orden 150: las cuentas que el anexo A5 dice de las cinco tiradas («nueve de sus diez puestos están antes del 1.000»,
+    # «de sus treinta puestos, 23 están por detrás del puesto de media tabla»…), contadas aquí y no a ojo
+    media_tabla = (n + 1) // 2
+    dos = [t["puestos"][w] for t in tiradas for w in ("respaldo", "madero") if t["puestos"].get(w) is not None]
+    antes = [x for x in dos if x < UMBRAL_PUESTO]
+    despues = [x for x in dos if x >= UMBRAL_PUESTO]
+    por_delante = sum(1 for t in tiradas
+                      if mediana([t["puestos"][w] for w in conocidas(MUEBLE)]) < media_tabla)
+    dinero_atras = [t["puestos"][w] for t in tiradas for w in conocidas(DINERO)]
+    atras = [x for x in dinero_atras if x > media_tabla]
+    se_repite = tabla_editorial(
+        "Lo que se repite en las cinco tiradas", ["qué se cuenta", "cuánto"],
+        [[f"«respaldo» y «madero», antes del puesto {miles(UMBRAL_PUESTO)}", f"{len(antes)} de {len(dos)}"],
+         [f"los que no están antes del {miles(UMBRAL_PUESTO)}", ", ".join(miles(x) for x in despues) or "ninguno"],
+         [f"tiradas en que la mediana del mueble queda por delante de media tabla ({miles(media_tabla)})",
+          f"{por_delante} de {len(tiradas)}"],
+         [f"puestos del dinero por detrás de media tabla ({miles(media_tabla)})",
+          f"{len(atras)} de {len(dinero_atras)}"]], "id")
+    return puestos_ + [""] + vecinas + [""] + se_repite
 
 
 def selftest():

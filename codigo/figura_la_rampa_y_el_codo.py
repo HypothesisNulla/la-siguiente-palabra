@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """
+Orden 150 (11 nov 2026, regla 11.24): la rampa y el codo ya no está en el cuerpo del capítulo 4 sino en el anexo A4, y vuelve a llevar sus
+números, como antes de la Orden 148; el anexo es donde se explican (regla 11.9: los números de una figura van junto a su cuenta).
+
 Capítulo 4 — lo que deja pasar la rampa corta y lo que deja pasar el codo (L24, A20).
 
 Dos dibujos lado a lado, **con la misma escala en los dos ejes y en los dos cuadros**: lo que le
@@ -12,12 +15,6 @@ El codo se llamaba «la que corta» (segunda vuelta de L24: chocaba con «la ram
 Los números marcados se leen del bloque 6 de `datos/salidas/culpa_hacia_atras.txt`; las curvas se
 dibujan con las mismas funciones que usa el programa, y el selftest comprueba que pasan por los
 puntos de la salida.
-
-Desde la Orden 148 (10 nov 2026, regla 11.9: una figura del cuerpo no lleva números que el cuerpo no explique) la
-figura no lleva cifras: las marcas dicen «una cuarta parte», «casi nada» (la rampa) y «nada», «todo» (el codo); en el
-eje horizontal, una sola marca, «el listón», con el rótulo «lo que le llega»; en el vertical, solo el 0 y el 1. Las
-palabras no se escriben a ojo: `palabras_casan` comprueba que casan con los números de la salida (0,25, menos de
-0,05, 0 y 1), y el selftest lo exige.
 
 Uso:
     python figura_la_rampa_y_el_codo.py --selftest
@@ -81,10 +78,10 @@ def panel(L, x0, titulo, xs, ys):
     ax.set_xlim(X_DESDE, X_HASTA); ax.set_ylim(Y_DESDE, Y_HASTA)
     ax.set_aspect("equal")
     ax.set_title(titulo, fontsize=9.0, color=L.p.tinta, fontweight="bold", pad=4)
-    ax.set_xlabel("lo que le llega", fontsize=7.2, color=L.p.tinta)
+    ax.set_xlabel("cuánto pasa del listón lo que le llega", fontsize=7.2, color=L.p.tinta)
     ax.set_ylabel("lo que dice", fontsize=7.2, color=L.p.tinta)
-    ax.set_xticks([0]); ax.set_xticklabels(["el listón"])
-    ax.set_yticks([0, 1]); ax.set_yticklabels(["0", "1"])
+    ax.set_xticks([-4, -2, 0, 2, 4]); ax.set_xticklabels(["−4", "−2", "0", "+2", "+4"])
+    ax.set_yticks([0, 1, 2, 3]); ax.set_yticklabels(["0", "1", "2", "3"])
     ax.tick_params(labelsize=7.0)
     ax.axvline(0, color=L.p.marco, linewidth=0.7, zorder=0)
     for s in ("top", "right"):
@@ -101,19 +98,6 @@ def marca(ax, x, y, pendiente, texto, p, xt, yt):
                 color=p.tinta, linespacing=1.15, arrowprops=dict(arrowstyle="-", color=p.suave, lw=0.6))
 
 
-PALABRAS = {                   # lo que dice la figura, y la prueba de que casa con la salida
-    "una cuarta parte": lambda d: abs(d[MARCA_RAMPA[0]][1] - 0.25) < 1e-3,
-    "casi nada": lambda d: d[MARCA_RAMPA[1]][1] < 0.05,
-    "nada": lambda d: d[MARCA_CODO[0]][3] == 0,
-    "todo": lambda d: abs(d[MARCA_CODO[1]][3] - 1) < 1e-9,
-}
-
-
-def palabras_casan(filas):
-    """Las palabras de la figura que NO casan con los números de la salida (lista vacía si casan todas)."""
-    return [w for w, ok in PALABRAS.items() if not ok(filas)]
-
-
 def dibujar(filas, paleta, ruta):
     L = Lienzo("La rampa y el codo",
                "Los dos con la misma escala. La inclinación es lo que deja pasar cada uno: por\n"
@@ -123,15 +107,13 @@ def dibujar(filas, paleta, ruta):
     xs = np.linspace(X_DESDE, X_HASTA, 400)
     a = panel(L, 0.08, "la rampa corta", xs, sigmoide(xs))
     d0, d1 = filas[MARCA_RAMPA[0]], filas[MARCA_RAMPA[1]]
-    assert not palabras_casan(filas), f"las palabras de la figura no casan con la salida: {palabras_casan(filas)}"
-    marca(a, MARCA_RAMPA[0], d0[0], d0[1], "en el centro: deja\npasar una cuarta parte", p, -1.8, 2.4)
-    marca(a, MARCA_RAMPA[1], d1[0], d1[1], "en lo plano:\ncasi nada", p, 2.6, 2.6)
+    marca(a, MARCA_RAMPA[0], d0[0], d0[1], f"en el centro:\ndeja pasar {c(d0[1])}", p, -2.3, 2.3)
+    marca(a, MARCA_RAMPA[1], d1[0], d1[1], f"en lo plano:\ndeja pasar {c(d1[1])}", p, 2.6, 2.6)
     b = panel(L, 0.56, "el codo", xs, np.maximum(0, xs))
     e0, e1 = filas[MARCA_CODO[0]], filas[MARCA_CODO[1]]
-    marca(b, MARCA_CODO[0], e0[2], e0[3], "por debajo:\nnada", p, -2.6, 1.6)
-    marca(b, MARCA_CODO[1], e1[2], e1[3], "por encima:\ntodo", p, 3.2, 0.7)
+    marca(b, MARCA_CODO[0], e0[2], e0[3], f"por debajo:\ndeja pasar {c(e0[3])}", p, -2.6, 1.6)
+    marca(b, MARCA_CODO[1], e1[2], e1[3], f"por encima:\ndeja pasar {c(e1[3])}", p, 3.2, 0.7)
     L.guardar(ruta)
-    return a, b
 
 
 def selftest():
@@ -154,23 +136,10 @@ def selftest():
     #    dos cuadros).
     peor = max(max(abs(float(sigmoide(x)) - v[0]), abs(max(0, x) - v[2])) for x, v in filas.items())
     for pal in (COLOR, GRIS):
-        a, b = dibujar(filas, pal, "/dev/null")
-    # la 11.9 (Orden 148): las palabras casan con la salida, y los ejes no llevan más cifras que el 0 y el 1
-    mal = palabras_casan(filas)
-    marcas = [[t.get_text() for t in ax.get_xticklabels()] for ax in (a, b)]
-    cifras_y = [[t.get_text() for t in ax.get_yticklabels()] for ax in (a, b)]
-    print(f"[3] invariante        curvas contra salida, diferencia máxima {coma(peor, 4)}; misma escala en los dos cuadros; "
-          f"palabras que no casan con la salida: {mal or 'ninguna'}; marcas del eje horizontal: {marcas[0]}; del vertical: {cifras_y[0]}")
+        dibujar(filas, pal, "/dev/null")
+    print(f"[3] invariante        curvas contra salida, diferencia máxima {coma(peor, 4)}; misma escala en los dos cuadros")
     if peor > 0.001:
         fallos.append("invariante: las curvas no pasan por los puntos de la salida")
-    if mal or marcas != [["el listón"]] * 2 or cifras_y != [["0", "1"]] * 2:
-        fallos.append(f"invariante: las palabras no casan con la salida o los ejes llevan cifras: {mal} {marcas} {cifras_y}")
-    # señal implantada: con una salida cambiada a propósito, las palabras tienen que dejar de casar
-    cambiada = {k: tuple(0.9 if i == 1 else x for i, x in enumerate(v)) for k, v in filas.items()}
-    detecta = palabras_casan(cambiada)
-    print(f"      señal implantada  con lo que deja pasar la rampa cambiado a 0,9: casan mal {detecta}")
-    if "una cuarta parte" not in detecta:
-        fallos.append("señal implantada: «una cuarta parte» sigue casando con una salida de 0,9")
     print()
     if fallos:
         for f in fallos:
