@@ -7,15 +7,18 @@ decir cuál de los dos se ha quedado la lista hacen falta dos grupos de palabras
 y el grupo no puede escribirlo quien ya ha visto las vecinas: las listas de `cuantas_veces_sale.py`
 se escribieron después de ver la primera tirada (ver su aviso). Aquí los grupos salen de fuera y
 de antes: **los sustantivos de las definiciones de «banco» en el Diccionario de la lengua
-española** (https://dle.rae.es/banco, consultado el 28 de septiembre de 2026):
+española**, 24.ª edición (https://dle.rae.es/banco, consultado el 11 de noviembre de 2026; copia
+de texto en `notas/fuentes/dle-banco-2026-11-11.txt` del repositorio del libro). Orden 152: hasta
+aquí el texto decía «acepciones 1, 2 y 5», con la numeración de una edición anterior; en la 24.ª
+son la 1a, la 1b y la 2a, con las mismas tres definiciones palabra por palabra:
 
-  - acepción 1: «Asiento, con respaldo o sin él, en que pueden sentarse dos o más personas.»
-  - acepción 2: «Madero grueso escuadrado que se coloca horizontalmente sobre cuatro pies y sirve
+  - acepción 1a: «Asiento, con respaldo o sin él, en que pueden sentarse dos o más personas.»
+  - acepción 1b: «Madero grueso escuadrado que se coloca horizontalmente sobre cuatro pies y sirve
     de mesa para labores de carpinteros y otros artesanos.»
-  - acepción 5: «Empresa dedicada a realizar operaciones financieras con el dinero procedente de
+  - acepción 2a: «Empresa dedicada a realizar operaciones financieras con el dinero procedente de
     sus accionistas y de los depósitos de sus clientes.»
 
-El mueble son los sustantivos de las acepciones 1 y 2; el dinero, los de la 5. Se toman tal como
+El mueble son los sustantivos de las acepciones 1a y 1b; el dinero, los de la 2a. Se toman tal como
 salen escritos en la definición; los que el modelo no conoce (menos de diez apariciones) se dicen
 y se quedan fuera.
 
@@ -33,12 +36,12 @@ Uso:
 
 PALABRA = "banco"
 FUENTE = "https://dle.rae.es/banco"
-CONSULTADO = "2026-09-28"
+CONSULTADO = "2026-11-11"
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre",
          "octubre", "noviembre", "diciembre"]
-MUEBLE = ["asiento", "respaldo", "personas",                                   # acepción 1
-          "madero", "pies", "mesa", "labores", "carpinteros", "artesanos"]     # acepción 2
-DINERO = ["empresa", "operaciones", "dinero", "accionistas", "depósitos", "clientes"]  # acep. 5
+MUEBLE = ["asiento", "respaldo", "personas",                                   # acepción 1a
+          "madero", "pies", "mesa", "labores", "carpinteros", "artesanos"]     # acepción 1b
+DINERO = ["empresa", "operaciones", "dinero", "accionistas", "depósitos", "clientes"]  # acep. 2a
 VECINAS = 5
 UMBRAL_PUESTO = 1000        # Orden 150: «entre las mil primeras», de la prosa del capítulo 5
 LETRA_VECINAS = "cinco"      # Orden 150: el título de la tabla lo dice con letra, como el libro
@@ -115,8 +118,8 @@ def informe(tiradas):
          # en FUENTE y CONSULTADO, y en la bibliografía del capítulo 16), ni dice que las palabras
          # están en el modelo. Si alguna faltara, la nota lo diría, como antes.
          f"Las palabras de cada grupo son los sustantivos de las definiciones de «{PALABRA}» en el "
-         "Diccionario de la lengua española: las acepciones 1 y 2, el asiento y la mesa de "
-         "carpintero, para el mueble, y la 5, la empresa de operaciones financieras, para el dinero."
+         "Diccionario de la lengua española, en su 24.ª edición: las acepciones 1a y 1b, el asiento y la mesa de "
+         "carpintero, para el mueble, y la 2a, la empresa de operaciones financieras, para el dinero."
          + (f" Faltan en el modelo: {', '.join(fuera)}." if fuera else "")])
     vecinas = tabla_editorial(
         f"Las {LETRA_VECINAS} vecinas de «{PALABRA}» en cada tirada",

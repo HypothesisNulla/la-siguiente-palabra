@@ -36,7 +36,7 @@ Cada número es el puesto de esa palabra entre las 68.926 vecinas de «banco»: 
 
 Las dos filas de la mediana dan el puesto del medio de cada grupo, y la última, el que saca una palabra cualquiera.
 
-Las palabras de cada grupo son los sustantivos de las definiciones de «banco» en el Diccionario de la lengua española: las acepciones 1 y 2, el asiento y la mesa de carpintero, para el mueble, y la 5, la empresa de operaciones financieras, para el dinero.
+Las palabras de cada grupo son los sustantivos de las definiciones de «banco» en el Diccionario de la lengua española, en su 24.ª edición: las acepciones 1a y 1b, el asiento y la mesa de carpintero, para el mueble, y la 2a, la empresa de operaciones financieras, para el dinero.
 :::
 
 ::: tabla
