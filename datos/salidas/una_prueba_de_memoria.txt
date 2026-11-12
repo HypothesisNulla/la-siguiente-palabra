@@ -7,7 +7,7 @@ SELFTEST: las tres pruebas pasan.
 --- 1. UNA PRUEBA, ESCRITA ENTERA ---
 
 ::: tabla
-Una prueba, con 10 de paja
+Una prueba, con 10 símbolos de paja
 
 |  | los símbolos |
 |:--|:--|
@@ -15,12 +15,10 @@ Una prueba, con 10 de paja
 | luego, la paja | 3 4 1 3 2 2 2 4 4 2 |
 | pregunta | ¿cuál era el primero? |
 | **respuesta buscada** | **B** |
-
-Las letras, de la A a la H, son lo que se le puede pedir; la paja son cifras del 1 al 4, así que nunca se confunde con ellas.
 :::
 
 ::: tabla
-Una prueba, con 40 de paja
+Una prueba, con 40 símbolos de paja
 
 |  | los símbolos |
 |:--|:--|
@@ -28,8 +26,6 @@ Una prueba, con 40 de paja
 | luego, la paja | 1 1 1 3 3 1 2 1 1 3 2 4 2 2 3 4 1 3 3 1 1 1 2 4 2 4 2 4 2 1 1 1 2 4 2 3 1 4 1 1 |
 | pregunta | ¿cuál era el primero? |
 | **respuesta buscada** | **C** |
-
-Las letras, de la A a la H, son lo que se le puede pedir; la paja son cifras del 1 al 4, así que nunca se confunde con ellas.
 :::
 
 --- 2. DE CADA 100 PRUEBAS, CUÁNTAS ACIERTA ---
@@ -37,7 +33,7 @@ Las letras, de la A a la H, son lo que se le puede pedir; la paja son cifras del
 ::: tabla
 De cada 100 pruebas, cuántas acierta
 
-| paja en medio, en símbolos | memoria simple | con compuertas |
+| paja en medio, en símbolos | sin el arreglo | con el arreglo |
 |--:|--:|--:|
 | 10 | 100 | 100 |
 | 20 | 93 | 100 |
@@ -45,5 +41,5 @@ De cada 100 pruebas, cuántas acierta
 | 80 | 20 | 13 |
 | 160 | 11 | 12 |
 
-Por puro azar acertaría 12,5 de cada cien, una de cada ocho. Cada cifra es la media de dos entrenamientos desde cero.
+Acertando a ciegas, unas doce de cada cien. Cada cifra es la media de dos entrenamientos desde cero.
 :::

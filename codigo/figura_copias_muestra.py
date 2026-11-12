@@ -134,9 +134,9 @@ def dibujar(n, palabras, cubiertas, porcentaje, paleta, ruta):
     ax.plot([6, 10], [yk, yk], color=p.suave, linewidth=0.8)
     L.texto(11, yk + 0.3, "subrayado: las tres palabras que se le dieron; el resto lo escribió la red",
             tam=6.8, color=p.suave)
-    n_cub = sum(cubiertas)
-    L.texto(6, yk - 5.0, f"{n_cub} de {len(palabras)} palabras sombreadas: {porcentaje}",
-            tam=8.6, negrita=True)
+    # Orden 153: fuera la línea «32 de 45 palabras sombreadas: 71,1 %». La cuenta (treinta y dos palabras,
+    # 71,1 %) la hace el anexo A6 con palabras; la figura enseña los dos tramos y su largo y nada más.
+    # El lienzo (ALTO) no cambia. `porcentaje` se sigue leyendo de la salida (lo usa el selftest).
     L.guardar(ruta)
     return cajas
 

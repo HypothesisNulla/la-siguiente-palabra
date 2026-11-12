@@ -90,6 +90,12 @@ EXENCIONES (Orden 137.2: «nada de exenciones genéricas»). Solo de la lista `c
   - Con `año`, `fecha`, `fuente` y `cálculo` se puede añadir «frase: «…»»: si el número no sale tal cual en la fuente (una
     conversión, o escrito de otra manera), lo que se exige es que esa frase salga en su texto. Las fuentes `.html` se leen
     sin las etiquetas.
+  - «fracción: 32 / 45» (Orden 153): lo que la prosa dice con una fracción en palabras («más de dos tercios», «menos de una
+    quinta parte», «la mitad que…») es el cociente de dos números que SÍ están en las salidas del capítulo, y el marcador
+    que lleva delante dice la verdad. La columna «número» de la exención es la fracción tal como está escrita
+    («dos tercios»). Sin marcador, el cociente tiene que dar la fracción con un 0,5 % de margen; con «casi» o «menos de»
+    tiene que quedar por debajo, a no más de un 25 % («casi», un 10 %); con «más de», por encima, a no más de un 25 %
+    («algo más de», un 10 %); con «unos» o «alrededor de», a no más de un 10 %.
   - «suma a la vista: 5 + 1 + 7»: el número es una cuenta hecha delante del lector con números que están en el
     mismo párrafo. Los sumandos, escritos en la exención, tienen que salir en el párrafo (con cifra o con
     letra, del uno al nueve) y sumar el número exento (Orden 140.2).
@@ -107,7 +113,7 @@ FICHERO_SALIDAS = "salidas-por-capitulo.md"
 FICHERO_EXENTAS = "cifras-exentas.md"
 
 MIN_FRAGMENTO = 12                      # caracteres del trozo de frase de una exención
-MOTIVOS = ("año", "fecha", "referencia", "inventado", "fuente", "redondeo", "suma a la vista", "cálculo", "ejemplo",
+MOTIVOS = ("año", "fecha", "referencia", "inventado", "fuente", "redondeo", "suma a la vista", "cálculo", "ejemplo", "fracción",
            "fuente-no-libre")
 DECLARA_INVENTADO = ("inventad", "imagina", "supón", "ficticio")
 REFERENCIAS = {"capítulo", "capítulos", "cap.", "caps.", "figura", "figuras", "tabla", "tablas", "página", "páginas",
@@ -117,6 +123,9 @@ MESES = {"enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto
 MARCAS_APROX = ("unas", "unos", "cerca de", "alrededor de", "aproximadamente")
 MARCAS_MAS = ("algo más de", "poco más de", "más de")
 MARCAS_MENOS = ("menos de", "casi", "apenas")
+FRACCIONES = {"la mitad": (1, 2), "un tercio": (1, 3), "dos tercios": (2, 3), "un cuarto": (1, 4),
+              "una cuarta parte": (1, 4), "tres cuartos": (3, 4), "un quinto": (1, 5), "una quinta parte": (1, 5),
+              "un décimo": (1, 10), "una décima parte": (1, 10)}      # Orden 153: la fracción en palabras → (numerador, denominador)
 LARGO_FRASE_MIN = 3                     # el selftest: una frase de menos palabras no se mira
 # ==========================================================
 
@@ -324,6 +333,49 @@ def redondeo_a_la_escala(texto, valor, marca, exacto):
     return ""
 
 
+MARGEN_IGUAL = Decimal("0.005")      # sin marcador: el cociente da la fracción con un 0,5 % de margen
+MARGEN_MAS = Decimal("0.25")         # «más de», «menos de»: a no más de un 25 % de la fracción
+MARGEN_POCO = Decimal("0.10")        # «algo más de», «poco más de», «casi», «unos»: a no más de un 10 %
+
+
+def fraccion_no_vale(e, frase, valores):
+    """Orden 153: por qué una exención de «fracción» no vale ('' si vale). Los dos números del cociente tienen que estar en
+    las salidas del capítulo, y el marcador que lleva la fracción delante en la frase tiene que decir la verdad."""
+    m = re.search(r"fracción:\s*(\d[\d.]*(?:,\d+)?)\s*/\s*(\d[\d.]*(?:,\d+)?)", e[3])
+    if not m:
+        return "sin «fracción: 32 / 45» (los dos números del cociente)"
+    num, den = valor_de(m.group(1))[0], valor_de(m.group(2))[0]
+    for x in (num, den):
+        if x not in valores:
+            return f"el {x} del cociente no está en las salidas del capítulo"
+    palabras = e[1].strip().lower()
+    if palabras not in FRACCIONES:
+        return f"«{e[1]}» no es una fracción conocida ({', '.join(sorted(FRACCIONES))})"
+    a, b = FRACCIONES[palabras]
+    valor = Decimal(a) / Decimal(b)
+    exacto = num / den
+    razon = exacto / valor
+    f = norm(frase).lower()
+    i = f.find(palabras)
+    antes = f[:i]
+    marca = marca_de(antes)
+    poco = any(antes.rstrip().endswith(x) for x in ("algo más de", "poco más de", "casi", "unos", "unas", "alrededor de"))
+    margen = MARGEN_POCO if poco else MARGEN_MAS
+    dicho = f"{num} / {den} = {exacto:.4f}, y «{palabras}» es {valor:.4f}"
+    if marca is None:
+        if abs(razon - 1) > MARGEN_IGUAL:
+            return f"«{palabras}» sin marcador tiene que dar la fracción con un 0,5 % de margen: {dicho}"
+    elif marca == "mas":
+        if not (1 < razon <= 1 + margen):
+            return f"el marcador de «{palabras}» no dice la verdad: con «más de» el cociente tiene que quedar por encima, a no más de un {int(margen * 100)} %: {dicho}"
+    elif marca == "menos":
+        if not (1 - margen <= razon < 1):
+            return f"el marcador de «{palabras}» no dice la verdad: con «menos de» o «casi» el cociente tiene que quedar por debajo, a no más de un {int(margen * 100)} %: {dicho}"
+    elif abs(razon - 1) > MARGEN_POCO:
+        return f"el marcador de «{palabras}» no dice la verdad: con «unos» el cociente tiene que estar a no más de un 10 %: {dicho}"
+    return ""
+
+
 def tiene_salida(h, valores):
     """Si el número de la prosa tiene un valor en las salidas, con las reglas de la cabecera."""
     v = h["valor"]
@@ -410,6 +462,9 @@ def leer_exenciones(raiz):
             continue
         if base == "redondeo" and not re.search(r"redondeo:\s*de\s+\d[\d.]*(?:,\d+)?", motivo):
             errores.append(f"exención de redondeo sin «redondeo: de 79,40 %» (el valor exacto): {l}")
+            continue
+        if base == "fracción" and not re.search(r"fracción:\s*\d[\d.]*(?:,\d+)?\s*/\s*\d", motivo):
+            errores.append(f"exención de fracción sin «fracción: 32 / 45» (los dos números del cociente): {l}")
             continue
         if base == "suma a la vista" and not re.search(r"suma a la vista:\s*\d+(?:\s*\+\s*\d+)+", motivo):
             errores.append(f"exención de suma sin «suma a la vista: 5 + 1 + 7» (los sumandos): {l}")
@@ -673,8 +728,20 @@ def revisar_capitulo(tl, raiz, cap, fichero, declaradas, todas, exenciones):
     nombres, derivadas = salidas_del_capitulo(cap, texto, declaradas, todas)
     valores = valores_de_salidas([todas[n] for n in nombres])
     valores_todos = valores_de_salidas(todas.values())
-    resultado, usadas = [], set()
-    for linea, frase, parrafo in prosa_del_capitulo(tl, fichero):
+    resultado, usadas, errores = [], set(), []
+    prosa = prosa_del_capitulo(tl, fichero)
+    for e in exenciones:                       # Orden 153: las fracciones en palabras («más de dos tercios»)
+        if e[0] != cap or e[4] != "fracción":
+            continue
+        usadas.add(e[5])
+        donde = [fr for _, fr, _ in prosa if norm(e[2]) in norm(fr) and e[1].strip().lower() in norm(fr).lower()]
+        if not donde:
+            errores.append(f"exención de fracción que no casa con ninguna frase del capítulo {cap} (¿cambió el texto?): {e[5]}")
+            continue
+        porque = fraccion_no_vale(e, donde[0], valores)
+        if porque:
+            errores.append(f"capítulo {cap}: «{e[1]}» está exenta y la exención no vale: {porque}")
+    for linea, frase, parrafo in prosa:
         for h in numeros_de(frase):
             h.update(linea=linea, frase=frase)
             if h["forma"] in ("unidad", "letra_pequena"):
@@ -695,7 +762,6 @@ def revisar_capitulo(tl, raiz, cap, fichero, declaradas, todas, exenciones):
                     h["estado"] = "sin salida"
                     h["en_ninguna"] = not tiene_salida(h, valores_todos)
             resultado.append(h)
-    errores = []
     for e in exenciones:
         if e[0] == cap and e[5] not in usadas:
             errores.append(f"exención que no casa con ningún número del capítulo {cap} (¿cambió el texto?): {e[5]}")
@@ -1015,6 +1081,34 @@ def _selftest():
         print(f"                      cinco exenciones malas de los motivos nuevos: sin rechazar {len(rotas)} (esperado 0)")
         if rotas:
             fallos.append(f"invariante: estas exenciones malas debían rechazarse: {rotas}")
+    # Orden 153: las fracciones en palabras («más de dos tercios») con su marcador.
+    cap153 = "# Cap\n\nMás de dos tercios de la muestra copia. La red copia menos de una quinta parte: la mitad que la otra.\n"
+    with tempfile.TemporaryDirectory() as d5:
+        raiz5, sal5 = _libro_de_mentira(d5, cap153, "tramos 32 de 45 y 28; copiado 17,8 y 35,6; sobre 100\n")
+        ruta5 = raiz5 / "notas" / "reforma-nov" / FICHERO_EXENTAS
+        buenas153 = ("- cap01 | dos tercios | Más de dos tercios | fracción: 32 / 45\n"
+                     "- cap01 | una quinta parte | menos de una quinta parte | fracción: 17,8 / 100\n"
+                     "- cap01 | la mitad | la mitad que la otra | fracción: 17,8 / 35,6\n")
+        ruta5.write_text("# x\n\n" + buenas153, encoding="utf-8")
+        _, e5 = correr(raiz5, sal5, [1], estricto=True)
+        print(f"                      tres fracciones con su marcador, bien escritas: fallos {len(e5)} (esperado 0)")
+        if e5:
+            fallos.append(f"invariante: las fracciones buenas de la Orden 153 debían valer; salió {e5}")
+        malas153 = {
+            "«más de» con un exacto que queda por debajo": (buenas153.replace("32 / 45", "28 / 45"), "no dice la verdad"),
+            "«menos de» con un exacto que queda por encima": (buenas153.replace("17,8 / 100", "35,6 / 100"), "no dice la verdad"),
+            "sin marcador y el cociente no da la fracción": (buenas153.replace("17,8 / 35,6", "17,8 / 100"), "0,5 %"),
+            "un número del cociente que no está en las salidas": (buenas153.replace("32 / 45", "33 / 45"), "no está en las salidas"),
+        }
+        rotas5 = []
+        for nombre, (lineas, quiero) in malas153.items():
+            ruta5.write_text("# x\n\n" + lineas, encoding="utf-8")
+            _, e = correr(raiz5, sal5, [1], estricto=True)
+            if not any(quiero in x for x in e):
+                rotas5.append((nombre, e))
+        print(f"                      cuatro fracciones malas de la Orden 153: sin rechazar {len(rotas5)} (esperado 0)")
+        if rotas5:
+            fallos.append(f"invariante: estas fracciones malas debían rechazarse: {rotas5}")
     print()
     if fallos:
         for f in fallos:

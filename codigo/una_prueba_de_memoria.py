@@ -26,7 +26,7 @@ SEMILLA_EJEMPLO = 20260928
 LETRAS = "ABCDEFGH"
 NUMEROS_PAJA = "1234"
 # Orden 97: cifras que las notas escriben con letra; si cambia el parámetro, falla aquí y no en la página.
-EN_LETRA = {8: "ocho", 2: "dos"}
+EN_LETRA = {8: "ocho", 2: "dos", 12: "doce"}
 
 # ==========================================================
 
@@ -79,13 +79,12 @@ def bloque_pruebas():
         for fila, objetivo in zip(x.numpy(), y.numpy()):
             simbolos = [a_texto(s) for s in fila]
             out += tabla_editorial(
-                f"Una prueba, con {distancia} de paja", ["", "los símbolos"],
+                f"Una prueba, con {distancia} símbolos de paja", ["", "los símbolos"],
                 [["se le enseña", simbolos[0]], ["luego, la paja", " ".join(simbolos[1:])],
                  ["pregunta", "¿cuál era el primero?"],
-                 ["**respuesta buscada**", f"**{a_texto(objetivo)}**"]], "ii",
-                [f"Las letras, de la {LETRAS[0]} a la {LETRAS[-1]}, son lo que se le puede pedir; la "
-                 f"paja son cifras del {NUMEROS_PAJA[0]} al {NUMEROS_PAJA[-1]}, así que nunca se "
-                 "confunde con ellas."])
+                 ["**respuesta buscada**", f"**{a_texto(objetivo)}**"]], "ii")
+            # Orden 153: sin nota. Lo que la nota decía (las letras de la A a la H se piden, la paja son
+            # cifras del 1 al 4) lo dice la prosa del capítulo 6, antes de la tabla.
             out.append("")
     return out[:-1]
 
@@ -94,12 +93,14 @@ def bloque_tabla(tabla):
     azar = 1 / mr.SIMBOLOS
     return ["--- 2. DE CADA 100 PRUEBAS, CUÁNTAS ACIERTA ---", ""] + tabla_editorial(
         "De cada 100 pruebas, cuántas acierta",
-        ["paja en medio, en símbolos", "memoria simple", "con compuertas"],
+        # Orden 154: «el arreglo», no «las compuertas»: la palabra se presenta después de la tabla.
+        ["paja en medio, en símbolos", "sin el arreglo", "con el arreglo"],
         [[str(d), de_cada_cien(tabla[d][0]), de_cada_cien(tabla[d][3])] for d in mr.DISTANCIAS],
         "ddd",
-        [f"Por puro azar acertaría {coma(100 * azar, 1)} de cada cien, una de cada "
-         f"{EN_LETRA[mr.SIMBOLOS]}. Cada cifra es la media de {EN_LETRA[mr.SEMILLAS_MEMORIA]} "
-         "entrenamientos desde cero."])
+        # Orden 153: la nota del texto, «Acertando a ciegas, unas doce de cada cien», con el 12,5 de
+        # la cuenta redondeado hacia abajo y marcado con «unas»; el 12,5 entero está en el anexo A6.
+        [f"Acertando a ciegas, unas {EN_LETRA[int(100 * azar)]} de cada cien. Cada cifra es la media "
+         f"de {EN_LETRA[mr.SEMILLAS_MEMORIA]} entrenamientos desde cero."])
 
 
 def selftest():

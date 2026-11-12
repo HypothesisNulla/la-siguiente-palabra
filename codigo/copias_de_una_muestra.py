@@ -274,8 +274,9 @@ def bloque_tabla(puntos, palabras, corpus, umbral, cache=None):
          # (los seis libros ajenos, el umbral y su margen) está en las constantes y en el código.
          f"Cada fila son {EN_LETRA[L.VENTANAS]} muestras de {largo} palabras. «Contar» es la "
          "máquina del capítulo 1, mirando una, dos o tres palabras atrás, y «el texto real», lo que "
-         f"sigue a cada comienzo en su libro. Una racha cuenta como copia desde {EN_LETRA[umbral]} "
-         "palabras seguidas."])
+         "sigue a cada comienzo en su libro."])
+    # Orden 153: la nota ya no dice «Una racha cuenta como copia desde siete palabras seguidas»; el corte lo
+    # explica la prosa del capítulo 6 («Desde siete palabras seguidas, ya es copia») y el anexo A6.
     return lin, res
 
 
