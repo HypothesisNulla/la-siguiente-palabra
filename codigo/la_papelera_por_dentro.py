@@ -183,23 +183,31 @@ def main():
         ["“|” separa dos trozos. El que pregunta es el último, el punto."]) + [""]
 
     L += ["--- 1. LO QUE PONE «El» EN LA MEZCLA ---", ""]
-    filas = []
+    # Orden 159 (12 nov 2026): el texto del A8 trae solo las filas del «alto»; «bajo» y «caro» van en una
+    # segunda tabla, para que lo que el cap. 8 dice de ellas («sale lo mismo») tenga su salida.
+    por_adjetivo = {}
     for adj, frase in FRASES.items():
         _, _, P, A, C, _ = por_dentro(tok, modelo, frase)
+        filas = []
         for nombre, d in (("todas", 0), ("últimas", desde)):
             r = resumen(P, A, C, d)
             filas += [[f"«{adj}»", nombre, "«El»", f"{coma(100 * r['porcion_el'])} %",
                        coma(r["tam_el"], 3), f"{coma(100 * r['parte_el'])} %"],
                       ["", "", "las demás palabras", f"{coma(100 * r['porcion_otras'])} %",
                        coma(r["tam_otras"], 3), f"{coma(100 * r['parte_otras'])} %"]]
+        por_adjetivo[adj] = filas
+    rot_mezcla = ["frase", "miradas", "", "porción", "tamaño", "parte de la mezcla"]
     L += tabla_editorial(
-        "Lo que pone «El» en la mezcla",
-        ["frase", "miradas", "", "porción", "tamaño", "parte de la mezcla"], filas, "iiiddd",
+        "Lo que pone «El» en la mezcla", rot_mezcla, por_adjetivo["alto"], "iiiddd",
         [# Orden 97: nota para el lector; lo técnico (los 64 números del contenido, cómo se mide el
          # tamaño) está en `resumen` y en el encabezado de este programa.
-         "Porción y parte de la mezcla, de cada cien. En «las demás palabras», el tamaño es el de una "
-         "palabra media, y la porción y la parte, las de todas juntas. "
-         f"«Todas» son las {todas} miradas; «últimas», las {ultimas} de las {capas - desde} últimas "
+         "Porción y parte de la mezcla, de cada cien; la mezcla son los apuntes. En «las demás "
+         "palabras», el tamaño es el de una palabra media, y la porción y la parte, las de todas "
+         "juntas."]) + [""]
+    L += tabla_editorial(
+        "Lo que pone «El» en la mezcla, con «bajo» y con «caro»", rot_mezcla,
+        por_adjetivo["bajo"] + por_adjetivo["caro"], "iiiddd",
+        [f"«Todas» son las {todas} miradas; «últimas», las {ultimas} de las {capas - desde} últimas "
          "capas."]) + [""]
 
     L += ["--- 2. EL REPARTO DEL FINAL DE LA FRASE, PALABRA A PALABRA ---", ""]
@@ -215,10 +223,9 @@ def main():
     L += tabla_editorial(
         "El reparto del final de la frase, palabra a palabra",
         ["frase", "miradas", "«El»", "«vaso»", "«cajón»", "el final"], filas, "iidddd",
-        ["Lo que va a los trozos de una palabra se suma, y «el final» son los dos últimos trozos "
-         f"juntos, el adjetivo y el punto. «Todas» son las {todas} miradas del modelo; «últimas», las "
-         f"{ultimas} de sus {capas - desde} últimas capas.",
-         "Lo mismo que reparto_una_a_una.py, con la última columna rotulada por lo que es."]) + [""]
+        ["«El final» son los dos últimos trozos juntos, el adjetivo y el punto. "
+         f"«Todas» son las {todas} miradas del modelo; «últimas», las "
+         f"{ultimas} de sus {capas - desde} últimas capas."]) + [""]
 
     L += ["--- 3. SI PREGUNTA EL ADJETIVO Y NO EL PUNTO DE DETRÁS ---", ""]
     filas = []
@@ -232,8 +239,7 @@ def main():
     L += tabla_editorial(
         "Si pregunta el adjetivo y no el punto de detrás",
         ["adjetivo", "pregunta", "«El»", "«vaso»", "«cajón»"], filas, "iiddd",
-        [f"Media de las {todas} miradas, de cada cien. reparto_una_a_una.py pregunta desde el "
-         "último trozo de la frase, que es el punto; aquí también desde el trozo de antes."])
+        [f"Media de las {todas} miradas, de cada cien."])
     for l in L:
         print(l)
     return 0

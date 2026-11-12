@@ -257,8 +257,8 @@ def bloque_vuelco(datos):
          ["miradas que mueven más de 0,10", f"{int((D > 0.10).sum())} de {D.size}"],
          ["el mayor cambio sobre «vaso», de todas", pct(dif["vaso"], 1)],
          ["el mayor cambio sobre «cajón», de todas", pct(dif["cajón"], 1)]], "id",
-        ["Vuelco: la parte del pastel que una mirada mueve de sitio al cambiar «alto» por «bajo»: "
-         f"0, no mueve nada; 1, lo mueve todo. Se mide sobre las {D.size} miradas del modelo."])
+        ["Vuelco: la parte del pastel que una mirada cambia de sitio al cambiar «alto» por «bajo»: "
+         "0, no mueve nada; 1, lo mueve todo."])
 
 
 def bloque_sujeto(tok, modelo, datos, cual):
@@ -288,8 +288,8 @@ def bloque_sujeto(tok, modelo, datos, cual):
     tabla = tabla_editorial(
         "¿Sigue al sujeto, o al principio de la frase?",
         ["frase", "sujeto", "primer sustantivo", "se fija en", "¿es el sujeto?"], filas, "ciiic",
-        [f"Es la mirada número {mirada + 1} de la capa {capa + 1}, la que más se fija en «{cual}» en "
-         f"la frase del vaso. En las {EN_LETRA[distinguibles]} frases en que el sujeto no es el primer "
+        [f"La mirada {mirada + 1} de la capa {capa + 1}. "
+         f"En las {EN_LETRA[distinguibles]} frases en que el sujeto no es el primer "
          + ("sustantivo, no se fija en él ni una vez." if aciertos == 0 else
             f"sustantivo, se fija en él {aciertos} {'vez' if aciertos == 1 else 'veces'}.")])
     return frases + [""] + tabla

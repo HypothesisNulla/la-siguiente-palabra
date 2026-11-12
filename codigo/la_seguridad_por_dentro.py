@@ -127,7 +127,7 @@ def main():
     L += ["--- 1. EL TEXTO QUE SE LE PASA ---", ""] + muestra_editorial(
         "El texto que se le pasa, con la frase del «caro»",
         [l.rstrip() for l in PLANTILLA.format(frase=frase, adj="caro").split("\n")],
-        ["El modelo continúa detrás de «Respuesta: El». Lo mismo con «alto» y con «bajo»."]) + [""]
+        ["Lo mismo con «alto» y con «bajo»."]) + [""]
     tamanos = {}
     modelos = {}
     for nombre in MODELOS:
@@ -160,7 +160,8 @@ def main():
              # lleven el espacio delante (como las escribe el modelo) está en `cuenta`.
              "Las dos primeras columnas dicen, de cada cien veces, cuántas escribiría el modelo «vaso» "
              "o «cajón» justo detrás de «Respuesta: El»; lo que falta hasta cien va a otras palabras. "
-             "La seguridad es la parte que se lleva la ganadora de lo que suman las dos."]) + [""]
+             "La seguridad es la parte que se lleva la ganadora de lo que suman las dos."]
+            if nombre == MODELOS[0] else []) + [""]    # Orden 159: la del segundo modelo va sin nota
     a, b = MODELOS
     L += ["--- 4. EL TAMAÑO DE LOS DOS MODELOS ---", ""] + tabla_editorial(
         "El tamaño de los dos modelos", ["el modelo", "números"],

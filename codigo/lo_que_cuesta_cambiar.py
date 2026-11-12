@@ -268,11 +268,9 @@ def imprimir(medidas, medido, n_total):
         filas, "iddddd",
         [# Orden 97: nota para el lector. La mediana del reloj y el csv de donde sale se dicen arriba
          # (esta salida) y en editar_contexto.py; la leyenda de los modelos queda en las otras tablas.
-         f"Un texto de {miles(n_total)} trozos. «Trozos» son los que hay que volver a calcular en ese "
-         "turno; «cuentas» y «reloj», las multiplicaciones y el tiempo del turno, en veces los de "
-         "«solo añadir». «Todo desde cero» es sin nada ya calculado.",
-         f"El de {rb[:-1]} millones va comprimido, con sus números redondeados para que quepa en el "
-         "portátil: eso cambia el reloj, no las cuentas."]) + [""]
+         "«Trozos» son los que hay que volver a calcular en ese turno; «cuentas» y «reloj», las "
+         "multiplicaciones y el tiempo del turno, en veces los de «solo añadir». "
+         f"El de {rb[:-1]} millones va comprimido: eso cambia el reloj, no las cuentas."]) + [""]
 
     filas = []
     for nombre in (a, b):

@@ -39,11 +39,8 @@ Fragmentos: lo que ve, lo que viene, lo más probable
 | 1 | `neración;_pero,_` | `¿` | `y` 26,9 %, `q` 10,8 %, `s` 10,0 % | no |
 | 2 | `das,_se_descubri` | `e` | `e` 18,7 %, `a` 18,2 %, `d` 17,4 % | sí |
 | 3 | `_del_jumento_y_a` | `c` | `_` 44,7 %, `l` 11,0 %, `n` 10,7 % | no |
-| el de la figura | `quiero_acordarme` | `,` | `_` 56,8 %, `,` 11,7 %, `t` 6,8 % | no |
 
-Fragmento: los tres primeros de prueba, sin elegir, y el de la figura.
-
-El guion bajo es un espacio. Acierta cuando la letra a la que da más porcentaje es la que viene de verdad.
+El guion bajo es un espacio.
 :::
 
 --- 3. LA MISMA «e» EN DOS SITIOS ---
@@ -100,7 +97,7 @@ La pregunta, la etiqueta y el contenido de la «e» del sitio 16
 | su etiqueta | 2,35 | -1,19 | 2,49 | 4,59 |
 | su contenido | 0,59 | -0,74 | -0,60 | 0,08 |
 
-Lo mismo con cada una de las 32 columnas da los 32 números de la pregunta; con la tabla de las etiquetas, los de la etiqueta; con la de los contenidos, los del contenido. Los 4 primeros de cada una.
+Los cuatro primeros de los treinta y dos números de cada lista.
 :::
 
 --- 5. CUÁNTO ENCAJA UNA PREGUNTA CON UNA ETIQUETA ---
@@ -146,9 +143,7 @@ De las puntuaciones al reparto: la «e» y las 16 letras
 | 16 | e | 4,212 | 67,47 | 12,2 % |
 | **suma** |  |  | **550,99** | **100,0 %** |
 
-El guion bajo es un espacio. Cada fila es la pregunta de la «e» contra la etiqueta de esa letra.
-
-La fuerza vale 1 con puntuación 0; 2,72 con 1; 7,39 con 2; 20,09 con 3, y 0,37 con menos 1. La última columna es esa fuerza entre la suma de todas, por cien.
+El guion bajo es un espacio. Cada fila es la pregunta de la «e» contra la etiqueta de esa letra; la última columna, su fuerza entre la suma de todas, por cien.
 :::
 
 --- 7. DOBLE PUNTUACIÓN NO ES DOBLE PORCIÓN ---
@@ -166,12 +161,12 @@ Doble puntuación no es doble porción
 ::: tabla
 El reparto de la «e», con el ajuste y sin él
 
-|  | 11 r | 12 d | 13 a | 14 r | 15 m | 16 e | reparte |
+|  | 11 r | 12 d | 13 a | 14 r | 15 m | 16 e | reparte entre |
 |:--|--:|--:|--:|--:|--:|--:|--:|
 | con el ajuste | 2 | 5 | 10 | 28 | 42 | 12 | 4,4 |
 | sin el ajuste | 0 | 0 | 0 | 10 | 90 | 0 | 1,4 |
 
-Lo que se lleva cada una de las seis últimas letras, de cada cien; sin el ajuste es sin dividir las puntuaciones entre 5,66. La última columna cuenta como «reparte entre».
+Lo que se lleva cada una de las seis últimas letras, de cada cien. «Reparte entre» se explica en la nota «es la de justo antes».
 :::
 
 --- 8. «REPARTE ENTRE» ---

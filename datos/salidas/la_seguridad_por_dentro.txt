@@ -16,7 +16,7 @@ El texto que se le pasa, con la frase del «caro»
     Pregunta: ¿Qué era demasiado caro?
     Respuesta: El
 
-El modelo continúa detrás de «Respuesta: El». Lo mismo con «alto» y con «bajo».
+Lo mismo con «alto» y con «bajo».
 :::
 
 --- 2. COMO LO MEDÍA respuesta_modelo.py HASTA EL 28 DE SEPT. ---
@@ -75,8 +75,6 @@ Qué responde el de mil quinientos millones
 | alto | 91,4 % | 5,8 % | 97,2 % | vaso | 94,0 % |
 | bajo | 89,6 % | 6,5 % | 96,1 % | vaso | 93,3 % |
 | caro | 94,3 % | 3,2 % | 97,6 % | vaso | 96,7 % |
-
-Las dos primeras columnas dicen, de cada cien veces, cuántas escribiría el modelo «vaso» o «cajón» justo detrás de «Respuesta: El»; lo que falta hasta cien va a otras palabras. La seguridad es la parte que se lleva la ganadora de lo que suman las dos.
 :::
 
 --- 4. EL TAMAÑO DE LOS DOS MODELOS ---

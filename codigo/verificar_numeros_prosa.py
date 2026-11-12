@@ -96,6 +96,9 @@ EXENCIONES (Orden 137.2: «nada de exenciones genéricas»). Solo de la lista `c
     («dos tercios»). Sin marcador, el cociente tiene que dar la fracción con un 0,5 % de margen; con «casi» o «menos de»
     tiene que quedar por debajo, a no más de un 25 % («casi», un 10 %); con «más de», por encima, a no más de un 25 %
     («algo más de», un 10 %); con «unos» o «alrededor de», a no más de un 10 %.
+    Orden 159: «fracción: 524.800 / 131.328 = 4» da el valor al que se refiere la frase cuando no es una de las de la lista
+    (para «por casi cuatro» o «tres letras de cada diez»: «= 3/10»), y un número del cociente puede salir en la fuente citada
+    en vez de en las salidas («fracción: 90,1 / 100; fuente: notas/fuentes/…»).
     Orden 157: también valen «una de cada cuatro», «una de cada cinco», «una vez de cada cinco», «cuatro de cada diez», «nueve de cada
     diez» y, como razones, «seis veces» y «tres veces y media» (para «más de seis veces más»: `fracción: 151.665 / 22.944`).
   - «suma a la vista: 5 + 1 + 7»: el número es una cuenta hecha delante del lector con números que están en el
@@ -127,7 +130,7 @@ MARCAS_MAS = ("algo más de", "poco más de", "más de")
 MARCAS_MENOS = ("menos de", "casi", "apenas")
 FRACCIONES = {"la mitad": (1, 2), "un tercio": (1, 3), "dos tercios": (2, 3), "un cuarto": (1, 4),
               "una cuarta parte": (1, 4), "tres cuartos": (3, 4), "un quinto": (1, 5), "una quinta parte": (1, 5),
-              "un décimo": (1, 10), "una décima parte": (1, 10),      # Orden 153: la fracción en palabras → (numerador, denominador)
+              "un décimo": (1, 10), "una décima parte": (1, 10), "una tercera parte": (1, 3),      # Orden 153: la fracción en palabras → (numerador, denominador)
               # Orden 157: las fracciones «de cada…» y las razones «veces» del cap. 7 (el «del dos al nueve con letra» no se mira,
               # y estas se dicen así: «una de cada cuatro», «más de seis veces más», «tres veces y media»)
               "una de cada cuatro": (1, 4), "una de cada cinco": (1, 5), "una vez de cada cinco": (1, 5),
@@ -345,21 +348,33 @@ MARGEN_MAS = Decimal("0.25")         # «más de», «menos de»: a no más de u
 MARGEN_POCO = Decimal("0.10")        # «algo más de», «poco más de», «casi», «unos»: a no más de un 10 %
 
 
-def fraccion_no_vale(e, frase, valores):
+def fraccion_no_vale(e, frase, valores, raiz="."):
     """Orden 153: por qué una exención de «fracción» no vale ('' si vale). Los dos números del cociente tienen que estar en
     las salidas del capítulo, y el marcador que lleva la fracción delante en la frase tiene que decir la verdad."""
-    m = re.search(r"fracción:\s*(\d[\d.]*(?:,\d+)?)\s*/\s*(\d[\d.]*(?:,\d+)?)", e[3])
+    m = re.search(r"fracción:\s*(\d[\d.]*(?:,\d+)?)\s*/\s*(\d[\d.]*(?:,\d+)?)(?:\s*=\s*(\d+(?:,\d+)?(?:\s*/\s*\d+)?))?", e[3])
     if not m:
         return "sin «fracción: 32 / 45» (los dos números del cociente)"
     num, den = valor_de(m.group(1))[0], valor_de(m.group(2))[0]
-    for x in (num, den):
-        if x not in valores:
-            return f"el {x} del cociente no está en las salidas del capítulo"
+    # Orden 159: un número del cociente puede salir, en vez de en las salidas, en el texto de la fuente citada
+    # («fracción: 90,1 / 100; fuente: notas/fuentes/…»; el 100 de «de cada cien» no hace falta buscarlo).
+    rutas = fuentes_de(e[3])
+    for escrito, x in ((m.group(1), num), (m.group(2), den)):
+        if x in valores:
+            continue
+        if rutas and (x == 100 or numero_en_fuente(raiz, rutas, escrito)):
+            continue
+        return f"el {x} del cociente no está en las salidas del capítulo" + (" ni en la fuente" if rutas else "")
     palabras = e[1].strip().lower()
-    if palabras not in FRACCIONES:
-        return f"«{e[1]}» no es una fracción conocida ({', '.join(sorted(FRACCIONES))})"
-    a, b = FRACCIONES[palabras]
-    valor = Decimal(a) / Decimal(b)
+    if m.group(3):
+        # Orden 159: «= 3/10» o «= 4» dice a qué fracción o razón se refiere la frase (para «tres de cada diez» o
+        # «por casi cuatro», que no se pueden poner en la lista de FRACCIONES sin que valgan para todo el libro)
+        r = [Decimal(x.replace(",", ".")) for x in re.split(r"\s*/\s*", m.group(3))]
+        valor = r[0] / r[1] if len(r) == 2 else r[0]
+    else:
+        if palabras not in FRACCIONES:
+            return f"«{e[1]}» no es una fracción conocida ({', '.join(sorted(FRACCIONES))}); o se le da su valor con «= 3/10»"
+        a, b = FRACCIONES[palabras]
+        valor = Decimal(a) / Decimal(b)
     exacto = num / den
     razon = exacto / valor
     f = norm(frase).lower()
@@ -745,7 +760,7 @@ def revisar_capitulo(tl, raiz, cap, fichero, declaradas, todas, exenciones):
         if not donde:
             errores.append(f"exención de fracción que no casa con ninguna frase del capítulo {cap} (¿cambió el texto?): {e[5]}")
             continue
-        porque = fraccion_no_vale(e, donde[0], valores)
+        porque = fraccion_no_vale(e, donde[0], valores, raiz)
         if porque:
             errores.append(f"capítulo {cap}: «{e[1]}» está exenta y la exención no vale: {porque}")
     for linea, frase, parrafo in prosa:
@@ -1144,6 +1159,33 @@ def _selftest():
         print(f"                      tres malas de la Orden 157: sin rechazar {len(rotas6)} (esperado 0)")
         if rotas6:
             fallos.append(f"invariante: estas de la Orden 157 debían rechazarse: {rotas6}")
+    # Orden 159: «fracción: A / B = V» (el valor lo da la exención) y el origen de un número en la fuente
+    cap159 = "# Cap\n\nLa máquina acierta tres letras de cada diez; la fuente dice más de nueve de cada diez.\n"
+    with tempfile.TemporaryDirectory() as d7:
+        raiz7, sal7 = _libro_de_mentira(d7, cap159, "acierta 30 de 100; sobre 10\n")
+        (raiz7 / "notas" / "fuentes").mkdir(parents=True, exist_ok=True)
+        (raiz7 / "notas" / "fuentes" / "f.txt").write_text("accuracy of 90.1% on the test", encoding="utf-8")
+        ruta7 = raiz7 / "notas" / "reforma-nov" / FICHERO_EXENTAS
+        buena159 = ("- cap01 | tres letras de cada diez | acierta tres letras de cada diez | fracción: 30 / 100 = 3/10\n"
+                    "- cap01 | nueve de cada diez | más de nueve de cada diez | fracción: 90,1 / 100 = 9/10; fuente: notas/fuentes/f.txt\n")
+        ruta7.write_text("# x\n\n" + buena159, encoding="utf-8")
+        _, e7 = correr(raiz7, sal7, [1], estricto=True)
+        print(f"                      dos fracciones con su valor y su fuente, bien escritas: fallos {len(e7)} (esperado 0)")
+        if e7:
+            fallos.append(f"invariante: las de la Orden 159 debían valer; salió {e7}")
+        malas159 = {
+            "el valor dado no es el de la frase (sin marcador, 0,30 no es 0,25)": (buena159.replace("= 3/10", "= 1/4"), "0,5 %"),
+            "«más de» con un cociente por debajo": (buena159.replace("90,1 / 100", "88 / 100").replace("fuente: notas/fuentes/f.txt", "fuente: notas/fuentes/f.txt"), "no está en"),
+        }
+        rotas7 = []
+        for nombre, (lineas, quiero) in malas159.items():
+            ruta7.write_text("# x\n\n" + lineas, encoding="utf-8")
+            _, e = correr(raiz7, sal7, [1], estricto=True)
+            if not any(quiero in x for x in e):
+                rotas7.append((nombre, e))
+        print(f"                      dos malas de la Orden 159: sin rechazar {len(rotas7)} (esperado 0)")
+        if rotas7:
+            fallos.append(f"invariante: estas de la Orden 159 debían rechazarse: {rotas7}")
     print()
     if fallos:
         for f in fallos:

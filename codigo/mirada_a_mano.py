@@ -646,9 +646,7 @@ def main():
         [[f"{miles(paso)} pasos", f"{coma(100 * med[paso]['acierto'])} %",
           f"{coma(med[paso]['reparte_entre'])} letras"] for paso in MOMENTOS], "idd",
         [f"Medido con {miles(EJEMPLOS_PRUEBA)} fragmentos de prueba de {CONTEXTO} letras, que la "
-         "máquina nunca ha visto. «Acierta la siguiente» dice, de cada cien, en cuántos la letra a la "
-         "que da más porcentaje es la que viene de verdad; «reparte entre», a cuántas de las "
-         f"{CONTEXTO} letras mira de media, de {CONTEXTO}, todas por igual, a 1, una sola."]) + [""]
+         "máquina nunca ha visto."]) + [""]    # Orden 159: la nota es la del A8
 
     x = prueba[:, :CONTEXTO]
     c0, cf = clasificar(x, med[0]["destino"]), clasificar(x, med[PASOS]["destino"])
@@ -657,8 +655,7 @@ def main():
         ["la letra a la que más mira", "al empezar", "al final"],
         [[cat, f"{coma(100 * c0[cat] / len(x))} %", f"{coma(100 * cf[cat] / len(x))} %"]
          for cat in CATEGORIAS], "idd",
-        ["Cada columna cuenta, de cada cien fragmentos de prueba, en cuántos la letra más mirada es "
-         "la de esa fila. Al empezar reparte casi por igual, y cuál sale la más mirada se decide por "
+        ["Al empezar reparte casi por igual, y cuál sale la más mirada se decide por "
          "decimales: esa columna es casi azar."]) + [""]
 
     filas = []
@@ -675,8 +672,7 @@ def main():
         ["la máquina", "acierta", "números", "vacías"], filas, "iddd",
         ["«Números» son los que guarda cada máquina; en la de contar, uno por cada hoja de su "
          "libreta y cada letra que vio detrás alguna vez. «Vacías» son los fragmentos de prueba que "
-         "caen en una hoja en blanco: ahí la de contar no tiene nada que decir, y cuentan como "
-         "fallo. Esta máquina no tiene libreta, y en sus filas esa columna va en blanco."]) + [""]
+         "caen en una hoja en blanco, y cuentan como fallo."]) + [""]
 
     tramo = frases[0][0]
     i_frase = texto.find(FRASE)
@@ -715,13 +711,11 @@ def main():
     L += ["--- 6. EL AJUSTE DE ESCALA ---", ""] + tabla_editorial(
         "El ajuste de escala, con él y sin él",
         ["empiezan", "ajuste"] + [f"acierta, tras los pasos: {miles(s)}" for s in MOMENTOS_ESCALA]
-        + ["reparte"], filas, "ic" + "d" * len(MOMENTOS_ESCALA) + "d",
-        [f"La máquina del Quijote con {ANCHO_ESCALA} números por letra en lugar de {ANCHO}, y cada "
-         "número moviéndose con su propio poquito. «Empiezan» dice de qué tamaño son al azar las "
-         "listas de las letras antes de aprender: de tamaño 1, de cada cien números "
+        + ["reparte entre"], filas, "ic" + "d" * len(MOMENTOS_ESCALA) + "d",
+        [f"La máquina del Quijote con {ANCHO_ESCALA} números por letra. «Empiezan» dice de qué tamaño "
+         "son al azar las listas de las letras antes de aprender: de tamaño 1, de cada cien números "
          f"{coma(100 * dentro['de tamaño 1'], 0)} caen entre menos 1 y 1; pequeños, entre menos 0,02 "
-         "y 0,02. El acierto va de cada cien; «reparte», entre cuántas letras mira antes de aprender "
-         "nada."]) + [""] + tabla_editorial(
+         "y 0,02. «Reparte entre» es antes de aprender nada."]) + [""] + tabla_editorial(
         "El ajuste de escala, con otras semillas", ["semilla", "con ajuste", "sin ajuste"], otras,
         "cdd",
         [f"Números de tamaño 1; cuánto acierta tras {miles(PASOS_ESCALA)} pasos, de cada cien."]) + [""]
@@ -736,8 +730,8 @@ def main():
          ["pregunta y etiqueta al azar, fijas", f"{coma(100 * med_fija[PASOS]['acierto'])} %",
           coma(med_fija[PASOS]["reparte_entre"])],
          ["sin mirar atrás", f"{coma(100 * med_sin[PASOS]['acierto'])} %", ""]], "idd",
-        ["En la segunda fila se entrena todo menos las dos tablas que deciden a dónde mira, la de "
-         "la pregunta y la de la etiqueta; el contenido sí aprende."]) + [""]
+        ["En la segunda fila se entrena todo menos las dos tablas que deciden a dónde mira; el "
+         "contenido sí aprende."]) + [""]
     filas = []
     for cual, nombre in REPARTOS_IMPUESTOS.items():
         mi = medir(p, prueba, forzar=cual)
@@ -758,8 +752,7 @@ def main():
     L += tabla_editorial(
         f"Con el reparto impuesto, y {miles(PASOS_REAPRENDER)} pasos para que el resto vuelva a aprender",
         rotulos, filas, "idd",
-        ["Con el reparto impuesto, la pregunta y la etiqueta ya no deciden nada; el resto de los "
-         "números vuelve a aprender, con el mismo poquito en las tres filas."]) + [""]
+        ["El mismo poquito en las tres filas."]) + [""]
     _, m_igual = entrenar(aprender, PASOS_REAPRENDER, [PASOS_REAPRENDER], prueba, desde=p, tasa=TASA)
     L += tabla_editorial(
         f"La entrenada entera, {miles(PASOS_REAPRENDER)} pasos más sin imponer nada",

@@ -55,7 +55,7 @@ SUMANDOS = [4, 16, 32, 64]    # cuántos productos se suman en una puntuación
 TIRADAS_SUMAS = 100_000       # sumas al azar por cada fila
 SEMILLA_SUMAS = 20260927
 # Orden 97: cifras que las notas escriben con letra; si cambia el parámetro, falla aquí y no en la página.
-EN_LETRA = {16: "dieciséis", 6: "seis", 32: "treinta y dos"}
+EN_LETRA = {16: "dieciséis", 6: "seis", 32: "treinta y dos", 4: "cuatro"}
 TOL_MANO = 1e-4               # diferencia máxima entre la cuenta a mano y la ida de la máquina
 
 # ==========================================================
@@ -271,7 +271,7 @@ def informe(texto, prueba, p, med):
              for j, f in enumerate(prueba[:TRAMOS_DE_PRUEBA])]
     casos.append((tramo, texto[i_frase + len(M.FRASE)], "el de la figura"))
     filas = []
-    for ve, viene, nombre in casos:
+    for ve, viene, nombre in casos[:TRAMOS_DE_PRUEBA]:    # Orden 159: la tabla del A8 lleva los tres primeros
         rr = ida_a_mano(P, np.array([M.INDICE[c] for c in ve]))
         orden = np.argsort(-rr["apuesta"])[:3]
         apuesta = ", ".join(f"{trozo(letra(M.LETRAS[k]))} {coma(100 * rr['apuesta'][k])} %" for k in orden)
@@ -280,9 +280,7 @@ def informe(texto, prueba, p, med):
     L += ["--- 2. FRAGMENTOS ---", ""] + tabla_editorial(
         "Fragmentos: lo que ve, lo que viene, lo más probable",
         ["fragmento", "lo que ve", "viene", "lo más probable", "¿acierta?"], filas, "ciiic",
-        ["Fragmento: los tres primeros de prueba, sin elegir, y el de la figura.",
-         "El guion bajo es un espacio. Acierta cuando la letra a la que da más porcentaje es la que "
-         "viene de verdad."]) + [""]
+        ["El guion bajo es un espacio."]) + [""]
 
     # 3. de la letra a la lista que entra
     k = MIRADOS_SITIO
@@ -323,9 +321,7 @@ def informe(texto, prueba, p, med):
         [""] + [num(j + 1) for j in range(MIRADOS)],
         [[f"su {nombre}"] + [dec(v) for v in r[nombre][-1][:MIRADOS]]
          for nombre in ("pregunta", "etiqueta", "contenido")], "i" + "d" * MIRADOS,
-        [f"Lo mismo con cada una de las {A} columnas da los {A} números de la pregunta; con la "
-         "tabla de las etiquetas, los de la etiqueta; con la de los contenidos, los del contenido. "
-         f"Los {MIRADOS} primeros de cada una."]) + [""]
+        [f"Los {EN_LETRA[MIRADOS]} primeros de los {EN_LETRA[A]} números de cada lista."]) + [""]
 
     # 5. la puntuación de una pareja, hecha a mano
     j_par = max(i for i, ch in enumerate(tramo) if ch == LETRA_PAREJA)
@@ -351,10 +347,7 @@ def informe(texto, prueba, p, med):
         + [neg(["suma", "", "", dec(r["fuerza"].sum()), f"{coma(100 * r['reparto'].sum())} %"])],
         "ccddd",
         ["El guion bajo es un espacio. Cada fila es la pregunta de la «e» contra la etiqueta de esa "
-         "letra.",
-         f"La fuerza vale 1 con puntuación 0; {coma(math.e, 2)} con 1; {coma(math.e ** 2, 2)} con 2; "
-         f"{coma(math.e ** 3, 2)} con 3, y {coma(math.e ** -1, 2)} con menos 1. La última columna es "
-         "esa fuerza entre la suma de todas, por cien."]) + [""]
+         "letra; la última columna, su fuerza entre la suma de todas, por cien."]) + [""]
 
     # 7. doble puntuación no es doble porción
     filas = []
@@ -368,14 +361,13 @@ def informe(texto, prueba, p, med):
         ["dos letras, con puntuaciones", "se llevan, de cada cien"], filas, "id") + [""]
     L += tabla_editorial(
         "El reparto de la «e», con el ajuste y sin él",
-        [""] + [f"{i + 1} {letra(tramo[i])}" for i in ult] + ["reparte"],
+        [""] + [f"{i + 1} {letra(tramo[i])}" for i in ult] + ["reparte entre"],
         [["con el ajuste"] + [str(round(100 * r["reparto"][i])) for i in ult]
          + [coma(reparte_entre(r["reparto"]))],
          ["sin el ajuste"] + [str(round(100 * sin[i])) for i in ult] + [coma(reparte_entre(sin))]],
         "i" + "d" * len(ult) + "d",
-        [f"Lo que se lleva cada una de las {EN_LETRA[len(ult)]} últimas letras, de cada cien; sin el "
-         f"ajuste es sin dividir las puntuaciones entre {dec(r['divisor'])}. La última columna cuenta "
-         "como «reparte entre»."]) + [""]
+        [f"Lo que se lleva cada una de las {EN_LETRA[len(ult)]} últimas letras, de cada cien. "
+         "«Reparte entre» se explica en la nota «es la de justo antes»."]) + [""]
 
     # 8. reparte entre
     mayores = [i for i in range(T) if round(100 * r["reparto"][i]) > 0]

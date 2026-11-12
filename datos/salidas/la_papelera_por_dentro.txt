@@ -29,6 +29,15 @@ Lo que pone «El» en la mezcla
 |  |  | las demás palabras | 47,0 % | 0,494 | 71,7 % |
 | «alto» | últimas | «El» | 60,4 % | 0,343 | 34,3 % |
 |  |  | las demás palabras | 39,6 % | 0,774 | 65,7 % |
+
+Porción y parte de la mezcla, de cada cien; la mezcla son los apuntes. En «las demás palabras», el tamaño es el de una palabra media, y la porción y la parte, las de todas juntas.
+:::
+
+::: tabla
+Lo que pone «El» en la mezcla, con «bajo» y con «caro»
+
+| frase | miradas |  | porción | tamaño | parte de la mezcla |
+|:--|:--|:--|--:|--:|--:|
 | «bajo» | todas | «El» | 52,7 % | 0,165 | 28,1 % |
 |  |  | las demás palabras | 47,3 % | 0,495 | 71,9 % |
 | «bajo» | últimas | «El» | 60,2 % | 0,343 | 34,3 % |
@@ -38,7 +47,7 @@ Lo que pone «El» en la mezcla
 | «caro» | últimas | «El» | 60,8 % | 0,343 | 34,5 % |
 |  |  | las demás palabras | 39,2 % | 0,790 | 65,5 % |
 
-Porción y parte de la mezcla, de cada cien. En «las demás palabras», el tamaño es el de una palabra media, y la porción y la parte, las de todas juntas. «Todas» son las 336 miradas; «últimas», las 112 de las 8 últimas capas.
+«Todas» son las 336 miradas; «últimas», las 112 de las 8 últimas capas.
 :::
 
 --- 2. EL REPARTO DEL FINAL DE LA FRASE, PALABRA A PALABRA ---
@@ -55,9 +64,7 @@ El reparto del final de la frase, palabra a palabra
 | caro | todas | 53,3 % | 3,6 % | 2,5 % | 25,3 % |
 | caro | últimas | 60,8 % | 1,1 % | 0,6 % | 26,2 % |
 
-Lo que va a los trozos de una palabra se suma, y «el final» son los dos últimos trozos juntos, el adjetivo y el punto. «Todas» son las 336 miradas del modelo; «últimas», las 112 de sus 8 últimas capas.
-
-Lo mismo que reparto_una_a_una.py, con la última columna rotulada por lo que es.
+«El final» son los dos últimos trozos juntos, el adjetivo y el punto. «Todas» son las 336 miradas del modelo; «últimas», las 112 de sus 8 últimas capas.
 :::
 
 --- 3. SI PREGUNTA EL ADJETIVO Y NO EL PUNTO DE DETRÁS ---
@@ -74,5 +81,5 @@ Si pregunta el adjetivo y no el punto de detrás
 | caro | el punto | 53,3 % | 3,6 % | 2,5 % |
 | caro | el adjetivo | 44,8 % | 4,0 % | 4,5 % |
 
-Media de las 336 miradas, de cada cien. reparto_una_a_una.py pregunta desde el último trozo de la frase, que es el punto; aquí también desde el trozo de antes.
+Media de las 336 miradas, de cada cien.
 :::
