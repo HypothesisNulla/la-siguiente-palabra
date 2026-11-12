@@ -27,3 +27,6 @@ corpus_es/
 # repositorio (visto el 10 de octubre de 2026, en el primer commit).
 !declaracion_universal/
 !declaracion_universal/*.txt
+
+# Orden 158: la salida en bruto de mirada_a_mano.py no se publica (antes estaba en la raíz de datos/, ya ignorada por «*.txt»).
+salidas/mirada_a_mano_bruto.txt

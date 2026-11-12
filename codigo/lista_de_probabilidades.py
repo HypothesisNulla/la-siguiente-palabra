@@ -21,7 +21,7 @@ Uso:
 # ======================= CONSTANTES =======================
 
 SALIDA_LISTA = "../datos/salidas/maquina_entera.txt"
-CSV_PASOS = "elegir_lo_mas_probable.csv"
+CSV_PASOS = "../datos/salidas/elegir_lo_mas_probable.csv"
 PAPELETAS = 100
 CASI_SEGURO = 0.90          # el de elegir_lo_mas_probable.py
 RENIDO = 0.50

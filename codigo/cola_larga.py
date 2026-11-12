@@ -17,7 +17,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-CORPUS = "../datos/corpus_es"
+CORPUS = "../datos/entrada/corpus_es"
 PUESTOS = (1, 10, 100, 1_000, 10_000, 100_000)
 PALABRA = r"[a-záéíóúüñ]+"       # una palabra: letras seguidas, en minúscula
 LIBROS_ESPERADOS = 300

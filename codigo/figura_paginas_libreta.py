@@ -25,7 +25,7 @@ Uso:
 SALIDA_XT = "../datos/salidas/traza_escalera.txt"        # la tabla de «xt»
 SALIDA_QU = "../datos/salidas/casillas_vacias.txt"       # la tabla de «qu»
 DESTINO = "../figuras/paginas_libreta.png"
-CORPUS = "../datos/quijote.txt"
+CORPUS = "../datos/entrada/quijote.txt"
 
 PAGINA_CON_PALITOS = "xt"       # la que se dibuja palito a palito
 PAGINA_CONTADA = "qu"           # la que no cabe y va contada

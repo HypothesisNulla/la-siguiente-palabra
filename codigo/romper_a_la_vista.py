@@ -27,7 +27,7 @@ Uso:
 PROGRAMA = "romper_la_maquina.py"                       # de donde se leen la aguja y el enunciado
 SALIDA_CSV = "../datos/salidas/romper_la_maquina.csv"
 RESPUESTAS = "../datos/salidas/romper_la_maquina_respuestas.txt"
-QUIJOTE = "../datos/quijote.txt"
+QUIJOTE = "../datos/entrada/quijote.txt"
 FIN_QUIJOTE = "*** END"                                  # donde acaba el texto y empieza el aviso legal
 CAPITULO = r"(?m)^Capítulo "                             # cómo empieza cada capítulo en el fichero
 CAPITULOS_QUIJOTE = 126                                  # 52 de la primera parte y 74 de la segunda

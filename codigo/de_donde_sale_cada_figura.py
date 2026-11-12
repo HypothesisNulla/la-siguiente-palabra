@@ -44,7 +44,7 @@ FIGURA = r'^!\[(.*?)\]\(figuras/([^)]+)\.png\)'    # «![pie](figuras/x.png)»
 ANCHO_MAXIMO = 56                                    # letras: programa más largo + salida más larga
 FILAS_POR_TABLA = 20                                 # figuras por tabla, para que quepa en una página
 LARGO_PIE = 25                                       # letras del pie que se cotejan con el PDF
-DATO = r'datos/(?:salidas/)?([\w.\-]+\.(?:txt|csv|json))'
+DATO = r'datos/(?:salidas/|entrada/)?([\w.\-]+\.(?:txt|csv|json))'   # Orden 158: lo que entra está en datos/entrada/
 
 # Selftest
 FIGURAS_MINI = "![Uno.](figuras/a.png)\n\n![Dos.](figuras/b.png)\n"
@@ -161,7 +161,8 @@ def nombre_de_salida(ruta):
     if ruta.startswith("datos/salidas/"):
         nombre = ruta[len("datos/salidas/"):]
         return nombre[:-4] if nombre.endswith(".txt") else nombre
-    return "*" + ruta[len("datos/"):]
+    # Orden 158: con asterisco, lo que está en datos/entrada/ (antes, en la raíz de datos/): el rótulo no cambia
+    return "*" + ruta.split("/", 2)[-1] if ruta.startswith("datos/entrada/") else "*" + ruta[len("datos/"):]
 
 
 def filas_de(figuras, programas, datos):

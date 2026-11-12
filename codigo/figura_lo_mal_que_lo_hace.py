@@ -13,7 +13,7 @@ saliendo de su programa, sin tocar):
   - los cuatro retratos marcados donde caen, con sus primeras palabras;
   - el suelo rotulado: cero es acertar todas las letras y con toda seguridad.
 
-Los datos se leen de `datos/en_que_orden_aprende_curva.csv` y de la salida del capítulo; aquí no
+Los datos se leen de `datos/salidas/en_que_orden_aprende_curva.csv` y de la salida del capítulo; aquí no
 hay ni un número escrito.
 
 Uso:
@@ -23,7 +23,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-CURVA = "../datos/en_que_orden_aprende_curva.csv"
+CURVA = "../datos/salidas/en_que_orden_aprende_curva.csv"
 SALIDA_CAP10 = "../datos/salidas/en_que_orden_aprende.txt"
 DESTINO = "../figuras/lo_mal_que_lo_hace.png"
 ALTO = 4.85                 # pulgadas (Orden 13: era 4,5, y el rótulo del eje de abajo salía cortado)

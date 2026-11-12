@@ -30,7 +30,7 @@ PESOS_MODELO_GRANDE = 100_000_000_000         # 100.000 millones, orden de un mo
 TOL_GRADIENTE = 1e-6                          # tolerancia de la comprobación de gradiente
 SEMILLA_GRADIENTE = 20260404                  # semilla propia: ver diferencia_entre_los_dos_metodos()
 
-SALIDA_CSV = "retropropagacion.csv"
+SALIDA_CSV = "../datos/salidas/retropropagacion.csv"
 
 # ==========================================================
 

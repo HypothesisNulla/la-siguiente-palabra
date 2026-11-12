@@ -16,7 +16,7 @@ programa.
 
 Invariante: con lote 16 y modelo de 256, la ventaja tiene que quedar a menos de un 30 % (arriba o
 abajo) de la de `datos/salidas/en_serie_o_a_la_vez.txt` (1,2x con 1.024 posiciones; el
-`en_serie_o_a_la_vez.csv` de `codigo/` es otra medición).
+`en_serie_o_a_la_vez.csv` de `datos/salidas/` es otra medición).
 
 =====================================================================================
 PREDICCIÓN DE CLAUDE, escrita antes de medir (Orden 24, 19 oct 2026, copiada tal cual):

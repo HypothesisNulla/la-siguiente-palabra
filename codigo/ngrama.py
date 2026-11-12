@@ -12,7 +12,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-CORPUS = "../datos/quijote.txt"
+CORPUS = "../datos/entrada/quijote.txt"
 MARCA_INICIO = "*** START OF"      # Gutenberg: recortar cabecera y pie
 MARCA_FIN = "*** END OF"
 

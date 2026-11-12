@@ -14,7 +14,7 @@ que el capítulo cuenta por separado en dos apartados:
   3. Que las tres frases dan el mismo reparto: cambiar «alto» por «bajo» o por «caro»
      no mueve las barras.
 
-De dónde salen los números. De `../datos/reparto_una_a_una.csv`, escrito por
+De dónde salen los números. De `../datos/salidas/reparto_una_a_una.csv`, escrito por
 `reparto_una_a_una.py`. Este programa **no carga ningún modelo**: lee el CSV y promedia.
 Así la figura y las cifras del texto no se pueden separar nunca; si alguien vuelve a
 medir, cambian las dos o no cambia ninguna.
@@ -43,7 +43,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-CSV = "../datos/reparto_una_a_una.csv"
+CSV = "../datos/salidas/reparto_una_a_una.csv"
 SALIDA = "../figuras/el_reparto.png"
 # 6,2 x 4,9 pulgadas. Lo que manda es la proporción: xelatex mete la imagen a lo ancho
 # de la caja (4,45 pulgadas), así que en el papel sale de 4,45 x 3,52, y la media caja

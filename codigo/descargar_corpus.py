@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Descarga los libros del capítulo 5 desde Proyecto Gutenberg, a partir de la lista
-`datos/candidatos_es.txt`. Uso: python descargar_corpus.py"""
+`datos/entrada/candidatos_es.txt`. Uso: python descargar_corpus.py"""
 import os, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
-LISTA = "../datos/candidatos_es.txt"
-DESTINO = "../datos/corpus_es"
+LISTA = "../datos/entrada/candidatos_es.txt"
+DESTINO = "../datos/entrada/corpus_es"
 MIN_BYTES = 20_000
 
 def bajar(numero):

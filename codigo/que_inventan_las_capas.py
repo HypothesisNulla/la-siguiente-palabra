@@ -28,7 +28,7 @@ PASOS = 20_000
 UMBRAL = 0.5               # por encima, la neurona dice que sí
 MINIMO_RESUELTAS = 1       # si no resuelve ninguna, algo está roto y hay que enterarse
 
-SALIDA_CSV = "que_inventan_las_capas.csv"
+SALIDA_CSV = "../datos/salidas/que_inventan_las_capas.csv"
 
 # Los dos montajes que ninguna neurona suelta puede calcular, porque una neurona es una raya
 # (capítulo 2). Si alguna vez aparecen aquí, la medición está mal.

@@ -22,7 +22,7 @@ FRACCION_PRUEBA = 0.3        # parte de los datos reservada para evaluar
 PAREJAS_DIGITOS = [(0, 1), (1, 7), (3, 5), (4, 9)]
 UMBRAL_SELFTEST = 0.95       # acierto mínimo exigido en la señal implantada
 
-SALIDA_CSV = "perceptron.csv"
+SALIDA_CSV = "../datos/salidas/perceptron.csv"
 
 # ==========================================================
 

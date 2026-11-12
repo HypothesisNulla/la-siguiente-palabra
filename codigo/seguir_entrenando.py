@@ -38,7 +38,7 @@ PASOS_SELFTEST = 600
 LETRAS_SELFTEST = 20_000       # texto diminuto: se aprende de memoria enseguida
 
 SALIDA_CSV = "../datos/salidas/seguir_entrenando.csv"
-CURVA_CAPITULO = "../datos/en_que_orden_aprende_curva.csv"
+CURVA_CAPITULO = "../datos/salidas/en_que_orden_aprende_curva.csv"
 
 # ==========================================================
 

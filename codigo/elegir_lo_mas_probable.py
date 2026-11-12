@@ -53,7 +53,7 @@ REPETICIONES = 3
 
 CASI_SEGURO = 0.90     # a partir de aquí el paso no es una elección, es un trámite
 
-SALIDA_CSV = "elegir_lo_mas_probable.csv"
+SALIDA_CSV = "../datos/salidas/elegir_lo_mas_probable.csv"
 
 # ==========================================================
 

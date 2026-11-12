@@ -8,7 +8,7 @@ ejercicio trae unos pocos pares de cuadrículas «antes → después» (3,3 de m
 una cuadrícula nueva, y hay que adivinar la regla y aplicarla. Esta figura enseña uno de verdad,
 el 25ff71a9 del conjunto público de entrenamiento, tal como está en
 https://github.com/fchollet/ARC-AGI (data/training/25ff71a9.json), copiado en
-`datos/arc_25ff71a9.json`: tres ejemplos y la cuadrícula nueva, con su respuesta tapada.
+`datos/entrada/arc_25ff71a9.json`: tres ejemplos y la cuadrícula nueva, con su respuesta tapada.
 
 En gris: el libro se imprime en negro. En el original las casillas llevan colores; aquí una casilla
 con color es oscura y una vacía es blanca, porque en este ejercicio el color no cuenta.
@@ -20,7 +20,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-DATOS = "../datos/arc_25ff71a9.json"
+DATOS = "../datos/entrada/arc_25ff71a9.json"
 DESTINO = "../figuras/prueba_de_chollet.png"
 ALTO = 3.75                # pulgadas (sin el hueco del pie, Orden 4; era 3,9)
 EJEMPLOS = 3               # cuántos pares de ejemplo se dibujan

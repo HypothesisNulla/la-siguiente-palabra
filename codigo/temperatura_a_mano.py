@@ -29,7 +29,7 @@ CANDIDATOS = (" la", " una", " un")      # los tres primeros de la urna del cap�
 PAPELETAS = 100
 # Orden 97: cifra que la nota escribe con letra; si cambia el parámetro, falla aquí y no en la página.
 EN_LETRA = {20: "veinte"}
-URNA_CAP7 = "../datos/maquina_entera.csv"   # la urna que imprime el capítulo 7
+URNA_CAP7 = "../datos/salidas/maquina_entera.csv"   # la urna que imprime el capítulo 7
 TOL_URNA = 0.0005                        # la urna a temperatura 1 es la del capítulo 7
 SALIDA_CSV = "../datos/salidas/temperatura_a_mano.csv"
 SALIDA_ROMPER = "../datos/salidas/romper_la_maquina.txt"   # donde está la muestra de la tirada 1

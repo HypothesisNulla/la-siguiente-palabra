@@ -28,7 +28,7 @@ PUNTOS = [(6, 4), (4, 6), (2, 6)]
 # Un punto en el que ningún dígito del conjunto tiene tinta: su peso no se corrige nunca.
 PUNTO_SIN_TINTA = (1, 1)
 SALIDA_TABLA = "../datos/salidas/que_mira_cada_una.txt"
-SALIDA_CSV = "el_sorteo_del_arranque.csv"
+SALIDA_CSV = "../datos/salidas/el_sorteo_del_arranque.csv"
 
 TITULO_1 = "LO QUE PONE AL AZAR LA SEMILLA: LOS PESOS CON LOS QUE ARRANCA"
 SUBTITULO_1 = ["un solo comité, cinco veces desde cero; de sus 64 pesos, los",

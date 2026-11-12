@@ -10,7 +10,7 @@ Usa solo el troceador del modelo del capítulo (el mismo de maquina_entera_detal
 el modelo. Mide tres cosas:
 
   1. CUÁNTOS TROZOS CUESTA LO MISMO. La Declaración Universal de Derechos Humanos entera, en
-     nueve idiomas (datos/declaracion_universal/, fuente en datos/README.md), y cuántos trozos
+     nueve idiomas (datos/entrada/declaracion_universal/, fuente en datos/README.md), y cuántos trozos
      necesita cada uno, por cada 100 del castellano. Los espacios se normalizan (cada tramo de
      espacios y saltos de línea pasa a ser un espacio), porque las copias traen sangrías
      distintas y eso no es el idioma.
@@ -28,7 +28,7 @@ Uso:
 # ======================= CONSTANTES =======================
 
 MODELO = "Qwen/Qwen2.5-0.5B"      # el del capítulo 7; solo se usa su troceador
-CARPETA = "../datos/declaracion_universal"
+CARPETA = "../datos/entrada/declaracion_universal"
 SEMILLA = 20261010                # para barajar las letras del test nulo
 
 # (nombre en el libro, fichero, letras con que se escribe, escritura que se espera en el texto)

@@ -13,7 +13,7 @@ de la que se transcribió. No la traen todos, así que lo que sale es una MUESTR
 programa dice de qué tamaño: un porcentaje sobre 46 libros no es lo mismo que sobre 300 y
 el libro no puede escribirlo como si lo fuera.
 
-De propina, el año de nacimiento y de muerte del autor, que `datos/candidatos_es.txt`
+De propina, el año de nacimiento y de muerte del autor, que `datos/entrada/candidatos_es.txt`
 lleva para casi todos. Es un indicio más flojo —un autor puede publicar a los veinte años
 y morir a los noventa— y por eso va aparte y rotulado como lo que es.
 
@@ -24,7 +24,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-LISTA = "../datos/candidatos_es.txt"
+LISTA = "../datos/entrada/candidatos_es.txt"
 CABECERA = 4000              # bytes del principio del fichero donde vive la cabecera
 CORTES = (1900, 1930, 1950)  # los años contra los que se cuenta; 1930 es el del capítulo
 

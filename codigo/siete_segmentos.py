@@ -66,7 +66,7 @@ ENCENDIDOS = {
 # recuento de las 1.024 particiones, de las que 160 no se separan con una raya.
 PARTICION_IMPOSIBLE = (0, 0, 0, 0, 0, 0, 1, 0, 0, 1)   # el 6 y el 9 contra los demás
 
-SALIDA_CSV = "siete_segmentos.csv"
+SALIDA_CSV = "../datos/salidas/siete_segmentos.csv"
 
 # ==========================================================
 

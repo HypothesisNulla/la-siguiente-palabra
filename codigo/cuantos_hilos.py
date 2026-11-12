@@ -17,7 +17,7 @@ n = 14. Si sale casi igual, en este Mac las multiplicaciones no las reparten los
 unidad de matrices) y hay que decirlo.
 Invariante: con n = 14, la ventaja con 1.024 posiciones tiene que quedar a menos de un 30 % (arriba o
 abajo) de la que dio el portátil en el procesador, 3,2x (`datos/salidas/en_serie_o_a_la_vez_cpu.txt`;
-el `en_serie_o_a_la_vez.csv` de `codigo/` es otra medición, la de 4,83x).
+el `en_serie_o_a_la_vez.csv` de `datos/salidas/` es otra medición, la de 4,83x).
 
 =====================================================================================
 PREDICCIÓN DE CLAUDE, escrita antes de medir (Orden 24, 19 oct 2026, copiada tal cual):

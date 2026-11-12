@@ -23,7 +23,7 @@ MODELO = "Qwen/Qwen2.5-7B-Instruct"
 DTYPE = "bfloat16"
 SEMILLA = 20260914
 
-CORPUS = "../datos/corpus_es"
+CORPUS = "../datos/entrada/corpus_es"
 SALIDA_CSV = "../datos/salidas/romper_la_maquina.csv"   # con las demás salidas
 SALIDA_RESPUESTAS = "../datos/salidas/romper_la_maquina_respuestas.txt"   # las de D, una a una
 

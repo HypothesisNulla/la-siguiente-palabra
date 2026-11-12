@@ -19,7 +19,7 @@ Uso:
 # ======================= CONSTANTES =======================
 
 SEMILLA = 20260914
-CORPUS = "../datos/corpus_es"
+CORPUS = "../datos/entrada/corpus_es"
 MAX_CARACTERES = 8_000_000
 
 CONTEXTO = 128             # letras que puede mirar hacia atrás
@@ -67,7 +67,7 @@ LARGO_MUESTRA = 200
 TEMPERATURA = 0.8
 EJEMPLOS_ACIERTO = 20_000
 
-SALIDA_CURVA = "../datos/en_que_orden_aprende_curva.csv"
+SALIDA_CURVA = "../datos/salidas/en_que_orden_aprende_curva.csv"
 SALIDA_FIGURA = "../figuras/en_que_orden_aprende.png"
 ANCHO_ALTO_FIGURA = (6.2, 3.0)    # pulgadas, para una página de 6 por 9
 VENTANA_SUAVIZADO = 40            # puntos de la media que dibuja la línea negra

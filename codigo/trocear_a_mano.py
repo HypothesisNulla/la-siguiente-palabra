@@ -30,7 +30,7 @@ JUNTAS = 10_000                       # cuántas piezas nuevas se sueldan
 PRIMERAS = 12                         # cuántas juntas se enseñan una a una
 MOMENTOS = [0, 10, 100, 1_000, 10_000]
 PALABRAS = [" murciélago", " Francia"]   # con su espacio delante (" caballero" salió el 4 oct.: no cabía en la página)
-SALIDA_CSV = "trocear_a_mano.csv"
+SALIDA_CSV = "../datos/salidas/trocear_a_mano.csv"
 SEMILLA = 20261004
 
 # ==========================================================

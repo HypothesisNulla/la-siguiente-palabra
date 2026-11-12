@@ -27,7 +27,7 @@ MODELOS = [
     ("32B comprimido",   "mlx-community/Qwen2.5-32B-Instruct-4bit"),
 ]
 MODELO_SELFTEST = "mlx-community/Qwen2.5-7B-Instruct-4bit"
-TEXTO = "../datos/quijote.txt"
+TEXTO = "../datos/entrada/quijote.txt"
 INICIO = "En un lugar de la Mancha"   # el texto empieza en su primera aparición
 VIEJOS = 7500        # tokens del texto viejo, ya calculados en la caché
 NUEVOS = 500         # tokens que añade el turno

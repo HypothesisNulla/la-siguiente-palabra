@@ -13,8 +13,8 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-CORPUS_LIBRO = "../datos/quijote.txt"
-CORPUS_BIBLIOTECA = "../datos/corpus_es"      # 300 libros en español de dominio público
+CORPUS_LIBRO = "../datos/entrada/quijote.txt"
+CORPUS_BIBLIOTECA = "../datos/entrada/corpus_es"      # 300 libros en español de dominio público
 
 DIMENSION = 100            # números por palabra
 VENTANA = 5                # palabras de contexto a cada lado

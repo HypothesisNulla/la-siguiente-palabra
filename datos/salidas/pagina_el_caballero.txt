@@ -6,10 +6,11 @@
 SELFTEST: las tres pruebas pasan.
 
 ########## capítulo 1: la hoja de «el caballero» ##########
-fecha: 2026-10-17 10:55 UTC
+fecha: 2026-11-12 20:44 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: cuenta palabras de un fichero de texto
-corpus: datos/quijote.txt, limpiado y troceado como en ngrama.py:
+corpus: datos/entrada/quijote.txt,
+limpiado y troceado como en ngrama.py:
 cada palabra es un trozo, y cada signo de puntuación, otro
 
 ::: tabla

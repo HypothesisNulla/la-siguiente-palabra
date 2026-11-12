@@ -42,7 +42,7 @@ CONTROL = ("El vaso era demasiado alto para el estante.", "alto", "vaso")
 DTYPE = "bfloat16"
 
 SEMILLA = 20260914
-SALIDA_CSV = "respuesta_modelo.csv"
+SALIDA_CSV = "../datos/salidas/respuesta_modelo.csv"
 UMBRAL_CONTROL = 0.60      # confianza mínima exigida en el control
 TOL_SUMA = 1e-6
 

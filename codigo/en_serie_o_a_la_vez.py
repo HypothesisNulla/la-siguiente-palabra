@@ -31,7 +31,7 @@ CALENTAMIENTO = 1
 # 30 % arriba o abajo. Ver fallo_del_test_nulo().
 MARGEN_TEST_NULO = 1.3
 
-SALIDA_CSV = "en_serie_o_a_la_vez.csv"
+SALIDA_CSV = "../datos/salidas/en_serie_o_a_la_vez.csv"
 
 # Orden 100: el modo --barridos repite la medición de siempre BARRIDOS veces, con los tres tamaños de
 # modelo de la tarjeta (los de en_serie_o_a_la_vez.txt, en_serie_512_gpu.txt y en_serie_1024_gpu.txt), y

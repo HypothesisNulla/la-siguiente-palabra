@@ -32,7 +32,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-CORPUS = "../datos/quijote.txt"
+CORPUS = "../datos/entrada/quijote.txt"
 SALIDA_ESCALERA = "../datos/salidas/traza_escalera.txt"     # hojas con algo apuntado de 1, 2, 3 y 5 letras
 SALIDA_CASILLAS = "../datos/salidas/casillas_vacias.txt"    # hojas posibles y con algo apuntado de 2 palabras
 
@@ -248,7 +248,8 @@ def main():
          f"fecha: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')} UTC",
          f"máquina: {platform.system()} {platform.machine()}. La medición no",
          "depende de la máquina: cuenta letras y palabras de un fichero",
-         "corpus: datos/quijote.txt, limpiado y troceado como en ngrama.py",
+         "corpus: datos/entrada/quijote.txt,",
+         "limpiado y troceado como en ngrama.py",
          f"símbolos del alfabeto de las letras: {len(N.ALFABETO)} (letras, espacio y signos)",
          f"trozos distintos (palabras y {len(N.SIGNOS)} signos): {miles(len(set(trozos)))}"]
     E = ["", "A. LA LIBRETA, SEGÚN CUÁNTO CONTEXTO SE MIRE", ""]

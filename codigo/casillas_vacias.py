@@ -50,7 +50,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-CORPUS = "../datos/quijote.txt"
+CORPUS = "../datos/entrada/quijote.txt"
 MUESTRA = "../datos/salidas/ngrama.txt"
 ROTULO_MUESTRA = "--- LETRAS, 1 letra de contexto ---"
 
@@ -274,7 +274,8 @@ def main():
         f"fecha: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')} UTC",
         f"máquina: {platform.system()} {platform.machine()}. La medición no",
         "depende de la máquina: cuenta letras y palabras de un fichero",
-        "corpus: datos/quijote.txt, limpiado y troceado como en ngrama.py:",
+        "corpus: datos/entrada/quijote.txt,",
+        "limpiado y troceado como en ngrama.py:",
         "cada palabra es un trozo, y cada signo de puntuación, otro",
         "",
         "EL TEXTO QUE SE CUENTA",

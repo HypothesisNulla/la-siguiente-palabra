@@ -8,10 +8,11 @@
 SELFTEST: las tres pruebas pasan.
 
 ########## capítulo 1: lo que crece la libreta ##########
-fecha: 2026-11-08 20:51 UTC
+fecha: 2026-11-12 20:44 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: cuenta letras y palabras de un fichero
-corpus: datos/quijote.txt, limpiado y troceado como en ngrama.py
+corpus: datos/entrada/quijote.txt,
+limpiado y troceado como en ngrama.py
 símbolos del alfabeto de las letras: 42 (letras, espacio y signos)
 trozos distintos (palabras y 8 signos): 22.952
 

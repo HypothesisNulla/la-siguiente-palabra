@@ -44,7 +44,7 @@ from reparto_atencion import (
 # Orden 97: cifras que la nota escribe con letra; si cambia el recuento, falla aquí y no en la página.
 EN_LETRA = {4: "cuatro"}
 PRIMERA_PALABRA = "el"            # la papelera: el primer trozo de la frase
-SALIDA_CSV = "reparto_una_a_una.csv"
+SALIDA_CSV = "../datos/salidas/reparto_una_a_una.csv"
 
 # Frases de control para saber a QUÉ se dedica la mirada que más se fija en «vaso».
 # En la frase del vaso, el sujeto es además el primer sustantivo y va en segunda

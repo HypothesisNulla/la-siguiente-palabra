@@ -10,10 +10,11 @@
 SELFTEST: las tres pruebas pasan.
 
 ########## capítulo 1: lo que no cabe en la libreta ##########
-fecha: 2026-11-08 20:51 UTC
+fecha: 2026-11-12 20:44 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: cuenta letras y palabras de un fichero
-corpus: datos/quijote.txt, limpiado y troceado como en ngrama.py:
+corpus: datos/entrada/quijote.txt,
+limpiado y troceado como en ngrama.py:
 cada palabra es un trozo, y cada signo de puntuación, otro
 
 EL TEXTO QUE SE CUENTA

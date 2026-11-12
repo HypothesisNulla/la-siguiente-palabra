@@ -34,7 +34,7 @@ Uso:
 # ======================= CONSTANTES =======================
 
 SEMILLA = 20260914
-CORPUS = "../datos/quijote.txt"          # el mismo texto y la misma limpieza que ngrama.py
+CORPUS = "../datos/entrada/quijote.txt"          # el mismo texto y la misma limpieza que ngrama.py
 PARTE_APRENDER = 0.9                      # el 90 % primero para aprender, el 10 % último para probar
 
 CONTEXTO = 16             # letras que puede mirar hacia atrás (la propia incluida)
@@ -778,7 +778,7 @@ def main():
         [f"Empieza por «{ARRANQUE_MUESTRA}»; lo demás lo escribe ella, letra a letra."])
 
     # si algo falla al imprimir, que la medición no se pierda: se deja entera en el disco antes
-    Path(AQUI / "../datos/mirada_a_mano_bruto.txt").write_text("\n".join(L), encoding="utf-8")
+    Path(AQUI / "../datos/salidas/mirada_a_mano_bruto.txt").write_text("\n".join(L), encoding="utf-8")
     for l in L:
         print(l)
     return 0

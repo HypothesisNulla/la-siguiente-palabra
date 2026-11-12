@@ -14,7 +14,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-CSV_JUNTAS = "trocear_a_mano.csv"
+CSV_JUNTAS = "../datos/salidas/trocear_a_mano.csv"
 SALIDA = "../datos/salidas/trocear_a_mano.txt"
 DESTINO = "../figuras/trocear_a_mano.png"
 PALABRA = " murciélago"

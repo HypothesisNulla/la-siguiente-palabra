@@ -60,7 +60,7 @@ TITULO_7 = "CUÁNTO SE PARECEN, CON LA CUENTA DE LOS PESOS DEL CUATRO"
 SUBTITULO_7 = ["(de -1 a 1: 1, iguales salvo el tamaño de los números;",
                "0, nada que ver; -1, uno es el negativo del otro)"]
 
-SALIDA_CSV = "que_mira_cada_una.csv"
+SALIDA_CSV = "../datos/salidas/que_mira_cada_una.csv"
 
 # ==========================================================
 

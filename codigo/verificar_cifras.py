@@ -248,8 +248,16 @@ carpeta = sys.argv[1]
 assert os.path.isdir(carpeta), (
     f"Se esperaba la carpeta de las salidas; se encontró {carpeta!r}, que no es una carpeta")
 total = malos = avisos = 0
+# Orden 158 (12 nov 2026): `resultados_mac.txt`, que antes estaba en `codigo/` y ahora está en `datos/salidas/`, es el
+# REGISTRO EN BRUTO de `medir_en_mac.sh` (lo que imprimen las bibliotecas y las pruebas, con `tee`), no una salida
+# formateada con `miles()` y `coma()`; el libro no lo cita. Se declara aquí, a mano, y se dice en la salida.
+EN_BRUTO = {'resultados_mac.txt'}
+saltados = []
 for nombre in sorted(os.listdir(carpeta)):
     if not nombre.endswith('.txt'):
+        continue
+    if nombre in EN_BRUTO:
+        saltados.append(nombre)
         continue
     total += 1
     todos = revisar_texto(open(os.path.join(carpeta, nombre), encoding='utf-8').read())
@@ -278,4 +286,5 @@ if malos:
 assert total, (
     f"Se esperaban ficheros .txt de salida en {carpeta}; no hay ninguno. Un verificador que "
     "no encuentra nada que mirar no aprueba: avisa de que le has dado la carpeta que no era")
-print(f"PASA: los {total} ficheros de salida escriben los números en castellano.")
+print(f"PASA: los {total} ficheros de salida escriben los números en castellano."
+      + (f" Sin mirar, declarado en bruto: {', '.join(saltados)}." if saltados else ""))

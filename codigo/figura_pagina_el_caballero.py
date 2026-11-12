@@ -23,7 +23,7 @@ Uso:
 
 SALIDA = "../datos/salidas/pagina_el_caballero.txt"
 DESTINO = "../figuras/pagina_el_caballero.png"
-CORPUS = "../datos/quijote.txt"
+CORPUS = "../datos/entrada/quijote.txt"
 
 ALTO_RENGLON = 4.2          # unidades del lienzo; con menos, los palitos se pegan a la raya
 PASO_PALITO = 1.15

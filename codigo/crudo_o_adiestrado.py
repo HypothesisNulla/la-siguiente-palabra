@@ -34,7 +34,7 @@ PREGUNTA = "¿Cuál es la capital de Francia?"
 from crecer import ETIQUETA_TAMANO, TAREAS, TAREA_CONTROL, acierta, evaluar   # misma batería
 
 UMBRAL_CONTROL = 0.99
-SALIDA_CSV = "crudo_o_adiestrado.csv"
+SALIDA_CSV = "../datos/salidas/crudo_o_adiestrado.csv"
 
 # ==========================================================
 

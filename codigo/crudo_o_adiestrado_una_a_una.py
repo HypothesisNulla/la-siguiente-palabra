@@ -26,7 +26,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-CSV_TABLA = "crudo_o_adiestrado.csv"      # donde lo deja crudo_o_adiestrado.py
+CSV_TABLA = "../datos/salidas/crudo_o_adiestrado.csv"      # donde lo deja crudo_o_adiestrado.py
 PARIS = [(" París", "«París», con tilde"), (" Paris", "«Paris», sin tilde")]
 CIUDADES = [" París", " Nápoles", " Roma"]
 EJEMPLOS = [("datos del mundo", 0), ("sumar dos cifras", 0)]   # (tarea, pregunta)

@@ -31,7 +31,7 @@ LOTE_MEMORIA = 128
 EJEMPLOS_PRUEBA = 2000
 
 # --- 2. escribir en español ---
-CORPUS = "../datos/corpus_es"
+CORPUS = "../datos/entrada/corpus_es"
 MAX_CARACTERES = 4_000_000
 LONGITUD = 40                 # PALABRAS de contexto por ejemplo. Se trabaja con palabras,
 VOCABULARIO_MAXIMO = 20_000   # no con letras, porque es lo comparable con el capitulo 1.

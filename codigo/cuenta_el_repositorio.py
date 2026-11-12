@@ -24,7 +24,7 @@ LA REGLA. Cada programa `codigo/*.py` cae en UNA clase, mirando en este orden:
 No se cuenta ningún fichero que no sea `.py` (hay un `medir_en_mac.sh`) ni los de las carpetas
 de dentro de `datos/salidas/`.
 
-EL CORPUS (Orden 14, 17 oct 2026). El apéndice dice cuántos libros hay en `datos/corpus_es/` y
+EL CORPUS (Orden 14, 17 oct 2026). El apéndice dice cuántos libros hay en `datos/entrada/corpus_es/` y
 cuántos bytes ocupan. Se cuentan los ficheros de esa carpeta (solo los de dentro, no los de
 subcarpetas) y se suman los bytes **de los ficheros** (su tamaño, el que dice `st_size`), no los
 bloques que ocupan en el disco, que dependen del disco.
@@ -40,7 +40,7 @@ Uso:
 
 CODIGO = "."
 SALIDAS = "../datos/salidas"
-CORPUS = "../datos/corpus_es"      # los libros de dominio público con los que se entrena
+CORPUS = "../datos/entrada/corpus_es"      # los libros de dominio público con los que se entrena
 
 CLASES = ["verificadores", "programas de figuras", "programas de medición",
           "programas que ayudan a los demás"]
@@ -209,7 +209,7 @@ def main():
     print()
     print("EL CORPUS DE ENTRENAMIENTO")
     print()
-    print(f"  ficheros de datos/corpus_es/                {miles(n_corpus):>14}")
+    print(f"  ficheros de datos/entrada/corpus_es/                {miles(n_corpus):>14}")
     print(f"  bytes que suman (los de los ficheros)       {miles(b_corpus):>14}")
     print(f"  en millones de bytes                        {coma(b_corpus / 1e6, 1):>14}")
     for c in CLASES:

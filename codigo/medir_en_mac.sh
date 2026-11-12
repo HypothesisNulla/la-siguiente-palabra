@@ -16,7 +16,7 @@
 #     cd la-siguiente-palabra/codigo     (la carpeta donde hayas clonado el repositorio)
 #     bash medir_en_mac.sh
 #
-# Deja la salida en resultados_mac.txt, que es lo que hay que pasarme.
+# Deja la salida en ../datos/salidas/resultados_mac.txt, que es lo que hay que pasarme.
 
 set -e
 cd "$(dirname "$0")"
@@ -31,7 +31,7 @@ source "$ENTORNO/bin/activate"
 python -m pip install --quiet --upgrade pip
 python -m pip install --quiet torch numpy scikit-learn gensim
 
-SALIDA="resultados_mac.txt"
+SALIDA="../datos/salidas/resultados_mac.txt"
 {
   echo "=============================================="
   echo "Mediciones del libro, ejecutadas en macOS"

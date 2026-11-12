@@ -35,7 +35,7 @@ CONTINUACION_FACIL = " cinco"
 UMBRAL_FACIL = 0.30
 TOL_SUMA = 1e-4
 
-SALIDA_CSV = "maquina_entera.csv"
+SALIDA_CSV = "../datos/salidas/maquina_entera.csv"
 
 # ==========================================================
 

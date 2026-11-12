@@ -35,7 +35,7 @@ CANDIDATAS = ("vaso", "cajón")    # los dos referentes posibles
 FRACCION_CAPAS_FINALES = 1 / 3
 
 SEMILLA = 20260914
-SALIDA_CSV = "reparto_atencion.csv"
+SALIDA_CSV = "../datos/salidas/reparto_atencion.csv"
 SALIDA_FIG = "reparto_atencion.png"
 
 TOL_SUMA = 1e-4                   # tolerancia del invariante "los pesos suman uno"

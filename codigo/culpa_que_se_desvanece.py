@@ -45,7 +45,7 @@ MONTAJES = [
 FACTORES_DEL_CAPITULO = [65, 777, 7192, 15048831]
 TOL_GRADIENTE = 1e-6
 
-SALIDA_CSV = "culpa_que_se_desvanece.csv"
+SALIDA_CSV = "../datos/salidas/culpa_que_se_desvanece.csv"
 
 # ---- El aspecto del bloque. Los rótulos están aquí, con nombre, porque son texto que se
 # ---- lee solo: el que se encuentre esta tabla al volver una página tiene que poder saber

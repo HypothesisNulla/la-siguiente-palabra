@@ -12,7 +12,7 @@ veces se repite el ciclo «escribir, ejecutar, volver a escribir» antes de la r
 El modelo es el de 32.000 millones, adiestrado y comprimido (el de `ordenes_escritas`), con el
 mismo formato de conversación con herramientas y cogiendo siempre el trozo más probable: no hay
 sorteo. La herramienta es una sola, `ejecutar_python`. Cada programa se ejecuta en una carpeta
-temporal nueva que contiene solo una copia de `datos/quijote.txt`, con `python3 -I` y 30 segundos
+temporal nueva que contiene solo una copia de `datos/entrada/quijote.txt`, con `python3 -I` y 30 segundos
 como máximo; lo que vuelve es la salida y los errores juntos, recortados a 2.000 caracteres (y se
 dice si se recortó).
 
@@ -65,7 +65,7 @@ Las ocho conversaciones completas quedan en ../datos/salidas/muchas_vueltas/tare
 
 # ======================= CONSTANTES =======================
 
-QUIJOTE = "../datos/quijote.txt"
+QUIJOTE = "../datos/entrada/quijote.txt"
 FICHERO = "quijote.txt"             # cómo se llama la copia dentro de la carpeta temporal
 CARPETA_CONVERSACIONES = "../datos/salidas/muchas_vueltas"
 SALIDA_TXT = "../datos/salidas/muchas_vueltas.txt"
