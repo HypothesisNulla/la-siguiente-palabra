@@ -96,6 +96,9 @@ EXENCIONES (Orden 137.2: «nada de exenciones genéricas»). Solo de la lista `c
     («dos tercios»). Sin marcador, el cociente tiene que dar la fracción con un 0,5 % de margen; con «casi» o «menos de»
     tiene que quedar por debajo, a no más de un 25 % («casi», un 10 %); con «más de», por encima, a no más de un 25 %
     («algo más de», un 10 %); con «unos» o «alrededor de», a no más de un 10 %.
+    Orden 161: con «aproximación aceptada por Carlos, 12 nov 2026» en el motivo, el marcador puede quedar fuera de su margen
+    (44,5 / 100 es un 11 % por encima de 4/10 y «algo más de» admite el 10 %); los dos números del cociente siguen teniendo que
+    salir en las salidas.
     Orden 159: «fracción: 524.800 / 131.328 = 4» da el valor al que se refiere la frase cuando no es una de las de la lista
     (para «por casi cuatro» o «tres letras de cada diez»: «= 3/10»), y un número del cociente puede salir en la fuente citada
     en vez de en las salidas («fracción: 90,1 / 100; fuente: notas/fuentes/…»).
@@ -384,6 +387,10 @@ def fraccion_no_vale(e, frase, valores, raiz="."):
     poco = any(antes.rstrip().endswith(x) for x in ("algo más de", "poco más de", "casi", "unos", "unas", "alrededor de"))
     margen = MARGEN_POCO if poco else MARGEN_MAS
     dicho = f"{num} / {den} = {exacto:.4f}, y «{palabras}» es {valor:.4f}"
+    if "aceptada por" in e[3]:
+        # Orden 161: una aproximación cierta que cae fuera del margen del marcador y que Carlos ha aceptado a ojos vistas
+        # («aproximación aceptada por Carlos, 12 nov 2026»). Los números del cociente siguen teniendo que estar.
+        return ""
     if marca is None:
         if abs(razon - 1) > MARGEN_IGUAL:
             return f"«{palabras}» sin marcador tiene que dar la fracción con un 0,5 % de margen: {dicho}"
@@ -1186,6 +1193,15 @@ def _selftest():
         print(f"                      dos malas de la Orden 159: sin rechazar {len(rotas7)} (esperado 0)")
         if rotas7:
             fallos.append(f"invariante: estas de la Orden 159 debían rechazarse: {rotas7}")
+        # Orden 161: lo mismo, fuera de margen, pasa solo si Carlos lo ha aceptado
+        fuera = "- cap01 | tres letras de cada diez | acierta tres letras de cada diez | fracción: 30 / 100 = 1/4"
+        ruta7.write_text("# x\n\n" + fuera + "\n", encoding="utf-8")
+        _, e8 = correr(raiz7, sal7, [1], estricto=True)
+        ruta7.write_text("# x\n\n" + fuera + "; aproximación aceptada por Carlos, 12 nov 2026\n", encoding="utf-8")
+        _, e9 = correr(raiz7, sal7, [1], estricto=True)
+        print(f"                      fuera de margen: sin aceptar, fallos {len(e8) > 0}; aceptada, fallos {len(e9)} (esperado True y 0)")
+        if not any("0,5 %" in x for x in e8) or e9:
+            fallos.append(f"invariante: una aproximación fuera de margen debía fallar y, aceptada, pasar; salió {e8} y {e9}")
     print()
     if fallos:
         for f in fallos:

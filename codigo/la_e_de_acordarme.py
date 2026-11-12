@@ -367,7 +367,7 @@ def informe(texto, prueba, p, med):
          ["sin el ajuste"] + [str(round(100 * sin[i])) for i in ult] + [coma(reparte_entre(sin))]],
         "i" + "d" * len(ult) + "d",
         [f"Lo que se lleva cada una de las {EN_LETRA[len(ult)]} últimas letras, de cada cien. "
-         "«Reparte entre» se explica en la nota «es la de justo antes»."]) + [""]
+                  "«Reparte entre» se explica en el apartado «Nadie lo programa» de este anexo."]) + [""]
 
     # 8. reparte entre
     mayores = [i for i in range(T) if round(100 * r["reparto"][i]) > 0]
