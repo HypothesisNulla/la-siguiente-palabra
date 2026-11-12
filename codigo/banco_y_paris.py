@@ -33,6 +33,7 @@ POR_CADA = 10_000
 import argparse
 import datetime
 import platform
+import math
 import sys
 
 import torch
@@ -69,11 +70,10 @@ def posicion(tok, frase, palabra):
     return ids, ids.index(t[0])
 
 
-def cifras(v, frase_larga):
-    """Cuántos decimales lleva un porcentaje: cuatro si es menor de 0,01 (0,0544 %) y dos si no; las
-    filas de la frase larga, con cuatro, como en `maquina_entera_detalle.txt`. (Orden 157: así van
-    en la tabla del Anexo A7.)"""
-    return 4 if v < 0.01 or frase_larga else 2
+def cifras(v, frase_larga=False):
+    """Cuántos decimales lleva un porcentaje para tener tres cifras significativas: 0,0544 %, 97,9 %, 15,5 %.
+    (Orden 160, 12 nov 2026: así va en la tabla del Anexo A7; antes, 4 decimales o 2 según el caso.)"""
+    return max(0, 2 - math.floor(math.log10(100 * v)))
 
 
 def bloque_paris(tok, modelo):
@@ -98,7 +98,7 @@ def bloque_paris(tok, modelo):
             ids = ids + [i]
         if k == 0:
             total_primera = total
-        d = lambda x: 4 if x < 0.01 else 2        # las cuentas del texto, a dos cifras salvo lo muy pequeño
+        d = cifras                                  # las cuentas del texto, con tres cifras significativas
         enteras += tabla_editorial(
             f"«{M.PALABRA_BUSCADA.strip()}» entera" + ("" if k == 0 else f", detrás de «{frase}»"), ["", "cuánto"],
             [[f"de cada {miles(POR_CADA)} veces, «Par» sale", coma(POR_CADA * valores[0], 2)],

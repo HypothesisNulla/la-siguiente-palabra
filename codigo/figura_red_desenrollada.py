@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Capítulo 6 — la red que lee, desenrollada: una caja por símbolo (L24).
+Capítulo 6 — la red que lee, desenrollada: un eslabón por símbolo (L24).
 
 La red del capítulo 6 lee una prueba de memoria símbolo a símbolo, arrastrando un resumen. Si se
-dibuja una caja por símbolo, con el resumen pasando de cada una a la siguiente, sale una pila de
+dibuja un eslabón por símbolo, con el resumen pasando de cada uno al siguiente, sale una pila de
 capas tumbada: la forma del capítulo 3, y por eso le pasa lo mismo que en el capítulo 4 a la
-culpa que tiene que volver hasta la primera caja.
+culpa que tiene que volver hasta el primer eslabón.
 
 La prueba no se inventa: se lee del bloque 1 de `datos/salidas/una_prueba_de_memoria.txt`, que
 la sacó la misma función que genera las pruebas del entrenamiento.
@@ -47,9 +47,9 @@ def leer(ruta):
 
 
 def dibujar(simbolos, respuesta, paleta, ruta):
-    L = Lienzo("La red leyendo una prueba, caja a caja",
-               "Una caja por símbolo. Cada una combina su símbolo con el resumen que le\n"
-               "llega y pasa el resultado a la siguiente.", paleta, alto=ALTO)
+    L = Lienzo("La red leyendo una prueba, eslabón a eslabón",
+               "Un eslabón por símbolo. Cada uno combina su símbolo con el resumen que le\n"
+               "llega y pasa el resultado al siguiente.", paleta, alto=ALTO)
     p, ax = L.p, L.ax
     n = len(simbolos)
     paso = 58.0 / n
@@ -95,7 +95,7 @@ def dibujar(simbolos, respuesta, paleta, ruta):
                             head_length=1.2, length_includes_head=True, facecolor=p.suave,
                             edgecolor="none", linestyle="--"))
     L.texto((xs[0] + xs[-1]) / 2, yc + 2.2,
-            f"la culpa de un fallo vuelve caja a caja: {n - 1} cajas hasta la {simbolos[0]}",
+            f"la culpa de un fallo vuelve eslabón a eslabón: {n - 1} eslabones hasta la {simbolos[0]}",
             tam=7.0, ha="center", color=p.suave)
     L.guardar(ruta)
     return xs
@@ -104,22 +104,22 @@ def dibujar(simbolos, respuesta, paleta, ruta):
 def selftest():
     fallos = []
     sim, resp = leer(AQUI / SALIDA)
-    # 1. TEST NULO — una prueba sin paja es una sola caja y ninguna flecha entre cajas.
+    # 1. TEST NULO — una prueba sin paja es un solo eslabón y ninguna flecha entre eslabones.
     xs = dibujar(sim[:1], resp, GRIS, "/dev/null")
-    print(f"[1] test nulo         sin paja: {len(xs)} caja")
+    print(f"[1] test nulo         sin paja: {len(xs)} eslabón")
     if len(xs) != 1:
-        fallos.append("test nulo: sin paja no sale una sola caja")
-    # 2. SEÑAL — la prueba de la salida: una caja por símbolo, y la respuesta es el primero.
+        fallos.append("test nulo: sin paja no sale un solo eslabón")
+    # 2. SEÑAL — la prueba de la salida: un eslabón por símbolo, y la respuesta es el primero.
     xs = dibujar(sim, resp, GRIS, "/dev/null")
-    print(f"[2] señal             {len(xs)} cajas para {len(sim)} símbolos; respuesta {resp} = primero {sim[0]}")
+    print(f"[2] señal             {len(xs)} eslabones para {len(sim)} símbolos; respuesta {resp} = primero {sim[0]}")
     if len(xs) != len(sim) or resp != sim[0]:
-        fallos.append("señal: cajas o respuesta no casan con la prueba")
-    # 3. INVARIANTE — las cajas van de izquierda a derecha y caben en la página; color y gris.
+        fallos.append("señal: eslabones o respuesta no casan con la prueba")
+    # 3. INVARIANTE — los eslabones van de izquierda a derecha y caben en la página; color y gris.
     dibujar(sim, resp, COLOR, "/dev/null")
     ok = all(a < b for a, b in zip(xs, xs[1:])) and xs[0] > 16.5 and xs[-1] < 90
-    print(f"[3] invariante        cajas en orden y dentro de la página: {ok}")
+    print(f"[3] invariante        eslabones en orden y dentro de la página: {ok}")
     if not ok:
-        fallos.append("invariante: cajas fuera de orden o de la página")
+        fallos.append("invariante: eslabones fuera de orden o de la página")
     print()
     if fallos:
         for x in fallos:

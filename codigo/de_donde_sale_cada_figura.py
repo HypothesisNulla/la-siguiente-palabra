@@ -44,6 +44,9 @@ FIGURA = r'^!\[(.*?)\]\(figuras/([^)]+)\.png\)'    # «![pie](figuras/x.png)»
 ANCHO_MAXIMO = 56                                    # letras: programa más largo + salida más larga
 FILAS_POR_TABLA = 20                                 # figuras por tabla, para que quepa en una página
 LARGO_PIE = 25                                       # letras del pie que se cotejan con el PDF
+# Orden 160 (12 nov 2026): las figuras que son una foto y no las dibuja ningún programa, con lo que se pone en la columna
+# «programa». Declaradas a mano, una a una: una figura sin programa que no esté aquí sigue reventando.
+SIN_PROGRAMA = {"mark_i": "(foto)"}
 DATO = r'datos/(?:salidas/|entrada/)?([\w.\-]+\.(?:txt|csv|json))'   # Orden 158: lo que entra está en datos/entrada/
 
 # Selftest
@@ -71,15 +74,20 @@ AQUI = Path(__file__).resolve().parent
 # ---- el libro --------------------------------------------------------------------------
 
 def capitulo(fichero):
-    """«cap03-muchos.md» -> «3»; el prólogo, el epílogo y el apéndice, por su nombre."""
+    """«cap03-muchos.md» -> «3»; «anexo-a03-muchos.md» -> «A3»; el prólogo, el epílogo y el apéndice, por su nombre."""
     if fichero.startswith("00-prologo"):
         return "prólogo"
     if fichero.startswith("98-epilogo"):
         return "epílogo"
     if fichero.startswith("99-apendice"):
         return "apéndice"
+    # Orden 160 (12 nov 2026): los anexos («anexo-a08-…») entran con su letra, «A8»: la figura de un anexo es
+    # del anexo, no del capítulo, y el lector la busca al final del libro.
+    m = re.match(r"anexo-a(\d+)-", fichero)
+    if m:
+        return f"A{int(m.group(1))}"
     m = re.match(r"cap(\d+)-", fichero)
-    assert m, f"Se esperaba un nombre de capítulo «capNN-…» y se encontró «{fichero}»"
+    assert m, f"Se esperaba un nombre «capNN-…» o «anexo-aNN-…» y se encontró «{fichero}»"
     return str(int(m.group(1)))
 
 
@@ -170,6 +178,9 @@ def filas_de(figuras, programas, datos):
     un fichero que el programa dice leer no existe."""
     filas = []
     for f in figuras:
+        if f["nombre"] in SIN_PROGRAMA:            # Orden 160: una foto no la dibuja ningún programa
+            filas.append([str(f["numero"]), f["capitulo"], SIN_PROGRAMA[f["nombre"]], "ninguna"])
+            continue
         prog = programa_de(f["nombre"], programas)
         leidos = datos_que_lee(programas[prog])
         for d in leidos:
@@ -255,7 +266,10 @@ def tablas(filas):
              "«Salidas que lee» son ficheros de datos/salidas/, con el nombre sin el .txt (si acaban "
              "de otra manera, va escrito); con asterisco, un fichero de datos/ que no está en "
              "salidas/. «Ninguna» quiere decir que el programa no lee ningún fichero: dibuja un "
-             "esquema, o calcula él mismo los números, o los trae escritos como ejemplo."]))
+             "esquema, o calcula él mismo los números, o los trae escritos como ejemplo. "
+             # Orden 160: los anexos y las fotos entran en la tabla
+             "Una «A» delante del capítulo quiere decir que la figura está en el anexo de ese capítulo, "
+             "y «(foto)» en el programa, que no la dibuja ningún programa: es una fotografía."]))
     return out
 
 
@@ -293,22 +307,24 @@ def selftest():
         t = Path(t)
         (t / "libro" / "manuscript").mkdir(parents=True)
         (t / "libro" / "notas" / "borradores" / "en-curso").mkdir(parents=True)
-        (t / "libro" / "manuscript" / "Book.txt").write_text("cap01-uno.md\ncap02-dos.md\n")
+        (t / "libro" / "manuscript" / "Book.txt").write_text("cap01-uno.md\ncap02-dos.md\nanexo-a02-dos.md\n")
         (t / "libro" / "manuscript" / "cap01-uno.md").write_text("![Uno.](figuras/a.png)\n")
         (t / "libro" / "manuscript" / "cap02-dos.md").write_text("![Viejo.](figuras/zzz.png)\n")
+        (t / "libro" / "manuscript" / "anexo-a02-dos.md").write_text("![Tres.](figuras/tres.png)\n")   # Orden 160: un anexo
         (t / "libro" / "notas" / "borradores" / "en-curso" / "cap02-dos.md").write_text(
             "![Dos.](figuras/una_capa.png)\n")
         (t / "datos" / "salidas").mkdir(parents=True)
         (t / "datos" / "salidas" / "x.txt").write_text("1\n")
         (t / "codigo").mkdir()
         (t / "codigo" / "figura_a.py").write_text('"""Docstring: nombra otra.png."""\nS = "../datos/salidas/x.txt"\nD = "../figuras/a.png"\n')
+        (t / "codigo" / "figura_tres.py").write_text('D = "../figuras/tres.png"\n')
         (t / "codigo" / "figura_una_capa.py").write_text('D = "../figuras/una_capa.png"\n')
         (t / "codigo" / "figura_que_es_una_capa.py").write_text('D = "../figuras/que_es_una_capa.png"\n')
         con = figuras_del_libro(t / "libro")
         sin = figuras_del_libro(t / "libro", con_borradores=False)
         filas = filas_de(con, leer_programas(t / "codigo"), t / "datos")
-    ok = (filas == [["1", "1", "a", "x"], ["2", "2", "una_capa", "ninguna"]]
-          and [f["nombre"] for f in sin] == ["a", "zzz"])
+    ok = (filas == [["1", "1", "a", "x"], ["2", "2", "una_capa", "ninguna"], ["3", "A2", "tres", "ninguna"]]
+          and [f["nombre"] for f in sin] == ["a", "zzz", "tres"])
     print(f"[2] señal implantada  dos figuras: {filas[0][2]} lee {filas[0][3]}; {filas[1][2]}: "
           f"{filas[1][3]}; con y sin borradores: {'bien' if ok else 'MAL'}")
     if not ok:

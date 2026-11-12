@@ -45,8 +45,8 @@ from verificar_vocabulario import leer_vocabulario, leer_orden
 
 
 def numero_de(fichero):
-    """El número de capítulo de «cap07-…md»; 0 para el prólogo, 98 para el epílogo, 99 para el apéndice."""
-    m = re.match(r'cap(\d+)-', fichero)
+    """El número de capítulo de «cap07-…md» (y de «anexo-a07-…md»); 0 para el prólogo, 98 para el epílogo, 99 para el apéndice."""
+    m = re.match(r'(?:cap|anexo-a)(\d+)-', fichero)    # Orden 160: el anexo aNN cuenta como el capítulo NN
     if m:
         return int(m.group(1))
     if fichero.startswith("00"):
@@ -55,7 +55,7 @@ def numero_de(fichero):
         return 98
     if fichero.startswith("99"):
         return 99
-    raise AssertionError(f"Se esperaba un fichero «capNN-…», «00-…», «98-…» o «99-…»; se encontró «{fichero}»")
+    raise AssertionError(f"Se esperaba un fichero «capNN-…», «anexo-aNN-…», «00-…», «98-…» o «99-…»; se encontró «{fichero}»")
 
 
 def cuerpo(ruta):
