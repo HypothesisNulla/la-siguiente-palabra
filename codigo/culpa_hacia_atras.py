@@ -3,7 +3,7 @@
 Capítulo 4 — la culpa, hecha a mano, sobre la red de la figura del pasillo (L24).
 
 El capítulo contaba el reparto de la culpa hacia atrás con palabras y sin un solo número
-(hallazgos A11 a A22 de `notas/auditoria/L24-IMAGINAR.md`). Este programa hace el caso
+(hallazgos A11 a A22 de `notas/control/auditoria/L24-IMAGINAR.md`). Este programa hace el caso
 entero, con números, sobre la misma red que dibuja la figura del capítulo: la que resuelve
 el o exclusivo con una neurona que pregunta «¿hay al menos uno subido?» y otra que pregunta
 «¿están los dos subidos?» (`figura_apilar.red_representativa`, semilla y pasos en sus

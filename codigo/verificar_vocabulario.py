@@ -9,12 +9,12 @@ uno en uno. Esto los caza todos a la vez, y los que vengan.
 Recorre el manuscrito en el orden de Book.txt, busca dónde se bautiza cada término y dónde
 se usa por primera vez, y suspende si el uso va por delante del bautizo.
 
-Los títulos (líneas que empiezan por #) no cuentan como uso: ver notas/VOCABULARIO.md.
+Los títulos (líneas que empiezan por #) no cuentan como uso: ver notas/control/VOCABULARIO.md.
 
 También vigila los puentes (regla 5 septies, 30 de octubre de 2026): las palabras de la prensa
 que el lector va a encontrar mientras lee —parámetros, modelo de lenguaje / LLM, token, GPU,
 ventana de contexto, prompt— se dicen una vez, donde el libro presenta la suya, y después el libro
-sigue con la suya. Lee el apartado «Puentes» de notas/VOCABULARIO.md y suspende si:
+sigue con la suya. Lee el apartado «Puentes» de notas/control/VOCABULARIO.md y suspende si:
   (a) «token» o «parámetro», que siguen prohibidos, aparecen en otro sitio que no sea la línea
       de su puente, un bloque de tabla o de muestra, el capítulo 16 o la bibliografía;
   (b) alguna palabra de un puente aparece, en el orden del libro, antes de su puente (quedan
@@ -31,7 +31,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-VOCABULARIO = "notas/VOCABULARIO.md"
+VOCABULARIO = "notas/control/VOCABULARIO.md"
 ORDEN = "manuscript/Book.txt"
 MANUSCRITO = "manuscript"
 MARCADO = r'`\\[a-záéíóúñ]+\{(.*?)\}`\{=latex\}'   # envoltorio de imprenta: es formato, no texto
@@ -287,7 +287,7 @@ def selftest(raiz):
     #     «bien»; tiene que quejarse de que no lo encuentra.
     with tempfile.TemporaryDirectory() as tmp:
         copia = os.path.join(tmp, "libro")
-        shutil.copytree(raiz, copia, ignore=shutil.ignore_patterns(".git", "pdf"))
+        shutil.copytree(raiz, copia, ignore=shutil.ignore_patterns(".git", "construir"))
         with open(os.path.join(copia, VOCABULARIO), "a", encoding="utf-8") as fh:
             fh.write("\nzarandaja | zarandaja, zarandajas | cap02-perceptron.md | **zarandaja**\n")
         _, f2, _ = revisar(copia)
@@ -301,7 +301,7 @@ def selftest(raiz):
     #     verificador tiene que cazar el uso adelantado.
     with tempfile.TemporaryDirectory() as tmp:
         copia = os.path.join(tmp, "libro")
-        shutil.copytree(raiz, copia, ignore=shutil.ignore_patterns(".git", "pdf"))
+        shutil.copytree(raiz, copia, ignore=shutil.ignore_patterns(".git", "construir"))
         voc = os.path.join(copia, VOCABULARIO)
         texto = open(voc, encoding="utf-8").read().replace(
             "pesos | peso, pesos | cap02-perceptron.md | se les llama **los pesos**",
@@ -318,7 +318,7 @@ def selftest(raiz):
     #         por donde vuelven de verdad, y tiene que cazarla.
     with tempfile.TemporaryDirectory() as tmp:
         copia = os.path.join(tmp, "libro")
-        shutil.copytree(raiz, copia, ignore=shutil.ignore_patterns(".git", "pdf"))
+        shutil.copytree(raiz, copia, ignore=shutil.ignore_patterns(".git", "construir"))
         cap = os.path.join(copia, MANUSCRITO, "cap02-perceptron.md")
         # Se añade un título nuevo al final, en vez de cambiar uno que existe: así la
         # prueba no depende de cómo se llamen hoy los apartados del capítulo 2.
@@ -354,7 +354,7 @@ def selftest(raiz):
     def juguete(cambios=(), ancla_token="se les llama *tokens*"):
         """Revisa el libro de juguete con `cambios` = [(fichero, viejo, nuevo)]; devuelve los fallos."""
         with tempfile.TemporaryDirectory() as tmp:
-            os.makedirs(os.path.join(tmp, "notas"))
+            os.makedirs(os.path.join(tmp, "notas", "control"))
             os.makedirs(os.path.join(tmp, MANUSCRITO))
             with open(os.path.join(tmp, VOCABULARIO), "w", encoding="utf-8") as fh:
                 fh.write("# Vocabulario\n\n## Puentes\n\n"

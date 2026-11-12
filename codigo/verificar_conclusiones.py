@@ -35,7 +35,7 @@ DESTACADO = ":::"
 TABLA = "|"
 # Las figuras cuya conclusión va en el párrafo de justo antes, declaradas una a una con su motivo
 # (regla 9 bis). Solo figuras: a un bloque de salida se le exige siempre prosa detrás.
-EXCEPCIONES = "../../libro-ia-libro/notas/CONCLUSION-ANTES.md"   # relativo a este programa
+EXCEPCIONES = "../../libro-ia-libro/notas/control/CONCLUSION-ANTES.md"   # relativo a este programa
 
 # ==========================================================
 

@@ -99,7 +99,7 @@ def miles(n):
 # encabezados y con estilo. Ahora quedan muy pobres.» El programa sigue haciendo las cuentas y
 # el libro sigue copiando su salida tal cual (regla 6). Lo que cambia es lo que imprime: en vez de
 # columnas alineadas a espacios para un monoespaciado, un bloque con título, una tabla de barras
-# en markdown y una nota. El filtro `libro-ia-libro/pdf/tablas.lua` lo convierte en una tabla
+# en markdown y una nota. El filtro `libro-ia-libro/construir/tablas.lua` lo convierte en una tabla
 # de libro: «Tabla N» y el título en versalitas, filetes arriba, bajo los rótulos y al final,
 # rótulos en cursiva, barras grises de verdad y la nota en gris pequeño.
 #

@@ -28,7 +28,7 @@ SIN_SELFTEST = {
 # su motivo: en cuanto se pueda meter aquí cualquier cosa, este verificador deja de servir. El
 # recuento de saltados sale siempre en la línea final, para que no se escondan.
 #
-# Y saltado NO es aprobado: estos hay que pasarlos en el Mac. Están en TAREA-MEDICIONES.md.
+# Y saltado NO es aprobado: estos hay que pasarlos en el Mac. Están en libro-ia/archivo/TAREA-MEDICIONES.md.
 SOLO_EN_EL_MAC = {
     'comprimir.py':         'necesita mlx_lm, que solo está en el Mac',
     'romper_la_maquina.py': 'su selftest carga y ejecuta un modelo de 7.000 millones de '

@@ -139,7 +139,7 @@ def selftest(raiz):
 
     def copia(tmp):
         c = os.path.join(tmp, "libro")
-        shutil.copytree(raiz, c, ignore=shutil.ignore_patterns(".git", "pdf", "figuras"))
+        shutil.copytree(raiz, c, ignore=shutil.ignore_patterns(".git", "construir", "figuras"))
         return c
 
     # [1] Test nulo: una referencia a un capítulo que no existe tiene que cazarse.

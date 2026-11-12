@@ -10,7 +10,7 @@ import os, re, sys, unicodedata
 
 # Jerga que no entra en el cuerpo por ningún motivo. Los términos que el libro SÍ se
 # apropia —red neuronal, neurona, capa, pesos— no se vigilan aquí: se declaran en
-# notas/VOCABULARIO.md y los vigila verificar_vocabulario.py, que comprueba algo más
+# notas/control/VOCABULARIO.md y los vigila verificar_vocabulario.py, que comprueba algo más
 # exigente que su ausencia: que se bauticen antes de usarse (reglas 5 bis y 5 ter).
 PROHIBIDAS = ["softmax","vector","matriz","matrices","gradiente","token","embedding",
     "query","key","value","parametro","hiperparametro","logaritm","dimension",
@@ -42,7 +42,7 @@ SANGRIA_MUESTRA = '    '
 # el libro los dice UNA vez, en la línea de su puente («a estos trozos, en la prensa y en
 # inglés, se les llama *tokens*»), y pueden aparecer dentro de un bloque «::: tabla» o
 # «::: muestra» (salida de máquina o texto que el programa imprime). En cualquier otro sitio
-# del cuerpo siguen suspendiendo. El apartado «Puentes» de notas/VOCABULARIO.md dice cuál es
+# del cuerpo siguen suspendiendo. El apartado «Puentes» de notas/control/VOCABULARIO.md dice cuál es
 # la línea de cada puente (la frase ancla); verificar_vocabulario.py vigila además que
 # ninguna palabra de un puente vaya antes que él.
 LIBRES_EN_UN_PUENTE = ('token', 'parametro')
@@ -51,15 +51,15 @@ APARTADO_PUENTES = '## Puentes'
 
 def puentes_de(ruta):
     """Las frases ancla de los puentes declarados para este fichero, o [] si no hay
-    notas/VOCABULARIO.md por encima de él (se sube desde su carpeta hasta encontrarlo)."""
+    notas/control/VOCABULARIO.md por encima de él (se sube desde su carpeta hasta encontrarlo)."""
     d = os.path.dirname(os.path.abspath(ruta))
-    while not os.path.exists(os.path.join(d, 'notas', 'VOCABULARIO.md')):
+    while not os.path.exists(os.path.join(d, 'notas', 'control', 'VOCABULARIO.md')):
         if os.path.dirname(d) == d:
             return []
         d = os.path.dirname(d)
     nombre = os.path.basename(ruta)
     anclas, dentro = [], False
-    for linea in open(os.path.join(d, 'notas', 'VOCABULARIO.md'), encoding='utf-8'):
+    for linea in open(os.path.join(d, 'notas', 'control', 'VOCABULARIO.md'), encoding='utf-8'):
         if linea.startswith('## '):
             dentro = linea.strip() == APARTADO_PUENTES
             continue

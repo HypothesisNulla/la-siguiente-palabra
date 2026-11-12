@@ -9,7 +9,7 @@ su primer uso dentro de cada capítulo.
 
 No decide nada: da candidatos para leer. Dos listas.
 
-  1. Términos del vocabulario (notas/VOCABULARIO.md): para cada término y cada capítulo
+  1. Términos del vocabulario (notas/control/VOCABULARIO.md): para cada término y cada capítulo
      posterior al de su bautizo, el primer uso en el cuerpo de ese capítulo, con su párrafo.
   2. Referencias a un capítulo anterior («el capítulo 4», «capítulos 5 y 7»): cada una, con su
      frase. Un número de capítulo no le recuerda nada a quien lo ha olvidado.
@@ -24,7 +24,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-VOCABULARIO = "notas/VOCABULARIO.md"
+VOCABULARIO = "notas/control/VOCABULARIO.md"
 ORDEN = "manuscript/Book.txt"
 MANUSCRITO = "manuscript"
 MARCADO = r'`\\[a-záéíóúñ]+\{(.*?)\}`\{=latex\}'   # envoltorio de imprenta: es formato, no texto
@@ -192,7 +192,7 @@ def imprimir(usos, referencias):
 def montar_libro(dir_, capitulos):
     """Un libro de prueba en dir_: {nombre: texto}, en ese orden, y un vocabulario."""
     os.makedirs(os.path.join(dir_, "manuscript"))
-    os.makedirs(os.path.join(dir_, "notas"))
+    os.makedirs(os.path.join(dir_, "notas", "control"))
     with open(os.path.join(dir_, ORDEN), "w", encoding="utf-8") as fh:
         fh.write("\n".join(capitulos) + "\n")
     for nombre, texto in capitulos.items():

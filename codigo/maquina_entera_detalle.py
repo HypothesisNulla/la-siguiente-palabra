@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Capítulo 7 — cuatro detalles de la máquina entera, pedidos por el análisis de claridad
-(notas/CLARIDAD.md, M7-1 a M7-4, aprobadas por Carlos el 25 de septiembre de 2026).
+(notas/control/CLARIDAD.md, M7-1 a M7-4, aprobadas por Carlos el 25 de septiembre de 2026).
 
 No sustituye a maquina_entera.py ni toca su salida, que el libro ya cita. Usa el mismo modelo,
 con el mismo tipo de número, y mide cuatro cosas que el capítulo necesita para explicarse:

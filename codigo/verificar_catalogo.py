@@ -5,7 +5,7 @@
     verificar_catalogo.py --selftest
 
 Cada auditor encuentra fallos nuevos y los escribe en SU informe. El catálogo del apartado 4 de
-`notas/AUDITORIA.md` es lo que lee el auditor siguiente, y es lo único que lee: si el fallo no
+`notas/control/AUDITORIA.md` es lo que lee el auditor siguiente, y es lo único que lee: si el fallo no
 está ahí, el que venga detrás no lo busca.
 
 Se ha quedado atrás **tres veces** en una semana. Las tres se arreglaron a mano, y las tres
@@ -16,7 +16,7 @@ que hay en el directorio, porque eso también se quedó atrás dos veces."""
 import os, re, sys
 
 # Los informes viven aquí, uno por capítulo, y ahí es donde nacen los fallos nuevos.
-CARPETA_INFORMES = os.path.join('notas', 'auditoria')
+CARPETA_INFORMES = os.path.join('notas', 'control', 'auditoria')
 NO_SON_INFORMES = {'README.md', 'PENDIENTES.md'}
 CABECERA = re.compile(r'^#{2,3}\s*(4\.\d+)\b', re.M)
 
@@ -84,7 +84,7 @@ if '--selftest' in sys.argv:
     sys.exit(selftest())
 
 raiz = sys.argv[1]
-catalogo = open(os.path.join(raiz, 'notas', 'AUDITORIA.md'), encoding='utf-8').read()
+catalogo = open(os.path.join(raiz, 'notas', 'control', 'AUDITORIA.md'), encoding='utf-8').read()
 carpeta = os.path.join(raiz, CARPETA_INFORMES)
 informes = {f: open(os.path.join(carpeta, f), encoding='utf-8').read()
             for f in sorted(os.listdir(carpeta))
@@ -101,7 +101,7 @@ dice = re.search(r'Pasar los (\w+) verificadores', catalogo)
 descuadre = dice and LETRAS.get(aqui) != dice.group(1)
 
 for n, donde in faltan:
-    print(f"  {n:<6} descrito en notas/auditoria/{donde} y NO está en el catálogo")
+    print(f"  {n:<6} descrito en notas/control/auditoria/{donde} y NO está en el catálogo")
 if descuadre:
     print(f"  el procedimiento manda pasar «{dice.group(1)}» verificadores y hay {aqui} "
           f"({LETRAS.get(aqui, aqui)})")

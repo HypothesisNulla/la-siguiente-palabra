@@ -4,7 +4,7 @@ Capítulo 1 — la escalera, paso a paso.
 
 La sección «La escalera» enseña lo que escribe la máquina de `ngrama.py` con el selector en cero,
 una, dos, tres y cinco letras. El lector ve el resultado de doscientos sorteos por peldaño y no
-los pasos que llevan a él (L11 y T27 de `notas/auditoria/PENDIENTES.md`). Este programa imprime
+los pasos que llevan a él (L11 y T27 de `notas/control/auditoria/PENDIENTES.md`). Este programa imprime
 esos pasos, con las mismas muestras:
 
   1. cómo arranca cada muestra: las primeras letras no salen de un sorteo;

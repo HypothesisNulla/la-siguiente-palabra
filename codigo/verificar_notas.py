@@ -5,7 +5,7 @@
     verificar_notas.py --selftest
 
 La regla 2 dice que las cuentas y las comprobaciones de un capítulo se hacen ANTES de escribirlo,
-en `notas/NOTAS-MATE-CAPnn.md`, y que sin nota no hay capítulo. Esa nota es la autoridad: es lo
+en `notas/por-capitulo/NOTAS-MATE-CAPnn.md`, y que sin nota no hay capítulo. Esa nota es la autoridad: es lo
 que se verificó con las fuentes delante.
 
 Existía la regla y no la comprobaba nadie. Faltaban dos notas —la del 3 y la del 8— y el libro
@@ -98,10 +98,10 @@ raiz = sys.argv[1]
 capitulos = [l.strip() for l in open(os.path.join(raiz, 'manuscript', 'Book.txt'),
                                      encoding='utf-8') if l.strip()]
 notas = {}
-for f in os.listdir(os.path.join(raiz, 'notas')):
+for f in os.listdir(os.path.join(raiz, 'notas', 'por-capitulo')):
     m = re.match(r'NOTAS-MATE-CAP(\d+)\.md$', f)
     if m:
-        notas[m.group(1)] = len(open(os.path.join(raiz, 'notas', f), encoding='utf-8').read())
+        notas[m.group(1)] = len(open(os.path.join(raiz, 'notas', 'por-capitulo', f), encoding='utf-8').read())
 
 fallos = revisar(capitulos, notas)
 if fallos:

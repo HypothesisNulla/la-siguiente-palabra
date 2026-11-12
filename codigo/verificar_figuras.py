@@ -44,7 +44,7 @@ Y dos cosas de la Orden 140 (8 nov 2026), para el capítulo 1 reformado:
     estén en el PDF (cuentan en el recuento de pies de figura).
 
 Y una de la Orden 143: una figura del cuerpo que el texto no nombra por su número, la foto del Mark I del cap. 2 (el
-pie «El Mark I. Foto: Marina de los Estados Unidos, 1960.» basta), puede declararse en `notas/FIGURAS-SIN-CITA.md`, una
+pie «El Mark I. Foto: Marina de los Estados Unidos, 1960.» basta), puede declararse en `notas/control/FIGURAS-SIN-CITA.md`, una
 línea «figuras/x.png | motivo». Se trata como las de los anexos: solo tiene que estar en el PDF.
 
 Y una de la Orden 148 (10 nov 2026), la regla 11.9 nueva: «Una figura del cuerpo no lleva números que el cuerpo no
@@ -52,7 +52,7 @@ explique». Lo que se puede comprobar: que ninguna figura del cuerpo de los cap�
 `notas/reforma-nov/capitulos-reformados.md`) lleve una cifra con decimales en sus rótulos. Se lee el texto de la imagen
 con `tesseract` (si no está instalado, el verificador lo dice y no puede comprobarlo) y se busca una cifra con coma
 decimal («0,25»; «3.609» es un millar, no un decimal). Las figuras de los capítulos 1 y 3 que ya la llevaban se declaran,
-mientras no se rehagan, en `notas/FIGURAS-CON-DECIMALES.md` (una línea «figuras/x.png | motivo»); una declarada que ya
+mientras no se rehagan, en `notas/control/FIGURAS-CON-DECIMALES.md` (una línea «figuras/x.png | motivo»); una declarada que ya
 no lleva decimales sale como fallo, para que se quite de la lista.
 
 Uso:
@@ -82,7 +82,7 @@ import shutil
 import subprocess
 import sys
 
-CON_DECIMALES = "notas/FIGURAS-CON-DECIMALES.md"
+CON_DECIMALES = "notas/control/FIGURAS-CON-DECIMALES.md"
 REFORMADOS = "notas/reforma-nov/capitulos-reformados.md"
 DECIMAL = re.compile(r"(?<![\d.,])\d+,\d+(?!\d)")    # «0,25»; no «3.609» (un millar) ni «1.019»
 
@@ -127,8 +127,8 @@ def paginas_con_figura(pdf):
 
 
 def sin_cita_declaradas(raiz):
-    """Las figuras que `notas/FIGURAS-SIN-CITA.md` declara sin cita por número: {«figuras/x.png»}."""
-    ruta = os.path.join(raiz, "notas", "FIGURAS-SIN-CITA.md")
+    """Las figuras que `notas/control/FIGURAS-SIN-CITA.md` declara sin cita por número: {«figuras/x.png»}."""
+    ruta = os.path.join(raiz, "notas", "control", "FIGURAS-SIN-CITA.md")
     if not os.path.exists(ruta):
         return set()
     return {l.split("|")[0].strip() for l in open(ruta, encoding="utf-8")
@@ -301,7 +301,7 @@ def decimales_de(texto):
 
 
 def declaradas_con_decimales(raiz):
-    """{figuras/x.png: motivo} de notas/FIGURAS-CON-DECIMALES.md."""
+    """{figuras/x.png: motivo} de notas/control/FIGURAS-CON-DECIMALES.md."""
     ruta = os.path.join(raiz, CON_DECIMALES)
     if not os.path.exists(ruta):
         return {}

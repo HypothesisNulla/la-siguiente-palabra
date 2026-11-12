@@ -15,7 +15,7 @@ import re, sys, io, os
 
 MINIMO = 10_000   # el bloque entero: ver el fallo 4.21 del catálogo
 EXCEPCIONES = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                           '..', '..', 'libro-ia-libro', 'notas', 'CITAS-DE-AUTOR.md')
+                           '..', '..', 'libro-ia-libro', 'notas', 'control', 'CITAS-DE-AUTOR.md')
 
 def quitar_marcado(t, comillas=True):
     """Quita el marcado de imprenta que envuelve trozos de la salida, dejando el trozo.

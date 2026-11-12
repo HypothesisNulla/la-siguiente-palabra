@@ -36,7 +36,7 @@ from formato import ANCHO_CAJA, ANCHO_CAJA_CITA
 LIBRO = "manuscript/Book.txt"
 
 # Cuántas líneas monoespaciadas caben en una página. El libro mete cada bloque de
-# programa en una minipágina para que no se parta entre dos páginas (`pdf/libro.tex`);
+# programa en una minipágina para que no se parta entre dos páginas (`construir/libro.tex`);
 # eso solo funciona mientras el bloque quepa entero. Medido igual que el ancho: a
 # \footnotesize, en la caja de 6 x 9, entran unas 50 líneas. Se deja margen y se avisa
 # antes: un bloque de más de 40 líneas hay que partirlo a mano.
