@@ -127,6 +127,12 @@ def selftest(tok, modelo):
     return 0
 
 
+def pct_vuelta(p):
+    """Porcentaje entero; «casi 100 %» si redondea a 100 sin llegar (99,95 % en la vuelta 7)."""
+    n = round(100 * p)
+    return "casi 100 %" if n == 100 and p < 1 else f"{n} %"
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--selftest", action="store_true")
@@ -146,7 +152,7 @@ def main():
         filas_t.append([t, str(len(piezas)), unidos([p.replace(" ", "_") for p in piezas])])
     print("\n".join(tabla_editorial(
         "El texto, partido en trozos", ["el texto", "trozos", "cómo se parte"], filas_t, "idi",
-        ["El guion bajo marca que ahí había un espacio."])))
+        ["La barra separa dos trozos, y el guion bajo marca que ahí había un espacio."])))
     print()
 
     print("--- 2. EL TAMAÑO DE LA MÁQUINA ---\n")
@@ -183,12 +189,14 @@ def main():
         top, _ = siguientes(tok, modelo, texto, 1)
         palabra, prob = top[0]
         texto += palabra
-        filas_b.append([str(i), trozo(palabra.replace(" ", "_")), pct(prob, 2), texto])
+        filas_b.append([str(i), trozo(palabra.replace(" ", "_")), pct_vuelta(prob), texto])
         filas.append(["bucle", str(i), palabra, f"{prob:.6f}"])
+    # Orden 157 (12 nov 2026): en el cap. 7 «paso» pasa a «vuelta» (ya es el paso de aprendizaje del cap. 4),
+    # los porcentajes salen enteros (11.9) y la tabla va sin nota. Las cuentas no cambian: el CSV
+    # sigue guardando las probabilidades enteras.
     print("\n".join(tabla_editorial(
-        "Y se vuelve a empezar", ["paso", "trozo", "probabilidad", "el texto, con el trozo pegado"],
-        filas_b, "cidi",
-        [f"Cada paso pega al texto el trozo más probable y vuelve a empezar, {PASOS_BUCLE} veces."])))
+        "Y se vuelve a empezar", ["vuelta", "trozo", "probabilidad", "el texto, con el trozo pegado"],
+        filas_b, "cidi")))
 
     with open(SALIDA_CSV, "w", newline="", encoding="utf-8") as fh:
         csv.writer(fh).writerows([["medicion", "contexto", "palabra", "probabilidad"]] + filas)

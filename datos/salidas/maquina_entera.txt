@@ -9,7 +9,7 @@ El texto, partido en trozos
 | El murciélago hambriento vigilaba | 11 | `El\|_mur\|ci\|él\|ago\|_h\|amb\|rient\|o\|_vigil\|aba` |
 | anticonstitucionalmente | 6 | `ant\|icon\|stit\|uc\|ional\|mente` |
 
-El guion bajo marca que ahí había un espacio.
+La barra separa dos trozos, y el guion bajo marca que ahí había un espacio.
 :::
 
 --- 2. EL TAMAÑO DE LA MÁQUINA ---
@@ -55,18 +55,16 @@ Los 10 trozos más probables. El resto se reparte entre las otras 151.926 posibi
 ::: tabla
 Y se vuelve a empezar
 
-| paso | trozo | probabilidad | el texto, con el trozo pegado |
+| vuelta | trozo | probabilidad | el texto, con el trozo pegado |
 |:-:|:--|--:|:--|
-| 1 | `_la` | 17,46 % | La capital de Francia es la |
-| 2 | `_ciudad` | 30,85 % | La capital de Francia es la ciudad |
-| 3 | `_más` | 25,45 % | La capital de Francia es la ciudad más |
-| 4 | `_grande` | 65,83 % | La capital de Francia es la ciudad más grande |
-| 5 | `_de` | 41,75 % | La capital de Francia es la ciudad más grande de |
-| 6 | `_Franc` | 56,68 % | La capital de Francia es la ciudad más grande de Franc |
-| 7 | `ia` | 99,95 % | La capital de Francia es la ciudad más grande de Francia |
-| 8 | `,` | 40,16 % | La capital de Francia es la ciudad más grande de Francia, |
-
-Cada paso pega al texto el trozo más probable y vuelve a empezar, 8 veces.
+| 1 | `_la` | 17 % | La capital de Francia es la |
+| 2 | `_ciudad` | 31 % | La capital de Francia es la ciudad |
+| 3 | `_más` | 25 % | La capital de Francia es la ciudad más |
+| 4 | `_grande` | 66 % | La capital de Francia es la ciudad más grande |
+| 5 | `_de` | 42 % | La capital de Francia es la ciudad más grande de |
+| 6 | `_Franc` | 57 % | La capital de Francia es la ciudad más grande de Franc |
+| 7 | `ia` | casi 100 % | La capital de Francia es la ciudad más grande de Francia |
+| 8 | `,` | 40 % | La capital de Francia es la ciudad más grande de Francia, |
 :::
 
 Escrito maquina_entera.csv

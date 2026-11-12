@@ -69,32 +69,49 @@ def posicion(tok, frase, palabra):
     return ids, ids.index(t[0])
 
 
+def cifras(v, frase_larga):
+    """Cuántos decimales lleva un porcentaje: cuatro si es menor de 0,01 (0,0544 %) y dos si no; las
+    filas de la frase larga, con cuatro, como en `maquina_entera_detalle.txt`. (Orden 157: así van
+    en la tabla del Anexo A7.)"""
+    return 4 if v < 0.01 or frase_larga else 2
+
+
 def bloque_paris(tok, modelo):
-    """L24 (9 de octubre): tablas editoriales (regla 6 ter). La cuenta no cambia."""
-    frase = M.FRASES_PARIS[0]
-    ids = M.ids_de(tok, frase)
-    total, texto, valores, filas = 1.0, frase, [], []
-    for i in M.ids_de(tok, M.PALABRA_BUSCADA):
-        p = lista(modelo, ids)
-        v, pu = float(p[i]), M.puesto(p, i)
-        t = tok.decode([i])
-        filas.append([f"«{texto}»", trozo(M.visible(t)), pct(v, 4 if v < 0.01 else 2),
-                      f"{miles(pu)} de {miles(len(p))}"])
-        valores.append(v)
-        total *= v
-        texto += t
-        ids = ids + [i]
+    """L24 (9 de octubre): tablas editoriales (regla 6 ter). La cuenta no cambia.
+    Orden 157 (12 nov 2026): la tabla del A7 lleva las dos frases (cuatro filas) y sin nota, y una tabla
+    corta con el puesto de «Par» detrás de cada una, que el cuerpo del cap. 7 usa."""
+    filas, puestos, enteras, total_primera = [], [], [], None
+    for k, frase in enumerate(M.FRASES_PARIS):
+        ids = M.ids_de(tok, frase)
+        total, texto, valores = 1.0, frase, []
+        for j, i in enumerate(M.ids_de(tok, M.PALABRA_BUSCADA)):
+            p = lista(modelo, ids)
+            v, pu = float(p[i]), M.puesto(p, i)
+            t = tok.decode([i])
+            filas.append([f"«{texto}»", trozo(M.visible(t)), pct(v, cifras(v, k > 0)),
+                          f"{miles(pu)} de {miles(len(p))}"])
+            if j == 0:
+                puestos.append([f"«{frase}»", miles(pu)])
+            valores.append(v)
+            total *= v
+            texto += t
+            ids = ids + [i]
+        if k == 0:
+            total_primera = total
+        d = lambda x: 4 if x < 0.01 else 2        # las cuentas del texto, a dos cifras salvo lo muy pequeño
+        enteras += tabla_editorial(
+            f"«{M.PALABRA_BUSCADA.strip()}» entera" + ("" if k == 0 else f", detrás de «{frase}»"), ["", "cuánto"],
+            [[f"de cada {miles(POR_CADA)} veces, «Par» sale", coma(POR_CADA * valores[0], 2)],
+             ["de esas, «ís» sigue, de cada 100", coma(100 * valores[1], 2)],
+             [f"**«{M.PALABRA_BUSCADA.strip()}» entera, de cada {miles(POR_CADA)}**",
+              f"**{coma(POR_CADA * total, 2)}**"]], "id",
+            [f"El {pct(valores[1], d(valores[1]))} del {pct(valores[0], d(valores[0]))}, "
+             f"que da {pct(total, d(total))}."]) + [""]
     trozos_ = tabla_editorial(
-        "París, trozo a trozo", ["detrás de", "trozo", "probabilidad", "puesto"], filas, "iidd",
-        ["Cada trozo se mira en la lista que da la máquina detrás del texto que tiene delante."])
-    entera = tabla_editorial(
-        f"«{M.PALABRA_BUSCADA.strip()}» entera", ["", "cuánto"],
-        [[f"de cada {miles(POR_CADA)} veces, «Par» sale", coma(POR_CADA * valores[0], 2)],
-         ["de esas, «ís» sigue, de cada 100", coma(100 * valores[1], 2)],
-         [f"**«{M.PALABRA_BUSCADA.strip()}» entera, de cada {miles(POR_CADA)}**",
-          f"**{coma(POR_CADA * total, 2)}**"]], "id",
-        [f"El {pct(valores[1], 2)} del {pct(valores[0], 4)}, que da {pct(total, 4)}."])
-    return trozos_ + [""] + entera, total
+        "París, trozo a trozo", ["detrás de", "trozo", "probabilidad", "puesto"], filas, "iidd")
+    donde = tabla_editorial(
+        "Dónde sale «Par», el primer trozo de «París»", ["detrás de", "puesto de «Par»"], puestos, "id")
+    return trozos_ + [""] + donde + [""] + enteras[:-1], total_primera
 
 
 def bloque_banco(tok, modelo):

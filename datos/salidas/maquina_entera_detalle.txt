@@ -1,7 +1,7 @@
 máquina: arm64, Darwin 25.6.0, procesador
 modelo: Qwen/Qwen2.5-0.5B en float32
 torch 2.14.0   transformers 5.17.0
-fecha: 2026-10-28
+fecha: 2026-11-12
 
 --- 1. QUÉ SE PARTE Y QUÉ NO ---
 
@@ -32,7 +32,7 @@ La misma palabra, en castellano y en inglés
 | gato | 2 | cat | 1 |
 | ventana | 1 | window | 1 |
 
-Cuántos trozos necesita cada palabra en la caja de la máquina, que tiene 151.665 trozos distintos.
+Cuántos trozos necesita cada palabra en la caja de la máquina.
 :::
 
 --- 2. DÓNDE ESTÁ PARÍS ---

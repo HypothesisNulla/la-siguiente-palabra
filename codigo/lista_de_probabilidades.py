@@ -94,14 +94,16 @@ def bloque_elecciones(pasos):
         filas.append([f] + [pct(k[x], 0) for x in c])
     k = cuentas(pasos)
     filas.append(["**las seis juntas**"] + [f"**{pct(k[x], 0)}**" for x in c])
-    lin = ["--- DE CADA CIEN PASOS, ¿CUÁNTOS ESTÁN ABIERTOS? ---", ""] + tabla_editorial(
-        "De cada cien pasos, ¿cuántos están abiertos?",
+    lin = ["--- DE CADA CIEN VUELTAS, ¿CUÁNTAS ESTÁN ABIERTAS? ---", ""] + tabla_editorial(
+        "De cada cien vueltas, ¿cuántas están abiertas?",
         ["frase de arranque", "casi seguro", "casi seguro sin terminar", "abierto", "reñido"],
         filas, "idddd",
-        [f"Un paso es casi seguro cuando el trozo seleccionado tenía el {pct(CASI_SEGURO, 0)} o más, y "
-         "abierto cuando no llegaba; por eso esas dos columnas suman cien. «Casi seguro sin terminar» "
-         "cuenta solo los casi seguros que no rematan una palabra empezada, como «ia» detrás de "
-         f"«Franc». Y reñido es un paso en el que el trozo seleccionado no llegaba ni al {pct(RENIDO, 0)}."])
+        # Orden 157 (12 nov 2026): en el cap. 7 «paso» pasa a «vuelta» (ya es el paso de aprendizaje del
+        # cap. 4) y «seleccionado» a «escogido»; las cuentas no cambian.
+        [f"Una vuelta es casi segura cuando el trozo escogido tenía el {pct(CASI_SEGURO, 0)} o más, y "
+         "abierta cuando no llegaba; por eso esas dos columnas suman cien. «Casi seguro sin terminar» "
+         "cuenta solo las casi seguras que no rematan una palabra empezada, como «ia» detrás de "
+         f"«Franc». Y reñida es una vuelta en la que el trozo escogido no llegaba ni al {pct(RENIDO, 0)}."])
     return lin, k
 
 

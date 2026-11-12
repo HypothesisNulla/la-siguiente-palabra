@@ -96,6 +96,8 @@ EXENCIONES (Orden 137.2: «nada de exenciones genéricas»). Solo de la lista `c
     («dos tercios»). Sin marcador, el cociente tiene que dar la fracción con un 0,5 % de margen; con «casi» o «menos de»
     tiene que quedar por debajo, a no más de un 25 % («casi», un 10 %); con «más de», por encima, a no más de un 25 %
     («algo más de», un 10 %); con «unos» o «alrededor de», a no más de un 10 %.
+    Orden 157: también valen «una de cada cuatro», «una de cada cinco», «una vez de cada cinco», «cuatro de cada diez», «nueve de cada
+    diez» y, como razones, «seis veces» y «tres veces y media» (para «más de seis veces más»: `fracción: 151.665 / 22.944`).
   - «suma a la vista: 5 + 1 + 7»: el número es una cuenta hecha delante del lector con números que están en el
     mismo párrafo. Los sumandos, escritos en la exención, tienen que salir en el párrafo (con cifra o con
     letra, del uno al nueve) y sumar el número exento (Orden 140.2).
@@ -125,7 +127,12 @@ MARCAS_MAS = ("algo más de", "poco más de", "más de")
 MARCAS_MENOS = ("menos de", "casi", "apenas")
 FRACCIONES = {"la mitad": (1, 2), "un tercio": (1, 3), "dos tercios": (2, 3), "un cuarto": (1, 4),
               "una cuarta parte": (1, 4), "tres cuartos": (3, 4), "un quinto": (1, 5), "una quinta parte": (1, 5),
-              "un décimo": (1, 10), "una décima parte": (1, 10)}      # Orden 153: la fracción en palabras → (numerador, denominador)
+              "un décimo": (1, 10), "una décima parte": (1, 10),      # Orden 153: la fracción en palabras → (numerador, denominador)
+              # Orden 157: las fracciones «de cada…» y las razones «veces» del cap. 7 (el «del dos al nueve con letra» no se mira,
+              # y estas se dicen así: «una de cada cuatro», «más de seis veces más», «tres veces y media»)
+              "una de cada cuatro": (1, 4), "una de cada cinco": (1, 5), "una vez de cada cinco": (1, 5),
+              "cuatro de cada diez": (4, 10), "nueve de cada diez": (9, 10),
+              "seis veces": (6, 1), "tres veces y media": (7, 2)}
 LARGO_FRASE_MIN = 3                     # el selftest: una frase de menos palabras no se mira
 # ==========================================================
 
@@ -1109,6 +1116,34 @@ def _selftest():
         print(f"                      cuatro fracciones malas de la Orden 153: sin rechazar {len(rotas5)} (esperado 0)")
         if rotas5:
             fallos.append(f"invariante: estas fracciones malas debían rechazarse: {rotas5}")
+    # Orden 157: las fracciones «de cada…» y las razones «veces» (3 buenas, 3 malas)
+    cap157 = ("# Cap\n\nLa caja es de más de seis veces más piezas. Casi cuatro de cada diez veces sale otra. "
+              "En más de la mitad de las vueltas gana uno.\n")
+    with tempfile.TemporaryDirectory() as d6:
+        raiz6, sal6 = _libro_de_mentira(d6, cap157, "piezas 151.665 y 22.944; otra 38 de 100; vueltas 57 de 100; sobre 10\n")
+        ruta6 = raiz6 / "notas" / "reforma-nov" / FICHERO_EXENTAS
+        buenas157 = ("- cap01 | seis veces | más de seis veces más | fracción: 151.665 / 22.944\n"
+                     "- cap01 | cuatro de cada diez | Casi cuatro de cada diez | fracción: 38 / 100\n"
+                     "- cap01 | la mitad | En más de la mitad de las vueltas | fracción: 57 / 100\n")
+        ruta6.write_text("# x\n\n" + buenas157, encoding="utf-8")
+        _, e6 = correr(raiz6, sal6, [1], estricto=True)
+        print(f"                      tres razones y fracciones de la Orden 157, bien escritas: fallos {len(e6)} (esperado 0)")
+        if e6:
+            fallos.append(f"invariante: las de la Orden 157 debían valer; salió {e6}")
+        malas157 = {
+            "«más de seis veces» con un cociente que queda por debajo": (buenas157.replace("151.665 / 22.944", "22.944 / 22.944"), "no dice la verdad"),
+            "«casi» con un cociente que queda por encima": (buenas157.replace("38 / 100", "57 / 100"), "no dice la verdad"),
+            "un número del cociente que no está en las salidas": (buenas157.replace("57 / 100", "58 / 100"), "no está en las salidas"),
+        }
+        rotas6 = []
+        for nombre, (lineas, quiero) in malas157.items():
+            ruta6.write_text("# x\n\n" + lineas, encoding="utf-8")
+            _, e = correr(raiz6, sal6, [1], estricto=True)
+            if not any(quiero in x for x in e):
+                rotas6.append((nombre, e))
+        print(f"                      tres malas de la Orden 157: sin rechazar {len(rotas6)} (esperado 0)")
+        if rotas6:
+            fallos.append(f"invariante: estas de la Orden 157 debían rechazarse: {rotas6}")
     print()
     if fallos:
         for f in fallos:

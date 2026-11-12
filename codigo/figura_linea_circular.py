@@ -27,11 +27,14 @@ DESTINO_TIRA = "../figuras/linea_circular_{}.png"
 ALTO = 3.55
 ALTO_TIRA = 1.25
 # (nombre corto, qué pasa ahí, clave de la cifra en la salida o None)
-ESTACIONES = [("Se rompe", "el texto, en piezas", None),
+# Orden 157 (12 nov 2026): los rótulos dicen lo mismo que el cap. 7 (trozos, «Encuesta», «Se escoge uno») y
+# la estación 4 ya no lleva «151.936», que el cuerpo no explica (11.9). Las cinco tiras salen de esta misma
+# lista, así que dicen lo mismo; hoy ningún capítulo las cita.
+ESTACIONES = [("Se rompe", "el texto, en trozos", None),
               ("Números", "{} números en cada lista", "números por trozo"),
-              ("Capas", "{} capas de mirar y mezclar", "rondas, una detrás de otra"),
-              ("Lista", "{} probabilidades", "trozos posibles en la salida"),
-              ("Se selecciona uno", "y se pega al texto", None)]
+              ("Capas", "{} capas", "rondas, una detrás de otra"),
+              ("Encuesta", "una probabilidad por trozo", None),
+              ("Se escoge uno", "y se pega al texto", None)]
 
 # ==========================================================
 
@@ -135,9 +138,9 @@ def selftest():
     print(f"[1] test nulo         sin la salida, las estaciones con cifra no se dibujan: {vacio}")
     if not vacio:
         fallos.append("test nulo: dibuja cifras que no ha leído")
-    # 2. SEÑAL — las cifras son las del capítulo: 896, 24 y 151.936.
-    ok = (cifras["números por trozo"], cifras["rondas, una detrás de otra"],
-          cifras["trozos posibles en la salida"]) == ("896", "24", "151.936")
+    # 2. SEÑAL — las cifras son las del capítulo: 896 y 24 (los 151.936 de la estación 4 se quitaron
+    #    de la figura en la Orden 157: el cuerpo no los explica).
+    ok = (cifras["números por trozo"], cifras["rondas, una detrás de otra"]) == ("896", "24")
     print(f"[2] señal             cifras leídas {cifras}: {ok}")
     if not ok:
         fallos.append("señal: las cifras no son las del capítulo")

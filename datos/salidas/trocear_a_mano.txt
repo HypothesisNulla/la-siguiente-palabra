@@ -16,7 +16,7 @@ Las primeras juntas, con el Quijote
 | 11 | `_` y `p` | `_p` | 23.748 |
 | 12 | `e` y `r` | `er` | 23.683 |
 
-El guion bajo es un espacio. Cada junta suelda la pareja que más se repite.
+El guion bajo es un espacio. La columna «veces» dice cuántas veces va esa pareja seguida en el Quijote.
 :::
 
 ::: tabla

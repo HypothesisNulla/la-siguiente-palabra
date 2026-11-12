@@ -191,8 +191,7 @@ def bloque_troceado(tok):
         ["castellano", "trozos", "inglés", "trozos"],
         [[es.strip(), str(len(trozos(tok, es))), en.strip(), str(len(trozos(tok, en)))]
          for es, en in PAREJAS_IDIOMA], "idid",
-        [f"Cuántos trozos necesita cada palabra en la caja de la máquina, que tiene {miles(len(tok))} "
-         "trozos distintos."])
+        ["Cuántos trozos necesita cada palabra en la caja de la máquina."])
     return partes + [""] + idiomas
 
 

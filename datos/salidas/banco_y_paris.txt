@@ -5,7 +5,7 @@
 SELFTEST: las tres pruebas pasan.
 
 máquina: arm64, Darwin 25.6.0, procesador
-modelo: Qwen/Qwen2.5-0.5B en float32   fecha: 2026-10-24
+modelo: Qwen/Qwen2.5-0.5B en float32   fecha: 2026-11-12
 
 --- 1. PARÍS, TROZO A TROZO ---
 
@@ -16,8 +16,17 @@ París, trozo a trozo
 |:--|:--|--:|--:|
 | «La capital de Francia es» | `_Par` | 0,0544 % | 123 de 151.936 |
 | «La capital de Francia es Par» | `ís` | 97,87 % | 1 de 151.936 |
+| «La capital de Francia es la ciudad de» | `_Par` | 15,5139 % | 1 de 151.936 |
+| «La capital de Francia es la ciudad de Par» | `ís` | 96,1953 % | 1 de 151.936 |
+:::
 
-Cada trozo se mira en la lista que da la máquina detrás del texto que tiene delante.
+::: tabla
+Dónde sale «Par», el primer trozo de «París»
+
+| detrás de | puesto de «Par» |
+|:--|--:|
+| «La capital de Francia es» | 123 |
+| «La capital de Francia es la ciudad de» | 1 |
 :::
 
 ::: tabla
@@ -30,6 +39,18 @@ Cada trozo se mira en la lista que da la máquina detrás del texto que tiene de
 | **«París» entera, de cada 10.000** | **5,33** |
 
 El 97,87 % del 0,0544 %, que da 0,0533 %.
+:::
+
+::: tabla
+«París» entera, detrás de «La capital de Francia es la ciudad de»
+
+|  | cuánto |
+|:--|--:|
+| de cada 10.000 veces, «Par» sale | 1551,39 |
+| de esas, «ís» sigue, de cada 100 | 96,20 |
+| **«París» entera, de cada 10.000** | **1492,37** |
+
+El 96,20 % del 15,51 %, que da 14,92 %.
 :::
 
 --- 2. «BANCO» Y OTRA PALABRA DE SU MISMA FRASE ---

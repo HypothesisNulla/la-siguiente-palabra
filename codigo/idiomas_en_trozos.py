@@ -202,8 +202,7 @@ def bloque_articulo_1(tok, textos):
     lineas = tabla_editorial(
         "El comienzo del artículo 1, trozo a trozo", ["idioma", "trozos", "cómo se parte"],
         filas, "idi",
-        ["“|” separa dos trozos; el guion bajo es el espacio de delante, que la palabra lleva "
-         "dentro de una frase."])
+        ["La barra separa dos trozos; el guion bajo es el espacio de delante."])
     return lineas, cuentas
 
 

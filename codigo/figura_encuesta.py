@@ -71,13 +71,13 @@ def dibujar(filas, paris, paleta, ruta):
                 mono=not resto)
         ax.add_patch(Rectangle((23, y - alto_barra / 2), w, alto_barra,
                                facecolor=p.tinta if resto else p.contra, edgecolor="none"))
-        L.texto(23 + w + 1.2, y, f"{v * 100:.2f} %".replace(".", ","), tam=7.6, negrita=resto)
+        # Orden 157 (12 nov 2026): porcentajes enteros, que es lo que explica el cuerpo (11.9). Antes: 17,46 %.
+        L.texto(23 + w + 1.2, y, f"{round(v * 100)} %", tam=7.6, negrita=resto)
         y -= paso
-    L.texto(4, y - 0.5, f"«Par», el primer trozo de «París», está en el puesto {paris[1]} "
-            f"de {paris[2]},", tam=7.2)
-    L.texto(4, y - 3.8, f"con un {paris[0]} %: dentro de «el resto».", tam=7.2)
+    # Antes, dos líneas aquí con el puesto y el 0,0544 % de «Par»: ahora van en la prosa del capítulo y en
+    # la tabla «Dónde sale «Par»», no dentro de la figura (11.9). `paris` se sigue leyendo para el selftest.
     L.pie("Largo de la barra: el porcentaje. El guion bajo marca que el trozo empieza con un\n"
-          f"espacio. «El resto» junta {paris[3]} trozos y suma más que los dos primeros juntos.")
+          "espacio. «El resto» junta a todos los demás trozos de la caja.")
     L.guardar(ruta)
     return anchos
 

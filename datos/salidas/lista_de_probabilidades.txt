@@ -29,10 +29,10 @@ Cien papeletas para «La capital de Francia es»
 Cada porcentaje, redondeado a papeletas de 100.
 :::
 
---- DE CADA CIEN PASOS, ¿CUÁNTOS ESTÁN ABIERTOS? ---
+--- DE CADA CIEN VUELTAS, ¿CUÁNTAS ESTÁN ABIERTAS? ---
 
 ::: tabla
-De cada cien pasos, ¿cuántos están abiertos?
+De cada cien vueltas, ¿cuántas están abiertas?
 
 | frase de arranque | casi seguro | casi seguro sin terminar | abierto | reñido |
 |:--|--:|--:|--:|--:|
@@ -44,5 +44,5 @@ De cada cien pasos, ¿cuántos están abiertos?
 | El ayuntamiento anunció ayer que | 40 % | 24 % | 60 % | 39 % |
 | **las seis juntas** | **57 %** | **37 %** | **43 %** | **25 %** |
 
-Un paso es casi seguro cuando el trozo seleccionado tenía el 90 % o más, y abierto cuando no llegaba; por eso esas dos columnas suman cien. «Casi seguro sin terminar» cuenta solo los casi seguros que no rematan una palabra empezada, como «ia» detrás de «Franc». Y reñido es un paso en el que el trozo seleccionado no llegaba ni al 50 %.
+Una vuelta es casi segura cuando el trozo escogido tenía el 90 % o más, y abierta cuando no llegaba; por eso esas dos columnas suman cien. «Casi seguro sin terminar» cuenta solo las casi seguras que no rematan una palabra empezada, como «ia» detrás de «Franc». Y reñida es una vuelta en la que el trozo escogido no llegaba ni al 50 %.
 :::
