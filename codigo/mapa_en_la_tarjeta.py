@@ -288,10 +288,11 @@ def informe(v, emitir, barridos):
         ["números por posición", "lote", "deja de ganar con"], filas, "dd" + "d",
         [# Orden 97: nota para el lector, en una sola frase larga.
          "En la tarjeta gráfica, para cada modelo y cada lote, es decir, cada número de textos a la "
-         "vez: la longitud más corta, en posiciones, a la que la máquina que mira todo a la vez ya "
-         f"no gana. Ganar es ir más de un {pct(MARGEN_EMPATE, 0)} por delante; a menos, es empate, que es "
-         "más o menos lo que varía la misma medición al repetirla. "
-         f"«{GANA_EN_TODAS.capitalize()}» quiere decir que gana en todas, de {miles(LONGITUDES[0])} a "
+         "vez: la longitud más corta, en posiciones, a la que la atención ya no gana. "
+         # Orden 162: acortada (se quitó «que es más o menos lo que varía la misma medición al repetirla»
+         # y «que gana en todas»).
+         f"Ganar es ir más de un {pct(MARGEN_EMPATE, 0)} por delante; a menos, es empate. "
+         f"«{GANA_EN_TODAS.capitalize()}» quiere decir de {miles(LONGITUDES[0])} a "
          f"{miles(LONGITUDES[-1])} posiciones.{mediana}"]))
     emitir([""])
 

@@ -84,3 +84,17 @@ Si no queda a menos de un 30 %, esta medición no vale.
 
 El texto del capítulo 9 dice que con dos núcleos la que mira todo a la vez pierde.
 :::
+
+--- LA TABLA DEL CUERPO DEL CAPÍTULO 9 ---
+
+::: tabla
+Los mismos programas en el mismo portátil, con más o menos núcleos
+
+| núcleos | va más deprisa |
+|--:|:--|
+| 1 | la cadena |
+| 2 | la cadena |
+| 4 | la atención |
+| 8 | la atención |
+| 14 | la atención |
+:::

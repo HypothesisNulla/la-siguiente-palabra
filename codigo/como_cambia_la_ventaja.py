@@ -209,8 +209,8 @@ def informe(ejecuciones=EJECUCIONES, carpeta=CARPETA):
             [[miles(ancho)] + [coma(v, DECIMALES_VENTAJA.get(maquina, 1)) + "x" for _, _, _, v in filas]
              + [f"{pct(queda, 0)}, {palabra}"] for ancho, filas, palabra, queda in ejes],
             "d" * (len(longitudes) + 1) + "i",
-            ["Cuántas veces más rápida va la máquina que lo mira todo a la vez, con cada tamaño de "
-             "modelo y cada longitud de texto. «Queda» es la parte de la ventaja del texto más corto "
+            [# Orden 162: acortada; la frase de «cuántas veces más rápida» sale de la nota.
+             "«Queda» es la parte de la ventaja del texto más corto "
              f"que sigue en el más largo: por debajo del {pct(QUEDA_CAE, 0)} se dice que cae, y entre "
              f"el {round(100 * QUEDA_CAE)} y el {pct(QUEDA_CRECE, 0)}, que se mantiene."
              + (f" {NOTA_VENTAJA}" if maquina.startswith("portátil") else "")]) + [""]
@@ -306,9 +306,9 @@ NOTA_TRES_ORDENADORES = (f"Las del portátil son la mediana de {EN_LETRA[MEDICIO
 NOTAS_SEGUNDOS = [
     # Orden 97: nota para el lector. Que cada número sea la media de tres pasadas tras una de
     # calentamiento que se tira está en en_serie_o_a_la_vez.py (REPETICIONES, CALENTAMIENTO).
-    f"Lo que tarda, en segundos, una pasada de entrenamiento con {EN_LETRA[TEXTOS_POR_PASADA]} "
-    "textos de cada longitud. La ventaja es el primer tiempo entre el segundo: por encima de 1,0x "
-    "gana la que mira todo a la vez; por debajo, la que lee en orden."]
+    # Orden 162: acortada, con los nombres del cap. 9 («la cadena» y «la atención»).
+    f"Una pasada de entrenamiento con {EN_LETRA[TEXTOS_POR_PASADA]} textos de cada longitud. "
+    "«En orden» es la cadena; «a la vez», la atención."]
 
 
 def tabla_de_segundos(titulo, filas, notas=NOTAS_SEGUNDOS):

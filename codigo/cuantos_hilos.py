@@ -64,6 +64,9 @@ MARGEN_INVARIANTE = 0.30           # la ventaja con 14 hilos, a menos de un 30 %
 REFERENCIA = "../datos/salidas/en_serie_o_a_la_vez_cpu.txt"   # el portátil, procesador: 3,2x con 1.024
 UMBRAL_SELFTEST_HILOS = 1.5        # el interruptor de hilos tiene que acelerar una operación repartible
 ANCHO_SALIDA = 62                  # líneas de no más de 62 caracteres, fuera de las tablas
+# Orden 162: la tabla del cuerpo del capítulo 9, con los nombres que usa el capítulo.
+GANA_EN_ORDEN = "la cadena"        # la red que lee en orden (capítulo 6): la que gana si la ventaja es menor que 1
+GANA_A_LA_VEZ = "la atención"      # la que mira todo a la vez: la que gana si la ventaja es mayor que 1
 
 # ==========================================================
 
@@ -198,6 +201,24 @@ def ventaja_de_referencia(ruta=AQUI / REFERENCIA, longitud=LONGITUD_LARGA):
     raise AssertionError(f"No encuentro la ventaja con {longitud} posiciones en {ruta}")
 
 
+def quien_va_mas_deprisa(ventaja):
+    """Orden 162: «la atención» si la ventaja (ya redondeada a dos decimales, como se ve en la tabla) está por
+    encima de 1, y «la cadena» si está por debajo. Con 1,00x no gana ninguna y la tabla no puede decir quién va
+    más deprisa: se para."""
+    v = round(ventaja, 2)
+    assert v != 1.0, f"Con una ventaja de {coma(ventaja, 3)}x no gana ninguna de las dos y la tabla no lo dice"
+    return GANA_A_LA_VEZ if v > 1.0 else GANA_EN_ORDEN
+
+
+def tabla_del_cuerpo(v):
+    """Orden 162: la tabla del cuerpo del capítulo 9, con LONGITUD_LARGA posiciones y sin nota: los hilos (los núcleos
+    que se le dejan usar al programa) y quién va más deprisa; la ventaja de cada uno sale de `v`."""
+    return tabla_editorial(
+        "Los mismos programas en el mismo portátil, con más o menos núcleos",
+        ["núcleos", "va más deprisa"],
+        [[str(n), quien_va_mas_deprisa(v[(n, LONGITUD_LARGA)])] for n in HILOS], "di")
+
+
 def cerca(valor, referencia, margen=MARGEN_INVARIANTE):
     """¿A menos de `margen` (arriba o abajo) de la referencia?"""
     return referencia * (1 - margen) <= valor <= referencia * (1 + margen)
@@ -293,6 +314,24 @@ def selftest():
     if abs(ref - 3.2) > 1e-9 or not pasos:
         fallos.append(f"invariante: la referencia es {ref} y se esperaba 3,2, o los pasos en serie cambian")
 
+    # Orden 162: la tabla del cuerpo del capítulo 9. «va más deprisa» tiene que casar con la ventaja de los barridos
+    # guardados (por encima de 1, la atención; por debajo, la cadena), y la función no puede decir quién gana con 1,00x.
+    _, v_guardada = medianas(leer_guardados())
+    tabla = tabla_del_cuerpo(v_guardada)
+    filas = [[c.strip() for c in l.strip("|").split("|")] for l in tabla[5:-1]]
+    casan = (len(filas) == len(HILOS) and all(
+        f[0] == str(n) and f[1] == (GANA_A_LA_VEZ if v_guardada[(n, LONGITUD_LARGA)] > 1 else GANA_EN_ORDEN)
+        for f, n in zip(filas, HILOS)))
+    try:
+        quien_va_mas_deprisa(1.0)
+        calla_en_empate = False
+    except AssertionError:
+        calla_en_empate = True
+    print(f"    la tabla del capítulo: {', '.join(f'{f[0]} {f[1]}' for f in filas)}; "
+          f"casa con las ventajas: {'sí' if casan else 'NO'}; con 1,00x se para: {'sí' if calla_en_empate else 'NO'}")
+    if not casan or not calla_en_empate:
+        fallos.append("invariante: «va más deprisa» no casa con la ventaja (por encima de 1, la atención), o con 1,00x no se para")
+
     print()
     if fallos:
         for f in fallos:
@@ -375,6 +414,9 @@ def main():
         f"¿Cae por debajo de 1,0x con {miles(LONGITUD_LARGA)} posiciones?", ["hilos", "ventaja", "¿por debajo de 1,0x?"],
         [[str(n), coma(v_poco[n], 2) + "x", "sí" if cruza[n] else "no"] for n in HILOS], "ddc",
         ["El texto del capítulo 9 dice que con dos núcleos la que mira todo a la vez pierde."]))
+    emitir([""])
+    emitir(["--- LA TABLA DEL CUERPO DEL CAPÍTULO 9 ---", ""])
+    emitir(tabla_del_cuerpo(v))
     return 0
 
 

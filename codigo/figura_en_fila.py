@@ -80,7 +80,7 @@ def dibujar(orden, a_la_vez, paleta, ruta):
         x0, ytop, _ = L.panel(n, f"{titulo_base}: {NUMEROS.get(cuantos, str(cuantos) + ' tandas')}",
                               ALTO_PANEL)
         fila(L, ytop - 1.6, datos, encadenar)
-    L.pie("Cada caja es la cuenta de una palabra; debajo, en qué tanda se puede hacer. En una tanda\n"
+    L.pie("Cada recuadro es la cuenta de una palabra; debajo, en qué tanda se puede hacer. En una tanda\n"
           "van todas las cuentas que se pueden hacer a la vez.")
     L.guardar(ruta)
     return pasos

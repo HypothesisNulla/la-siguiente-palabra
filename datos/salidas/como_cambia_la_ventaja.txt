@@ -17,7 +17,7 @@ La ventaja en el ordenador de 2 núcleos en la nube
 |--:|--:|--:|--:|--:|--:|:--|
 | 256 | 1,1x | 0,8x | 0,9x | 0,7x | 0,5x | 42 %, cae |
 
-Cuántas veces más rápida va la máquina que lo mira todo a la vez, con cada tamaño de modelo y cada longitud de texto. «Queda» es la parte de la ventaja del texto más corto que sigue en el más largo: por debajo del 75 % se dice que cae, y entre el 75 y el 110 %, que se mantiene.
+«Queda» es la parte de la ventaja del texto más corto que sigue en el más largo: por debajo del 75 % se dice que cae, y entre el 75 y el 110 %, que se mantiene.
 :::
 
 ::: tabla
@@ -29,7 +29,7 @@ La ventaja en el procesador del portátil, con tres tamaños de modelo
 | 512 | 4,4x | 4,7x | 5,0x | 4,3x | 3,7x | 84 %, se mantiene |
 | 1.024 | 5,8x | 6,2x | 6,4x | 6,2x | 4,8x | 83 %, se mantiene |
 
-Cuántas veces más rápida va la máquina que lo mira todo a la vez, con cada tamaño de modelo y cada longitud de texto. «Queda» es la parte de la ventaja del texto más corto que sigue en el más largo: por debajo del 75 % se dice que cae, y entre el 75 y el 110 %, que se mantiene. Cada ventaja es la mediana de diez mediciones.
+«Queda» es la parte de la ventaja del texto más corto que sigue en el más largo: por debajo del 75 % se dice que cae, y entre el 75 y el 110 %, que se mantiene. Cada ventaja es la mediana de diez mediciones.
 :::
 
 ::: tabla
@@ -41,7 +41,7 @@ La ventaja en la tarjeta gráfica del portátil, con tres tamaños de modelo
 | 512 | 2,34x | 2,40x | 2,19x | 1,83x | 1,26x | 54 %, cae |
 | 1.024 | 1,72x | 1,67x | 1,64x | 1,45x | 1,27x | 74 %, cae |
 
-Cuántas veces más rápida va la máquina que lo mira todo a la vez, con cada tamaño de modelo y cada longitud de texto. «Queda» es la parte de la ventaja del texto más corto que sigue en el más largo: por debajo del 75 % se dice que cae, y entre el 75 y el 110 %, que se mantiene. Cada ventaja es la mediana de diez mediciones.
+«Queda» es la parte de la ventaja del texto más corto que sigue en el más largo: por debajo del 75 % se dice que cae, y entre el 75 y el 110 %, que se mantiene. Cada ventaja es la mediana de diez mediciones.
 :::
 
 
@@ -58,7 +58,7 @@ Los segundos en el ordenador de 2 núcleos en la nube, modelo de 256 números po
 | 512 | 0,1842 | 0,2704 | 0,7x |
 | 1.024 | 0,3664 | 0,7737 | 0,5x |
 
-Lo que tarda, en segundos, una pasada de entrenamiento con dieciséis textos de cada longitud. La ventaja es el primer tiempo entre el segundo: por encima de 1,0x gana la que mira todo a la vez; por debajo, la que lee en orden.
+Una pasada de entrenamiento con dieciséis textos de cada longitud. «En orden» es la cadena; «a la vez», la atención.
 :::
 
 ::: tabla
