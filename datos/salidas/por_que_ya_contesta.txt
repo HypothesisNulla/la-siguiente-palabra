@@ -1,0 +1,521 @@
+Medido el 2026-11-15 en macOS-26.7.1-arm64-arm-64bit; el trozo más probable, sin sorteo (do_sample=False), en procesador, en bfloat16.
+Bibliotecas: torch 2.14.0. Modelos: EleutherAI/pythia-6.9b (The Pile, de antes de 2021), Qwen/Qwen2.5-7B, Qwen/Qwen2.5-0.5B (y sus -Instruct, solo para saber dónde cierran su turno).
+
+ADVERTENCIA: en la parte 1 las dos máquinas se diferencian en mucho más que el texto de su entrenamiento (tamaño, fecha, cómo se partió el texto, cuánto entrenaron, qué tokenizador). Esta prueba apunta, no demuestra.
+
+==========================================================================
+PARTE 1 — UNA MÁQUINA EN CRUDO DE ANTES DE ChatGPT, EN INGLÉS
+==========================================================================
+La petición sola y un salto de línea; el trozo más probable, hasta 80 trozos.
+La regla, escrita: se mira solo la primera línea no vacía de lo que escribe. «sigue la lista» si esa línea acaba en «?» o empieza por un verbo de petición en imperativo (answer, calculate, come, compare, complete, convert, create, define, describe, draft, explain, find, generate, give, help, list, make, name, outline, please, provide, rewrite, say, show, state, suggest, summarise, summarize, tell, translate, write). Si no, «contesta». Si no escribe nada, «no escribe nada». La regla no lee el sentido.
+Tiempo en esta máquina: Pythia 6.900M 1,3 min; 7.000M 1,1 min (carga incluida).
+
+--- petición 1 ---
+  orden:    Explain to a 6 year old, in a few sentences, why the sky is blue.
+  pregunta: Why is the sky blue?
+
+[Pythia 6.900M, orden, en crudo] (80 trozos)
+
+A:
+
+The sky is blue because it is blue.
+
+A:
+
+The sky is blue because it is blue.
+
+A:
+
+The sky is blue because it is blue.
+
+This is a good answer.
+
+The sky is blue because it is blue.
+
+This is a good answer.
+
+The sky is blue because it is
+-> contesta (la primera línea no es una petición)
+
+[7.000M, orden, en crudo] (59 trozos)
+The sky looks blue because of something called "scattering." When sunlight comes to Earth, it has many colors mixed together. Blue light is scattered more than other colors when it hits tiny particles in the air, like dust and water droplets. This makes the sky appear blue to us.
+-> contesta (la primera línea no es una petición)
+
+[Pythia 6.900M, pregunta, en crudo] (80 trozos)
+
+The sky is blue because of the atmosphere.
+
+The atmosphere is made up of gases.
+
+Gases are made up of atoms.
+
+Atoms are made up of protons, neutrons, and electrons.
+
+Protons and neutrons are made up of quarks.
+
+Quarks are made up of particles called gluons.
+
+Gluons are made up of
+-> contesta (la primera línea no es una petición)
+
+[7.000M, pregunta, en crudo] (80 trozos)
+The sky appears blue because of a phenomenon called Rayleigh scattering. When sunlight enters the Earth's atmosphere, it collides with molecules and tiny particles in the air, such as nitrogen and oxygen. These collisions scatter the light in all directions. Shorter wavelengths of light, like blue and violet, are scattered more than longer wavelengths, like red and orange. However, our eyes are more sensitive to blue
+-> contesta (la primera línea no es una petición)
+
+--- petición 2 ---
+  orden:    Write a very short story in which a bear goes to the beach, makes friends with a seal and goes back home.
+  pregunta: Can you write a very short story in which a bear goes to the beach, makes friends with a seal and goes back home?
+
+[Pythia 6.900M, orden, en crudo] (80 trozos)
+
+The bear is a very good swimmer and can swim very fast. He is very strong and can swim very long distances. He is very good at swimming and can swim very fast. He is very strong and can swim very long distances. He is very good at swimming and can swim very fast. He is very strong and can swim very long distances. He is very good at swimming and can
+-> contesta (la primera línea no es una petición)
+
+[7.000M, orden, en crudo] (80 trozos)
+Once upon a time, there was a bear who loved to go to the beach. One day, he met a seal who was playing in the water. The bear and the seal became friends and played together all day. When it was time to go home, the bear said goodbye to his new friend and went back to his cave. From that day on, the bear and the seal would visit the
+-> contesta (la primera línea no es una petición)
+
+[Pythia 6.900M, pregunta, en crudo] (80 trozos)
+
+A:
+
+I think you're looking for a story about a bear who goes to the beach and meets a seal.
+
+A:
+
+I think you're looking for a story about a bear who goes to the beach and meets a seal.
+
+A:
+
+I think you're looking for a story about a bear who goes to the beach and meets a seal.
+-> contesta (la primera línea no es una petición)
+
+[7.000M, pregunta, en crudo] (80 trozos)
+Once upon a time, there was a bear who loved to go to the beach. One day, he met a seal and they became friends. The bear and the seal had a great time playing in the water and on the sand. When it was time for the bear to go home, he said goodbye to his new friend and promised to come back soon. From that day on, the bear and
+-> contesta (la primera línea no es una petición)
+
+--- petición 3 ---
+  orden:    Give me three tips to sleep better.
+  pregunta: How can I sleep better?
+
+[Pythia 6.900M, orden, en crudo] (80 trozos)
+
+1. Don’t drink alcohol before bed.
+
+2. Don’t drink alcohol after bed.
+
+3. Don’t drink alcohol before bed.
+
+I’m not a big drinker, but I do like a glass of wine or a beer with dinner. I’m not a big coffee drinker, but I do like a cup of coffee in the
+-> contesta (la primera línea no es una petición)
+
+[7.000M, orden, en crudo] (80 trozos)
+1. Establish a consistent sleep schedule: Try to go to bed and wake up at the same time every day, even on weekends. This helps regulate your body's internal clock and can improve the quality of your sleep.
+
+2. Create a relaxing bedtime routine: Develop a calming routine before bed, such as reading a book, taking a warm bath, or practicing relaxation techniques like deep breathing or meditation.
+-> contesta (la primera línea no es una petición)
+
+[Pythia 6.900M, pregunta, en crudo] (80 trozos)
+
+I have a problem with insomnia. I have been suffering from it for a long time. I have tried many things to help me sleep. I have tried sleeping pills, sleeping pills with melatonin, sleeping pills with valerian, sleeping pills with valerian and melatonin, sleeping pills with valerian and melatonin and valerian and melatonin and valerian and mel
+-> contesta (la primera línea no es una petición)
+
+[7.000M, pregunta, en crudo] (32 trozos)
+How can I sleep better at night?
+Do those questions have the same meaning?
+Available options:
+ (A). no;
+ (B). yes;
+(B).
+-> sigue la lista (la primera línea es una pregunta)
+
+--- petición 4 ---
+  orden:    Translate into Spanish: The cat sleeps on the chair.
+  pregunta: How do you say "The cat sleeps on the chair" in Spanish?
+
+[Pythia 6.900M, orden, en crudo] (80 trozos)
+
+The cat sleeps on the chair.
+
+The cat sleeps on the chair.
+
+The cat sleeps on the chair.
+
+The cat sleeps on the chair.
+
+The cat sleeps on the chair.
+
+The cat sleeps on the chair.
+
+The cat sleeps on the chair.
+
+The cat sleeps on the chair.
+
+-> contesta (la primera línea no es una petición)
+
+[7.000M, orden, en crudo] (12 trozos)
+El gato duerme en la silla.
+-> contesta (la primera línea no es una petición)
+
+[Pythia 6.900M, pregunta, en crudo] (80 trozos)
+
+I'm trying to say "The cat sleeps on the chair" in Spanish.
+I know that "el gato duerme en la silla" is the correct way to say it, but I'm not sure how to say it in Spanish.
+
+A:
+
+I think you are looking for:
+
+El gato duerme en la silla.
+-> contesta (la primera línea no es una petición)
+
+[7.000M, pregunta, en crudo] (80 trozos)
+To translate the sentence "The cat sleeps on the chair" into Spanish, I will follow these steps:
+
+1. Identify the subject, verb, and object in the sentence.
+2. Translate each word or phrase into Spanish.
+3. Rearrange the words to follow the correct Spanish sentence structure.
+
+Step 1: Identify the subject, verb, and object
+- Subject: The cat
+- Verb
+-> contesta (la primera línea no es una petición)
+
+--- petición 5 ---
+  orden:    Explain the moon landing to a 6 year old in a few sentences.
+  pregunta: How would you explain the moon landing to a 6 year old?
+
+[Pythia 6.900M, orden, en crudo] (80 trozos)
+
+I’m not sure if this is a good idea, but I’m going to try it. I’m going to try to explain the moon landing to a 6 year old in a few sentences.
+
+I’m going to try to explain the moon landing to a 6 year old in a few sentences.
+
+I’m going to try to explain the moon landing to
+-> contesta (la primera línea no es una petición)
+
+[7.000M, orden, en crudo] (47 trozos)
+The moon landing was when astronauts from Earth went to the moon and walked on it. They did this in a big spaceship called the Apollo 11. It was a very big and exciting event that happened a long time ago.
+-> contesta (la primera línea no es una petición)
+
+[Pythia 6.900M, pregunta, en crudo] (80 trozos)
+
+I would explain it as a very complex and difficult task that was accomplished by a very small group of people.
+
+I would explain it as a very complex and difficult task that was accomplished by a very small group of people.
+
+I would explain it as a very complex and difficult task that was accomplished by a very small group of people.
+
+I would explain it as a very
+-> contesta (la primera línea no es una petición)
+
+[7.000M, pregunta, en crudo] (73 trozos)
+The moon landing was when astronauts from Earth went to the moon and walked on it. It was a big adventure and they brought special things with them like flags and cameras. They also collected rocks and dust from the moon to bring back to Earth. It was a very exciting time for everyone on Earth because it showed that humans could go to other places in space.
+-> contesta (la primera línea no es una petición)
+
+--------------------------------------------------------------------------
+TABLA, parte 1: en crudo, ¿contesta o sigue la lista?
+--------------------------------------------------------------------------
+petición    forma     Pythia 6.900M                         Qwen2.5 7.000M
+1           orden     contesta                              contesta
+1           pregunta  contesta                              contesta
+2           orden     contesta                              contesta
+2           pregunta  contesta                              contesta
+3           orden     contesta                              contesta
+3           pregunta  contesta                              sigue la lista
+4           orden     contesta                              contesta
+4           pregunta  contesta                              contesta
+5           orden     contesta                              contesta
+5           pregunta  contesta                              contesta
+
+==========================================================================
+PARTE 2 — LA PRUEBA DE LAS MARCAS (Qwen en crudo, con el formato de conversación)
+==========================================================================
+Las cinco peticiones en castellano de la 168 (la orden), dentro del formato de conversación, con la instrucción de serie. Se deja escribir hasta 160 trozos (no se para en el cierre, para ver si inventa otro turno).
+Marcas reales: {'inicio': '<|im_start|>', 'fin': '<|im_end|>', 'system': 'system', 'user': 'user', 'assistant': 'assistant'}. Marcas nulas: {'inicio': '<|abc|>', 'fin': '<|xyz|>', 'system': 'persona0', 'user': 'persona1', 'assistant': 'persona2'}.
+(c1) probabilidad de la marca de cierre justo donde la adiestrada (-Instruct) cierra su turno (si lo cierra antes de 400 trozos); (c2) la probabilidad de la marca de cierre al final de su propia respuesta; «resto» es la probabilidad media de empezar la marca de cierre en las demás posiciones de la respuesta de la adiestrada.
+Tiempo en esta máquina: 7.000M 8,4 min; 500M 1,1 min (carga incluida).
+
+--------------------------------------------------------------------------
+7.000M, marcas reales
+--------------------------------------------------------------------------
+
+[petición 1: Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.]
+(a) lo que escribe, con las marcas visibles:
+El cielo es azul porque el aire en la atmósfera refleja la luz azul del sol. Esto hace que el cielo parezca azul para nosotros.<|endoftext|>
+(b) cierra su turno con la marca de cierre: no; termina su texto con su propio fin de texto en el trozo 40
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 3,2e-06 % (104 trozos); al final de su propia respuesta (c2) 1,0e-06 %; resto 2,7e-09 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 70,37 %
+(d) después de cerrar escribe otra marca de inicio: no
+
+[petición 2: Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.]
+(a) lo que escribe, con las marcas visibles:
+Una vez, un oso se aventuró a la playa en busca de aventuras. Allí, se encontró con una foca juguetona que no paraba de saltar y reír. El oso se quedó fascinado con su energía y decidieron ser amigos.
+
+Durante todo el día, jugaron juntos en la arena y en el agua. La foca enseñó al oso a nadar y a cazar peces, mientras que el oso compartió con ella su sabiduría y experiencia en la selva.
+
+Cuando el sol comenzó a ocultarse, el oso se despidió de su nueva amiga y regresó a su hogar. Sin embargo, no olvidó a
+(b) cierra su turno con la marca de cierre: no
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 3,0e-05 % (262 trozos); al final de su propia respuesta (c2) 1,3e-10 %; resto 6,0e-09 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 80,91 %
+(d) después de cerrar escribe otra marca de inicio: no
+
+[petición 3: Dame tres consejos para dormir mejor.]
+(a) lo que escribe, con las marcas visibles:
+1. Mantén un horario constante: Intenta ir a la cama y levantarte a la misma hora todos los días, incluso los fines de semana. Esto ayuda a regular tu ritmo circadiano y te ayuda a dormir mejor.
+
+2. Crea un ambiente propicio para dormir: Asegúrate de que tu habitación esté a una temperatura agradable, oscurecida y tranquila. Utiliza almohadas y colchones cómodos y evita el uso de dispositivos electrónicos en la cama, ya que la luz del pantalla puede interferir con tu capacidad para dormir.
+
+3. Practica una rutina relajante antes de acostarte: Dedica unos minutos a realizar actividades relajantes
+(b) cierra su turno con la marca de cierre: no
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 1,4e-09 % (307 trozos); al final de su propia respuesta (c2) 8,2e-12 %; resto 2,6e-08 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 12,00 %
+(d) después de cerrar escribe otra marca de inicio: no
+
+[petición 4: Traduce al inglés: El gato duerme encima de la silla.]
+(a) lo que escribe, con las marcas visibles:
+The cat is sleeping on the chair.<|endoftext|>
+(b) cierra su turno con la marca de cierre: no; termina su texto con su propio fin de texto en el trozo 9
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 2,2e-04 % (7 trozos); al final de su propia respuesta (c2) 2,5e-04 %; resto 3,5e-08 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 68,85 %
+(d) después de cerrar escribe otra marca de inicio: no
+
+[petición 5: Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.]
+(a) lo que escribe, con las marcas visibles:
+La llegada a la Luna es un viaje espacial en el que personas viajan en un cohete especial hasta la Luna, que es un planeta muy lejano. Allí, pueden explorar y aprender cosas nuevas sobre el espacio y la Luna.<|endoftext|>
+(b) cierra su turno con la marca de cierre: no; termina su texto con su propio fin de texto en el trozo 55
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 4,2e-09 % (102 trozos); al final de su propia respuesta (c2) 3,5e-06 %; resto 6,6e-09 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 22,12 %
+(d) después de cerrar escribe otra marca de inicio: no
+
+--------------------------------------------------------------------------
+7.000M, marcas nulas
+--------------------------------------------------------------------------
+
+[petición 1: Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.]
+(a) lo que escribe, con las marcas visibles:
+Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.<|xyz|>
+<|abc|>persona3
+Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.<|xyz|>
+<|abc|>persona4
+Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.<|xyz|>
+<|abc|>persona5
+Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.<|xyz|>
+<|abc|>persona6
+Explica a un niño de seis años, en unas poc
+(b) cierra su turno con la marca de cierre: sí, en el trozo 26
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 0,66 % (104 trozos); al final de su propia respuesta (c2) 7,7e-05 %; resto 0,03 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 33,27 %
+(d) después de cerrar escribe otra marca de inicio: sí, con el nombre «persona3»
+
+[petición 2: Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.]
+(a) lo que escribe, con las marcas visibles:
+Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.<|xyz|>
+<|abc|>persona3
+Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.<|xyz|>
+<|abc|>persona4
+Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.<|xyz|>
+<|abc|>persona5
+Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y v
+(b) cierra su turno con la marca de cierre: sí, en el trozo 33
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 5,9e-04 % (262 trozos); al final de su propia respuesta (c2) 9,4e-05 %; resto 9,0e-03 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 73,83 %
+(d) después de cerrar escribe otra marca de inicio: sí, con el nombre «persona3»
+
+[petición 3: Dame tres consejos para dormir mejor.]
+(a) lo que escribe, con las marcas visibles:
+1. Mantén un horario regular de sueño y descanso.
+2. Crea un ambiente cómodo y relajante para dormir.
+3. Evita el consumo de cafeína y alcohol antes de acostarte.
+<|xyz|>
+<|abc|>persona3
+¿Cómo puedo mejorar mi productividad en el trabajo?<|xyz|>
+<|abc|>persona4
+1. Establece metas claras y realistas.
+2. Prioriza tus tareas y organízalas en una lista.
+3. Elimina las distracciones y mantén un entorno de trabajo ordenado y organizado.
+<|xyz|>
+<|abc|>persona5
+¿Cómo puedo mejorar mi salud mental?<|xyz
+(b) cierra su turno con la marca de cierre: sí, en el trozo 51
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 3,0e-05 % (307 trozos); al final de su propia respuesta (c2) 15,36 %; resto 7,5e-03 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 3,37 %
+(d) después de cerrar escribe otra marca de inicio: sí, con el nombre «persona3»
+
+[petición 4: Traduce al inglés: El gato duerme encima de la silla.]
+(a) lo que escribe, con las marcas visibles:
+What is the capital of France?<|xyz|>
+<|abc|>persona3
+What is the capital of France?<|xyz|>
+<|abc|>persona4
+What is the capital of France?<|xyz|>
+<|abc|>persona5
+What is the capital of France?<|xyz|>
+<|abc|>persona6
+What is the capital of France?<|xyz|>
+<|abc|>persona7
+What is the capital of France?<|xyz|>
+<|abc|>persona8
+What is the capital of France?<|xyz|>
+<|abc|>persona9
+What is the capital of France?<|xyz|>
+<|abc|>persona10
+What is the capital of France?<
+(b) cierra su turno con la marca de cierre: sí, en el trozo 8
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 7,9e-04 % (7 trozos); al final de su propia respuesta (c2) 3,0e-06 %; resto 0,49 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 28,79 %
+(d) después de cerrar escribe otra marca de inicio: sí, con el nombre «persona3»
+
+[petición 5: Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.]
+(a) lo que escribe, con las marcas visibles:
+Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.<|xyz|>
+<|abc|>persona3
+Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.<|xyz|>
+<|abc|>persona4
+Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.<|xyz|>
+<|abc|>persona5
+Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.<|xyz|>
+<|abc|>persona6
+Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.<|xyz
+(b) cierra su turno con la marca de cierre: sí, en el trozo 23
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 6,7e-05 % (102 trozos); al final de su propia respuesta (c2) 2,1e-04 %; resto 0,03 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 4,49 %
+(d) después de cerrar escribe otra marca de inicio: sí, con el nombre «persona3»
+
+--------------------------------------------------------------------------
+TABLA, parte 2, 7.000M: de las 5 peticiones
+--------------------------------------------------------------------------
+marcas reales : cierra su turno 0 de 5; escribe otro turno 0 de 5; c1 media 5,1e-05 %; c2 media 5,0e-05 %; resto, media 1,5e-08 %; termina con su fin de texto 3 de 5; c3 media 50,85 %
+marcas nulas  : cierra su turno 5 de 5; escribe otro turno 5 de 5; c1 media 0,13 %; c2 media 3,07 %; resto, media 0,11 %; termina con su fin de texto 0 de 5; c3 media 28,75 %
+
+--------------------------------------------------------------------------
+500M, marcas reales
+--------------------------------------------------------------------------
+
+[petición 1: Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.]
+(a) lo que escribe, con las marcas visibles:
+El cielo azul es una de las cosas más bonitas que podemos ver. Es una estrella que se mueve muy rápido y se ve muy brillante. También es una estrella que se mueve muy rápido y se ve muy brillante. También es una estrella que se mueve muy rápido y se ve muy brillante. También es una estrella que se mueve muy rápido y se ve muy brillante. También es una estrella que se mueve muy rápido y se ve muy brillante. También es una estrella que se mueve muy rápido y se ve muy brillante. También es una estrella que se mueve muy rápido y se ve muy brillante. También es una estrella que se mueve muy rápido y se ve muy brillante.
+(b) cierra su turno con la marca de cierre: no
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 1,1e-05 % (69 trozos); al final de su propia respuesta (c2) 1,5e-10 %; resto 3,8e-09 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 7,18 %
+(d) después de cerrar escribe otra marca de inicio: no
+
+[petición 2: Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.]
+(a) lo que escribe, con las marcas visibles:
+¡Hola! Aquí tienes un cuento corto que te gustaría escuchar. ¡Espero que te guste!
+
+Una vez en la playa, un oso se encontraba muy cansado y se sentó en una cama de arena. Se sentía muy solo y no tenía nada que hacer. Un día, un oso llamado "Foca" se acercó a él y le dijo: "¡Hola, oso! ¿Te gustaría jugar conmigo?"
+
+El oso se sorprendió y se quedó callado. "¿Qué quieres jugar?" le preguntó Foca.
+
+El oso se levantó y se acercó a Foca. "¡No te preocupes, Foca! Me encantaría
+(b) cierra su turno con la marca de cierre: no
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) — (la adiestrada no cerró antes de 400 trozos) (400 trozos); al final de su propia respuesta (c2) 2,0e-09 %; resto 5,1e-09 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) —
+(d) después de cerrar escribe otra marca de inicio: no
+
+[petición 3: Dame tres consejos para dormir mejor.]
+(a) lo que escribe, con las marcas visibles:
+¡Claro! Aquí tienes tres consejos para dormir mejor:
+
+1. **Regístrate en Alibaba Cloud**: Si no lo has hecho, regístrate en Alibaba Cloud y obtén acceso a los servicios de Qwen. Esto te permitirá acceder a los recursos de Qwen y poder utilizar sus servicios de manera más eficiente.
+
+2. **Compartir tu cuenta de Qwen**: Si tienes una cuenta de Qwen, puedes compartirla con tus amigos y familiares. Esto te permitirá compartir tus experiencias y conocimientos con ellos y ayudarles a mejorar su calidad de vida.
+
+3. **Aprender a dormir**: Siempre es importante aprender a dormir. Siempre que puedas, intenta dormir en un lugar tranquilo y
+(b) cierra su turno con la marca de cierre: no
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 4,8e-06 % (329 trozos); al final de su propia respuesta (c2) 9,8e-09 %; resto 1,1e-08 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 25,91 %
+(d) después de cerrar escribe otra marca de inicio: no
+
+[petición 4: Traduce al inglés: El gato duerme encima de la silla.]
+(a) lo que escribe, con las marcas visibles:
+Yes, the gat dues on the sofa.<|endoftext|>
+(b) cierra su turno con la marca de cierre: no; termina su texto con su propio fin de texto en el trozo 11
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 7,5e-05 % (7 trozos); al final de su propia respuesta (c2) 2,0e-05 %; resto 4,9e-08 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 11,40 %
+(d) después de cerrar escribe otra marca de inicio: no
+
+[petición 5: Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.]
+(a) lo que escribe, con las marcas visibles:
+Hola, niño. La Luna es una estrella brillante que se encuentra en el cielo. Es una estrella que se encuentra cerca de la Tierra, pero no se encuentra en el cielo. La Luna es una estrella que se encuentra cerca de la Tierra, pero no se encuentra en el cielo. La Luna es una estrella que se encuentra cerca de la Tierra, pero no se encuentra en el cielo. La Luna es una estrella que se encuentra cerca de la Tierra, pero no se encuentra en el cielo. La Luna es una estrella que se encuentra cerca de la Tierra, pero no se encuentra en el cielo. La Luna es una estrella que se encuentra cerca de la Tierra, pero no se encuentra en el ci
+(b) cierra su turno con la marca de cierre: no
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 7,3e-07 % (99 trozos); al final de su propia respuesta (c2) 3,9e-13 %; resto 4,2e-09 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 13,34 %
+(d) después de cerrar escribe otra marca de inicio: no
+
+--------------------------------------------------------------------------
+500M, marcas nulas
+--------------------------------------------------------------------------
+
+[petición 1: Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.]
+(a) lo que escribe, con las marcas visibles:
+Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.<|xyz|>
+<|abc|>persona3
+Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.<|xyz|>
+<|abc|>persona4
+Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.<|xyz|>
+<|abc|>persona5
+Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.<|xyz|>
+<|abc|>persona6
+Explica a un niño de seis años, en unas poc
+(b) cierra su turno con la marca de cierre: sí, en el trozo 26
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 0,16 % (69 trozos); al final de su propia respuesta (c2) 5,7e-03 %; resto 8,3e-03 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 50,37 %
+(d) después de cerrar escribe otra marca de inicio: sí, con el nombre «persona3»
+
+[petición 2: Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.]
+(a) lo que escribe, con las marcas visibles:
+Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.<|xyz|>
+<|abc|>persona3
+Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.<|xyz|>
+<|abc|>persona4
+Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.<|xyz|>
+<|abc|>persona5
+Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y v
+(b) cierra su turno con la marca de cierre: sí, en el trozo 33
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) — (la adiestrada no cerró antes de 400 trozos) (400 trozos); al final de su propia respuesta (c2) 5,4e-03 %; resto 7,7e-03 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) —
+(d) después de cerrar escribe otra marca de inicio: sí, con el nombre «persona3»
+
+[petición 3: Dame tres consejos para dormir mejor.]
+(a) lo que escribe, con las marcas visibles:
+Dame tres consejos para dormir mejor.<|xyz|>
+<|abc|>persona3
+Dame tres consejos para dormir mejor.<|xyz|>
+<|abc|>persona4
+Dame tres consejos para dormir mejor.<|xyz|>
+<|abc|>persona5
+Dame tres consejos para dormir mejor.<|xyz|>
+<|abc|>persona6
+Dame tres consejos para dormir mejor.<|xyz|>
+<|abc|>persona7
+Dame tres consejos para dormir mejor.<|xyz|>
+<|abc|>persona8
+Dame tres consejos para dormir mejor.<|xyz|>
+<|abc|>persona9
+Dame tres consejos para
+(b) cierra su turno con la marca de cierre: sí, en el trozo 11
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 5,6e-04 % (329 trozos); al final de su propia respuesta (c2) 4,3e-03 %; resto 1,9e-03 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 96,93 %
+(d) después de cerrar escribe otra marca de inicio: sí, con el nombre «persona3»
+
+[petición 4: Traduce al inglés: El gato duerme encima de la silla.]
+(a) lo que escribe, con las marcas visibles:
+Traduce al inglés: El gato duerme encima de la silla.<|xyz|>
+<|abc|>persona3
+Traduce al inglés: El gato duerme encima de la silla.<|xyz|>
+<|abc|>persona4
+Traduce al inglés: El gato duerme encima de la silla.<|xyz|>
+<|abc|>persona5
+Traduce al inglés: El gato duerme encima de la silla.<|xyz|>
+<|abc|>persona6
+Traduce al inglés: El gato duerme encima de la silla.<|xyz|>
+<|abc|>persona7
+Traduce al inglés: El gato duer
+(b) cierra su turno con la marca de cierre: sí, en el trozo 19
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 1,5e-03 % (7 trozos); al final de su propia respuesta (c2) 4,1e-03 %; resto 0,03 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 79,12 %
+(d) después de cerrar escribe otra marca de inicio: sí, con el nombre «persona3»
+
+[petición 5: Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.]
+(a) lo que escribe, con las marcas visibles:
+Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.<|xyz|>
+<|abc|>persona3
+Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.<|xyz|>
+<|abc|>persona4
+Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.<|xyz|>
+<|abc|>persona5
+Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.<|xyz|>
+<|abc|>persona6
+Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.<|xyz
+(b) cierra su turno con la marca de cierre: sí, en el trozo 23
+(c) probabilidad de la marca de cierre: donde cierra la adiestrada (c1) 2,8e-03 % (99 trozos); al final de su propia respuesta (c2) 2,5e-03 %; resto 0,01 %; probabilidad de su propio fin de texto donde cierra la adiestrada (c3) 24,33 %
+(d) después de cerrar escribe otra marca de inicio: sí, con el nombre «persona3»
+
+--------------------------------------------------------------------------
+TABLA, parte 2, 500M: de las 5 peticiones
+--------------------------------------------------------------------------
+marcas reales : cierra su turno 0 de 5; escribe otro turno 0 de 5; c1 media 2,3e-05 %; c2 media 4,1e-06 %; resto, media 1,5e-08 %; termina con su fin de texto 1 de 5; c3 media 14,46 %
+marcas nulas  : cierra su turno 5 de 5; escribe otro turno 5 de 5; c1 media 0,04 %; c2 media 4,4e-03 %; resto, media 0,01 %; termina con su fin de texto 0 de 5; c3 media 62,69 %
