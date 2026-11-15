@@ -30,3 +30,5 @@ corpus_es/
 
 # Orden 158: la salida en bruto de mirada_a_mano.py no se publica (antes estaba en la raíz de datos/, ya ignorada por «*.txt»).
 salidas/mirada_a_mano_bruto.txt
+# Orden 171: OpenAssistant (oasst1), 34 MB de textos de terceros (Apache 2.0): no se publican; el programa los baja de nuevo y comprueba su md5
+oasst1/

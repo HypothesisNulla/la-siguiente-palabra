@@ -16,3 +16,7 @@ Lo que entra en los programas está en `entrada/`; lo que sale de ellos, en `sal
   https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/udhr2.zip
   (sha256 del zip `0796c314b09a930c989c6f9d93d226af9af13feccd88496e196c743dd266c7f3`). Las
   cuenta `codigo/idiomas_en_trozos.py` para el capítulo 7.
+- `entrada/oasst1/` — OpenAssistant, `oasst1`: conversaciones escritas a mano por voluntarios en 2023, con varias respuestas a la misma
+  petición ordenadas por personas (https://huggingface.co/datasets/OpenAssistant/oasst1, licencia Apache 2.0). El fichero es
+  `2023-04-12_oasst_ready.trees.jsonl.gz` (md5 `bd119c17938362c3ea25bc1523e99551`, bajado el 15 de noviembre de 2026). No se publica
+  (34 MB de textos de terceros): `codigo/ejemplos_de_adiestramiento.py` lo baja de nuevo y comprueba el md5.

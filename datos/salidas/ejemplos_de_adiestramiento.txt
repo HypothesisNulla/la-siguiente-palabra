@@ -1,0 +1,279 @@
+Sacado el 2026-11-15 en macOS-26.7.1-arm64-arm-64bit. La salida no depende de la máquina: lee un fichero guardado.
+Fuente: OpenAssistant/oasst1 (https://huggingface.co/datasets/OpenAssistant/oasst1), licencia Apache 2.0.
+Versión: 2023-04-12_oasst_ready.trees.jsonl.gz; md5 de la copia: bd119c17938362c3ea25bc1523e99551.
+El conjunto trae 10.364 árboles de conversación; 3.910 empiezan en castellano.
+Filtro: lang == «es», no borrado, revisión aprobada, escrito por una persona (no `synthetic`) y toxicidad automática (`detoxify`) por debajo de 0,02.
+Pasan el filtro: 1374 parejas cortas para la fase 1 (petición de menos de 30 palabras, mejor respuesta de menos de 120) y 826 peticiones con al menos 3 respuestas ordenadas para la fase 2.
+Semilla: 20260914.
+
+==========================================================================
+FASE 1, EL EJEMPLO: 20 parejas al azar (petición y la respuesta que las personas pusieron la primera)
+==========================================================================
+
+--- pareja 1 ---
+[petición] mensaje 9d683795-e683-4355-9ed2-6730b7050b20
+Hola
+
+[respuesta] mensaje 91ad6c3f-00d2-4b10-b65b-717d32189bcb (puesto 0)
+¡Hola, espero que te encuentres bien! ¿En qué puedo ayudarte?
+
+
+--- pareja 2 ---
+[petición] mensaje f03e34b9-55fd-42fb-b39e-e52ec8929aec
+¿Qué es un Alfoz?
+
+[respuesta] mensaje 49c5e99b-207a-495a-b111-da41c364889f (puesto 0)
+Un alfoz es un término que se utilizaba en la Edad Media para referirse a una división territorial que estaba compuesta por una ciudad o villa y su territorio circundante, donde vivían los campesinos y las comunidades rurales que dependían de esa ciudad o villa. El alfoz solía estar bajo la jurisdicción y protección de la ciudad o villa central, y estaba gobernado por un alcalde o un representante de la ciudad o villa. Los alfozes eran comunes en España y otros países de Europa durante la Edad Media y eran una forma de organización territorial y política en esa época.
+
+
+--- pareja 3 ---
+[petición] mensaje b5ef7c9f-402a-42b0-87c8-d70135b3326e
+¿Puedes hacer una lista de cinco palabras que terminen con la letra "n" y que no contengan tilde?
+
+[respuesta] mensaje 567217fc-d5a9-49de-be02-d10c31ffcbe4 (puesto 0)
+La mayoría de las palabras en español terminadas en "n" llevan tilde. He echo una búsqueda y esta es una lista de cinco palabras que terminen con la letra "n" y que no contengan tilde:
+
+1. Saltan
+2. Juegan
+3. Eligieron
+4. Bien
+5. Juan
+
+
+--- pareja 4 ---
+[petición] mensaje fe8cd450-7aed-4d82-9c1a-d077214c8ea3
+¿Cuántos elementos hay en la tabla periódica de elementos?
+
+[respuesta] mensaje 4aeb2464-1704-4c2f-a90d-12ebcc18b1f7 (puesto 0)
+La tabla periódica cuenta con 118 elementos, los cuales se distribuyen en 18 columnas verticales llamadas grupos y 7 filas verticales llamadas periodos. Los elementos se encuentran ordenados, de izquierda a derecha, por valores crecientes de sus números atómicos (Z) y está dividida en sub grupos llamados "bloques s,p,d,f". Quien propuso la organización y distribución de la tabla periódica fue el químico e inventor ruso Dmitri Mendeléyev
+
+
+--- pareja 5 ---
+[petición] mensaje 83a0a38a-16f7-40a3-a8e3-99858d3e2009
+Tienes algún consejo para iniciar a aprender japonés?
+
+[respuesta] mensaje ea34f090-1ecc-4cfb-8213-d298203cb058 (puesto 0)
+Lo mejor es empezar tomando clases con un profesor nativo, o puedes apuntarte en un curso online para principiantes, o también puedes aprender hablando japonés con una IA como yo :)
+
+
+--- pareja 6 ---
+[petición] mensaje dd713090-ee5e-471e-82da-0869418e6ff4
+¿qué es un piloto de FPV de drones?
+
+[respuesta] mensaje d384d436-d12f-40af-8fa0-c00e8569954c (puesto 0)
+Un piloto de carreras de drones utiliza unas gafas FPV (Vista en Primera Persona) que conectan directamente con la cámara a bordo del dron que está pilotando. De esta forma, se el piloto recibe una imagen en directo del dron y así experimenta como si el piloto estuviera montado en el propio dron.
+
+
+--- pareja 7 ---
+[petición] mensaje 00b4e171-5820-49db-b32d-84b598acadab
+Usando css en una pagina web ¿Como puedo hacer que un texto este subrayado de color azul?
+
+[respuesta] mensaje 988fbdf2-7a90-4792-9db5-ca1433e7d0f8 (puesto 0)
+Para subrayar el texto puedes usar la propiedad "underline" de css, aca te muestro un ejemplo:
+
+<style>
+  p.blue-underline {
+    text-decoration: underline;
+    text-decoration-color: blue;
+  }
+</style>
+
+<p class="blue-underline">Este es un texto con subrayado azul</p>
+
+
+--- pareja 8 ---
+[petición] mensaje 85840d46-c156-4f81-ac72-c96da3f2031a
+¿Qué carrera me recomiendas estudiar para dedicarme a la Inteligencia Artificial?
+
+[respuesta] mensaje 6695aa3b-6304-4145-b5f0-84f19ebaf0c0 (puesto 0)
+La mayoría de las ciencias e ingenierías se ven relacionadas más y más con los avances actuales en Inteligencia Artificial, pues las distintas técnicas de aprendizaje de máquina desarrolladas en la pasada década han empujado nuevamente los límites en el estado de la cuestión de múltiples espacios tecnológicos.
+
+Por lo que si te interesa la inteligencia Artificial vas a sentirte cómodo en múltiples espacios de las ciencias, tecnologías e ingenierías, en especial los lugares donde se requiera analizar muchos datos o se requieran modelos predictivos basados en características identificadas por la experiencia en tu área de estudio específica.
+
+En resumen, existe una gran flexibilidad en las carreras que podrías elegir si te interesa la Inteligencia Artificial.
+
+
+--- pareja 9 ---
+[petición] mensaje f35ac552-1f2e-4173-af13-74bd600138ee
+¿que debería de hacer si veo un fantasma en casa?
+
+[respuesta] mensaje 3110d902-2ffe-455d-a6eb-b6dc03328ded (puesto 0)
+El abrumador consenso científico indica que no existen los fantasmas y la cacería de fantasmas ha sido clasificada ampliamente como pseudociencia [1]. Por lo tanto, puedes estar seguro de que no hay un fantasma en tu casa.
+
+Es probable que lo hayas visto tenga alguna otra explicación mas racional: una alucinación, algún animal, algún efecto visual o alguien que te hizo una broma para asustarte.
+
+En todo caso, si lo sigues viendo sería recomendable que llames a otra personas para que te acompañen. O de ser necesario a la policía.
+
+[1] fuente: https://en.wikipedia.org/wiki/Ghost
+
+
+--- pareja 10 ---
+[petición] mensaje 6fafac04-a85b-4173-a976-0e61cd3b8d8b
+¿Es seguro vacunarse?
+
+[respuesta] mensaje 4cedb2b6-a924-42dd-a9c1-9b8d04762371 (puesto 0)
+Desde mi punto de vista, sí es seguro vacunarse. Las vacunas han demostrado ser muy efectivas para prevenir enfermedades, y los beneficios de la vacunación superan con creces los riesgos de efectos secundarios. Es importante confiar en la información de fuentes confiables, como las agencias de salud gubernamentales y las organizaciones médicas, para obtener información precisa sobre la seguridad y eficacia de las vacunas. Si tienes preguntas o preocupaciones sobre las vacunas, es importante hablar con un profesional de la salud capacitado para obtener información y asesoramiento personalizados.
+
+
+--- pareja 11 ---
+[petición] mensaje cd31be41-4166-4369-883e-54d741a302eb
+¿Cuantos habitantes tiene Venezuela?
+
+[respuesta] mensaje 49edbcf0-a47a-411b-99ad-4a9112491449 (puesto 0)
+Según estimaciones oficiales, la población de Venezuela a partir de 2021 es de aproximadamente 28 millones de habitantes. Sin embargo, debido a la crisis política y económica que ha afectado al país en los últimos años, hay una gran cantidad de personas que han emigrado, por lo que la cifra real puede ser diferente.
+
+
+--- pareja 12 ---
+[petición] mensaje 4a8477f8-2f02-4e15-b122-f55c95a3f830
+¿Cuál es la mejor forma de aprender Next.js si ya sé programar?
+
+[respuesta] mensaje 28338376-912e-491a-a841-187552c9751b (puesto 0)
+Hay varias formas efectivas de aprender Next.js si ya tienes conocimientos previos de programación. Algunas opciones incluyen:
+
+Leer la documentación oficial de Next.js y seguir los tutoriales.
+Mirar vídeos tutoriales en línea y seguir los ejemplos prácticos.
+Participar en foros y comunidades en línea para obtener ayuda y aprender de otros desarrolladores experimentados.
+Crear proyectos personales utilizando Next.js para poner en práctica tus habilidades.
+Tomar cursos en línea o presenciales especializados en Next.js.
+Es importante que encuentres la forma de aprendizaje que mejor se adapte a tus necesidades y preferencias personales.
+
+
+--- pareja 13 ---
+[petición] mensaje d29679bf-6f20-4d74-965f-036fbd654bff
+Estoy teniendo pesadillas habitualmente, ¿qué puedo hacer?
+
+[respuesta] mensaje caa07af3-f083-4e93-b1d6-edf47a984d40 (puesto 0)
+Algunos expertos recomiendan evitar comer alimentos pesados al menos unas 3 horas antes de irte a la cama a dormir, ya que la comida acelera el metabolismo y activa al cerebro. En especial, evita los alimentos que contengan azúcar. También es importante no consumir alcohol y estimulantes como café, té y refrescos energéticos antes de dormir. Se aconseja utilizar tapones de oídos si en la casa donde se duerme se escuchan ruidos. Además, puede resultar útil escribir la pesadilla en un papel y leerla en voz alta a otra persona.
+
+
+--- pareja 14 ---
+[petición] mensaje f9f52135-644b-41d8-bfba-80d306a8fa7c
+¿Existen los extraterrestres?
+
+[respuesta] mensaje f1b1b84f-937a-411f-b66c-919927231d00 (puesto 0)
+Aunque la humanidad ha realizado búsquedas activas de vida extraterrestre, por ejemplo por medio del programa SETI, todavía no se han encontrado pruebas de la existencia de vida extraterrestre. No obstante, dada la inmensidad del universo, se estima que la vida extraterrestre es bastante probable. Si quieres más información al respecto puedes preguntarme sobre la ecuación de Drake.
+
+
+--- pareja 15 ---
+[petición] mensaje 6f0730ac-c7d5-4d19-b276-b0312a014f57
+¿Puedes organizarme un viaje de 3 días en Montevideo?
+
+[respuesta] mensaje 394f6397-5706-409f-b4fe-71292746fd7b (puesto 0)
+Al ser el viaje desde España, y dado que lleva un día entero el viaje de ida y otro de vuelta, el viaje consistirá en 5 días en total. Si quieres que me ajuste a los tres días ten en cuenta que sólo disfrutarás de un día en Montevideo.
+
+
+--- pareja 16 ---
+[petición] mensaje 14957af8-3a30-4a87-a3ae-699ad8a8e36e
+Elabórame un menú para la semana
+
+[respuesta] mensaje 68cf31c9-1272-43ed-9762-f5199c18205f (puesto 0)
+Con muchos gusto! Este es el menú para el Almuerzo de la semana:
+El lunes:
+Moro de Guandules con carne guisadas.
+El martes:
+Espaguetis con Pollo y plátanos verdes fritos.
+El miércoles:
+Moro de Habichuelas Rojas con Coco y chuletas fritas.
+El jueves:
+Lasaña con ensalada verde y un jugo de naranja.
+El viernes:
+Yuca Hervida con pechugas a la cordon bleu.
+El sábado:
+Arroz blanco con habichuelas guisadas y albóndigas guisadas.
+El Domingo:
+Croquetas de jamón y queso con papas fritas.
+
+Este es el menú del almuerzo de la semana que he preparado espero que te guste.
+
+
+--- pareja 17 ---
+[petición] mensaje 8afdf912-2077-4925-be9c-2c9bf2150d97
+¿Cómo debería comportarme en una fiesta para caer bien?
+
+[respuesta] mensaje 42caa90d-7cb8-43fb-84b3-0b85ad4a6852 (puesto 0)
+Siendo sincero, amable y respetuoso con las personas que te rodean.
+
+
+--- pareja 18 ---
+[petición] mensaje 3e52749f-9fc2-4337-b405-7db8fb126a75
+Proporcioname el horario de de ahora mismo en Argentina
+
+[respuesta] mensaje 24039328-a4dd-4979-a4cf-5567295e8bfd (puesto 0)
+Hola, este es Open Assistant. La hora actual en Argentina es 11:37 PM del domingo 26 de febrero de 2023. Argentina tiene una sola zona horaria y no cambia el horario de verano
+
+
+--- pareja 19 ---
+[petición] mensaje 823879f1-130b-4acc-aec7-f99c43ebd907
+¿Cuáles son las notas de la escala de Re menor?
+
+[respuesta] mensaje e9233456-d9d5-406d-8180-13b3c50d2bad (puesto 0)
+Escala de Re menor tiene las siguientes notas: Re – Mi – Fa – Sol – La – Si♭ – Do.
+
+
+--- pareja 20 ---
+[petición] mensaje 5a69c5ac-4e3d-48cb-950d-9f894be0441d
+¿Sabes OpenSCAD?
+
+[respuesta] mensaje 5b8e63e4-162a-439e-a19b-35229f990fae (puesto 0)
+Sí, OpenSCAD es un lenguaje de programación Software de Código Abierto (Open Source) para crear modelos 3D paramétricos. Se utiliza principalmente para diseñar prototipos de robótica, piezas mecánicas, y otros objetos 3D. Ofrece herramientas y características para la creación de objetos 3D simples o complejos.
+
+==========================================================================
+FASE 2, EL JUEZ: 3 peticiones con sus respuestas, por el puesto que les dieron las personas (0 es la mejor)
+==========================================================================
+
+--- petición 1 ---
+[petición] mensaje 81f0d12d-50f4-4fb6-bf8a-738d0ad80b08
+¿Es Python sensible a las mayúsculas y minúsculas?
+
+[respuesta] mensaje 6d5becb6-a658-431d-9a8a-c475b1fc02be (puesto 0)
+Sí, los identificadores y palabras reservadas del lenguaje Python son sensibles a las mayúsculas y minúsculas. Por lo que, por ejemplo, las variables `mi_variable` y `MI_variABLE` son entendidas como diferentes por el intérprete.
+
+[respuesta] mensaje d4c26b46-9bfa-42b8-ae39-4e3e85d4323d (puesto 1)
+Sí, en Python las mayúsculas y minúsculas son importantes. En Python, los nombres de las variables, funciones y módulos son case-sensitive, lo que significa que Python diferencia entre nombres como "miVariable" y "mivariable". De manera similar, los identificadores de clase también son sensibles a las mayúsculas y minúsculas en Python.
+
+Por lo tanto, es importante ser consistente con las mayúsculas y minúsculas en su código para evitar errores y asegurarse de que Python esté interpretando correctamente su código.
+
+[respuesta] mensaje 5afa0bc1-4914-442e-b859-37445b598149 (puesto 2)
+Así es, Python distingue mayúsculas de minúsculas.
+
+
+--- petición 2 ---
+[petición] mensaje ec5be2ab-809c-4bbd-adc6-0ce17b0d2a2f
+¿Qué es para ti el amor?
+
+[respuesta] mensaje 173fadf6-f73b-4680-809a-1b5a5d707651 (puesto 0)
+El amor es un sentimiento complejo que se puede experimentar de distintas formas. El amor puede ser romántico, familiar, platónico o maternal, en general se puede considerar como un sentimiento positivo de afecto hacia alguien, un sentimiento que une a las personas y le dan un sentido de pertenencia.
+
+[respuesta] mensaje f7bd497e-b98a-481e-b4d0-59b449609def (puesto 1)
+No hay una sola respuesta, pero creo que el amor puede ser ese sentimiento que te mueve a ayudar a mejorar a las personas que más quieres o estar ahí cuando lo necesitan. Hay tantos tipos de amor como relaciones interpersonales
+
+[respuesta] mensaje 31e593fa-a13c-43c8-a9c1-93a43d8cdb7f (puesto 2)
+El amor es una cuestión que ha suscitado debate desde los albores de la humaidad. Contestar concretamente me resulta imposible, pues un soy, al fin y al cabo, un simple programa de ordenador y nunca voy a poder experimentar la cadena de reacciones químicas cerebrales que llevan al enamoramiento. Sin embargo, el amor se ha estudiado mucho desde primero la Filosofía y después la Biología. Me puedes preguntar por esas ramas.
+
+[respuesta] mensaje 978a7f35-820e-48b4-8eb7-134ef2b2f036 (puesto 3)
+Es una pregunta muy común que se hace a las inteligencias artificiales basadas en modelos del lenguaje y que puede llegar a tener una multitud muy amplia de matices y definiciones pero en términos generales el amor es un sentimiento intenso de profundo afecto, cariño, atracción y conexión emocional hacia cualquier agente externo al ente consciente que esté sintiendo dicha emoción, ya sea persona, animal, objeto o idea
+
+
+--- petición 3 ---
+[petición] mensaje c6a75608-b041-4447-ab12-990531b504dd
+Hola, ¿me podrías decir a cuantos kilómetros equivale un milla náutica?¿Se sigue usando la milla náutica como medida de longitud recurrentemente en algún ámbito?
+
+[respuesta] mensaje b0fafd28-a131-4ffe-adee-567d712a3dc4 (puesto 0)
+Claro.
+Una milla náutica equivale a 1.852Km.
+Las millas náuticas se utilizan comúnmente en el ámbito de la navegación marina y área, la definición de esta medida fue adoptada en 1929, equivaliendo a un de 1' de la latitud terrestre.
+Cabe resaltar que esta longitud no pertenece al Sistema Internacional de Unidades.
+
+[respuesta] mensaje faa2c811-2a8d-437f-bad3-6c4fb4abb058 (puesto 1)
+Por supuesto. Una milla náutica equivale a 1.852 km que es aproximadamente la longitud de un arco de 1' (un minuto de arco, la sesentava parte de un grado sexagesimal) de latitud terrestre. 
+
+Actualmente tanto la milla nautica como el nudo son prácticamente las únicas medidas de distancia y velocidad usadas en navegación marítima y aérea, ya que simplifican los cálculos de posición del observador.
+
+Espero que esta información te haya resultado de utilidad.
+
+[respuesta] mensaje f83ff49d-b256-4560-bcfb-8f672a346c57 (puesto 2)
+Una milla náutica equivale a 1,852 kilómetros. Es de común uso en todo tipo de actividades relacionadas con la navegación marítima.
+
+[respuesta] mensaje 91313e97-9cb6-430e-a6d7-92ca6e9f33fc (puesto 3)
+¡Buenas! Una milla náutica equivale a aproximadamente 1,852 kilómetros. La milla náutica se utiliza aún en la navegación marítima como una unidad de medida de distancia
+
