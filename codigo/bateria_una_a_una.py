@@ -146,9 +146,8 @@ def bloque_tabla(usados, resp, cuentas):
         "La batería, en los cuatro tamaños", ["tarea"] + etiquetas, filas,
         "i" + "d" * len(etiquetas),
         [# Orden 97: nota para el lector. La regla de acierto (NOTA_REGLA) está en `acierta`.
-         f"Cuántas de las {EN_LETRA[preguntas]} preguntas de cada tarea acierta cada tamaño. "
-         f"{etiquetas[0]} quiere decir {EN_LETRA[int(etiquetas[0][:-1])]} millones de números, sus "
-         "pesos: es la cifra redonda con que se publicó el modelo."])
+         # Orden 166: acortada; lo de «500M» lo dice el cuerpo del capítulo («los llamaré por el nombre redondo»).
+         f"Cuántas de las {EN_LETRA[preguntas]} preguntas de cada tarea acierta cada tamaño."])
     out += [""] + tabla_editorial(
         "Cuántos números tiene cada modelo", ["modelo", "números (pesos)"],
         [[ETIQUETA_TAMANO[m], miles(cuentas[m][0])] for m in usados], "dd",
@@ -190,9 +189,9 @@ def bloque_troceado(tok, usados, resp):
             renglon.append(x)
     renglones.append("|".join(visible(y) for y in renglon))
     out += muestra_editorial(
-        "El primer enunciado del patrón inventado, en trozos", renglones,
-        ["«_» es un espacio, y «|», el corte entre dos trozos. Cada renglón acaba además en un "
-         "trozo que no se ve: el salto de línea."])
+        # Orden 166: el título y la nota como van en el cap. 11; la frase del salto de línea pasa al texto del A11.
+        "El enunciado del patrón inventado, en trozos", renglones,
+        ["«|» es el corte entre dos trozos, y «_», un espacio."])
     filas = []
     for pal, rev in [("casa", "asac"), ("mesa", "asem")] + \
             [(pp.split("\n")[-1].split(" ")[0], ee) for pp, ee in items

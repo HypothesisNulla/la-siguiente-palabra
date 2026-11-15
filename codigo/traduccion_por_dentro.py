@@ -71,9 +71,9 @@ def bloque(usados, res):
         "La traducción por dentro", ["palabra"] + et, filas, "i" + "d" * len(et),
         [# Orden 97: nota para el lector. Que la palabra buena valga con espacio delante o sin él, y que
          # su probabilidad sea la del primer trozo por la de los siguientes, está en `medir`.
+         # Orden 166: la frase del salto, que estaba aquí, está ahora en el texto del A11; y la remisión a las listas del cap. 7.
          "Cuánta probabilidad le da cada tamaño a la traducción buena, entera, justo donde tiene que "
-         "escribirla. El salto está entre los dos más pequeños: de menos de uno de cada cien a más "
-         "de la mitad."])
+         "escribirla, como en las listas del capítulo 7."])
     filas = []
     for k, (p, e) in enumerate(TAREAS[TAREA]):
         for j, m in enumerate(usados):

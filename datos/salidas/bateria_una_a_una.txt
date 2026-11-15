@@ -1,4 +1,4 @@
-Medido el 2026-10-28 en macOS-26.7.1-arm64-arm-64bit; generación determinista (do_sample=False) en procesador, como crecer.py.
+Medido el 2026-11-15 en macOS-26.7.1-arm64-arm-64bit; generación determinista (do_sample=False) en procesador, como crecer.py.
 Las respuestas reproducen crecer.csv en los cuatro tamaños.
 
 --- 1. LA TABLA DEL CAPÍTULO, EN PREGUNTAS ---
@@ -16,7 +16,7 @@ La batería, en los cuatro tamaños
 | razonar sobre una frase | 1 de 5 | 2 de 5 | 3 de 5 | 3 de 5 |
 | **en total** | **4 de 30** | **14 de 30** | **19 de 30** | **19 de 30** |
 
-Cuántas de las cinco preguntas de cada tarea acierta cada tamaño. 500M quiere decir quinientos millones de números, sus pesos: es la cifra redonda con que se publicó el modelo.
+Cuántas de las cinco preguntas de cada tarea acierta cada tamaño.
 :::
 
 ::: tabla
@@ -173,13 +173,13 @@ De cada respuesta va el primer renglón, que es lo único que mira la regla.
 --- 3. CÓMO LE LLEGA EL PATRÓN INVENTADO ---
 
 ::: muestra
-El primer enunciado del patrón inventado, en trozos
+El enunciado del patrón inventado, en trozos
 
     c|asa|_->|_as|ac
     mes|a|_->|_a|sem
     lib|ro|_->|_
 
-«_» es un espacio, y «|», el corte entre dos trozos. Cada renglón acaba además en un trozo que no se ve: el salto de línea.
+«|» es el corte entre dos trozos, y «_», un espacio.
 :::
 
 ::: tabla

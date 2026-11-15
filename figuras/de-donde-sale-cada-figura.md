@@ -1,7 +1,7 @@
 # De dónde sale cada figura
 
 Tabla calculada, no escrita a mano, por `codigo/de_donde_sale_cada_figura.py`.  
-Fecha: 2026-11-15 10:50 UTC.  
+Fecha: 2026-11-15 11:39 UTC.  
 Libro: con los borradores de en-curso/; numeración cotejada con La-siguiente-palabra-lectura.pdf.  
 56 figuras. La tabla no depende de la máquina: sale de ficheros de texto.
 
@@ -41,32 +41,32 @@ Cómo se lee:
 | 25 | 10 | cuatro_retratos | cuatro_retratos, en_que_orden_aprende |
 | 26 | 10 | lo_que_encuentra_en_un_paso | cuatro_retratos |
 | 27 | 11 | seis_maneras | crecer.csv |
-| 28 | 11 | todo_o_nada | todo_o_nada.csv |
-| 29 | 13 | cien_papeletas | temperatura_a_mano.csv |
-| 30 | 14 | cifra_a_cifra | ordenes_a_la_vista |
-| 31 | 14 | con_manos | ninguna |
-| 32 | 15 | la_salamandra | ninguna |
-| 33 | 15 | el_empujon | cuentas_a_mano.csv |
-| 34 | 15 | prueba_de_chollet | *arc_25ff71a9.json |
-| 35 | 15 | tablero | ninguna |
-| 36 | 16 | dos_valles | dos_valles.csv |
-| 37 | A1 | lo_poco_que_hay | casillas_vacias |
-| 38 | A3 | diez_digitos | ninguna |
-| 39 | A3 | saltan_la_regla | reloj_a_mano |
-| 40 | A3 | siete_segmentos | ninguna |
-| 41 | A3 | sorteo_del_arranque | el_sorteo_del_arranque |
-| 42 | A3 | los_dos_que_mas_se_parecen | que_mira_cada_una |
-| 43 | A4 | la_red_del_colegio | culpa_en_el_colegio_datos.csv |
-| 44 | A4 | cuadrado_de_la_red | ninguna |
-| 45 | A4 | de_la_regla_al_cuadrado | culpa_en_el_colegio_datos.csv |
-| 46 | A4 | la_rampa_del_colegio | culpa_en_el_colegio_datos.csv |
-| 47 | A4 | culpa_hacia_atras_colegio | culpa_en_el_colegio_datos.csv, culpa_en_el_colegio |
-| 48 | A4 | el_terreno_del_colegio | culpa_en_el_colegio_datos.csv, culpa_en_el_colegio |
-| 49 | A4 | la_rampa_y_el_codo | culpa_hacia_atras |
-| 50 | A5 | misma_direccion | palabras_de_cerca |
-| 51 | A8 | maquina_del_quijote | la_e_de_acordarme |
-| 52 | A8 | mirada_a_mano | mirada_a_mano |
-| 53 | A8 | el_reparto | reparto_una_a_una.csv |
-| 54 | A10 | cuanto_ha_leido | cuatro_retratos |
-| 55 | A10 | lo_mal_que_lo_hace | en_que_orden_aprende_curva.csv, en_que_orden_aprende |
-| 56 | A10 | seguir_entrenando | seguir_entrenando.csv |
+| 28 | 13 | cien_papeletas | temperatura_a_mano.csv |
+| 29 | 14 | cifra_a_cifra | ordenes_a_la_vista |
+| 30 | 14 | con_manos | ninguna |
+| 31 | 15 | la_salamandra | ninguna |
+| 32 | 15 | el_empujon | cuentas_a_mano.csv |
+| 33 | 15 | prueba_de_chollet | *arc_25ff71a9.json |
+| 34 | 15 | tablero | ninguna |
+| 35 | 16 | dos_valles | dos_valles.csv |
+| 36 | A1 | lo_poco_que_hay | casillas_vacias |
+| 37 | A3 | diez_digitos | ninguna |
+| 38 | A3 | saltan_la_regla | reloj_a_mano |
+| 39 | A3 | siete_segmentos | ninguna |
+| 40 | A3 | sorteo_del_arranque | el_sorteo_del_arranque |
+| 41 | A3 | los_dos_que_mas_se_parecen | que_mira_cada_una |
+| 42 | A4 | la_red_del_colegio | culpa_en_el_colegio_datos.csv |
+| 43 | A4 | cuadrado_de_la_red | ninguna |
+| 44 | A4 | de_la_regla_al_cuadrado | culpa_en_el_colegio_datos.csv |
+| 45 | A4 | la_rampa_del_colegio | culpa_en_el_colegio_datos.csv |
+| 46 | A4 | culpa_hacia_atras_colegio | culpa_en_el_colegio_datos.csv, culpa_en_el_colegio |
+| 47 | A4 | el_terreno_del_colegio | culpa_en_el_colegio_datos.csv, culpa_en_el_colegio |
+| 48 | A4 | la_rampa_y_el_codo | culpa_hacia_atras |
+| 49 | A5 | misma_direccion | palabras_de_cerca |
+| 50 | A8 | maquina_del_quijote | la_e_de_acordarme |
+| 51 | A8 | mirada_a_mano | mirada_a_mano |
+| 52 | A8 | el_reparto | reparto_una_a_una.csv |
+| 53 | A10 | cuanto_ha_leido | cuatro_retratos |
+| 54 | A10 | lo_mal_que_lo_hace | en_que_orden_aprende_curva.csv, en_que_orden_aprende |
+| 55 | A10 | seguir_entrenando | seguir_entrenando.csv |
+| 56 | A11 | todo_o_nada | todo_o_nada.csv |

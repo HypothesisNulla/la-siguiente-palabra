@@ -68,7 +68,7 @@ def dibujar(tamanos, tareas, datos, paleta, ruta):
     """Dibuja y devuelve, por tarea, los valores que ha puesto en el cuadrito."""
     L = Lienzo("Seis maneras de aparecer",
                "Cuántas de las cinco preguntas de cada tarea acierta cada tamaño.\n"
-               "Los mismos números que la tabla, uno por punto.",
+               "500M es la máquina de quinientos millones de pesos, y así las demás.",   # Orden 166: la tabla ya no está en el cuerpo (pasó al A11)
                paleta, alto=ALTO)
     p = paleta
     arriba = L.y / L.alto_u
