@@ -23,10 +23,16 @@ numeración no coincide con los «Figura N:» del PDF (de lectura, o del manuscr
 
 POR QUÉ ESTA MEDICIÓN NO DEPENDE DE LA MÁQUINA. Se leen ficheros de texto.
 
+Orden 163 (15 de noviembre de 2026): la tabla ya no va en el apéndice del libro, que solo remite a ella. Además de
+imprimir las tablas de siempre, el programa escribe esta misma tabla, en markdown y con una nota de cómo se lee, en
+`figuras/de-donde-sale-cada-figura.md` (DESTINO). Son números de figura, capítulos y nombres de programas y de
+salidas: nada del texto del libro. Con `--sin-escribir` no toca ese fichero.
+
 Uso:
     python de_donde_sale_cada_figura.py --selftest
     python de_donde_sale_cada_figura.py > ../datos/salidas/de_donde_sale_cada_figura.txt
     python de_donde_sale_cada_figura.py --sin-borradores
+    python de_donde_sale_cada_figura.py --sin-escribir
 """
 
 # ======================= CONSTANTES =======================
@@ -47,6 +53,7 @@ LARGO_PIE = 25                                       # letras del pie que se cot
 # Orden 160 (12 nov 2026): las figuras que son una foto y no las dibuja ningún programa, con lo que se pone en la columna
 # «programa». Declaradas a mano, una a una: una figura sin programa que no esté aquí sigue reventando.
 SIN_PROGRAMA = {"mark_i": "(foto)"}
+DESTINO = "../figuras/de-donde-sale-cada-figura.md"   # Orden 163: la tabla, para quien lea el repositorio
 DATO = r'datos/(?:salidas/|entrada/)?([\w.\-]+\.(?:txt|csv|json))'   # Orden 158: lo que entra está en datos/entrada/
 
 # Selftest
@@ -273,6 +280,30 @@ def tablas(filas):
     return out
 
 
+def markdown(filas, cabecera):
+    """La misma tabla en markdown, de una pieza, con la fecha y una nota de cómo se lee (Orden 163). `cabecera`: las
+    líneas de la fecha, la máquina y la numeración. Devuelve el texto del fichero."""
+    L = ["# De dónde sale cada figura", ""]
+    L += cabecera
+    L += ["",
+          "Cómo se lee:",
+          "",
+          "- **fig.** es el número de la figura, en el orden en que salen en el libro.",
+          "- **cap.** es el capítulo en que está. Con una «A» delante (por ejemplo A8), está en el anexo de ese capítulo.",
+          "- **programa** es el programa que la dibuja. En `codigo/` el fichero es `figura_` + el nombre + `.py`, salvo cuando "
+          "el nombre ya empieza por `figuras_` (por ejemplo `figuras_el_comite_por_dentro`): entonces es el nombre entero. "
+          "«(foto)» quiere decir que ningún programa la dibuja: es una fotografía.",
+          "- **salidas que lee** son los ficheros de `datos/salidas/` de los que el programa saca sus números, con el nombre "
+          "sin `.txt` (si acaban de otra manera, va escrito). Con asterisco, un fichero de `datos/entrada/`. "
+          "«ninguna» quiere decir que el programa no lee ningún fichero: dibuja un esquema, calcula él mismo los "
+          "números o los trae escritos como ejemplo.",
+          "",
+          "| fig. | cap. | programa | salidas que lee |",
+          "|--:|--:|:--|:--|"]
+    L += ["| " + " | ".join(f) + " |" for f in filas]
+    return "\n".join(L) + "\n"
+
+
 # ---- selftest --------------------------------------------------------------------------
 
 def selftest():
@@ -344,6 +375,12 @@ def selftest():
         fallos.append("invariante: las tablas no reparten todas las filas")
     if [f["numero"] for f in figuras] != list(range(1, len(figuras) + 1)) or len(filas) != len(figuras):
         fallos.append("invariante: la numeración no va de 1 a N")
+    # Orden 163: la tabla en markdown tiene una línea por figura y se lee de vuelta igual que las filas.
+    md = markdown(filas, ["fecha: prueba"])
+    leidas = [[c.strip() for c in l.strip().strip("|").split("|")] for l in md.split("\n")
+              if re.match(r"^\| \d+ \|", l)]
+    if leidas != filas:
+        fallos.append("invariante: la tabla en markdown no reproduce las filas")
 
     print()
     if fallos:
@@ -362,6 +399,8 @@ def main():
     ap.add_argument("--sin-borradores", action="store_true",
                     help="solo el manuscrito, cotejado con el PDF del manuscrito")
     ap.add_argument("--pdf", help="otro PDF con el que cotejar la numeración")
+    ap.add_argument("--sin-escribir", action="store_true",
+                    help=f"no escribe {DESTINO} (Orden 163)")
     args = ap.parse_args()
 
     print("--- selftest ---")
@@ -392,6 +431,15 @@ def main():
         for l in trozo:
             print(l)
         print()
+    if not args.sin_escribir:
+        destino = AQUI / DESTINO
+        cabecera = [f"Tabla calculada, no escrita a mano, por `codigo/de_donde_sale_cada_figura.py`.  ",
+                    f"Fecha: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')} UTC.  ",
+                    f"Libro: {'con los borradores de en-curso/' if con_borradores else 'solo el manuscrito'}; "
+                    f"numeración cotejada con {pdf.name}.  ",
+                    f"{len(filas)} figuras. La tabla no depende de la máquina: sale de ficheros de texto."]
+        destino.write_text(markdown(filas, cabecera), encoding="utf-8")
+        print(f"escrita {DESTINO}")
 
 
 if __name__ == "__main__":

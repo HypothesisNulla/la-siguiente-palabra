@@ -1,104 +1,107 @@
 --- selftest ---
 [1] test nulo         una figura sin programa, con dos programas y con otra numeración: 3 de 3 revientan
 [2] señal implantada  dos figuras: a lee x; una_capa: ninguna; con y sin borradores: bien
-[3] invariante        54 figuras, cada una con su programa; numeradas de 1 a 54; 10 sin fichero; en 4 tablas de 20 filas como mucho
+[3] invariante        56 figuras, cada una con su programa; numeradas de 1 a 56; 13 sin fichero; en 4 tablas de 20 filas como mucho
 
 SELFTEST: las tres pruebas pasan.
 
 ########## de dónde sale cada figura del libro ##########
-fecha: 2026-10-28 13:51 UTC
+fecha: 2026-11-15 10:39 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: lee ficheros de texto
 libro: con los borradores de en-curso/;
 numeración cotejada con La-siguiente-palabra-lectura.pdf
 
 ::: tabla
-De dónde sale cada figura, de la 1 a la 20
+De dónde sale cada figura, de la 1 a la 13
 
 | fig. | cap. | programa | salidas que lee |
 |--:|--:|:--|:--|
 | 1 | 1 | paginas_libreta | traza_escalera, casillas_vacias, *quijote.txt |
-| 2 | 1 | la_escalera | ngrama |
-| 3 | 1 | pagina_el_caballero | pagina_el_caballero, *quijote.txt |
-| 4 | 1 | casillas_vacias | casillas_vacias |
-| 5 | 1 | lo_poco_que_hay | casillas_vacias |
-| 6 | 2 | el_comite | ninguna |
-| 7 | 2 | que_es_aprender | ninguna |
-| 8 | 2 | el_colegio | ninguna |
+| 2 | 1 | pagina_el_caballero | pagina_el_caballero, *quijote.txt |
+| 3 | 1 | casillas_vacias | casillas_vacias |
+| 4 | 2 | el_comite | ninguna |
+| 5 | 2 | que_es_aprender | ninguna |
+| 6 | 2 | (foto) | ninguna |
+| 7 | 2 | el_colegio | ninguna |
+| 8 | 3 | figuras_el_comite_por_dentro | el_comite_por_dentro |
 | 9 | 3 | figuras_el_comite_por_dentro | el_comite_por_dentro |
 | 10 | 3 | figuras_el_comite_por_dentro | el_comite_por_dentro |
-| 11 | 3 | figuras_el_comite_por_dentro | el_comite_por_dentro |
+| 11 | 3 | cuadrado_del_colegio | ninguna |
 | 12 | 3 | figuras_el_comite_por_dentro | el_comite_por_dentro |
-| 13 | 3 | cuadrado_del_colegio | ninguna |
-| 14 | 3 | figuras_el_comite_por_dentro | el_comite_por_dentro |
-| 15 | 3 | diez_digitos | ninguna |
-| 16 | 3 | saltan_la_regla | reloj_a_mano |
-| 17 | 3 | reloj_a_mano | reloj_a_mano |
-| 18 | 3 | siete_segmentos | ninguna |
-| 19 | 3 | sorteo_del_arranque | el_sorteo_del_arranque |
-| 20 | 3 | una_capa | ninguna |
+| 13 | 3 | una_capa | ninguna |
 
-«Programa» es el nombre del programa que dibuja la figura: en codigo/, el fichero se llama así con «figura_» delante y «.py» detrás, salvo cuando el nombre ya empieza por «figuras_», como figuras_el_comite_por_dentro, que entonces es el nombre entero. «Salidas que lee» son ficheros de datos/salidas/, con el nombre sin el .txt (si acaban de otra manera, va escrito); con asterisco, un fichero de datos/ que no está en salidas/. «Ninguna» quiere decir que el programa no lee ningún fichero: dibuja un esquema, o calcula él mismo los números, o los trae escritos como ejemplo.
+«Programa» es el nombre del programa que dibuja la figura: en codigo/, el fichero se llama así con «figura_» delante y «.py» detrás, salvo cuando el nombre ya empieza por «figuras_», como figuras_el_comite_por_dentro, que entonces es el nombre entero. «Salidas que lee» son ficheros de datos/salidas/, con el nombre sin el .txt (si acaban de otra manera, va escrito); con asterisco, un fichero de datos/ que no está en salidas/. «Ninguna» quiere decir que el programa no lee ningún fichero: dibuja un esquema, o calcula él mismo los números, o los trae escritos como ejemplo. Una «A» delante del capítulo quiere decir que la figura está en el anexo de ese capítulo, y «(foto)» en el programa, que no la dibuja ningún programa: es una fotografía.
 :::
 
 ::: tabla
-De dónde sale cada figura, de la 21 a la 40
+De dónde sale cada figura, de la 14 a la 27
 
 | fig. | cap. | programa | salidas que lee |
 |--:|--:|:--|:--|
-| 21 | 3 | los_dos_que_mas_se_parecen | que_mira_cada_una |
-| 22 | 4 | la_red_del_colegio | culpa_en_el_colegio_datos.csv |
-| 23 | 4 | de_la_regla_al_cuadrado | culpa_en_el_colegio_datos.csv |
-| 24 | 4 | la_rampa_del_colegio | culpa_en_el_colegio_datos.csv |
-| 25 | 4 | culpa_hacia_atras_colegio | culpa_en_el_colegio_datos.csv, culpa_en_el_colegio |
-| 26 | 4 | el_terreno_del_colegio | culpa_en_el_colegio_datos.csv, culpa_en_el_colegio |
-| 27 | 4 | la_rampa_y_el_codo | culpa_hacia_atras |
-| 28 | 5 | mapa_de_palabras | palabras_de_cerca |
-| 29 | 5 | misma_direccion | palabras_de_cerca |
-| 30 | 6 | copias_muestra | copias_de_una_muestra |
-| 31 | 6 | red_desenrollada | una_prueba_de_memoria |
-| 32 | 7 | linea_circular | maquina_entera |
-| 33 | 7 | trocear_a_mano | trocear_a_mano |
-| 34 | 7 | encuesta | maquina_entera, banco_y_paris |
-| 35 | 8 | maquina_del_quijote | la_e_de_acordarme |
-| 36 | 8 | mirada_a_mano | mirada_a_mano |
-| 37 | 8 | cuadricula | cuadricula_y_fila |
-| 38 | 8 | el_reparto | *reparto_una_a_una.csv |
-| 39 | 9 | en_fila | cuadricula_y_fila |
-| 40 | 10 | cuanto_ha_leido | cuatro_retratos |
+| 14 | 4 | la_red_del_colegio | culpa_en_el_colegio_datos.csv |
+| 15 | 5 | mapa_de_palabras | palabras_de_cerca |
+| 16 | 5 | misma_direccion | palabras_de_cerca |
+| 17 | 6 | copias_muestra | copias_de_una_muestra |
+| 18 | 6 | red_desenrollada | una_prueba_de_memoria |
+| 19 | 7 | linea_circular | maquina_entera |
+| 20 | 7 | trocear_a_mano | trocear_a_mano.csv, trocear_a_mano |
+| 21 | 7 | encuesta | maquina_entera, banco_y_paris |
+| 22 | 8 | cuadricula | cuadricula_y_fila |
+| 23 | 8 | papelera_cuerpo | ninguna |
+| 24 | 9 | en_fila | cuadricula_y_fila |
+| 25 | 10 | cuanto_ha_leido | cuatro_retratos |
+| 26 | 10 | cuatro_retratos | cuatro_retratos, en_que_orden_aprende |
+| 27 | 10 | lo_que_encuentra_en_un_paso | cuatro_retratos |
 
-«Programa» es el nombre del programa que dibuja la figura: en codigo/, el fichero se llama así con «figura_» delante y «.py» detrás, salvo cuando el nombre ya empieza por «figuras_», como figuras_el_comite_por_dentro, que entonces es el nombre entero. «Salidas que lee» son ficheros de datos/salidas/, con el nombre sin el .txt (si acaban de otra manera, va escrito); con asterisco, un fichero de datos/ que no está en salidas/. «Ninguna» quiere decir que el programa no lee ningún fichero: dibuja un esquema, o calcula él mismo los números, o los trae escritos como ejemplo.
+«Programa» es el nombre del programa que dibuja la figura: en codigo/, el fichero se llama así con «figura_» delante y «.py» detrás, salvo cuando el nombre ya empieza por «figuras_», como figuras_el_comite_por_dentro, que entonces es el nombre entero. «Salidas que lee» son ficheros de datos/salidas/, con el nombre sin el .txt (si acaban de otra manera, va escrito); con asterisco, un fichero de datos/ que no está en salidas/. «Ninguna» quiere decir que el programa no lee ningún fichero: dibuja un esquema, o calcula él mismo los números, o los trae escritos como ejemplo. Una «A» delante del capítulo quiere decir que la figura está en el anexo de ese capítulo, y «(foto)» en el programa, que no la dibuja ningún programa: es una fotografía.
 :::
 
 ::: tabla
-De dónde sale cada figura, de la 41 a la 42
+De dónde sale cada figura, de la 28 a la 47
 
 | fig. | cap. | programa | salidas que lee |
 |--:|--:|:--|:--|
-| 41 | 10 | cuatro_retratos | cuatro_retratos, en_que_orden_aprende |
-| 42 | 10 | lo_que_encuentra_en_un_paso | cuatro_retratos |
+| 28 | 10 | lo_mal_que_lo_hace | en_que_orden_aprende_curva.csv, en_que_orden_aprende |
+| 29 | 10 | seguir_entrenando | seguir_entrenando.csv |
+| 30 | 11 | seis_maneras | crecer.csv |
+| 31 | 11 | todo_o_nada | todo_o_nada.csv |
+| 32 | 13 | cien_papeletas | temperatura_a_mano.csv |
+| 33 | 14 | cifra_a_cifra | ordenes_a_la_vista |
+| 34 | 14 | con_manos | ninguna |
+| 35 | 15 | la_salamandra | ninguna |
+| 36 | 15 | el_empujon | cuentas_a_mano.csv |
+| 37 | 15 | prueba_de_chollet | *arc_25ff71a9.json |
+| 38 | 15 | tablero | ninguna |
+| 39 | 16 | dos_valles | dos_valles.csv |
+| 40 | A1 | lo_poco_que_hay | casillas_vacias |
+| 41 | A3 | diez_digitos | ninguna |
+| 42 | A3 | saltan_la_regla | reloj_a_mano |
+| 43 | A3 | siete_segmentos | ninguna |
+| 44 | A3 | sorteo_del_arranque | el_sorteo_del_arranque |
+| 45 | A3 | los_dos_que_mas_se_parecen | que_mira_cada_una |
+| 46 | A4 | la_red_del_colegio | culpa_en_el_colegio_datos.csv |
+| 47 | A4 | cuadrado_de_la_red | ninguna |
 
-«Programa» es el nombre del programa que dibuja la figura: en codigo/, el fichero se llama así con «figura_» delante y «.py» detrás, salvo cuando el nombre ya empieza por «figuras_», como figuras_el_comite_por_dentro, que entonces es el nombre entero. «Salidas que lee» son ficheros de datos/salidas/, con el nombre sin el .txt (si acaban de otra manera, va escrito); con asterisco, un fichero de datos/ que no está en salidas/. «Ninguna» quiere decir que el programa no lee ningún fichero: dibuja un esquema, o calcula él mismo los números, o los trae escritos como ejemplo.
+«Programa» es el nombre del programa que dibuja la figura: en codigo/, el fichero se llama así con «figura_» delante y «.py» detrás, salvo cuando el nombre ya empieza por «figuras_», como figuras_el_comite_por_dentro, que entonces es el nombre entero. «Salidas que lee» son ficheros de datos/salidas/, con el nombre sin el .txt (si acaban de otra manera, va escrito); con asterisco, un fichero de datos/ que no está en salidas/. «Ninguna» quiere decir que el programa no lee ningún fichero: dibuja un esquema, o calcula él mismo los números, o los trae escritos como ejemplo. Una «A» delante del capítulo quiere decir que la figura está en el anexo de ese capítulo, y «(foto)» en el programa, que no la dibuja ningún programa: es una fotografía.
 :::
 
 ::: tabla
-De dónde sale cada figura, de la 43 a la 54
+De dónde sale cada figura, de la 48 a la 56
 
 | fig. | cap. | programa | salidas que lee |
 |--:|--:|:--|:--|
-| 43 | 10 | lo_mal_que_lo_hace | *en_que_orden_aprende_curva.csv, en_que_orden_aprende |
-| 44 | 10 | seguir_entrenando | seguir_entrenando.csv |
-| 45 | 11 | seis_maneras | crecer.csv |
-| 46 | 11 | todo_o_nada | todo_o_nada.csv |
-| 47 | 13 | cien_papeletas | temperatura_a_mano.csv |
-| 48 | 14 | cifra_a_cifra | ordenes_a_la_vista |
-| 49 | 14 | con_manos | ninguna |
-| 50 | 15 | la_salamandra | ninguna |
-| 51 | 15 | el_empujon | cuentas_a_mano.csv |
-| 52 | 15 | prueba_de_chollet | *arc_25ff71a9.json |
-| 53 | 15 | tablero | ninguna |
-| 54 | 16 | dos_valles | dos_valles.csv |
+| 48 | A4 | de_la_regla_al_cuadrado | culpa_en_el_colegio_datos.csv |
+| 49 | A4 | la_rampa_del_colegio | culpa_en_el_colegio_datos.csv |
+| 50 | A4 | culpa_hacia_atras_colegio | culpa_en_el_colegio_datos.csv, culpa_en_el_colegio |
+| 51 | A4 | el_terreno_del_colegio | culpa_en_el_colegio_datos.csv, culpa_en_el_colegio |
+| 52 | A4 | la_rampa_y_el_codo | culpa_hacia_atras |
+| 53 | A5 | misma_direccion | palabras_de_cerca |
+| 54 | A8 | maquina_del_quijote | la_e_de_acordarme |
+| 55 | A8 | mirada_a_mano | mirada_a_mano |
+| 56 | A8 | el_reparto | reparto_una_a_una.csv |
 
-«Programa» es el nombre del programa que dibuja la figura: en codigo/, el fichero se llama así con «figura_» delante y «.py» detrás, salvo cuando el nombre ya empieza por «figuras_», como figuras_el_comite_por_dentro, que entonces es el nombre entero. «Salidas que lee» son ficheros de datos/salidas/, con el nombre sin el .txt (si acaban de otra manera, va escrito); con asterisco, un fichero de datos/ que no está en salidas/. «Ninguna» quiere decir que el programa no lee ningún fichero: dibuja un esquema, o calcula él mismo los números, o los trae escritos como ejemplo.
+«Programa» es el nombre del programa que dibuja la figura: en codigo/, el fichero se llama así con «figura_» delante y «.py» detrás, salvo cuando el nombre ya empieza por «figuras_», como figuras_el_comite_por_dentro, que entonces es el nombre entero. «Salidas que lee» son ficheros de datos/salidas/, con el nombre sin el .txt (si acaban de otra manera, va escrito); con asterisco, un fichero de datos/ que no está en salidas/. «Ninguna» quiere decir que el programa no lee ningún fichero: dibuja un esquema, o calcula él mismo los números, o los trae escritos como ejemplo. Una «A» delante del capítulo quiere decir que la figura está en el anexo de ese capítulo, y «(foto)» en el programa, que no la dibuja ningún programa: es una fotografía.
 :::
 
+escrita ../figuras/de-donde-sale-cada-figura.md

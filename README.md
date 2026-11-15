@@ -13,7 +13,7 @@ Máquina de referencia: MacBook Pro M4 Max, 36 GB de memoria unificada, macOS.
 | `datos/entrada/` | lo que entra en los programas: `quijote.txt`, `candidatos_es.txt`, `arc_25ff71a9.json`, `declaracion_universal/` y, si se descarga, `corpus_es/` (los trescientos libros, que no se publican) |
 | `datos/salidas/` | lo que sale de ellos: las tablas guardadas (`.txt`), los `.csv`, `resultados_mac.txt`, y las carpetas de muestras y de pruebas. Cada tabla del libro se copia literalmente de una de estas salidas |
 | `datos/README.md` | de dónde viene cada dato de entrada |
-| `figuras/` | carpeta vacía al clonar: los programas de `codigo/` dibujan aquí las figuras al ejecutarse. Las figuras no se publican (el `.gitignore` las deja fuera) |
+| `figuras/` | los programas de `codigo/` dibujan aquí las figuras al ejecutarse; las figuras no se publican (el `.gitignore` las deja fuera). Al clonar solo está `de-donde-sale-cada-figura.md`: qué programa dibuja cada figura del libro y de qué salidas guardadas saca sus números (lo escribe `codigo/de_donde_sale_cada_figura.py`) |
 | `archivo/` | lo viejo que ya no se usa; nada se borra |
 | `requirements.txt`, `requirements-mac-exacto.txt`, `LICENSE`, `.gitignore` | lo que exigen las herramientas |
 
