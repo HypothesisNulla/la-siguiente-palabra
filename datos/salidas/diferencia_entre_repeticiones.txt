@@ -1,0 +1,32 @@
+--- selftest ---
+[1] test nulo         dos repeticiones idénticas: diferencia mayor 0,0 %
+[2] señal implantada  una repetición un 37 % más lenta: 37,0 % en las 4 cifras
+[3] invariante        60 cifras comparadas; mediana 1,6 % y mayor 37,0 %; 19 líneas
+
+SELFTEST: las tres pruebas pasan.
+
+##### cuánto se separan dos repeticiones de la medición #####
+fecha: 2026-11-15
+máquina: ninguna. Este programa NO cronometra: relee los csv
+de los barridos ya guardados (las dos repeticiones, A y B),
+así que da lo mismo en cualquier ordenador.
+
+::: tabla
+Cuánto se separan las dos repeticiones enteras de la medición
+
+| medido en | cifras comparadas | diferencia mediana | la mayor |
+|:--|--:|--:|--:|
+| el procesador | 30 | 1,5 % | 16,8 % |
+| la tarjeta gráfica | 30 | 1,6 % | 37,0 % |
+
+Cada cifra es la mediana de cinco barridos, una vez en la repetición A y otra en la B; la diferencia es la que hay entre las dos, dividida entre la menor. «Cifras comparadas» son las celdas (tamaño de modelo y longitud del texto) por los dos tiempos, en serie y a la vez.
+:::
+
+La mayor, medida en el procesador: en serie, modelo de 256 números, 512 posiciones.
+La mayor, medida en la tarjeta gráfica: a la vez, modelo de 256 números, 64 posiciones.
+
+--- LO QUE QUEDA DE LA VENTAJA EN CADA REPETICIÓN ---
+
+El procesador, el modelo de 256 números, de 64 a 1.024 posiciones.
+repetición A: queda el 76,5 % de la ventaja del texto más corto.
+repetición B: queda el 84,7 % de la ventaja del texto más corto.

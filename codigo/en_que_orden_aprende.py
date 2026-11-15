@@ -83,7 +83,10 @@ ETIQUETA_SUAVE = "la misma, suavizada, para que se vea la forma"
 PASO_RECUADRO = 10_000            # desde qué paso se amplía el tramo final
 ETIQUETA_RECUADRO = "el tramo final de cerca:\ndel paso {} al {}"
 NOTA_RECUADRO = "aquí el cero no está en el dibujo, para que se vea que baja"
-MODELO_GRANDE = 500_000_000_000   # orden de magnitud de un modelo grande de hoy
+# Orden 167: uno de los mayores que publican su tamaño, DeepSeek-V3 (dic 2024): 671.000 millones de parámetros en total
+# (informe técnico, arXiv:2412.19437; `notas/fuentes/deepseek-v3-2024.pdf`). Antes: 500.000.000.000, «de memoria» y sin fuente;
+# la salida decía «unas 274.579 veces más» y ahora dice unas 368.000.
+MODELO_GRANDE = 671_000_000_000
 
 # ==========================================================
 
@@ -463,9 +466,9 @@ def ficha():
         ["letras de contexto", str(modelo.pos.num_embeddings)],
         ["pesos", miles(pesos)],
     ]
-    print("--- LA FICHA DE LA MÁQUINA DEL CAPÍTULO 10 ---\n")
+    print("--- LA FICHA DE LA RED DEL CAPÍTULO 10 ---\n")   # Orden 167: «red», como en el texto
     print("\n".join(tabla_editorial(
-        "La ficha de la máquina del capítulo 10", ["", "la máquina"], filas, "id",
+        "La ficha de la red del capítulo 10", ["", "la red"], filas, "id",
         ["Contada del propio modelo, sin entrenar. Las piezas son los símbolos distintos del "
          "texto: las 42 letras y signos de ngrama.py y el salto de línea."])))
 

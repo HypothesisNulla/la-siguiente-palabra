@@ -1,9 +1,9 @@
---- LA FICHA DE LA MÁQUINA DEL CAPÍTULO 10 ---
+--- LA FICHA DE LA RED DEL CAPÍTULO 10 ---
 
 ::: tabla
-La ficha de la máquina del capítulo 10
+La ficha de la red del capítulo 10
 
-|  | la máquina |
+|  | la red |
 |:--|--:|
 | qué lee | letras |
 | piezas distintas | 43 |

@@ -101,7 +101,7 @@ def ancho_letra(L):
 
 
 def dibujar(retratos, paleta, ruta):
-    L = Lienzo("Cuatro retratos de la misma máquina",
+    L = Lienzo("Cuatro retratos de la misma red",   # Orden 167: «red», como en el texto
                "Cada vez se le da «el» para empezar y escribe sola. Subrayado, lo que es\n"
                "una palabra de verdad; lo demás, invención.", paleta, alto=ALTO)
     p, ax = L.p, L.ax

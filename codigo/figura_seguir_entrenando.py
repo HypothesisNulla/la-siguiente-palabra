@@ -48,7 +48,7 @@ def mejor_nuevo(d):
 
 
 def dibujar(d, paleta, ruta):
-    L = Lienzo("La misma máquina, el triple de pasos",
+    L = Lienzo("La misma red, el triple de pasos",   # Orden 167: «red», como en el texto
                "Lo mal que lo hace en dos textos: los libros con los que aprende, y otros libros\n"
                "que no lee nunca. Cuanto más abajo, mejor; el cero es el suelo del dibujo.",
                paleta, alto=ALTO)
