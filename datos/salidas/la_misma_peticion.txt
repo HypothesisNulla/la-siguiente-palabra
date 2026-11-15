@@ -7,11 +7,12 @@ La regla, escrita: se mira solo la primera línea no vacía de lo que escribe. �
 ==========================================================================
 TAMAÑO 7.000M
 ==========================================================================
-tiempo en esta máquina: en crudo 1,2 min; adiestrada 1,5 min (carga del modelo incluida).
+tiempo en esta máquina: en crudo 1,7 min; adiestrada 2,5 min (carga del modelo incluida).
 
 --- petición 1 ---
-  orden:    Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.
-  pregunta: ¿Por qué el cielo es azul?
+  orden:               Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.
+  pregunta:            ¿Por qué el cielo es azul?
+  pregunta sin signos: Por qué el cielo es azul
 
 [orden, en crudo] (80 trozos; cortado a los 80 trozos)
 El cielo es azul porque el aire en la atmósfera refleja la luz azul del sol. Cuando la luz del sol llega a la Tierra, se dispersa en todas las direcciones, y el azul es la parte de la luz que se refleja más en el aire. Por eso, cuando miramos hacia arriba, vemos un ci
@@ -19,6 +20,10 @@ El cielo es azul porque el aire en la atmósfera refleja la luz azul del sol. Cu
 
 [pregunta, en crudo] (80 trozos; cortado a los 80 trozos)
 El cielo es azul debido a un fenómeno llamado dispersión de Rayleigh. Esta dispersión ocurre cuando la luz del sol, que es una mezcla de todos los colores del espectro, pasa a través de la atmósfera terrestre. La luz blanca del sol está compuesta por una variedad de longitudes de onda, desde los
+-> contesta (la primera línea no es una petición)
+
+[pregunta sin signos, en crudo] (80 trozos; cortado a los 80 trozos)
+El cielo es azul porque la luz del sol es blanca y se compone de todos los colores del arcoíris. Cuando la luz del sol llega a la atmósfera, se dispersa en todas las direcciones debido a las moléculas de aire y partículas en suspensión. Esta dispersión es más intensa en los colores
 -> contesta (la primera línea no es una petición)
 
 [orden, adiestrada] (80 trozos; cortado a los 80 trozos)
@@ -31,9 +36,16 @@ El cielo aparece azul debido a un proceso llamado dispersión de Rayleigh. Este 
 La luz solar es una mezcla de todos los colores del
 -> contesta (la primera línea no es una petición)
 
+[pregunta sin signos, adiestrada] (80 trozos; cortado a los 80 trozos)
+El cielo aparece azul debido a un proceso llamado dispersión de Rayleigh. Este fenómeno se produce cuando la luz del sol interactúa con las partículas en la atmósfera terrestre.
+
+1. **Luz del Sol**: La luz solar que llega a la Tierra es una mezcla de todos los colores del espectro visible, que
+-> contesta (la primera línea no es una petición)
+
 --- petición 2 ---
-  orden:    Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.
-  pregunta: ¿Me escribes un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa?
+  orden:               Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.
+  pregunta:            ¿Me escribes un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa?
+  pregunta sin signos: Me escribes un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa
 
 [orden, en crudo] (80 trozos; cortado a los 80 trozos)
 En una playa solitaria, un oso se adentró en el agua. Se encontró con una foca juguetona que le sonrió. El oso y la foca se hicieron amigos y pasaron horas nadando juntos. Cuando el sol comenzó a ponerse, el oso se despidió de la foca y regresó a su casa
@@ -41,6 +53,10 @@ En una playa solitaria, un oso se adentró en el agua. Se encontró con una foca
 
 [pregunta, en crudo] (79 trozos; cerró su turno)
 En una playa solitaria, un oso se adentró en el agua. Se encontró con una foca que nadaba cerca. El oso se acercó y la foca se acercó también. El oso y la foca se hicieron amigos. El oso se quedó en la playa con la foca y se fue a casa.
+-> contesta (la primera línea no es una petición)
+
+[pregunta sin signos, en crudo] (80 trozos; cortado a los 80 trozos)
+En una playa solitaria, un oso se adentró en el agua. Se encontró con una foca que nadaba cerca. El oso se acercó y la saludó. La foca se sorprendió pero pronto se relajó y comenzaron a jugar juntos. El oso se hizo amigo de la foca y se divertieron mucho. Cuando
 -> contesta (la primera línea no es una petición)
 
 [orden, adiestrada] (80 trozos; cortado a los 80 trozos)
@@ -55,9 +71,16 @@ Claro, aquí tienes un cuento muy corto sobre un oso que va a la playa:
 En un día soleado, un oso llamado Osko decidió ir a la playa. Allí encontró a una pequeña foca jugando con las olas. Aunque al principio estaban un poco nerviosos, pronto se hicieron amigos. Osko
 -> contesta (la primera línea no es una petición)
 
+[pregunta sin signos, adiestrada] (80 trozos; cortado a los 80 trozos)
+Claro, aquí tienes un corto cuento sobre un oso que va a la playa:
+
+En un día soleado, un oso llamado Osko decidió ir a la playa. Allí encontró a una pequeña foca jugando en la arena. Aunque al principio estaban un poco nerviosos, pronto se hicieron amigos. Jugaron con las
+-> contesta (la primera línea no es una petición)
+
 --- petición 3 ---
-  orden:    Dame tres consejos para dormir mejor.
-  pregunta: ¿Cómo puedo dormir mejor?
+  orden:               Dame tres consejos para dormir mejor.
+  pregunta:            ¿Cómo puedo dormir mejor?
+  pregunta sin signos: Cómo puedo dormir mejor
 
 [orden, en crudo] (80 trozos; cortado a los 80 trozos)
 1. Crear un ambiente adecuado: Mantener una habitación fresca, oscura y silenciosa puede ayudar a mejorar la calidad del sueño. Utiliza cortinas opacas, un ventilador o un reproductor de música relajante para reducir el ruido y la luz.
@@ -66,6 +89,14 @@ En un día soleado, un oso llamado Osko decidió ir a la playa. Allí encontró 
 -> contesta (la primera línea no es una petición)
 
 [pregunta, en crudo] (80 trozos; cortado a los 80 trozos)
+Dormir bien es fundamental para nuestra salud y bienestar. Aquí te dejo algunos consejos para mejorar tu calidad de sueño:
+
+1. **Establece un horario regular**: Intenta ir a la cama y levantarte a la misma hora todos los días, incluso los fines de semana. Esto ayuda a regular tu ritmo circadiano.
+
+2. **C
+-> contesta (la primera línea no es una petición)
+
+[pregunta sin signos, en crudo] (80 trozos; cortado a los 80 trozos)
 Dormir bien es fundamental para nuestra salud y bienestar. Aquí te dejo algunos consejos para mejorar tu calidad de sueño:
 
 1. **Establece un horario regular**: Intenta ir a la cama y levantarte a la misma hora todos los días, incluso los fines de semana. Esto ayuda a regular tu ritmo circadiano.
@@ -87,9 +118,18 @@ Dormir bien es fundamental para mantener una buena salud física y mental. Aquí
 2. Crea un ambiente propicio: Mantén
 -> contesta (la primera línea no es una petición)
 
+[pregunta sin signos, adiestrada] (80 trozos; cortado a los 80 trozos)
+Dormir bien es fundamental para mantener una buena salud física y mental. Aquí te presento algunas sugerencias que pueden ayudarte a mejorar la calidad de tu sueño:
+
+1. Establece un horario de sueño: Intenta ir a la cama y despertar a la misma hora todos los días, incluso los fines de semana.
+
+2. Crea un ambiente prop
+-> contesta (la primera línea no es una petición)
+
 --- petición 4 ---
-  orden:    Traduce al inglés: El gato duerme encima de la silla.
-  pregunta: ¿Cómo se dice en inglés «El gato duerme encima de la silla»?
+  orden:               Traduce al inglés: El gato duerme encima de la silla.
+  pregunta:            ¿Cómo se dice en inglés «El gato duerme encima de la silla»?
+  pregunta sin signos: Cómo se dice en inglés «El gato duerme encima de la silla»
 
 [orden, en crudo] (8 trozos; cerró su turno)
 The cat sleeps on the chair.
@@ -99,6 +139,11 @@ The cat sleeps on the chair.
 En inglés, se dice "The cat sleeps on the chair."
 -> contesta (la primera línea no es una petición)
 
+[pregunta sin signos, en crudo] (23 trozos; cerró su turno)
+How do you say "The cat sleeps on the chair" in English?
+The cat sleeps on the chair.
+-> sigue la lista (la primera línea es una pregunta)
+
 [orden, adiestrada] (8 trozos; cerró su turno)
 The cat sleeps on the chair.
 -> contesta (la primera línea no es una petición)
@@ -107,9 +152,20 @@ The cat sleeps on the chair.
 En inglés, "El gato duerme encima de la silla" se traduce como "The cat is sleeping on the chair."
 -> contesta (la primera línea no es una petición)
 
+[pregunta sin signos, adiestrada] (55 trozos; cerró su turno)
+La traducción al inglés de "El gato duerme encima de la silla" es:
+
+"The cat is sleeping on the chair"
+
+Si prefieres una forma más coloquial, también puedes decir:
+
+"The cat is napping on the chair"
+-> contesta (la primera línea no es una petición)
+
 --- petición 5 ---
-  orden:    Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.
-  pregunta: ¿Cómo le explicarías a un niño de seis años la llegada a la Luna?
+  orden:               Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.
+  pregunta:            ¿Cómo le explicarías a un niño de seis años la llegada a la Luna?
+  pregunta sin signos: Cómo le explicarías a un niño de seis años la llegada a la Luna
 
 [orden, en crudo] (66 trozos; cerró su turno)
 La Luna es un planeta que orbita alrededor de la Tierra. Los astronautas viajaron en una nave espacial llamada Apolo 11 y llegaron a la Luna en 1969. Fueron los primeros seres humanos en pisar su superficie.
@@ -118,6 +174,11 @@ La Luna es un planeta que orbita alrededor de la Tierra. Los astronautas viajaro
 [pregunta, en crudo] (80 trozos; cortado a los 80 trozos)
 ¡Hola! La llegada a la Luna es como si tuvieras un viaje en un avión, pero en lugar de ir a un lugar cerca de la tierra, vas a un lugar muy lejano llamado la Luna. La Luna es un planeta que está muy lejos de la tierra, y los astronautas son como pilotos que van en un cohete
 -> contesta (la primera línea no es una petición)
+
+[pregunta sin signos, en crudo] (80 trozos; cortado a los 80 trozos)
+Cómo le explicarías a un niño de seis años la llegada a la Luna
+El 20 de julio de 1969, Neil Armstrong y Buzz Aldrin se convirtieron en los primeros seres humanos en pisar la Luna. La hazaña fue transmitida en directo por televisión y se convirtió en un hito en la
+-> contesta (la primera línea no es una petición) Además: repite su petición.
 
 [orden, adiestrada] (80 trozos; cortado a los 80 trozos)
 ¡Claro! Imagina que la Luna es como una gran bola blanca en el cielo nocturno. Muchos astronautas, que son como los superhéroes del espacio, han viajado en un gran cohete especial para ir a visitarla. Es como si fueran de paseo, pero en lugar de caminar por la tierra, caminan
@@ -129,14 +190,21 @@ La Luna es un planeta que orbita alrededor de la Tierra. Los astronautas viajaro
 "Imagina que la Tierra es como una gran manzana en el centro de tu habitación. Ahora, la Luna
 -> contesta (la primera línea no es una petición)
 
+[pregunta sin signos, adiestrada] (80 trozos; cortado a los 80 trozos)
+¡Hola! Imagina que estás en un viaje muy especial, como si fueras a una gran fiesta en el cielo. Este lugar mágico se llama Luna y está muy lejos de nuestra casa, la Tierra.
+
+Para llegar allí, necesitamos un gran cohete, como un avión muy grande pero más fuerte. Este cohete es como un
+-> contesta (la primera línea no es una petición)
+
 ==========================================================================
 TAMAÑO 500M
 ==========================================================================
-tiempo en esta máquina: en crudo 0,2 min; adiestrada 0,2 min (carga del modelo incluida).
+tiempo en esta máquina: en crudo 0,4 min; adiestrada 0,4 min (carga del modelo incluida).
 
 --- petición 1 ---
-  orden:    Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.
-  pregunta: ¿Por qué el cielo es azul?
+  orden:               Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.
+  pregunta:            ¿Por qué el cielo es azul?
+  pregunta sin signos: Por qué el cielo es azul
 
 [orden, en crudo] (42 trozos; cerró su turno)
 El cielo azul es una estrella que nos muestra que el sol está en el cielo, y que el cielo es un lugar donde podemos ver cosas que no podemos ver en el sol.
@@ -144,6 +212,10 @@ El cielo azul es una estrella que nos muestra que el sol está en el cielo, y qu
 
 [pregunta, en crudo] (80 trozos; cortado a los 80 trozos)
 El cielo azul es un fenómeno natural que se produce debido a la luz de la luna. La luna es una estrella que se encuentra en el cielo nocturno y se encuentra en constante movimiento. Cuando la luna se encuentra en un cielo azul, la luz que la emite se refleja en el aire y se refleja en
+-> contesta (la primera línea no es una petición)
+
+[pregunta sin signos, en crudo] (80 trozos; cortado a los 80 trozos)
+El cielo azul es una de las características más conocidas de la naturaleza. Es un fenómeno natural que se produce cuando el sol se encuentra en un punto en el cielo que permite que la luz del sol se absorba por la atmósfera y se evapore. Esto produce un reflejo de la luz del sol en el aire, lo que produce un color
 -> contesta (la primera línea no es una petición)
 
 [orden, adiestrada] (70 trozos; cerró su turno)
@@ -156,9 +228,18 @@ El cielo azul se debe a la luz de las estrellas y los planetas que iluminan el e
 1. Luz de las estrellas: Las estrellas emiten luz en forma de rayos verdes o rojos, dependiendo del tipo de estrella y su masa. Los planetas también emiten luz, pero más limit
 -> contesta (la primera línea no es una petición)
 
+[pregunta sin signos, adiestrada] (80 trozos; cortado a los 80 trozos)
+El cielo azul se debe a la luz de las estrellas y otros objetos celestes que iluminan el espacio. Aquí hay algunos factores clave:
+
+1. Luz de los astros: Los planetas, estrellas, nebulosas y otros objetos celestes emiten luz visible.
+
+2. Lente del sol: El sol también produce luz visible, pero su
+-> contesta (la primera línea no es una petición)
+
 --- petición 2 ---
-  orden:    Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.
-  pregunta: ¿Me escribes un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa?
+  orden:               Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.
+  pregunta:            ¿Me escribes un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa?
+  pregunta sin signos: Me escribes un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa
 
 [orden, en crudo] (80 trozos; cortado a los 80 trozos)
 El oso, que se había ido a la playa con su amiga, se encontraba en una playa con su familia. El oso se sentó en una de las bancas y le dio un beso a la foca. La foca le sonrió y le dijo que estaba muy contenta de ver a su amigo. El oso se levantó y se dir
@@ -170,6 +251,10 @@ El oso, que se había ido a la playa con su amiga, se encontraba en una playa co
 **El Oso y la Foca**
 
 En un pueblo de la costa, había un oso llamado "El Oso" que siempre se sentía solo y solo. Su vida era un viaje por el mundo, donde se encontraba con personas que le daban vida y le daban la vida
+-> contesta (la primera línea no es una petición)
+
+[pregunta sin signos, en crudo] (80 trozos; cortado a los 80 trozos)
+El cuento es muy corto, pero es muy divertido. El oso va a la playa, se hace amigo de la foca y vuelve a casa. El oso se enamora de la foca y se va a la playa, pero la foca no le gusta y se marcha. El oso se marcha también, pero la foca no le gusta y
 -> contesta (la primera línea no es una petición)
 
 [orden, adiestrada] (80 trozos; cortado a los 80 trozos)
@@ -190,9 +275,19 @@ El oso, llamado "Pato", estaba tan contento con su vida en el bosque que no sab�
 Un día,
 -> contesta (la primera línea no es una petición)
 
+[pregunta sin signos, adiestrada] (80 trozos; cortado a los 80 trozos)
+Aquí tienes un breve cuento en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa:
+
+El oso, con su gran nariz y sus grandes ojos,
+Voy a la playa, donde las olas son suaves.
+¡Qué hermosa arena! ¡Qué mar tranquilo!
+Y aquí estoy, con mi am
+-> contesta (la primera línea no es una petición)
+
 --- petición 3 ---
-  orden:    Dame tres consejos para dormir mejor.
-  pregunta: ¿Cómo puedo dormir mejor?
+  orden:               Dame tres consejos para dormir mejor.
+  pregunta:            ¿Cómo puedo dormir mejor?
+  pregunta sin signos: Cómo puedo dormir mejor
 
 [orden, en crudo] (80 trozos; cortado a los 80 trozos)
 Dame tres consejos para dormir mejor.
@@ -204,7 +299,7 @@ Dame tres consejos para dormir mejor.
 Dame tres consejos para dormir mejor.
 Dame tres consejos para dormir mejor.
 
--> sigue la lista (empieza por el verbo de petición «dame»)
+-> sigue la lista (empieza por el verbo de petición «dame») Además: repite su petición.
 
 [pregunta, en crudo] (80 trozos; cortado a los 80 trozos)
 ¿Cómo puedo dormir mejor?
@@ -219,7 +314,12 @@ Dame tres consejos para dormir mejor.
 ¿Cómo puedo dormir mejor?
 ¿Cómo puedo dormir mejor?
 ¿Cómo puedo
--> sigue la lista (la primera línea es una pregunta)
+-> sigue la lista (la primera línea es una pregunta) Además: repite su petición.
+
+[pregunta sin signos, en crudo] (80 trozos; cortado a los 80 trozos)
+Dormir mejor es una tarea que puede ser difícil de realizar, pero es posible. Aquí te dejo algunos consejos para ayudarte a dormir mejor:
+1. Comenzar a comer bien. La comida puede ser una de las causas más importantes para no dormir bien. Comenzar a comer bien puede ayudar a reducir el estrés y a mejorar la calidad
+-> contesta (la primera línea no es una petición)
 
 [orden, adiestrada] (80 trozos; cortado a los 80 trozos)
 ¡Por supuesto! Aquí te dejo tres consejos para ayudarte a dormir mejor:
@@ -233,9 +333,16 @@ Dormir bien es una tarea compleja que requiere un equilibrio entre la calidad de
 1. **Planificación del sueño**: Decide cuándo y en qué lugar dormir. Esto puede ayudar a regular tus作息times y evitar las inter
 -> contesta (la primera línea no es una petición)
 
+[pregunta sin signos, adiestrada] (80 trozos; cortado a los 80 trozos)
+Dormir bien es crucial para mantener una saludable circunstancia y mejorar la calidad de vida. Aquí te presento algunas sugerencias que podrían ayudarte a dormir mejor:
+
+1. **Preparación del Hogar**: Comienza con un buen descanso en tu hogar antes de dormir. Esto puede incluir preparar tus ropa, hacer el des
+-> contesta (la primera línea no es una petición)
+
 --- petición 4 ---
-  orden:    Traduce al inglés: El gato duerme encima de la silla.
-  pregunta: ¿Cómo se dice en inglés «El gato duerme encima de la silla»?
+  orden:               Traduce al inglés: El gato duerme encima de la silla.
+  pregunta:            ¿Cómo se dice en inglés «El gato duerme encima de la silla»?
+  pregunta sin signos: Cómo se dice en inglés «El gato duerme encima de la silla»
 
 [orden, en crudo] (14 trozos; cerró su turno)
 El gato duerme encima de la silla.
@@ -243,6 +350,16 @@ El gato duerme encima de la silla.
 
 [pregunta, en crudo] (14 trozos; cerró su turno)
 El gato duerme encima de la silla.
+-> contesta (la primera línea no es una petición)
+
+[pregunta sin signos, en crudo] (80 trozos; cortado a los 80 trozos)
+El gato duerme encima de la silla
+El gato duerme encima de la silla
+El gato duerme encima de la silla
+El gato duerme encima de la silla
+El gato duerme encima de la silla
+El gato duerme encima de la silla
+El g
 -> contesta (la primera línea no es una petición)
 
 [orden, adiestrada] (8 trozos; cerró su turno)
@@ -257,9 +374,18 @@ En inglés, "El gato duerme encima de la silla" se dice como:
 Esta frase es una traducción directa del español al inglés. La palabra clave aquí es "gato", que se traduce como "el cat" en inglés. Además, "duerme" se traduce como "siente", y "enc
 -> contesta (la primera línea no es una petición)
 
+[pregunta sin signos, adiestrada] (80 trozos; cortado a los 80 trozos)
+En inglés, "El gato duerme encima de la silla" se dice como:
+
+"The cat sleeps on the chair"
+
+Esta frase es una traducción directa del español al inglés. La palabra clave aquí es "gato", que se traduce como "el cat" en inglés. Además, "duerme" se traduce como "siente", y "enc
+-> contesta (la primera línea no es una petición)
+
 --- petición 5 ---
-  orden:    Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.
-  pregunta: ¿Cómo le explicarías a un niño de seis años la llegada a la Luna?
+  orden:               Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.
+  pregunta:            ¿Cómo le explicarías a un niño de seis años la llegada a la Luna?
+  pregunta sin signos: Cómo le explicarías a un niño de seis años la llegada a la Luna
 
 [orden, en crudo] (80 trozos; cortado a los 80 trozos)
 El niño de seis años se acerca a la Luna, como si fuera un pequeño astronauta, y se acerca a la Luna, como si fuera un pequeño astronauta, y se acerca a la Luna, como si fuera un pequeño astronauta, y se acerca a la Luna, como si fuera un pequeño astronauta, y se acerca a la Luna, como si fuera un
@@ -268,6 +394,14 @@ El niño de seis años se acerca a la Luna, como si fuera un pequeño astronauta
 [pregunta, en crudo] (80 trozos; cortado a los 80 trozos)
 La Luna es un objeto celestial que se encuentra a una distancia de 1.500 millones de kilómetros de la Tierra. Es un objeto muy pequeño y su tamaño es similar al de un par de gatos. La Luna es un objeto celestial que se encuentra a una distancia de 1.500 millones de kilómetros de la Tierra. Es un objeto muy
 -> contesta (la primera línea no es una petición)
+
+[pregunta sin signos, en crudo] (80 trozos; cortado a los 80 trozos)
+¿Cómo le explicarías a un niño de seis años la llegada a la Luna?
+¿Cómo le explicarías a un niño de seis años la llegada a la Luna?
+¿Cómo le explicarías a un niño de seis años la llegada a la Luna?
+¿Cómo le explicarías a un niño de seis años la llegada a la Luna?
+¿Cómo le explic
+-> sigue la lista (la primera línea es una pregunta) Además: repite su petición.
 
 [orden, adiestrada] (80 trozos; cortado a los 80 trozos)
 ¡Hola! La llegada a la Luna es una aventura fascinante para los niños pequeños. Aunque no se puede explicar todo lo que sucede, puedes imaginar que el niño experimenta emociones como alegría y frustración al descubrir que es posible viajar a una estrella que está muy lejos del sol. También puede ser gratificante ver
@@ -279,14 +413,28 @@ La Luna es un objeto celestial que se encuentra a una distancia de 1.500 millone
 Primero, cuando saliste del vuelo, tu corazón se llenó de alegría. Tu cuerpo estaba listo para hacer todo lo
 -> contesta (la primera línea no es una petición)
 
+[pregunta sin signos, adiestrada] (80 trozos; cortado a los 80 trozos)
+¡Claro! Aquí tienes una explicación simple y concisa para que un niño de 6 años entienda:
+
+1. **Luna en el cielo**: La Luna es como un pequeño reloj en el cielo nocturno. Es muy pequeña, pero tiene un color especial.
+
+2. **Circunferencia**: La Luna está formada por muchos pequeños
+-> contesta (la primera línea no es una petición)
+
 ==========================================================================
 RESUMEN (según la regla; de las 5 peticiones, cuántas «contestan»)
 ==========================================================================
+Las preguntas sin signos: la regla no mira sus palabras, así que una que se repite a sí misma sale «contesta»;
+la línea «Además: repite su petición.» de cada texto lo dice.
    500M  orden     adiestrada  contesta 5 de 5
    500M  orden     en crudo    contesta 4 de 5
    500M  pregunta  adiestrada  contesta 5 de 5
    500M  pregunta  en crudo    contesta 4 de 5
+   500M  pregunta sin signos adiestrada  contesta 5 de 5
+   500M  pregunta sin signos en crudo    contesta 4 de 5
  7.000M  orden     adiestrada  contesta 5 de 5
  7.000M  orden     en crudo    contesta 5 de 5
  7.000M  pregunta  adiestrada  contesta 5 de 5
  7.000M  pregunta  en crudo    contesta 5 de 5
+ 7.000M  pregunta sin signos adiestrada  contesta 5 de 5
+ 7.000M  pregunta sin signos en crudo    contesta 4 de 5

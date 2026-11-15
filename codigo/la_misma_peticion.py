@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Capítulo 12 — la misma petición, en crudo y adiestrada; y cada petición, en forma de orden y de pregunta
-(Órdenes 168 y 169, 15 de noviembre de 2026).
+(Órdenes 168, 169 y 170, 15 de noviembre de 2026).
 
 Para cinco peticiones en castellano, el programa le da a dos máquinas el MISMO modelo —el de 7.000 millones de
 pesos y el de 500 millones, de la familia Qwen2.5— antes y después del adiestramiento, y escribe lo que sale:
@@ -10,8 +10,9 @@ pesos y el de 500 millones, de la familia Qwen2.5— antes y después del adiest
   - adiestrada (`-Instruct`): la petición dentro de su formato de conversación, con la instrucción de serie que
     pone su plantilla (como en la tercera columna de la batería del capítulo 12).
 
-Cada petición se da de dos formas: como orden y como pregunta. Son cuatro textos por petición y por tamaño:
-orden en crudo, pregunta en crudo, orden adiestrada, pregunta adiestrada.
+Cada petición se da de tres formas: como orden, como pregunta y como pregunta sin los signos «¿» y «?» (Orden 170).
+Son seis textos por petición y por tamaño: orden en crudo, pregunta en crudo, pregunta sin signos en crudo, orden
+adiestrada, pregunta adiestrada, pregunta sin signos adiestrada.
 
 Se escribe siempre el trozo más probable, sin sorteo, hasta 80 trozos o hasta que la máquina cierra su turno.
 Debajo de cada texto va una línea que dice si lo primero que escribe PARECE SEGUIR LA LISTA (otra petición del mismo
@@ -30,23 +31,29 @@ Uso:
 
 PAREJAS = [("Qwen/Qwen2.5-7B", "Qwen/Qwen2.5-7B-Instruct"),
            ("Qwen/Qwen2.5-0.5B", "Qwen/Qwen2.5-0.5B-Instruct")]
+FORMAS = ("orden", "pregunta", "pregunta sin signos")
 ETIQUETA = {"Qwen/Qwen2.5-0.5B": "500M", "Qwen/Qwen2.5-7B": "7.000M"}   # los rótulos de la batería del capítulo 11
 DTYPE = "bfloat16"
 SEMILLA = 20260914
 MAX_NUEVOS = 80          # trozos como mucho
 
-# (la petición como orden, la misma como pregunta), tal cual
+# (la petición como orden, la misma como pregunta, la pregunta sin los signos «¿» y «?»), tal cual
 PETICIONES = [
     ("Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.",
-     "¿Por qué el cielo es azul?"),
+     "¿Por qué el cielo es azul?",
+     "Por qué el cielo es azul"),
     ("Escribe un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa.",
-     "¿Me escribes un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa?"),
+     "¿Me escribes un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa?",
+     "Me escribes un cuento muy corto en el que un oso va a la playa, se hace amigo de una foca y vuelve a casa"),
     ("Dame tres consejos para dormir mejor.",
-     "¿Cómo puedo dormir mejor?"),
+     "¿Cómo puedo dormir mejor?",
+     "Cómo puedo dormir mejor"),
     ("Traduce al inglés: El gato duerme encima de la silla.",
-     "¿Cómo se dice en inglés «El gato duerme encima de la silla»?"),
+     "¿Cómo se dice en inglés «El gato duerme encima de la silla»?",
+     "Cómo se dice en inglés «El gato duerme encima de la silla»"),
     ("Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.",
-     "¿Cómo le explicarías a un niño de seis años la llegada a la Luna?"),     # la de OpenAI (2022), en castellano
+     "¿Cómo le explicarías a un niño de seis años la llegada a la Luna?",
+     "Cómo le explicarías a un niño de seis años la llegada a la Luna"),     # la de OpenAI (2022), en castellano
 ]
 
 # REGLA: la primera línea no vacía de lo que escribe «sigue la lista» si es otra petición, y si no, «contesta».
@@ -127,8 +134,13 @@ def clasificar(texto):
     return "contesta", "la primera línea no es una petición"
 
 
-def _recortar(l, n=60):
-    return l if len(l) <= n else l[:n - 1] + "…"
+def repite(texto, peticion):
+    """« Además: repite su petición.» si la primera línea no vacía es la petición misma (sin signos ni mayúsculas ni
+    espacios de más); si no, nada. Es una línea aparte de la regla, para las preguntas sin signos."""
+    def limpia(s):
+        return re.sub(r"[^\wáéíóúüñ]+", " ", s.lower()).strip()
+    linea = next((l for l in texto.split("\n") if l.strip()), "")
+    return " Además: repite su petición." if linea.strip() and limpia(linea) == limpia(peticion) else ""
 
 
 def medir(base, instruido):
@@ -138,8 +150,8 @@ def medir(base, instruido):
     for version, nombre in (("en crudo", base), ("adiestrada", instruido)):
         t0 = time.time()
         tok, modelo = cargar(nombre)
-        for k, (orden, pregunta) in enumerate(PETICIONES):
-            for forma, peticion in (("orden", orden), ("pregunta", pregunta)):
+        for k, formas in enumerate(PETICIONES):
+            for forma, peticion in zip(FORMAS, formas):
                 texto = en_crudo(peticion) if version == "en crudo" else con_formato(tok, peticion)
                 res[(k, forma, version)] = escribir(tok, modelo, texto)
         tiempos[version] = time.time() - t0
@@ -156,11 +168,13 @@ def selftest():
 
     # 1. TEST NULO — la regla no regala el resultado: si la máquina se limitara a repetir la petición (que es
     #    seguir la lista, no contestar), cada una de las diez formas se clasifica «sigue la lista»; y nada es nada.
-    copiadas = [clasificar(p)[0] for o, q in PETICIONES for p in (o, q)]
+    #    (Las preguntas sin signos no se prueban aquí: la regla mira «¿», «?» y los verbos, y una pregunta sin signos
+    #    copiada, sin ninguno de los tres, saldría «contesta»; por eso la salida dice además si repite su petición.)
+    copiadas = [clasificar(p)[0] for f in PETICIONES for p in f[:2]]
     nada = clasificar("  \n\n ")[0]
     ok1 = all(c == "sigue la lista" for c in copiadas) and nada == "no escribe nada"
-    print(f"[1] test nulo         repetir la petición no cuenta como contestar: {sum(c == 'sigue la lista' for c in copiadas)}"
-          f" de {len(copiadas)} «sigue la lista»; un texto vacío, «{nada}»")
+    print(f"[1] test nulo         repetir la orden o la pregunta no cuenta como contestar: "
+          f"{sum(c == 'sigue la lista' for c in copiadas)} de {len(copiadas)} «sigue la lista»; un texto vacío, «{nada}»")
     if not ok1:
         fallos.append(f"test nulo: la regla regala «contesta» a una petición copiada: {copiadas}, {nada}")
 
@@ -180,12 +194,15 @@ def selftest():
 
     # 3. INVARIANTE — se escribe siempre lo más probable: dos ejecuciones dan lo mismo; y el formato adiestrado lleva
     #    la instrucción de serie y el crudo, nada más que el salto de línea.
+    sin_signos = all(f[2] == f[1].replace("¿", "").replace("?", "") for f in PETICIONES)
     a = escribir(tok_b, mod_b, en_crudo(PETICIONES[2][0]))
     b = escribir(tok_b, mod_b, en_crudo(PETICIONES[2][0]))
     formato = con_formato(tok_i, PETICIONES[2][0])
-    ok3 = a == b and en_crudo("x") == "x\n" and "system" in formato and formato.rstrip().endswith("assistant")
+    ok3 = (a == b and en_crudo("x") == "x\n" and "system" in formato and formato.rstrip().endswith("assistant")
+           and sin_signos)
     print(f"[3] invariante        dos ejecuciones iguales: {'sí' if a == b else 'NO'}; crudo = petición + salto de línea; "
-          f"adiestrada con su instrucción de serie: {'sí' if ('system' in formato) else 'NO'}")
+          f"adiestrada con su instrucción de serie: {'sí' if ('system' in formato) else 'NO'}; "
+          f"cada pregunta sin signos es la pregunta sin «¿» ni «?»: {'sí' if sin_signos else 'NO'}")
     if not ok3:
         fallos.append("invariante: dos ejecuciones distintas, o el montaje de los dos formatos no es el esperado")
     print()
@@ -224,21 +241,24 @@ def main():
         print(f"\n{'=' * 74}\nTAMAÑO {etiqueta}\n{'=' * 74}")
         print(f"tiempo en esta máquina: en crudo {coma(tiempos['en crudo'] / 60)} min; "
               f"adiestrada {coma(tiempos['adiestrada'] / 60)} min (carga del modelo incluida).")
-        for k, (orden, pregunta) in enumerate(PETICIONES, 1):
-            print(f"\n--- petición {k} ---\n  orden:    {orden}\n  pregunta: {pregunta}")
-            for version, forma in (("en crudo", "orden"), ("en crudo", "pregunta"),
-                                   ("adiestrada", "orden"), ("adiestrada", "pregunta")):
+        for k, (orden, pregunta, sin_signos) in enumerate(PETICIONES, 1):
+            print(f"\n--- petición {k} ---\n  orden:               {orden}\n  pregunta:            {pregunta}\n"
+                  f"  pregunta sin signos: {sin_signos}")
+            for version in ("en crudo", "adiestrada"):
+              for forma in FORMAS:
                 texto, n, cerro = res[(k - 1, forma, version)]
                 clase, porque = clasificar(texto)
                 fin = "cerró su turno" if cerro else f"cortado a los {MAX_NUEVOS} trozos"
                 print(f"\n[{forma}, {version}] ({n} trozos; {fin})")
                 print(texto)
-                print(f"-> {clase} ({porque})")
+                print(f"-> {clase} ({porque}){repite(texto, PETICIONES[k - 1][FORMAS.index(forma)])}")
     resumen = {}
     for etiqueta, (res, _) in todo.items():
         for (k, forma, version), (texto, _, _) in res.items():
             resumen.setdefault((etiqueta, forma, version), []).append(clasificar(texto)[0])
     print(f"\n{'=' * 74}\nRESUMEN (según la regla; de las 5 peticiones, cuántas «contestan»)\n{'=' * 74}")
+    print("Las preguntas sin signos: la regla no mira sus palabras, así que una que se repite a sí misma sale «contesta»;")
+    print("la línea «Además: repite su petición.» de cada texto lo dice.")
     for (etiqueta, forma, version), clases in sorted(resumen.items()):
         print(f"{etiqueta:>7}  {forma:<9} {version:<11} contesta {clases.count('contesta')} de {len(clases)}")
 
