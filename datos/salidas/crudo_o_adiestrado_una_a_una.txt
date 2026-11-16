@@ -1,4 +1,4 @@
-Medido el 2026-10-28 en macOS-26.7.1-arm64-arm-64bit; generación determinista (do_sample=False), como crudo_o_adiestrado.py.
+Medido el 2026-11-16 en macOS-26.7.1-arm64-arm-64bit; generación determinista (do_sample=False), como crudo_o_adiestrado.py.
 
 ============================================================
 TAMAÑO 500M
@@ -16,7 +16,7 @@ Lo que puede venir detrás de «La capital de Francia es», en crudo
 | `_conoc` | 5,0 % | [barra:5.0] |
 | `_uno` | 3,7 % | [barra:3.7] |
 
-`_` marca el espacio que va pegado delante del trozo. Los seis trozos más probables de toda la lista, en la versión cruda, con la frase sola.
+`_` marca el espacio que va pegado delante del trozo.
 :::
 
 ::: tabla
@@ -31,7 +31,7 @@ Lo mismo, en la versión adiestrada
 | `_conoc` | 3,5 % | [barra:3.5] |
 | `:` | 1,8 % | [barra:1.8] |
 
-`_` marca el espacio que va pegado delante del trozo. Los seis más probables en la versión adiestrada, con la misma frase sola, sin pregunta ni formato de conversación.
+La misma frase sola, sin pregunta ni formato de conversación.
 :::
 
 ::: tabla
@@ -47,7 +47,7 @@ Dónde está «París» detrás de «La capital de Francia es»
 | su puesto en la lista | 136 | 20 |
 | **las dos maneras juntas** | **0,1 %** | **0,7 %** |
 
-La versión cruda y la adiestrada, con la frase sola. «París» con tilde va en dos trozos; sin tilde, en uno. El puesto es el que ocupa cada trozo en la lista entera, del más probable al menos.
+El puesto es el que ocupa cada trozo en la lista entera, del más probable al menos.
 :::
 
 ::: tabla
@@ -62,9 +62,7 @@ La pregunta sola, en crudo: lo que puede venir detrás de «La capital de Franci
 | `_Lyon` | 2,7 % | [barra:2.7] |
 | `_Roma` | 1,7 % | [barra:1.7] |
 
-`_` marca el espacio que va pegado delante del trozo.
-
-La versión cruda pequeña, de 500 millones, con la pregunta delante, justo antes de escribir la ciudad. La «N» es el principio de Nápoles, y lo que acaba escribiendo es «La capital de Francia es Nápoles.»
+La versión cruda pequeña, de 500 millones, con la pregunta delante, justo antes de escribir la ciudad. La «N» es el principio de Nápoles.
 :::
 
 ::: tabla
@@ -79,7 +77,7 @@ Las tres ciudades enteras, en ese mismo punto (500M)
 La probabilidad de cada ciudad entera, con todos sus trozos, frente al puesto de su primer trozo en la lista. Como ciudad entera gana París; como trozo, la «N» de Nápoles.
 :::
 
-(las respuestas reproducen la batería de crudo_o_adiestrado.csv)
+(las respuestas reproducen la batería de ../datos/salidas/crudo_o_adiestrado.csv)
 
 ::: tabla
 La batería del capítulo 11, en las tres columnas (500M)
@@ -94,7 +92,7 @@ La batería del capítulo 11, en las tres columnas (500M)
 | razonar sobre una frase | 1 de 5 | 2 de 5 | 1 de 5 |
 | **en total** | **4 de 30** | **7 de 30** | **2 de 30** |
 
-Cuántas de las cinco preguntas de cada tarea acierta el mismo modelo de 500 millones: en crudo; adiestrado, con el enunciado tal cual; y adiestrado, con el enunciado dentro de su formato de conversación, que es como lo usas tú. La regla es la del capítulo 11: acierta si lo primero que escribe es la respuesta correcta.
+El mismo modelo de 500 millones: en crudo; adiestrado, con el enunciado tal cual; y adiestrado, dentro de su formato de conversación. La regla es la del capítulo 11.
 :::
 
 ::: tabla
@@ -129,7 +127,7 @@ El mismo enunciado, dentro del formato de conversación
     Respuesta: <|im_end|>
     <|im_start|>assistant
 
-Así lo recibe la tercera columna. «<|im_start|>» y «<|im_end|>» abren y cierran cada parte, y «system», «user» y «assistant» dicen de quién es: la instrucción de serie, quien pregunta y la máquina. La última parte se queda abierta: es su turno.
+«<|im_start|>» y «<|im_end|>» abren y cierran cada parte, y «system», «user» y «assistant» dicen de quién es: la instrucción de serie, quien pregunta y la máquina. La última parte se queda abierta: es su turno.
 :::
 
 ::: tabla
@@ -162,7 +160,7 @@ El mismo enunciado, dentro del formato de conversación
     12 + 25 = <|im_end|>
     <|im_start|>assistant
 
-Así lo recibe la tercera columna. «<|im_start|>» y «<|im_end|>» abren y cierran cada parte, y «system», «user» y «assistant» dicen de quién es: la instrucción de serie, quien pregunta y la máquina. La última parte se queda abierta: es su turno.
+«<|im_start|>» y «<|im_end|>» abren y cierran cada parte, y «system», «user» y «assistant» dicen de quién es: la instrucción de serie, quien pregunta y la máquina. La última parte se queda abierta: es su turno.
 :::
 
 ============================================================
@@ -181,7 +179,7 @@ Lo que puede venir detrás de «La capital de Francia es», en crudo
 | `_el` | 4,9 % | [barra:4.9] |
 | `_conoc` | 4,1 % | [barra:4.1] |
 
-`_` marca el espacio que va pegado delante del trozo. Los seis trozos más probables de toda la lista, en la versión cruda, con la frase sola.
+`_` marca el espacio que va pegado delante del trozo.
 :::
 
 ::: tabla
@@ -196,7 +194,7 @@ Lo mismo, en la versión adiestrada
 | `_un` | 6,4 % | [barra:6.4] |
 | `___` | 4,4 % | [barra:4.4] |
 
-`_` marca el espacio que va pegado delante del trozo. Los seis más probables en la versión adiestrada, con la misma frase sola, sin pregunta ni formato de conversación. `___` es un espacio seguido de dos rayas bajas.
+La misma frase sola, sin pregunta ni formato de conversación. `___` es un espacio seguido de dos rayas bajas.
 :::
 
 ::: tabla
@@ -212,7 +210,7 @@ Dónde está «París» detrás de «La capital de Francia es»
 | su puesto en la lista | 7 | 3 |
 | **las dos maneras juntas** | **5,8 %** | **24,5 %** |
 
-La versión cruda y la adiestrada, con la frase sola. «París» con tilde va en dos trozos; sin tilde, en uno. El puesto es el que ocupa cada trozo en la lista entera, del más probable al menos.
+El puesto es el que ocupa cada trozo en la lista entera, del más probable al menos.
 :::
 
 ::: tabla
@@ -226,8 +224,6 @@ La pregunta sola, en crudo: lo que puede venir detrás de «La capital de Franci
 | `_**` | 0,1 % | [barra:0.1] |
 | `_PAR` | 0,0 % | [barra:0.0] |
 | `_el` | 0,0 % | [barra:0.0] |
-
-`_` marca el espacio que va pegado delante del trozo.
 
 La versión cruda de 7.000 millones, con la pregunta delante: la lista que tiene justo antes de escribir la ciudad. Acaba escribiendo «La capital de Francia es París.»
 :::
@@ -244,7 +240,7 @@ Las tres ciudades enteras, en ese mismo punto (7.000M)
 La probabilidad de cada ciudad entera, con todos sus trozos, frente al puesto de su primer trozo en la lista. Gana París, como ciudad entera y como trozo.
 :::
 
-(las respuestas reproducen la batería de crudo_o_adiestrado.csv)
+(las respuestas reproducen la batería de ../datos/salidas/crudo_o_adiestrado.csv)
 
 ::: tabla
 La batería del capítulo 11, en las tres columnas (7.000M)
@@ -259,7 +255,7 @@ La batería del capítulo 11, en las tres columnas (7.000M)
 | razonar sobre una frase | 3 de 5 | 4 de 5 | 1 de 5 |
 | **en total** | **19 de 30** | **17 de 30** | **4 de 30** |
 
-Cuántas de las cinco preguntas de cada tarea acierta el mismo modelo de 7.000 millones: en crudo; adiestrado, con el enunciado tal cual; y adiestrado, con el enunciado dentro de su formato de conversación, que es como lo usas tú. La regla es la del capítulo 11: acierta si lo primero que escribe es la respuesta correcta.
+El mismo modelo de 7.000 millones: en crudo; adiestrado, con el enunciado tal cual; y adiestrado, dentro de su formato de conversación. La regla es la del capítulo 11.
 :::
 
 ::: tabla
@@ -294,7 +290,7 @@ El mismo enunciado, dentro del formato de conversación
     Respuesta: <|im_end|>
     <|im_start|>assistant
 
-Así lo recibe la tercera columna. «<|im_start|>» y «<|im_end|>» abren y cierran cada parte, y «system», «user» y «assistant» dicen de quién es: la instrucción de serie, quien pregunta y la máquina. La última parte se queda abierta: es su turno.
+«<|im_start|>» y «<|im_end|>» abren y cierran cada parte, y «system», «user» y «assistant» dicen de quién es: la instrucción de serie, quien pregunta y la máquina. La última parte se queda abierta: es su turno.
 :::
 
 ::: tabla
@@ -327,6 +323,6 @@ El mismo enunciado, dentro del formato de conversación
     12 + 25 = <|im_end|>
     <|im_start|>assistant
 
-Así lo recibe la tercera columna. «<|im_start|>» y «<|im_end|>» abren y cierran cada parte, y «system», «user» y «assistant» dicen de quién es: la instrucción de serie, quien pregunta y la máquina. La última parte se queda abierta: es su turno.
+«<|im_start|>» y «<|im_end|>» abren y cierran cada parte, y «system», «user» y «assistant» dicen de quién es: la instrucción de serie, quien pregunta y la máquina. La última parte se queda abierta: es su turno.
 :::
 

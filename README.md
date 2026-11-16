@@ -62,5 +62,9 @@ en este repositorio, ni los datos de terceros, que conservan sus propias condici
 - `datos/entrada/quijote.txt`: Don Quijote, del Proyecto Gutenberg, de dominio público.
 - `datos/entrada/arc_25ff71a9.json`: una tarea del conjunto público de ARC-AGI
   (https://github.com/fchollet/ARC-AGI), bajo licencia Apache 2.0.
+- `datos/salidas/ejemplos_de_adiestramiento.txt`: los mensajes de esa salida (peticiones, respuestas y su orden) no son
+  del autor: los escribieron voluntarios de OpenAssistant, `oasst1`, versión del 12 de abril de 2023
+  (https://huggingface.co/datasets/OpenAssistant/oasst1), bajo licencia Apache 2.0, que pide atribución; van tal cual,
+  con sus faltas. El conjunto entero no se publica: `codigo/ejemplos_de_adiestramiento.py` lo baja de nuevo.
 - Los trescientos libros de los capítulos 5 y siguientes no se incluyen: `codigo/descargar_corpus.py`
   los descarga del Proyecto Gutenberg.

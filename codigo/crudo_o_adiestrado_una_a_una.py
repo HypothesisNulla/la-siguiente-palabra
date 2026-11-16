@@ -35,15 +35,20 @@ ANCHO_RENGLON = 56     # un renglón más largo de lo que recibe la máquina se 
 TOLERANCIA = 1e-9
 NOMBRE = {"500M": "500 millones", "7.000M": "7.000 millones"}
 # Orden 97: cifras que las notas escriben con letra; si cambia el parámetro, falla aquí y no en la página.
-EN_LETRA = {6: "seis", 5: "cinco", 2: "dos"}
+EN_LETRA = {5: "cinco", 2: "dos"}
 TAREA_NOTA = "sumar dos cifras"      # una tarea cualquiera: la nota solo cuenta cuántas preguntas tiene cada una
-# Lo que dice la nota de la lista justo antes de la ciudad, según el tamaño (el borrador del capítulo 12
+# Lo que dice la nota de la lista justo antes de la ciudad, según el tamaño (el texto del capítulo 12
 # las escribe distintas porque lo que enseña cada una es distinto).
+# Orden 173 (16 nov 2026): las notas de este programa son ahora las que lleva el Anexo A12, que las
+# reescribió Claude para que cada una diga solo lo que la tabla no dice ya (las demás cifras no cambian:
+# se repitió la medición entera y se comparó con la guardada). Antes la de 500M terminaba «…y lo que
+# acaba escribiendo es «La capital de Francia es Nápoles.»» (lo dice el cuerpo del capítulo) y todas
+# repetían «el "_" marca el espacio…» o «con la frase sola».
 NOTA_PREGUNTA_SOLA = {
     "7.000M": "La versión cruda de {nombre}, con la pregunta delante: la lista que tiene justo antes "
               "de escribir la ciudad. Acaba escribiendo «{entero}»",
     "500M": "La versión cruda pequeña, de {nombre}, con la pregunta delante, justo antes de escribir "
-            "la ciudad. La «N» es el principio de Nápoles, y lo que acaba escribiendo es «{entero}»",
+            "la ciudad. La «N» es el principio de Nápoles.",
 }
 
 # ==========================================================
@@ -127,12 +132,12 @@ def lista_y_paris(tok, mod):
     return pares, paris
 
 
-def tabla_lista(pares, titulo, quien):
+def tabla_lista(pares, titulo, nota):
     filas = [[trozo(visible(w)), pct(v, 1), barra(v)] for w, v in pares]
-    # Orden 97: una sola nota, para el lector: el «_», lo que son los trozos de la lista (`quien`, con
-    # {n} por cuántos son) y, si hay trozos con rayas bajas de verdad, qué son.
-    notas = [" ".join([f"{trozo('_')} marca el espacio que va pegado delante del trozo.",
-                       quien.format(n=EN_LETRA[len(pares)])] + rayas(pares))]
+    # Orden 97: una sola nota, para el lector: lo que dice `nota` y, si hay trozos con rayas bajas
+    # de verdad, qué son. (Orden 173: `nota` la pone el que llama; antes era siempre «el "_" marca el
+    # espacio…» más una frase de «los seis más probables…», y ahora cada tabla dice lo suyo.)
+    notas = [" ".join([nota] + rayas(pares))]
     return tabla_editorial(titulo, ["trozo siguiente", "probabilidad", ""], filas, "idi", notas)
 
 
@@ -155,9 +160,9 @@ def tabla_paris(datos, etiqueta):
         ["**las dos maneras juntas**"] + [f"**{p_txt(d[tilde][1] + d[sin][1])}**" for d in cols],
     ]
     # Orden 97: «con tilde va en dos trozos; sin tilde, en uno» es lo que comprueba el assert de arriba.
-    notas = ["La versión cruda y la adiestrada, con la frase sola. «París» con tilde va en dos "
-             "trozos; sin tilde, en uno. El puesto es el que ocupa cada trozo en la lista entera, "
-             "del más probable al menos."]
+    # Orden 173: la nota se queda en lo que la tabla no dice (lo de «con tilde, en dos trozos» lo dice
+    # el texto del A12 y lo comprueba el assert de arriba).
+    notas = ["El puesto es el que ocupa cada trozo en la lista entera, del más probable al menos."]
     return tabla_editorial("Dónde está «París» detrás de «La capital de Francia es»",
                            [""] + [r for r, _ in datos], filas, "idd", notas)
 
@@ -190,7 +195,7 @@ def tablas_pregunta_sola(etiqueta, llevado, pares, ciudades, entero):
         f"La pregunta sola, en crudo: lo que puede venir detrás de «{llevado}»",
         ["trozo siguiente", "probabilidad", ""],
         [[trozo(visible(w)), pct(v, 1), barra(v)] for w, v in pares], "idi",
-        [f"{trozo('_')} marca el espacio que va pegado delante del trozo."] + rayas(pares)
+        rayas(pares)
         + [NOTA_PREGUNTA_SOLA[etiqueta].format(nombre=NOMBRE[etiqueta], entero=entero)])
     if etiqueta == "500M":
         assert pares[0][0].strip() == "N" and "Nápoles" in entero, (
@@ -254,7 +259,7 @@ COLUMNAS = ["en crudo", "adiestrado", "con su formato"]
 def tabla_bateria(etiqueta, columnas):
     filas, tot = [], [0, 0, 0]
     assert all(len(v) == len(TAREAS[TAREA_NOTA]) for v in TAREAS.values()), (
-        "la nota dice «cinco preguntas de cada tarea»")
+        "la tabla dice «a de 5» en cada tarea: todas tienen las mismas preguntas")
     for t in TAREAS:
         fila = [t]
         for j, resp in enumerate(columnas):
@@ -267,11 +272,8 @@ def tabla_bateria(etiqueta, columnas):
     return tabla_editorial(
         f"La batería del capítulo 11, en las tres columnas ({etiqueta})",
         ["tarea"] + COLUMNAS, filas, "iddd",
-        [f"Cuántas de las {EN_LETRA[len(TAREAS[TAREA_NOTA])]} preguntas de cada tarea acierta el "
-         f"mismo modelo de {NOMBRE[etiqueta]}: en crudo; adiestrado, con el enunciado tal cual; y "
-         "adiestrado, con el enunciado dentro de su formato de conversación, que es como lo usas tú. "
-         "La regla es la del capítulo 11: acierta si lo primero que escribe es la respuesta "
-         "correcta."])
+        [f"El mismo modelo de {NOMBRE[etiqueta]}: en crudo; adiestrado, con el enunciado tal cual; y "
+         "adiestrado, dentro de su formato de conversación. La regla es la del capítulo 11."])
 
 
 def renglones(texto):
@@ -309,7 +311,7 @@ def tablas_una_pregunta(tok_i, columnas, etiqueta):
         formato = renglones(cap12.con_formato(tok_i, p))
         out.append(muestra_editorial(
             f"El mismo enunciado, dentro del formato de conversación", formato,
-            ["Así lo recibe la tercera columna. «<|im_start|>» y «<|im_end|>» abren y cierran "
+            ["«<|im_start|>» y «<|im_end|>» abren y cierran "
              "cada parte, y «system», «user» y «assistant» dicen de quién es: la instrucción de "
              "serie, quien pregunta y la máquina. La última parte se queda abierta: es su turno."]))
     return out
@@ -405,11 +407,10 @@ def main():
         comprobar(etiqueta, cols, tabla)
         imprimir([
             tabla_lista(pares_b, "Lo que puede venir detrás de «La capital de Francia es», "
-                                 "en crudo", "Los {n} trozos más probables de toda la lista, "
-                                 "en la versión cruda, con la frase sola."),
+                                 "en crudo",
+                        f"{trozo('_')} marca el espacio que va pegado delante del trozo."),
             tabla_lista(pares_i, "Lo mismo, en la versión adiestrada",
-                        "Los {n} más probables en la versión adiestrada, con la misma frase "
-                        "sola, sin pregunta ni formato de conversación."),
+                        "La misma frase sola, sin pregunta ni formato de conversación."),
             tabla_paris([("en crudo", paris_b), ("adiestrado", paris_i)], etiqueta),
             *tablas_pregunta_sola(etiqueta, *sola),
         ])

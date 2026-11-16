@@ -20,6 +20,11 @@ Qué hace:
   - FASE 2, el juez: peticiones con al menos tres respuestas y su puesto (`rank`), puesto por las personas;
   - imprime cada texto tal cual, con su identificador de mensaje, para encontrarlo en el conjunto.
 
+Orden 173 (16 de noviembre de 2026): al final de la salida, «LO QUE EL LIBRO CITA DE AQUÍ», el programa imprime la
+muestra «Tres ejemplos del libro de conversaciones» del capítulo 12: las parejas EN_EL_LIBRO de la fase 1, con
+«Usuario:» delante de la petición y «Asistente:» delante de la respuesta, partidas en renglones de ANCHO_MUESTRA
+(formato.muestra_editorial), como las enseña el libro.
+
 POR QUÉ ESTA MEDICIÓN NO DEPENDE DE LA MÁQUINA. Se leen ficheros de texto.
 
 Uso:
@@ -42,6 +47,8 @@ FASE_1_PETICION_MAX = 30         # palabras: la petición, de menos de
 FASE_1_RESPUESTA_MAX = 120       # palabras: la respuesta, de menos de
 FASE_2_PETICIONES = 3            # peticiones con varias respuestas ordenadas
 FASE_2_RESPUESTAS_MIN = 3        # al menos tres respuestas, todas con su puesto
+EN_EL_LIBRO = (1, 17, 19)        # Orden 173: las parejas de la fase 1 (de 1 a 20) que enseña el capítulo 12
+ANCHO_MUESTRA = 57               # caracteres por renglón de la muestra del libro; el que se parte sigue con dos espacios
 
 # ==========================================================
 
@@ -55,6 +62,8 @@ import platform
 import random
 import sys
 import urllib.request
+
+from formato import muestra_editorial, partir
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 
@@ -168,8 +177,22 @@ def selftest():
     print(f"[3] invariante        la elección con la semilla {SEMILLA} es la misma aunque cambie el orden de entrada: "
           f"{'sí' if a == b else 'NO'}; md5 de la copia guardada: "
           f"{'el anotado' if md5_ok else ('NO es el anotado' if md5_ok is False else 'no hay copia (se baja al ejecutar)')}")
+    # (Orden 173) la muestra del libro: «Usuario:» y «Asistente:» delante, ningún renglón de más de ANCHO_MUESTRA (el
+    # que se parte sigue con dos espacios) y, si se juntan los renglones, vuelve a salir el texto de cada mensaje.
+    largas = [(msg(f"x{k}", "pregunta " * 9 + f"{k}"), msg(f"y{k}", "respuesta " * 14 + f"{k}")) for k in range(20)]
+    sal = muestra_del_libro(largas)
+    cuerpo = [l[4:] for l in sal[3:sal.index(":::", 1) - 2] if l.strip()]
+    renglones = [l for l in cuerpo if len(l) <= ANCHO_MUESTRA]
+    unidos = " ".join(l.strip() for l in cuerpo)
+    ok_muestra = (len(renglones) == len(cuerpo) and sal[0] == "::: muestra" and sal[-1] == ":::"
+                  and all(f"Usuario: {largas[k - 1][0]['text']}" in unidos and f"Asistente: {largas[k - 1][1]['text']}" in unidos
+                          for k in EN_EL_LIBRO))
+    print(f"    la muestra del libro con parejas largas: renglones de {ANCHO_MUESTRA} como mucho y el texto entero al juntarlos: "
+          f"{'sí' if ok_muestra else 'NO'}")
     if a != b or md5_ok is False:
         fallos.append("invariante: la elección no es reproducible, o el md5 de la copia no es el anotado")
+    if not ok_muestra:
+        fallos.append("invariante: la muestra del libro parte mal los renglones o pierde texto")
     print()
     if fallos:
         for f in fallos:
@@ -177,6 +200,24 @@ def selftest():
         return 1
     print("SELFTEST: las tres pruebas pasan.")
     return 0
+
+
+def muestra_del_libro(elegidas):
+    """La muestra del capítulo 12: las parejas EN_EL_LIBRO de `elegidas` (la lista de la fase 1, en su orden), cada
+    una como «Usuario: …» y «Asistente: …», con una línea en blanco entre pareja y pareja."""
+    lineas = []
+    for k in EN_EL_LIBRO:
+        p, r = elegidas[k - 1]
+        for quien, m in (("Usuario", p), ("Asistente", r)):
+            assert "\n" not in m["text"].strip(), f"Se esperaba un mensaje de un solo renglón; la pareja {k} trae más"
+            partes = partir(f"{quien}: {m['text'].strip()}", ANCHO_MUESTRA)
+            seguido = partir(" ".join(partes[1:]), ANCHO_MUESTRA - 2) if len(partes) > 1 else []
+            lineas += [partes[0]] + ["  " + x for x in seguido]       # el renglón que sigue, con sus dos espacios, cabe
+        lineas.append("")
+    return muestra_editorial(
+        "Tres ejemplos del libro de conversaciones", lineas[:-1],
+        ["Tres conversaciones distintas, tal como las escribieron. La petición la escribió una persona, y la "
+         "respuesta, otra que hacía de asistente."])
 
 
 def imprimir(m, etiqueta):
@@ -198,6 +239,8 @@ def main():
     print(f"Sacado el {datetime.date.today()} en {platform.platform()}. La salida no depende de la máquina: lee un fichero guardado.")
     print(f"Fuente: OpenAssistant/oasst1 (https://huggingface.co/datasets/OpenAssistant/oasst1), licencia {LICENCIA}.")
     print(f"Versión: {VERSION}; md5 de la copia: {MD5}.")
+    print("Los mensajes de abajo los escribieron voluntarios de OpenAssistant, no el autor de este repositorio: van tal cual, "
+          f"con sus faltas, y se publican con la licencia del conjunto, que pide atribución: licencia {LICENCIA}.")
     print(f"El conjunto trae {len(arbs):,} árboles de conversación; {len(raices_es):,} empiezan en castellano.".replace(",", "."))
     print(f"Filtro: lang == «{LENGUA}», no borrado, revisión aprobada, escrito por una persona (no `synthetic`) y toxicidad "
           f"automática (`detoxify`) por debajo de {str(UMBRAL_TOXICIDAD).replace('.', ',')}.")
@@ -221,6 +264,9 @@ def main():
         imprimir(p, "petición")
         for r in rs:
             imprimir(r, "respuesta")
+
+    print(f"{'=' * 74}\nLO QUE EL LIBRO CITA DE AQUÍ (capítulo 12)\n{'=' * 74}\n")
+    print("\n".join(muestra_del_libro(elegir(f1, FASE_1_CANDIDATAS))))
 
 
 if __name__ == "__main__":

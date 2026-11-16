@@ -1,6 +1,7 @@
-Sacado el 2026-11-15 en macOS-26.7.1-arm64-arm-64bit. La salida no depende de la máquina: lee un fichero guardado.
+Sacado el 2026-11-16 en macOS-26.7.1-arm64-arm-64bit. La salida no depende de la máquina: lee un fichero guardado.
 Fuente: OpenAssistant/oasst1 (https://huggingface.co/datasets/OpenAssistant/oasst1), licencia Apache 2.0.
 Versión: 2023-04-12_oasst_ready.trees.jsonl.gz; md5 de la copia: bd119c17938362c3ea25bc1523e99551.
+Los mensajes de abajo los escribieron voluntarios de OpenAssistant, no el autor de este repositorio: van tal cual, con sus faltas, y se publican con la licencia del conjunto, que pide atribución: licencia Apache 2.0.
 El conjunto trae 10.364 árboles de conversación; 3.910 empiezan en castellano.
 Filtro: lang == «es», no borrado, revisión aprobada, escrito por una persona (no `synthetic`) y toxicidad automática (`detoxify`) por debajo de 0,02.
 Pasan el filtro: 1374 parejas cortas para la fase 1 (petición de menos de 30 palabras, mejor respuesta de menos de 120) y 826 peticiones con al menos 3 respuestas ordenadas para la fase 2.
@@ -277,3 +278,25 @@ Una milla náutica equivale a 1,852 kilómetros. Es de común uso en todo tipo d
 [respuesta] mensaje 91313e97-9cb6-430e-a6d7-92ca6e9f33fc (puesto 3)
 ¡Buenas! Una milla náutica equivale a aproximadamente 1,852 kilómetros. La milla náutica se utiliza aún en la navegación marítima como una unidad de medida de distancia
 
+==========================================================================
+LO QUE EL LIBRO CITA DE AQUÍ (capítulo 12)
+==========================================================================
+
+::: muestra
+Tres ejemplos del libro de conversaciones
+
+    Usuario: Hola
+    Asistente: ¡Hola, espero que te encuentres bien! ¿En qué
+      puedo ayudarte?
+    
+    Usuario: ¿Cómo debería comportarme en una fiesta para
+      caer bien?
+    Asistente: Siendo sincero, amable y respetuoso con las
+      personas que te rodean.
+    
+    Usuario: ¿Cuáles son las notas de la escala de Re menor?
+    Asistente: Escala de Re menor tiene las siguientes notas:
+      Re – Mi – Fa – Sol – La – Si♭ – Do.
+
+Tres conversaciones distintas, tal como las escribieron. La petición la escribió una persona, y la respuesta, otra que hacía de asistente.
+:::
