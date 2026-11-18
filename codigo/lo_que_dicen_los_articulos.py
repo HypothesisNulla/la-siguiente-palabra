@@ -106,8 +106,9 @@ def liu():
         ["dónde estaba el documento bueno", *VERSIONES], filas, "idd",
         [# Orden 97: nota para el lector. Los veinte documentos (LIU_PUESTOS llega hasta el 20) y los
          # trozos de cada versión (4.000 y 16.000) salen en la nota con letra y con el rótulo.
-         f"Aciertos de cada cien, con {EN_LETRA[DOCUMENTOS]} documentos y una pregunta, y solo uno de "
-         f"los {EN_LETRA[DOCUMENTOS]} con la respuesta. Las dos columnas son la misma máquina en dos "
+         # Orden 175: la nota del A13 es más corta («Aciertos de cada cien. Las dos columnas son…»); lo de los veinte
+         # documentos y la pregunta lo dice el texto del capítulo 13, y el assert de arriba lo sigue comprobando.
+         f"Aciertos de cada cien. Las dos columnas son la misma máquina en dos "
          f"versiones: una admite {VERSIONES[0]} trozos de texto y la otra, {VERSIONES[1]}."]))
     peor = min(range(len(LIU_4K)), key=lambda i: LIU_4K[i])
     return peor

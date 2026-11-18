@@ -149,7 +149,7 @@ def informe_reves():
     g, p = r[GRANDE], r[PEQUENO]
     print("\n".join(muestra_editorial(
         "Lo que recibe la máquina, la primera de las cinco", g[0]["enunciado"],
-        ["El mismo enunciado del capítulo 11: dos ejemplos y la palabra."])))
+        ["Dos ejemplos y la palabra."])))   # Orden 175: el capítulo 13 nuevo lo llama «Dos ejemplos y la palabra»
     filas = []
     for a, b in zip(g, p):
         assert a["esperada"] == b["esperada"]
@@ -160,11 +160,9 @@ def informe_reves():
     print()
     print("\n".join(tabla_editorial(
         "Las palabras al revés",
-        ["palabra", "al revés, como debía", "32.000M: escribe", "32.000M: ¿vale?",
-         "7.000M: escribe", "7.000M: ¿vale?"], filas, "iiicic",
-        ["La máquina grande, comprimida, y la de 7.000 millones, sin comprimir; las dos, "
-         "adiestradas. «Escribe» es la primera línea de lo que escribió cada una, y «¿vale?», si "
-         "la regla de corrección la da por buena."])))
+        ["palabra", "al revés", "32.000M escribe", "¿vale?", "7.000M escribe", "¿vale?"], filas, "iiicic",
+        # Orden 175: cabeceras y nota como las lleva el capítulo 13 (antes: «32.000M: escribe», «al revés, como debía»…)
+        ["Las dos, adiestradas. «Escribe» es la primera línea de lo que escribió cada una."])))
     print("\nlo que escribió después de la primera línea, entero:")
     for nombre, items in ((GRANDE, g), (PEQUENO, p)):
         for x in items:
@@ -188,11 +186,11 @@ def informe_mundo():
               "sí" if x["acierto"] else "no"] for x in g]
     print(f"\n--- 4. LAS CINCO RESPUESTAS DE LA DE 32.000M EN «{TAREA_MUNDO.upper()}» ---\n")
     print("\n".join(tabla_editorial(
-        f"Las cinco respuestas de «{TAREA_MUNDO}», 32.000M comprimido",
+        f"Las cinco respuestas de «{TAREA_MUNDO}», Qwen2.5 32.000M",
         ["se esperaba", "lo que escribe", "¿vale?"], filas, "iic",
         ["«/» es un salto de línea. Lo que escribe, sin tocar, en los "
          f"{EN_LETRA[max_nuevos()]} trozos que se le dejan. «¿Vale?» dice si la regla de corrección "
-         "la da por buena, y la regla exige que la respuesta empiece por la palabra que se esperaba."])))
+         "la da por buena."])))   # Orden 175: la regla («empiece por la palabra que se esperaba») la cuenta el texto
     return g
 
 

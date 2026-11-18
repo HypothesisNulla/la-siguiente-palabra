@@ -13,7 +13,7 @@ Aciertos según dónde está el documento bueno (Liu y otros, 2023)
 | sin ningún documento | 56,1 | 56,0 |
 | con solo el documento bueno | 88,3 | 88,6 |
 
-Aciertos de cada cien, con veinte documentos y una pregunta, y solo uno de los veinte con la respuesta. Las dos columnas son la misma máquina en dos versiones: una admite 4.000 trozos de texto y la otra, 16.000.
+Aciertos de cada cien. Las dos columnas son la misma máquina en dos versiones: una admite 4.000 trozos de texto y la otra, 16.000.
 :::
 
 --- 2. TURING Y LA PRUEBA DE 2025, EN LA MISMA MONEDA ---

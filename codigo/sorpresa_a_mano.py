@@ -134,11 +134,14 @@ def informe(R, tok, modelo):
     print("\n".join(tabla_editorial(
         "La sorpresa de un trozo",
         ["papeletas de cada cien que le daba al trozo que vino", "sorpresa"], filas, "dd",
-        [f"Con cien papeletas, ninguna sorpresa. Cada vez que las papeletas se dividen entre dos, "
+        # Orden 175: una sola nota, como la lleva el A13. El «caso» que antes era una segunda nota se imprime
+        # debajo, fuera de la tabla. Orden 176: se quita de la nota «Es el logaritmo natural de cien entre las
+        # papeletas»: es jerga y la regla 1 la prohíbe también en los anexos (el cálculo no cambia, solo la frase).
+        [f"Con cien papeletas, ninguna sorpresa. Cada vez que las papeletas se parten entre dos, "
          f"la sorpresa sube {coma(sorpresa_de(50), 2)}; entre diez, sube "
-         f"{coma(sorpresa_de(10), 2)}.",
-         f"Un caso: {coma(CASO_A_MANO, 1)} papeletas, entre las filas de 25 y de 10, muy cerca de "
-         f"25: sorpresa {coma(sorpresa_de(CASO_A_MANO), 2)}."])))
+         f"{coma(sorpresa_de(10), 2)}."])))
+    print(f"\nUn caso: {coma(CASO_A_MANO, 1)} papeletas, entre las filas de 25 y de 10, muy cerca de "
+          f"25: sorpresa {coma(sorpresa_de(CASO_A_MANO), 2)}.")
 
     todos = pares(R, tok, modelo)
     prefijo, humano, maquina = todos[PARRAFO]
@@ -156,14 +159,17 @@ def informe(R, tok, modelo):
     print()
     print("\n".join(tabla_editorial(
         "Un párrafo, trozo a trozo",
-        ["una persona: trozo", "una persona: papeletas", "la máquina: trozo",
-         "la máquina: papeletas"], filas, "idid",
+        ["una persona: trozo", "papeletas", "la máquina: trozo", "papeletas"], filas, "idid",
         [# Orden 97: nota para el lector; el modelo (7.000 millones, adiestrado y sin comprimir, a
          # temperatura 0) sale arriba y los trozos de cada texto, en `ids_h_largo`.
-         f"«_» es un espacio. Los {EN_LETRA[TROZOS_VISTOS]} primeros trozos de cada texto, cada uno "
-         "con las papeletas de cada cien que la máquina le daba justo antes de que viniera. La "
-         f"sorpresa media del texto entero es {coma(media(h), 3)} en el de la persona y "
-         f"{coma(media(m), 3)} en el de la máquina."])))
+         # Orden 175: la nota es la del A13; «0,0 quiere decir menos de cinco centésimas» lo comprueba el assert.
+         f"«_» es un espacio. Los {EN_LETRA[TROZOS_VISTOS]} primeros trozos de cada continuación, con las "
+         "papeletas de cada cien que la máquina le daba a cada uno justo antes de que viniera. «0,0» quiere "
+         "decir menos de cinco centésimas."])))
+    assert any(f[1] == "0,0" or f[3] == "0,0" for f in filas) and all(
+        100 * p >= 0 for _, p in h + m), "la nota explica «0,0»: tiene que haber alguno"
+    print(f"\nLa sorpresa media del texto entero es {coma(media(h), 3)} en el de la persona y "
+          f"{coma(media(m), 3)} en el de la máquina.")
 
     print("\n--- 3. LA MEDIA DE LOS OCHO PÁRRAFOS ---")
     sh = sum(media(trozo_a_trozo(R, tok, modelo, a, b)) for a, b, _ in todos) / len(todos)
@@ -176,9 +182,10 @@ def informe(R, tok, modelo):
     print("\n".join(tabla_editorial(
         f"La media de los {len(todos)} párrafos",
         ["", "sorpresa media", "papeletas por trozo"], filas, "idd",
-        ["«Papeletas por trozo» es la sorpresa media vuelta a papeletas con la tabla de la "
-         "sorpresa, no la media de las papeletas. Los textos de la máquina son a veces más cortos, "
-         "porque da el suyo por terminado antes."])))
+        [# Orden 175: la nota es la del A13; que los textos de la máquina sean a veces más cortos (lo dice el
+         # texto: «o hasta que da el suyo por terminado») lo sigue comprobando el assert de abajo.
+         "«Papeletas por trozo» es la sorpresa media vuelta a papeletas con la tabla de la "
+         "sorpresa: las papeletas que, dadas a todos los trozos por igual, darían esa misma sorpresa."])))
     assert min(c.shape[1] for _, _, c in todos) < R.LARGO_B, (
         "la nota dice que los textos de la máquina son a veces más cortos")
     ch, cm = medias_del_capitulo()

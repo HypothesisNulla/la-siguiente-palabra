@@ -1,4 +1,4 @@
-Medido el 2026-11-16 en macOS-26.7.1-arm64-arm-64bit; generación determinista (do_sample=False), como crudo_o_adiestrado.py.
+Medido el 2026-11-17 en macOS-26.7.1-arm64-arm-64bit; generación determinista (do_sample=False), como crudo_o_adiestrado.py.
 
 ============================================================
 TAMAÑO 500M
@@ -62,7 +62,7 @@ La pregunta sola, en crudo: lo que puede venir detrás de «La capital de Franci
 | `_Lyon` | 2,7 % | [barra:2.7] |
 | `_Roma` | 1,7 % | [barra:1.7] |
 
-La versión cruda pequeña, de 500 millones, con la pregunta delante, justo antes de escribir la ciudad. La «N» es el principio de Nápoles.
+Qwen2.5 500M en crudo, con la pregunta delante, justo antes de escribir la ciudad. La «N» es el principio de Nápoles.
 :::
 
 ::: tabla

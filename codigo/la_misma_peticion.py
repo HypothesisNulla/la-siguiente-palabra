@@ -22,10 +22,14 @@ los textos.
 
 Los textos se imprimen enteros y tal cual. Los tiempos son de esta máquina y van etiquetados como tales.
 
+Orden 175 (17 de noviembre de 2026): la tabla «La misma petición, en crudo y adiestrada» pasa a ser cuatro bloques
+(la petición, en negrita, y debajo, en cursiva, el modelo y lo que escribe en crudo y adiestrado), tal como los lleva
+el capítulo 12; los nombres son «Qwen2.5 500M», «Qwen2.5 7.000M», «GPT-3» e «InstructGPT».
+
 Orden 173 (16 de noviembre de 2026): al final de la salida, «LO QUE EL LIBRO CITA DE AQUÍ», el programa imprime
 dos cosas del capítulo 12, ya como las lleva el libro y sacadas de los textos de arriba, no escritas a mano:
 (1) el principio de la respuesta que abre el capítulo («Claro, aquí tienes tres consejos…»: 7.000M, petición 3,
-orden, adiestrada) y (2) la tabla «La misma petición, en crudo y adiestrada». Los principios van cortados por el
+orden, adiestrada) y (2) los cuatro bloques de «La misma petición, en crudo y adiestrada» (antes, una tabla). Los principios van cortados por el
 número de palabras que dice CORTES, con «…» si queda texto detrás; si no hay «…», el corte tiene que caer en un
 punto, en una admiración o en unos dos puntos (lo comprueba el programa). La fila de la Luna es de OpenAI y no de
 este programa: son las constantes OPENAI_*, traducidas por Claude del original (en el Anexo A12).
@@ -91,7 +95,7 @@ OPENAI_CRUDO = ("Explica la teoría de la gravedad a un niño de seis años. Exp
                 "niño de seis años…")
 OPENAI_ADIESTRADA = ("La gente fue a la Luna, hizo fotos de lo que vio y las mandó a la Tierra para que todos "
                      "pudiéramos verlas.")
-NOMBRE_TAMANO = {"500M": "la pequeña", "7.000M": "la grande"}
+NOMBRE_TAMANO = {"500M": "Qwen2.5 500M", "7.000M": "Qwen2.5 7.000M"}   # como los llama el texto (Orden 175)
 
 # ==========================================================
 
@@ -104,7 +108,7 @@ import sys
 import time
 
 import torch
-from formato import coma, tabla_editorial
+from formato import coma
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 REGLA = ("La regla, escrita: se mira solo la primera línea no vacía de lo que escribe. «sigue la lista» si esa línea "
@@ -198,18 +202,20 @@ def lo_que_cita_el_libro(todo):
     out = ["", "=" * 74, "LO QUE EL LIBRO CITA DE AQUÍ (capítulo 12)", "=" * 74, "",
            f"--- la respuesta que abre el capítulo: {tam}, petición {k}, orden, adiestrada ---", "",
            lineas[0], "", inicio(lineas[1], n, True), ""]
-    filas = []
+    # Orden 175: ya no es una tabla sino cuatro bloques, tal como los lleva el capítulo 12: la petición, en negrita, y
+    # debajo, en cursiva, el modelo y lo que escribe, en crudo y adiestrado. Cada línea es un párrafo del libro
+    # (`verificar_muestras.py` comprueba esos párrafos contra esta salida).
+    bloques = [(PETICIONES[4][0], [("GPT-3, de OpenAI, en crudo", OPENAI_CRUDO),
+                                   ("La misma, adiestrada (InstructGPT)", OPENAI_ADIESTRADA)])]
     for tam, k, (nc, pc), (na, pa) in CORTES:
-        pedir = f"{PETICIONES[k - 1][0]} ({NOMBRE_TAMANO[tam]})"
-        filas.append([pedir, f"«{inicio(texto(tam, k, 'en crudo'), nc, pc)}»",
-                      f"«{inicio(texto(tam, k, 'adiestrada'), na, pa)}»"])
-    # la fila de OpenAI, la primera de la tabla
-    filas.insert(0, [f"{PETICIONES[4][0]} (OpenAI, 2022)", f"«{OPENAI_CRUDO}»", f"«{OPENAI_ADIESTRADA}»"])
-    out += tabla_editorial(
-        "La misma petición, en crudo y adiestrada",
-        ["lo que se le pide", "en crudo escribe", "adiestrada escribe"], filas, "iii",
-        ["El comienzo de lo que escribe cada una, tal cual. La primera fila es de OpenAI, con su máquina de 2020; "
-         "las otras tres, de las máquinas de este libro."])
+        nombre = NOMBRE_TAMANO[tam]
+        bloques.append((PETICIONES[k - 1][0], [(f"{nombre}, en crudo", inicio(texto(tam, k, "en crudo"), nc, pc)),
+                                               (f"{nombre}, adiestrada", inicio(texto(tam, k, "adiestrada"), na, pa))]))
+    out += ["--- la misma petición, en crudo y adiestrada: los cuatro ejemplos del capítulo ---", ""]
+    for peticion, lineas in bloques:
+        out += [f"**{peticion}**", ""]
+        for etiqueta, escrito in lineas:
+            out += [f"*{etiqueta}:* «{escrito}»", ""]
     return out
 
 

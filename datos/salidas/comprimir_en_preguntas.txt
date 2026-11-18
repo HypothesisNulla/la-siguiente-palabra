@@ -18,13 +18,13 @@ La batería del capítulo 11 con tres máquinas
 | razonar sobre una frase | 3 de 5 | 4 de 5 | 3 de 5 |
 | **en total** | **14 de 30** | **17 de 30** | **19 de 30** |
 
-Cuántas de las cinco preguntas de cada tarea acierta cada máquina. Las tres están adiestradas; la comprimida guarda cada número con menos detalle.
+Las tres, adiestradas y puestas en marcha con el programa de Apple para sus chips (MLX).
 :::
 
 ::: tabla
 La misma máquina en los capítulos 12 y 13
 
-| tarea | cap. 12, adiestrado | cap. 13, sin comprimir | ¿cambia? |
+| tarea | cap. 12 | cap. 13 | ¿cambia? |
 |:--|--:|--:|:-:|
 | sumar dos cifras | 5 de 5 | 3 de 5 | sí |
 | plurales | 3 de 5 | 3 de 5 | no |
@@ -34,6 +34,6 @@ La misma máquina en los capítulos 12 y 13
 | razonar sobre una frase | 4 de 5 | 3 de 5 | sí |
 | **en total** | **17 de 30** | **14 de 30** |  |
 
-Las dos columnas son la misma máquina, con las mismas preguntas y la misma regla de corrección. Solo cambia el programa que la pone en marcha: en el capítulo 12, uno de uso general; en éste, el de Apple.
+Qwen2.5 7.000M, adiestrada y sin comprimir, con las mismas preguntas y la misma regla. En el capítulo 12, con un programa de uso general (transformers); en éste, con el de Apple.
 :::
 

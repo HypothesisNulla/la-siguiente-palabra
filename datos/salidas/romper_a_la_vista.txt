@@ -8,7 +8,7 @@ La frase escondida y la pregunta
     ¿Cuál es el código de la compuerta de Vall d'Orsera?
     Responde solo con el número.
 
-Arriba, la frase que se escondió en el texto; debajo, la pregunta que se le hizo después del texto.
+Arriba, la frase que se escondió en el texto; debajo, la pregunta que se le hizo después.
 :::
 
 --- 2. EL PAJAR MÁS LARGO, A ESCALA ---
@@ -16,15 +16,13 @@ Arriba, la frase que se escondió en el texto; debajo, la pregunta que se le hiz
 ::: tabla
 La aguja en el pajar
 
-| largo del texto | profundidad: 0 % | profundidad: 25 % | profundidad: 50 % | profundidad: 75 % | profundidad: 100 % |
+| largo del texto | 0 % | 25 % | 50 % | 75 % | 100 % |
 |--:|:-:|:-:|:-:|:-:|:-:|
 | 1.000 | sí | sí | sí | sí | sí |
 | 4.000 | sí | sí | sí | sí | sí |
 | 16.000 | sí | sí | sí | sí | sí |
 
-Filas: largo del texto, en trozos. Columnas: a qué profundidad del texto se escondió la frase. Sí: la encontró.
-
-El pajar más largo: 16.000 trozos, 9.570 palabras. Modelo de 7.000 millones, adiestrado y sin comprimir.
+Filas: largo del texto, en trozos. Columnas: a qué profundidad del texto se escondió la frase, del principio (0 %) al final (100 %). «Sí»: la encontró.
 :::
 
 ::: tabla
@@ -49,7 +47,7 @@ Lo que se puso delante de cada una de las veinte preguntas
     respuesta equivocada resta 3 puntos, una correcta suma 1
     punto, y decir que no lo sabes vale 0 puntos.
 
-La segunda regla del examen, escrita para la máquina.
+El segundo examen, escrito para la máquina.
 :::
 
 ::: tabla
@@ -61,7 +59,7 @@ Cuántas veces se calla
 | avisando de que fallar resta | 19 de 20 | 95 % | [barra:95.0] |
 | con respuesta, avisando | 0 de 5 | 0 % | [barra:0.0] |
 
-«Se calla»: contesta que no lo sabe, o que eso no existe. Las dos primeras filas son las veinte preguntas sin respuesta; la tercera, cinco del capítulo 11 que sí la tienen.
+«Se calla»: contesta que no lo sabe, o que eso no existe. Las dos primeras filas son las veinte preguntas sin respuesta; la tercera, cinco preguntas del capítulo 11 que sí la tienen.
 :::
 
 ::: muestra
@@ -75,12 +73,24 @@ Lo que contesta, avisando de que fallar resta, sobre el arroyo de Peñaflor de A
 El arroyo no existe. «->»: lo que escribe la máquina.
 :::
 
+::: muestra
+Lo que contesta, sin el aviso, sobre el arroyo de Peñaflor de Alcorbe
+
+    -> El arroyo de Peñaflor de Alcorbe desemboca en el río
+       Guadiana.
+       Alcorbe es una localidad y municipio de España, situado
+       en la provincia de Cáceres, Comunidad Autónoma de
+       Extremadura. El ar
+
+«->»: lo que escribe la máquina. Ni el arroyo ni el municipio existen.
+:::
+
 --- 4. EL EXAMEN TIPO TEST, CONTESTADO A CIEGAS ---
 
 ::: tabla
 El examen tipo test, contestado a ciegas
 
-| regla | puntos: un acierto | puntos: un fallo | puntos: en blanco | las 4: a ciegas | las 4: en blanco |
+| regla | acierto | fallo | en blanco | las 4, a ciegas | las 4, en blanco |
 |:--|--:|--:|--:|--:|--:|
 | la de casi todas las pruebas | +1 | 0 | 0 | +1 | 0 |
 | la del enunciado que avisa | +1 | −3 | 0 | −8 | 0 |

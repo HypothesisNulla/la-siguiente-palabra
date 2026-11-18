@@ -78,7 +78,7 @@ def leer_cap12(ruta):
 # «7.000M: sin comprimir» lo parte el filtro del libro en dos pisos: el tamaño arriba, abarcando
 # sus columnas, y la copia debajo.
 ROTULOS_1 = ["7.000M: sin comprimir", "7.000M: comprimido", "32.000M: comprimido"]
-ROTULOS_2 = ["cap. 12, adiestrado", "cap. 13, sin comprimir", "¿cambia?"]
+ROTULOS_2 = ["cap. 12", "cap. 13", "¿cambia?"]    # Orden 175: antes «cap. 12, adiestrado» y «cap. 13, sin comprimir»
 
 
 def bloques(a, c12):
@@ -90,9 +90,10 @@ def bloques(a, c12):
         "La batería del capítulo 11 con tres máquinas", ["tarea"] + ROTULOS_1, filas, "iddd",
         [# Orden 97: nota para el lector. Que 7.000M y 32.000M sean millones de números (nominal) y
          # que «sin comprimir» sea tal como salió del entrenamiento está en el código y en cap. 13.
-         f"Cuántas de las {EN_LETRA[POR_TAREA]} preguntas de cada tarea acierta cada máquina. Las "
-         f"{EN_LETRA[len(COLUMNAS)]} están adiestradas; la comprimida guarda cada número con menos "
-         "detalle."])
+         # Orden 175: la nota del A13 es «Las tres, adiestradas y puestas en marcha con el programa de Apple para sus
+         # chips (MLX)»; lo de las cinco preguntas por tarea lo dice la propia tabla («3 de 5»).
+         f"Las {EN_LETRA[len(COLUMNAS)]}, adiestradas y puestas en marcha con el programa de Apple para sus "
+         "chips (MLX)."])
     filas = []
     for t in TAREAS:
         x, y = c12[t], a[t][0]
@@ -101,9 +102,8 @@ def bloques(a, c12):
     filas.append(["**en total**", f"**{t12} de 30**", f"**{t13} de 30**", ""])
     t2 = tabla_editorial(
         "La misma máquina en los capítulos 12 y 13", ["tarea"] + ROTULOS_2, filas, "iddc",
-        ["Las dos columnas son la misma máquina, con las mismas preguntas y la misma regla de "
-         "corrección. Solo cambia el programa que la pone en marcha: en el capítulo 12, uno de uso "
-         "general; en éste, el de Apple."])
+        ["Qwen2.5 7.000M, adiestrada y sin comprimir, con las mismas preguntas y la misma regla. En el "
+         "capítulo 12, con un programa de uso general (transformers); en éste, con el de Apple."])
     return [t1, t2], tot, (t12, t13)
 
 

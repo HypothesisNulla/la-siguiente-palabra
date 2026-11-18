@@ -17,6 +17,10 @@ y lo pone a la vista del lector:
      de casi todas las pruebas (acierto 1, fallo 0, en blanco 0) y con la del enunciado que avisa
      (la que imprime el apartado 3; el programa la lee de ahí).
 
+Orden 175 (17 de noviembre de 2026): el capítulo 13 nuevo y su A13 llevan estas tablas con otros rótulos y otras notas
+(la aguja sin «profundidad:» en las cabeceras y con una sola nota, el examen con las cabeceras cortas, «cinco preguntas
+del capítulo 11») y con una muestra más: lo que contesta la máquina sobre el arroyo sin el aviso. No cambia ninguna cifra.
+
 Uso:
     python romper_a_la_vista.py --selftest
     python romper_a_la_vista.py > ../datos/salidas/romper_a_la_vista.txt
@@ -129,12 +133,14 @@ def cuantas_abstenciones(ruta=AQUI / RESPUESTAS):
     return out
 
 
-def escapada(ruta=AQUI / RESPUESTAS):
+def escapada(ruta=AQUI / RESPUESTAS, apartado_de=None):
     """Las líneas de la respuesta (lo que va detrás de «->») a la pregunta de ESCAPADA, en su
-    apartado del fichero de respuestas."""
+    apartado del fichero de respuestas (por omisión, el del enunciado que avisa; con
+    `apartado_de="enunciado normal"`, el de sin aviso: Orden 175)."""
     t = Path(ruta).read_text(encoding="utf-8")
     partes = re.split(r"(?m)^=== (.+?) ===$", t)
-    apartado = next(partes[i + 1] for i in range(1, len(partes), 2) if partes[i] == ESCAPADA[0])
+    apartado = next(partes[i + 1] for i in range(1, len(partes), 2)
+                    if partes[i] == (apartado_de or ESCAPADA[0]))
     entrada = next(e for e in apartado.split("\n\n") if ESCAPADA[1] in e)
     lineas = entrada.splitlines()
     k = next(n for n, l in enumerate(lineas) if l.lstrip().startswith("->"))
@@ -155,7 +161,7 @@ def informe(C, filas, por_cap, n_pajar):
         [l.strip() for l in partido(C["AGUJA"])] + [""]
         + [l.strip() for l in partido(C["PREGUNTA_AGUJA"])],
         ["Arriba, la frase que se escondió en el texto; debajo, la pregunta que se le hizo "
-         "después del texto."]))
+         "después."]))
 
     print("--- 2. EL PAJAR MÁS LARGO, A ESCALA ---\n")
     palabras = int(next(f["a"] for f in filas
@@ -169,13 +175,11 @@ def informe(C, filas, por_cap, n_pajar):
     imprime(
         tabla_editorial(
             "La aguja en el pajar",
-            ["largo del texto"] + [f"profundidad: {pct(h, 0)}" for h in hondos],
+            ["largo del texto"] + [pct(h, 0) for h in hondos],
             [[miles(n)] + ["sí" if rejilla[n][h] else "no" for h in hondos]
              for n in sorted(rejilla)], "d" + "c" * len(hondos),
             ["Filas: largo del texto, en trozos. Columnas: a qué profundidad del texto se "
-             "escondió la frase. Sí: la encontró.",
-             f"El pajar más largo: {miles(n_pajar)} trozos, {miles(palabras)} palabras. Modelo "
-             "de 7.000 millones, adiestrado y sin comprimir."]),
+             "escondió la frase, del principio (0 %) al final (100 %). «Sí»: la encontró."]),
         tabla_editorial(
             "El pajar más largo, a escala",
             ["", "cuánto"],
@@ -202,18 +206,23 @@ def informe(C, filas, por_cap, n_pajar):
         muestra_editorial(
             "Lo que se puso delante de cada una de las veinte preguntas",
             [l.strip() for l in partido(C["ENUNCIADO_KALAI"].replace("{p}", "").strip())],
-            ["La segunda regla del examen, escrita para la máquina."]),
+            ["El segundo examen, escrito para la máquina."]),
         tabla_editorial(
             "Cuántas veces se calla", ["enunciado", "se calla en", "", ""], tabla, "iddi",
             [# Orden 97: nota para el lector; el modelo (7.000 millones, adiestrado y sin comprimir) sale
              # en la nota del pajar. Las veinte y las cinco preguntas se comprueban con los totales.
              "«Se calla»: contesta que no lo sabe, o que eso no existe. Las dos primeras filas son "
-             "las veinte preguntas sin respuesta; la tercera, cinco del capítulo 11 que sí la "
+             "las veinte preguntas sin respuesta; la tercera, cinco preguntas del capítulo 11 que sí la "
              "tienen."]),
         muestra_editorial(
             f"Lo que contesta, avisando de que fallar resta, sobre el arroyo de {ESCAPADA[1]}",
             escapada(),
-            ["El arroyo no existe. «->»: lo que escribe la máquina."]))
+            ["El arroyo no existe. «->»: lo que escribe la máquina."]),
+        # Orden 175: la misma pregunta, sin el aviso (el A13: «Sin el aviso, la del arroyo fue todavía más lejos»).
+        muestra_editorial(
+            f"Lo que contesta, sin el aviso, sobre el arroyo de {ESCAPADA[1]}",
+            escapada(apartado_de="enunciado normal"),
+            ["«->»: lo que escribe la máquina. Ni el arroyo ni el municipio existen."]))
 
     print("--- 4. EL EXAMEN TIPO TEST, CONTESTADO A CIEGAS ---\n")
     normal = (1, 0, 0)
@@ -229,8 +238,8 @@ def informe(C, filas, por_cap, n_pajar):
                          signo(blanco * n)])
     imprime(tabla_editorial(
         "El examen tipo test, contestado a ciegas",
-        ["regla", "puntos: un acierto", "puntos: un fallo", "puntos: en blanco",
-         f"las {n}: a ciegas", f"las {n}: en blanco"], filas_ex, "iddddd",
+        ["regla", "acierto", "fallo", "en blanco",
+         f"las {n}, a ciegas", f"las {n}, en blanco"], filas_ex, "iddddd",
         [f"{n} preguntas de {o} respuestas cada una. A ciegas se acierta 1 de cada {o}: en las "
          f"{n}, {n // o} acierto y {n - n // o} fallos."]))
     return aviso

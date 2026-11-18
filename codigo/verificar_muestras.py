@@ -171,6 +171,47 @@ def comprobar_bloque(b, salida_texto, literal=False):
     return 'recompuesto', sueltas[0]
 
 
+def parrafos_de_ejemplos(texto):
+    """Los párrafos de «ejemplos en bloques» de un capítulo (Orden 175, 17 nov 2026): lo que el capítulo 12 enseña ya no
+    como tabla sino como una petición, en negrita, y debajo, en cursiva, el modelo y lo que escribe. Son párrafos
+    sueltos del texto, sin valla `::: tabla` ni `::: muestra`, y por eso nadie los comprobaba. Se reconocen por su forma:
+
+        **La petición.**                          un párrafo entero en negrita, seguido de
+        *Qwen2.5 500M, en crudo:* «lo que escribe»   uno o más párrafos que empiezan por una etiqueta en cursiva que
+                                                    acaba en dos puntos y siguen con una cita entre « y ».
+
+    Devuelve [(párrafo, de qué clase)] con la clase «etiqueta» (la línea en cursiva) o «petición» (la negrita que abre el
+    bloque, solo si va delante de una etiqueta). Cada uno tiene que estar tal cual en la salida del programa."""
+    parrafos, actual, dentro = [], [], False
+    for l in texto.splitlines():
+        if re.match(r'^:::\s*\w+', l) and not dentro:
+            dentro = True
+            continue
+        if dentro:
+            dentro = l.strip() != ':::'
+            continue
+        if l.strip() == '':
+            if actual:
+                parrafos.append(' '.join(x.strip() for x in actual))
+            actual = []
+        else:
+            actual.append(l)
+    if actual:
+        parrafos.append(' '.join(x.strip() for x in actual))
+    etiqueta = re.compile(r'^\*[^*]+:\*\s*«.+»[.,;:]?$')
+    negrita = re.compile(r'^\*\*[^*]+\*\*$')
+    out = []
+    for i, p in enumerate(parrafos):
+        if etiqueta.match(p):
+            out.append((p, 'etiqueta'))
+            j = i - 1
+            while j >= 0 and etiqueta.match(parrafos[j]):
+                j -= 1
+            if j >= 0 and negrita.match(parrafos[j]) and (parrafos[j], 'petición') not in out:
+                out.append((parrafos[j], 'petición'))
+    return out
+
+
 def selftest():
     """Tres pruebas sobre lo único que este verificador decide de verdad: si una fila de
     tabla del libro está o no en la salida del programa."""
@@ -302,12 +343,28 @@ def selftest():
         fallos.append("comillas invertidas: dentro de una muestra se comparan tal cual y el bloque "
                       "pasa; fuera se quitan; una palabra cambiada suspende")
 
+    # 10. LOS EJEMPLOS EN BLOQUES (Orden 175) — una petición en negrita con sus líneas en cursiva se reconoce, y se compara
+    #     con la salida: la copia exacta pasa, la palabra cambiada no, y la cursiva suelta o la negrita sin etiquetas no se
+    #     toman por ejemplos (no se vigila lo que no es de este formato).
+    texto = ("Prosa.\n\n**Dame tres consejos para dormir mejor.**\n\n*Qwen2.5 500M, en crudo:* «Dame tres\nconsejos…»\n\n"
+             "*Qwen2.5 500M, adiestrada:* «Claro.»\n\n**Una negrita sola.**\n\n*cursiva sin dos puntos* «no»\n\n"
+             "::: tabla\n*X:* «dentro de una tabla»\n:::\n")
+    hallados = parrafos_de_ejemplos(texto)
+    sal10 = normalizar("**Dame tres consejos para dormir mejor.** *Qwen2.5 500M, en crudo:* «Dame tres consejos…» "
+                       "*Qwen2.5 500M, adiestrada:* «Claro.»")
+    buenos = [p for p, _ in hallados if normalizar(p) in sal10]
+    cambiado = [p for p, _ in hallados if normalizar(p.replace("Claro", "Vale")) in sal10]
+    print(f"[10] los ejemplos en bloques  de un texto con tres bloques falsos y uno bueno reconoce {len(hallados)} "
+          f"párrafos; la copia exacta pasa en {len(buenos)}; con una palabra cambiada pasan {len(cambiado)}")
+    if len(hallados) != 3 or len(buenos) != 3 or len(cambiado) != 2:
+        fallos.append("ejemplos en bloques: reconoce la petición y sus dos líneas, y una palabra cambiada suspende")
+
     print()
     if fallos:
         for f in fallos:
             print("FALLA:", f)
         return 1
-    print("SELFTEST: las nueve pruebas pasan.")
+    print("SELFTEST: las diez pruebas pasan.")
     return 0
 
 
@@ -467,11 +524,19 @@ for t in perdidos:
     print(f"TÍTULO O NOTA NO LITERAL: «{t[:60]}…»")
     fallos += 1
 
+# Los ejemplos en bloques (Orden 175): una petición en negrita y, debajo, líneas en cursiva con lo que escribe cada
+# máquina. Sin valla de tabla ni de muestra, así que se comprueban aparte: cada párrafo, tal cual, en la salida.
+ejemplos = parrafos_de_ejemplos(crudo)
+for p, clase in ejemplos:
+    if normalizar(quitar_marcado(p)) not in salida:
+        print(f"EJEMPLO EN BLOQUES NO LITERAL ({clase}): «{p[:60]}…»")
+        fallos += 1
+
 # Un capítulo puede no enseñar ni un dato medido —el prólogo no enseña ninguno— y eso no es un
 # fallo. El fallo es que el capítulo SÍ traiga bloques o tablas y no se reconozca ninguno: ahí el
 # formato ha cambiado y este verificador habría pasado a aprobar sin mirar. Antes los dos casos
 # daban el mismo error, y el aviso que importa quedaba escondido detrás del que no importa.
-if not (comprobados or filas or cabeceras or de_autor or divs):
+if not (comprobados or filas or cabeceras or de_autor or divs or ejemplos):
     assert not parece_salida_de_maquina(crudo.splitlines()), (
         f"{capitulo} trae bloques o filas con cifras y no he reconocido ninguno: el formato ha "
         "cambiado y desde ahora este verificador estaría aprobando el capítulo sin mirar nada")
@@ -480,6 +545,6 @@ if not (comprobados or filas or cabeceras or de_autor or divs):
 
 print(f"{comprobados} citas de máquina comprobadas ({recompuestos} recortadas), "
       f"{de_autor} bloques declarados del autor, {filas} filas de tabla con números, "
-      f"{cabeceras} filas de rótulos, {divs} tablas o muestras editoriales")
+      f"{cabeceras} filas de rótulos, {divs} tablas o muestras editoriales, {len(ejemplos)} párrafos de ejemplos en bloques")
 print("FALLA" if fallos else "PASA: todas las citas de máquina son literales")
 sys.exit(1 if fallos else 0)

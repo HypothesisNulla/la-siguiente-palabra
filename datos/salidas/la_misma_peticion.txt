@@ -1,4 +1,4 @@
-Medido el 2026-11-16 en macOS-26.7.1-arm64-arm-64bit; el trozo más probable, sin sorteo (do_sample=False), en procesador, hasta 80 trozos o hasta que cierra su turno.
+Medido el 2026-11-17 en macOS-26.7.1-arm64-arm-64bit; el trozo más probable, sin sorteo (do_sample=False), en procesador, hasta 80 trozos o hasta que cierra su turno.
 Bibliotecas: torch 2.14.0.
 En crudo: la petición sola, seguida de un salto de línea. Adiestrada: la petición dentro de su formato de conversación, con la instrucción de serie de su plantilla.
 
@@ -7,7 +7,7 @@ La regla, escrita: se mira solo la primera línea no vacía de lo que escribe. �
 ==========================================================================
 TAMAÑO 7.000M
 ==========================================================================
-tiempo en esta máquina: en crudo 1,7 min; adiestrada 2,2 min (carga del modelo incluida).
+tiempo en esta máquina: en crudo 1,6 min; adiestrada 2,0 min (carga del modelo incluida).
 
 --- petición 1 ---
   orden:               Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.
@@ -199,7 +199,7 @@ Para llegar allí, necesitamos un gran cohete, como un avión muy grande pero m�
 ==========================================================================
 TAMAÑO 500M
 ==========================================================================
-tiempo en esta máquina: en crudo 0,3 min; adiestrada 0,4 min (carga del modelo incluida).
+tiempo en esta máquina: en crudo 0,3 min; adiestrada 0,3 min (carga del modelo incluida).
 
 --- petición 1 ---
   orden:               Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.
@@ -449,15 +449,29 @@ Claro, aquí tienes tres consejos para mejorar tu calidad de sueño:
 
 1. **Establece un horario de sueño regular**: Trata de ir a la cama y despertarte a la misma hora todos los días…
 
-::: tabla
-La misma petición, en crudo y adiestrada
+--- la misma petición, en crudo y adiestrada: los cuatro ejemplos del capítulo ---
 
-| lo que se le pide | en crudo escribe | adiestrada escribe |
-|:--|:--|:--|
-| Explica la llegada a la Luna a un niño de seis años, en unas pocas frases. (OpenAI, 2022) | «Explica la teoría de la gravedad a un niño de seis años. Explica la teoría de la relatividad a un niño de seis años…» | «La gente fue a la Luna, hizo fotos de lo que vio y las mandó a la Tierra para que todos pudiéramos verlas.» |
-| Dame tres consejos para dormir mejor. (la pequeña) | «Dame tres consejos para dormir mejor. Dame tres consejos para dormir mejor. Dame tres consejos…» | «¡Por supuesto! Aquí te dejo tres consejos para ayudarte a dormir mejor:» |
-| Traduce al inglés: El gato duerme encima de la silla. (la pequeña) | «El gato duerme encima de la silla.» | «The cat sleeps on the chair.» |
-| Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul. (la grande) | «El cielo es azul porque el aire en la atmósfera refleja la luz azul del sol.» | «Hola pequeño! El cielo parece azul porque…» |
+**Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.**
 
-El comienzo de lo que escribe cada una, tal cual. La primera fila es de OpenAI, con su máquina de 2020; las otras tres, de las máquinas de este libro.
-:::
+*GPT-3, de OpenAI, en crudo:* «Explica la teoría de la gravedad a un niño de seis años. Explica la teoría de la relatividad a un niño de seis años…»
+
+*La misma, adiestrada (InstructGPT):* «La gente fue a la Luna, hizo fotos de lo que vio y las mandó a la Tierra para que todos pudiéramos verlas.»
+
+**Dame tres consejos para dormir mejor.**
+
+*Qwen2.5 500M, en crudo:* «Dame tres consejos para dormir mejor. Dame tres consejos para dormir mejor. Dame tres consejos…»
+
+*Qwen2.5 500M, adiestrada:* «¡Por supuesto! Aquí te dejo tres consejos para ayudarte a dormir mejor:»
+
+**Traduce al inglés: El gato duerme encima de la silla.**
+
+*Qwen2.5 500M, en crudo:* «El gato duerme encima de la silla.»
+
+*Qwen2.5 500M, adiestrada:* «The cat sleeps on the chair.»
+
+**Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.**
+
+*Qwen2.5 7.000M, en crudo:* «El cielo es azul porque el aire en la atmósfera refleja la luz azul del sol.»
+
+*Qwen2.5 7.000M, adiestrada:* «Hola pequeño! El cielo parece azul porque…»
+

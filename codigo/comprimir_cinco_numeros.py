@@ -180,9 +180,9 @@ def informe():
              for k, (a, b) in enumerate(zip(antes, despues), 1)], "cddd",
             [# Orden 97: nota para el lector. Que sea la primera fila de una tabla de la primera capa
              # (TABLA) y que la diferencia sea el comprimido menos el sin comprimir, está en el código.
-             f"Los {EN_LETRA[CUANTOS]} primeros números de una de las tablas de la máquina de 7.000 "
-             "millones adiestrada, tal como salieron del entrenamiento y en la copia comprimida. La "
-             "diferencia es lo que se ha movido cada uno al comprimir."]),
+             # Orden 175: la nota del A13 es solo «La diferencia es…»; de qué tabla son los cinco números lo dice el
+             # texto («la fila 1 de la primera tabla de la atención de Qwen2.5 7.000M adiestrada»).
+             "La diferencia es lo que se ha movido cada uno al comprimir."]),
         tabla_editorial(
             f"Valores distintos en el primer grupo de {q['group_size']} números de esa fila",
             ["sin comprimir", "comprimido"], [[str(len(set(grupo0))), str(len(set(grupo1)))]],
@@ -204,9 +204,8 @@ def informe():
         [# Orden 97: nota para el lector. Los números de cada copia (32.640.013.312 y 7.615.616.512) y
          # lo que son los «36 GB» de la ficha están en `cuantos_numeros` y en `linea_memoria`.
          "«Medido»: lo que ocupan sus ficheros en el disco. «Calculado»: "
-         f"{EN_LETRA[BYTES_SIN_COMPRIMIR]} bytes por cada número, como la de 7.000M sin comprimir. "
-         f"El portátil tiene {coma(MEMORIA_PORTATIL_BYTES / GB, 1)} GB de memoria para todo, y la "
-         "grande sin comprimir no cabe."]))
+         f"{EN_LETRA[BYTES_SIN_COMPRIMIR]} bytes por cada peso, como la de 7.000M sin comprimir. "
+         f"El portátil tiene {coma(MEMORIA_PORTATIL_BYTES / GB, 1)} GB de memoria para todo."]))   # Orden 175: sin «y la grande…»
     assert n32 * BYTES_SIN_COMPRIMIR > MEMORIA_PORTATIL_BYTES, (
         "la nota dice que la grande sin comprimir no cabe en la memoria del portátil")
 

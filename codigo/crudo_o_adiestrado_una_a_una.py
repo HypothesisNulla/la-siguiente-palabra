@@ -44,10 +44,12 @@ TAREA_NOTA = "sumar dos cifras"      # una tarea cualquiera: la nota solo cuenta
 # se repitió la medición entera y se comparó con la guardada). Antes la de 500M terminaba «…y lo que
 # acaba escribiendo es «La capital de Francia es Nápoles.»» (lo dice el cuerpo del capítulo) y todas
 # repetían «el "_" marca el espacio…» o «con la frase sola».
+# Orden 175 (17 nov 2026): la nota de la de 500M dice «Qwen2.5 500M en crudo» (el nombre con que el texto llama ahora a
+# la máquina pequeña), y no «La versión cruda pequeña, de 500 millones».
 NOTA_PREGUNTA_SOLA = {
     "7.000M": "La versión cruda de {nombre}, con la pregunta delante: la lista que tiene justo antes "
               "de escribir la ciudad. Acaba escribiendo «{entero}»",
-    "500M": "La versión cruda pequeña, de {nombre}, con la pregunta delante, justo antes de escribir "
+    "500M": "Qwen2.5 500M en crudo, con la pregunta delante, justo antes de escribir "
             "la ciudad. La «N» es el principio de Nápoles.",
 }
 

@@ -17,6 +17,12 @@ mecanismo. Este programa enseña el mecanismo con la urna que el lector ya tiene
      el final dentro de las letras del castellano, y cuántas acaban en bucle. La tirada 1 es la
      muestra que imprime `romper_la_maquina.py`, y se comprueba que sale igual.
 
+Orden 175 (17 de noviembre de 2026): el capítulo 13 nuevo («Dónde se rompe») y su A13 llevan estas tablas con otros
+rótulos y otras notas. Cambia lo que se IMPRIME, no las cuentas: la urna a cuatro temperaturas sale dos veces (en
+el cuerpo, redondeada a papeletas enteras y con barra; en el A13, con un decimal y sin barra), y las veinte tiradas,
+dos veces (el cuerpo, con dos columnas y barra; el A13, con las cuatro). Las tablas de las tiradas se reimprimen
+desde el CSV (`--solo-tabla`), sin volver a ejecutar el modelo: lo que se midió el 28 de octubre es lo que se enseña.
+
 Uso (en el Mac: la parte 2 necesita la tarjeta gráfica):
     python temperatura_a_mano.py --selftest
     python temperatura_a_mano.py > ../datos/salidas/temperatura_a_mano.txt
@@ -51,6 +57,7 @@ from formato import barra, coma, miles, tabla_editorial
 # salen como tablas de libro (formato.py, tabla_editorial; REGLAS 6 ter). Las cuentas no cambian.
 
 AQUI = Path(__file__).resolve().parent
+_TOK = None      # el troceador de la urna del capítulo 7; lo deja logits_cap7
 
 
 # ----------------------------- la cuenta del mando -----------------------------
@@ -96,7 +103,8 @@ def logits_cap7():
     import torch
     from maquina_entera import DTYPE, FRASE, MODELO
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    tok = AutoTokenizer.from_pretrained(MODELO)
+    global _TOK
+    tok = _TOK = AutoTokenizer.from_pretrained(MODELO)
     modelo = AutoModelForCausalLM.from_pretrained(MODELO, dtype=getattr(torch, DTYPE))
     modelo.eval()
     ids = tok(FRASE, return_tensors="pt")["input_ids"]
@@ -127,29 +135,55 @@ def urna_del_cap7():
     return [lee[c] for c in CANDIDATOS]
 
 
+def etiqueta_t(t):
+    """La temperatura como la escribe el cuerpo del capítulo 13: «0», «1», «1,3», «1,8»."""
+    return str(int(t)) if t == int(t) else coma(t, 1)
+
+
+def los_de_mas_papeletas(logits, pos, n=10):
+    """Los `n` trozos con más papeletas a temperatura 1 sin contar «la», «una» y «un», decodificados."""
+    import numpy as np
+    p = urna(logits, 1.0)
+    mejores = [int(i) for i in np.argsort(-p) if int(i) not in pos][:n]
+    return [_TOK.decode([i]) for i in mejores]
+
+
 def parte_urna(filas):
     frase, modelo, logits, pos = logits_cap7()
     print(f"--- 1. EL SORTEO DEL CAPÍTULO 7 A CUATRO TEMPERATURAS ---")
     print(f"modelo: {modelo} (el del capítulo 7)")
-    tabla = []
+    tabla_exacta = []
     otros = []
     for t in TEMPERATURAS:
         r = reparto(logits, pos, t)
         otros.append(r[3])
         e = en_papeletas(r)
-        tabla.append([coma(t, 1)] + [coma(100 * x, 1) for x in r[:3]] + [coma(100 * r[3], 1),
-                                                                         barra(r[3])])
+        tabla_exacta.append([coma(t, 1)] + [coma(100 * x, 1) for x in r])
         filas.append(["urna", f"{t:.1f}"] + [f"{x:.6f}" for x in r] + [str(x) for x in e])
     assert otros == sorted(otros) and otros[-1] > 0.5, (
         "la nota dice que al subir la temperatura «otros» se lo va quedando casi todo")
+    # Orden 175: lo que dice la nota de la tabla exacta del A13 sobre «todos los demás».
+    assert len(logits) > 150_000, "la nota dice «más de ciento cincuenta mil» trozos: la lista tiene menos"
+    for ejemplo in (" el", " conoc"):
+        assert ejemplo in los_de_mas_papeletas(logits, pos), (
+            f"la nota dice que «{ejemplo.strip()}» es de los que tienen algo entre «todos los demás»")
+    # (1) la del cuerpo del capítulo 13: papeletas enteras, y la barra es la parte de todos los demás.
+    cuerpo = []
+    for t in TEMPERATURAS:
+        e = en_papeletas(reparto(logits, pos, t))
+        cuerpo.append([etiqueta_t(t)] + [str(x) for x in e] + [barra(e[3] / PAPELETAS)])
     print()
     print("\n".join(tabla_editorial(
         f"Las papeletas de «{frase}» a cuatro temperaturas",
-        ["temperatura", "«la»", "«una»", "«un»", "otros", ""], tabla, "cddddi",
-        [# Orden 97: nota para el lector; el modelo (Qwen/Qwen2.5-0.5B, el del capítulo 7) sale arriba.
-         "Papeletas de cada cien para cada trozo. «Otros» son todos los demás trozos juntos, y la "
-         "barra, su parte: al subir la temperatura se lo van quedando casi todo. A temperatura 0 no "
-         "hay sorteo: gana siempre el favorito."])))
+        ["temperatura", "«la»", "«una»", "«un»", "todos los demás", ""], cuerpo, "cddddi",
+        ["Papeletas de cada cien, redondeadas. La barra es la parte de todos los demás trozos juntos."])))
+    # (2) la del A13: las papeletas exactas, con un decimal y sin barra.
+    print()
+    print("\n".join(tabla_editorial(
+        "Las papeletas exactas",
+        ["temperatura", "«la»", "«una»", "«un»", "todos los demás"], tabla_exacta, "cdddd",
+        ["Papeletas de cada cien. Entre «todos los demás» hay unos pocos con algo, como «el» o «conoc», "
+         "y más de ciento cincuenta mil casi sin nada."])))
     print("\nlas mismas, redondeadas a papeletas enteras (para la figura):")
     for t in TEMPERATURAS:
         e = en_papeletas(reparto(logits, pos, t))
@@ -197,6 +231,19 @@ def parte_tiradas(filas):
     tabla_de_tiradas(resumen, R.MUESTRAS_REPETICION)
 
 
+def tabla_del_cuerpo(resumen, n):
+    """La del cuerpo del capítulo 13 (Orden 175): solo la columna de letras latinas, con barra, y la de distintas."""
+    filas = [[etiqueta_t(t), f"{dentro} de {n}", barra(dentro / n), str(distintas)]
+             for t, dentro, bucle, distintas, _ in resumen]
+    assert resumen[0][0] == 0.0 and resumen[0][3] == 1, "la nota dice que a temperatura 0 las tiradas son la misma"
+    print()
+    print("\n".join(tabla_editorial(
+        f"Veinte tiradas de cada temperatura",
+        ["temperatura", "escritas con nuestras letras", "", "distintas entre sí"], filas, "cdid",
+        ["«Escritas con nuestras letras»: de principio a fin con el alfabeto latino, aunque se cuele alguna palabra "
+         f"de otro idioma que lo use. A temperatura 0 no hay sorteo, y las {EN_LETRA[n]} son la misma."])))
+
+
 def tabla_de_tiradas(resumen, n):
     """La tabla resumen de las tiradas. Se imprime al final de la parte 2 y, sin volver a
     ejecutar el modelo, con --solo-tabla, leyéndola del CSV (primera versión: el rótulo decía
@@ -213,8 +260,8 @@ def tabla_de_tiradas(resumen, n):
          # capítulo 12) sale arriba. «Las veinte son la misma» es lo que comprueba el assert.
          "«Solo letras latinas»: tiradas escritas de principio a fin con nuestro alfabeto, aunque se "
          "cuele alguna palabra de otro idioma que lo use, como el inglés. «Acaban en bucle»: repiten "
-         "al final la misma frase tres veces. La última columna cuenta cuántas tiradas distintas hay: "
-         f"a temperatura 0, como no hay sorteo, las {EN_LETRA[n]} son la misma."])))
+         "al final la misma frase tres veces."])))   # (Orden 175: se quitó «La última columna cuenta…»)
+    tabla_del_cuerpo(resumen, n)
 
 
 def tabla_desde_csv():
@@ -253,11 +300,11 @@ def parte_puntuaciones():
     print()
     print("\n".join(tabla_editorial(
         f"Las puntuaciones de «{frase}», divididas entre la temperatura",
-        ["temperatura", "puntuación: «la»", "puntuación: «una»", "puntuación: uno del medio",
+        ["temperatura", "«la»", "«una»", "uno del medio",
          "«la», en veces el del medio"], filas, "cdddd",
         [# Orden 97: nota para el lector; la lista de {len(logits)} trozos y el modelo salen arriba.
          "«Uno del medio» es el trozo que queda a mitad de la lista, ordenados todos por puntuación. "
-         "La última columna dice cuántas veces es más fuerte «la» que ése. A temperatura 0 no se "
+         "La última columna dice cuántas veces más papeletas tiene «la» que ése. A temperatura 0 no se "
          "divide nada: sale siempre el favorito."])))
 
 
@@ -325,6 +372,8 @@ def main():
     ap.add_argument("--solo-urna", action="store_true", help="solo la parte 1 (sin tarjeta gráfica)")
     ap.add_argument("--puntuaciones", action="store_true",
                     help="el mecanismo: las puntuaciones divididas entre la temperatura (sin tarjeta)")
+    ap.add_argument("--solo-papeletas", action="store_true",
+                    help="la parte 1 (las dos tablas de la urna), sin tarjeta gráfica y SIN tocar el CSV")
     ap.add_argument("--solo-tabla", action="store_true",
                     help="reimprime la tabla de las tiradas desde el CSV, sin ejecutar el modelo")
     args = ap.parse_args()
@@ -332,6 +381,9 @@ def main():
         sys.exit(selftest())
     if args.solo_tabla:
         tabla_desde_csv()
+        return
+    if args.solo_papeletas:
+        parte_urna([])
         return
     if args.puntuaciones:
         parte_puntuaciones()

@@ -9,5 +9,18 @@ Las 20 tiradas de cada temperatura
 | 1,3 | 9 de 20 | 0 de 20 | 20 |
 | 1,8 | 0 de 20 | 0 de 20 | 20 |
 
-«Solo letras latinas»: tiradas escritas de principio a fin con nuestro alfabeto, aunque se cuele alguna palabra de otro idioma que lo use, como el inglés. «Acaban en bucle»: repiten al final la misma frase tres veces. La última columna cuenta cuántas tiradas distintas hay: a temperatura 0, como no hay sorteo, las veinte son la misma.
+«Solo letras latinas»: tiradas escritas de principio a fin con nuestro alfabeto, aunque se cuele alguna palabra de otro idioma que lo use, como el inglés. «Acaban en bucle»: repiten al final la misma frase tres veces.
+:::
+
+::: tabla
+Veinte tiradas de cada temperatura
+
+| temperatura | escritas con nuestras letras |  | distintas entre sí |
+|:-:|--:|:--|--:|
+| 0 | 20 de 20 | [barra:100.0] | 1 |
+| 1 | 18 de 20 | [barra:90.0] | 20 |
+| 1,3 | 9 de 20 | [barra:45.0] | 20 |
+| 1,8 | 0 de 20 | [barra:0.0] | 20 |
+
+«Escritas con nuestras letras»: de principio a fin con el alfabeto latino, aunque se cuele alguna palabra de otro idioma que lo use. A temperatura 0 no hay sorteo, y las veinte son la misma.
 :::
