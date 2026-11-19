@@ -1,0 +1,110 @@
+Medido el 2026-11-19 en macOS-26.7.1-arm64-arm-64bit; pyarrow 26.0.1; 3.12.14. Sin modelo: se lee texto y se cuenta.
+Pregunta: en los textos con que se entrenan estas máquinas, ¿detrás de «Explica… a un niño de seis años» viene otra petición?
+Semilla 20261119. Una línea es un CASO si pide explicar o describir algo a un niño de cinco o seis años (como mucho 240 caracteres). (a): la línea siguiente no vacía es otra petición (empieza por un verbo de petición en imperativo o acaba en «?»); (b): es otra cosa.
+
+==========================================================================
+INGLÉS: FineWeb, muestra sample-10BT
+==========================================================================
+Recorridos 14.868.862 documentos en 82,5 minutos (se acabó el corpus; se pedían al menos 300 casos, con un tope de 16.000.000 documentos o 180 minutos).
+La expresión: \b(?:explain|describe)\b[^\n]{0,160}?(?:\b(?:6|six|5|five)[\s-]*(?:years?|yrs?)[\s-]*olds?\b|\blike\s+i(?:'|’)?\s*(?:m|am)\s+(?:5|five)\b)
+Documentos con algún caso: 107.
+
+TODOS LOS CASOS (la línea dice lo del niño detrás de «explain»/«explica», aunque sea una frase que habla de explicar):
+  Casos: 107.
+    (a) detrás viene otra petición: 9 (8,4 %; intervalo del 95 %: 4,5 % a 15,2 %).
+    (b) detrás viene otra cosa: 98 (91,6 %).
+    Forman parte de una lista (tres o más peticiones seguidas): 4 (3,7 %).
+    Por documento (el primer caso de cada uno): 107 documentos; (a) 9 (8,4 %; intervalo del 95 %: 4,5 % a 15,2 %); (b) 98; en lista 4.
+
+SOLO LAS PETICIONES (la línea EMPIEZA con el verbo, quitadas viñetas, numeración, «please» o una etiqueta corta):
+  Casos: 15.
+    (a) detrás viene otra petición: 2 (13,3 %; intervalo del 95 %: 3,7 % a 37,9 %).
+    (b) detrás viene otra cosa: 13 (86,7 %).
+    Forman parte de una lista (tres o más peticiones seguidas): 0 (0,0 %).
+    Por documento (el primer caso de cada uno): 15 documentos; (a) 2 (13,3 %; intervalo del 95 %: 3,7 % a 37,9 %); (b) 13; en lista 0.
+
+Una advertencia: los casos de un mismo documento no son independientes (una lista de ejercicios da varios casos); el intervalo por casos supone que lo son, y el de «por documento» se acerca más a lo que importa.
+
+Una muestra de lo que CASA (las primeras líneas que casaron):
+  + i REALLY don't want to have to explain to my 6 year old what they mean.
+  + you seek to explain to your six year old daughter why she can't
+  + Explain that to the parents of the six-year-old killed in Aurora.
+  + Can someone explain to me like I'm five years old what the above means. Also, HR posted on 11/12/06 the following:
+  + Q:What is the input, what is the output ? Explain like I am five, for 1 kg of meat , what is needed?
+  + The lesson I learned is simple, assume everyone knows nothing, they have never done it before, and will not understand what you want unless you explain it to them in terms that a 5-year-old would unde
+
+Una muestra de lo que NO casa (líneas que dicen lo del niño y no casan: sin el verbo antes, o demasiado largas):
+  - As of late, my 5 year old LG Flatron L1752S LCD monitor has been acting strangely. The screen flickers (most noticeable if you pay attention to text on any window) when I scroll down webpages or watch
+  - “And the Lord spoke to Moses, saying, ‘This applies to the Levites: from twenty-five years old and upward they shall come to do duty in the service of the tent of meeting. And from the age of fifty ye
+  - Yet even with the less than familiar material, he offered rewards. "Moon on Your Pyjamas," a song Weller said he wrote for his then five-year-old son, may not be as iconic as John Lennon's "Beautiful 
+  - “We’re also looking at adding some trailer bikes that attach to the bike and sort of transform it into a tandem bike. That would be more for kids between the ages of six and 10,” Gardner said. “The ch
+  - ||Five years old|
+  - A BEAUTIFUL INCIDENT. – Some months ago, an amiable, beautiful and accomplished lady, the mother of three bright, interesting children, and the wife of a highly esteemed citizen, died suddenly and und
+
+Ejemplos de las PETICIONES, elegidos con la semilla 20261119 (no a mano); se saltaron 1 por llevar alguna de las palabras de PALABRAS_A_SALTAR. Es texto de terceros: solo los fragmentos, con su dirección.
+
+--- detrás viene OTRA PETICIÓN (1) ---
+Ejemplo 1: https://www.bobistheoilguy.com/forums/ubbthreads.php/topics/4813390
+    Explain it like I'm 5.
+    What do bypass filters filter exactly? Is it just another filter in line with the main filter?
+    OK - here's a synopsis ... for a more simplistic explanation ...
+    First, most 5 year old kids won't be able to follow this, but hopefully you will.
+    - there are many types of contamination in lubricants. When we speak of internal combustion engines, there are four major sources
+
+--- detrás viene la RESPUESTA u otra cosa (2) ---
+Ejemplo 1: https://m.csmonitor.com/1982/1206/120636.html
+    * Explain to your children why and when they'll be home alone. ''One little 6 -year-old said she came home one day and her mother simply wasn't there. She says she cried for 21/2 hours until Mom came 
+    * Don't assume your child can go to the neighbor's. Make sure the neighbors and children know each other, that the neighbors are home during the day, and that they agree with the arrangement.
+    * Set up a telephone network - a list of emergency numbers to call (police, fire, Mom, Dad, another adult).
+    * Be punctual. ''If you tell the kid you'll be there at 5:30, and then you stop off to get some milk at the store, those extra 15 minutes can be terrifying ,'' he said. ''This is especially true for c
+    * Give him a pet. ''Kids in the inner city want a big, mean dog to help them feel less afraid, and kids out in the suburbs want a rabbit or a kitten for solace,'' he reported.
+Ejemplo 2: https://www.adventuresinmomjeans.com/ouradventures
+    Explain it to me like I'm five
+    The next morning, we met my sister and her family who had just arrived from the States, and took the bus to the Pantheon where our tour guide, Katia, was waiting. Katia was recommended to us by a frie
+    Our first full day in Rome was soaked in history, mysteries, and more sweat than I’m proud to admit. We were off to a great start and ready to tackle the next thing: The Vatican. In 100 degree heat. W
+    Where to Stay: Hotel Serena. Simple and small. Close to the train station and lots of restaurants.
+    What to Do: Pantheon and Colosseum. When in Rome!
+
+==========================================================================
+CASTELLANO: FineWeb-2, spa_Latn
+==========================================================================
+Recorridos 16.000.000 documentos en 55,4 minutos (tope de documentos; se pedían al menos 300 casos, con un tope de 16.000.000 documentos o 180 minutos).
+La expresión: \b(?:explica|explícale|explicale|explícame|explicame)\b[^\n]{0,160}?\ba(?:\s+un|\s+una)?\s+niñ[oa]s?\b(?:\s+de\s+(?:seis|6|cinco|5)\s+años|\s+pequeñ[oa]s?)
+Documentos con algún caso: 3.
+
+TODOS LOS CASOS (la línea dice lo del niño detrás de «explain»/«explica», aunque sea una frase que habla de explicar):
+  Casos: 3.
+    (a) detrás viene otra petición: 0 (0,0 %; intervalo del 95 %: 0,0 % a 56,2 %).
+    (b) detrás viene otra cosa: 3 (100,0 %).
+    Forman parte de una lista (tres o más peticiones seguidas): 0 (0,0 %).
+    Por documento (el primer caso de cada uno): 3 documentos; (a) 0 (0,0 %; intervalo del 95 %: 0,0 % a 56,2 %); (b) 3; en lista 0.
+
+SOLO LAS PETICIONES (la línea EMPIEZA con el verbo, quitadas viñetas, numeración, «please» o una etiqueta corta):
+  Casos: 1.
+    (a) detrás viene otra petición: 0 (0,0 %; intervalo del 95 %: 0,0 % a 79,3 %).
+    (b) detrás viene otra cosa: 1 (100,0 %).
+    Forman parte de una lista (tres o más peticiones seguidas): 0 (0,0 %).
+    Por documento (el primer caso de cada uno): 1 documentos; (a) 0 (0,0 %; intervalo del 95 %: 0,0 % a 79,3 %); (b) 1; en lista 0.
+
+Una advertencia: los casos de un mismo documento no son independientes (una lista de ejercicios da varios casos); el intervalo por casos supone que lo son, y el de «por documento» se acerca más a lo que importa.
+
+Una muestra de lo que CASA (las primeras líneas que casaron):
+  + - Explica qué es la RAM a un niño de 5 años- Candidato a un empleo de Apple Genius.
+  + -Si, por favor, explícame como a un niño pequeño, porque no entiendo, ¿Cómo es que se besaron? ¿No que tu estabas enamorada de Inuyasha? ¿El no es un asesino? Amiga como se te ocurre ¡enamorarte de Se
+  + Participante M.F. : David, explicame que quieres decir con esto. Enn palabras sencillas como a un niño pequeño por favor, mis respetos por tu sabiduria.
+
+Una muestra de lo que NO casa (líneas que dicen lo del niño y no casan: sin el verbo antes, o demasiado largas):
+  - Otra forma de manejar el enojo y desarrollar la paciencia es la “paciencia con la naturaleza de las cosas”. La naturaleza de las personas inmaduras e infantiles es actuar mal y groseramente. La natura
+  - Así que cambié la Volanta por un Campamento. Me llevaría a una niña de 5 años a acampar, cosa que le debía desde hace año y medio, cuando me reclamó que la llevara tal como me llevé a otra niña en una
+  - Fellom cree que los pantalones de entrenamiento y la ropa interior le parecen lo mismo que los pañales a un niño pequeño, y que usarlos antes de que pasen tres meses harán que se haga pipí en ellos de
+  - Mi querida madre fue una maestra visitante maravillosa y dedicada por muchos años. Siempre estaba pensando en formas en que podía bendecir a las familias que visitaba. Les prestaba especial atención a
+  - Cuando saque a su perro de paseo, llévelo siempre de la correa para poderlo controlar. Supervise atentamente a su hijo cuando se relacione con su perro y no deje nunca a un bebé o a un niño pequeño (d
+  - La inmunidad humana es otro factor importante, especialmente entre los adultos residentes en zonas que reúnen condiciones de transmisión moderada a intensa. La inmunidad se desarrolla a lo largo de añ
+
+Ejemplos de las PETICIONES, elegidos con la semilla 20261119 (no a mano); se saltaron 1 por llevar alguna de las palabras de PALABRAS_A_SALTAR. Es texto de terceros: solo los fragmentos, con su dirección.
+
+--- detrás viene OTRA PETICIÓN (0) ---
+(no hay ninguno)
+
+--- detrás viene la RESPUESTA u otra cosa (0) ---
+(no hay ninguno)

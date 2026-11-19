@@ -96,6 +96,19 @@ OPENAI_CRUDO = ("Explica la teoría de la gravedad a un niño de seis años. Exp
 OPENAI_ADIESTRADA = ("La gente fue a la Luna, hizo fotos de lo que vio y las mandó a la Tierra para que todos "
                      "pudiéramos verlas.")
 NOMBRE_TAMANO = {"500M": "Qwen2.5 500M", "7.000M": "Qwen2.5 7.000M"}   # como los llama el texto (Orden 175)
+# Orden 178 (19 de noviembre de 2026): lo que GPT-3 escribe ENTERO ante la petición de la Luna, en el original en
+# inglés, línea a línea, tal como lo enseña el blog de OpenAI del 27 de enero de 2022 («Aligning language models to
+# follow instructions»; copia en notas/fuentes/ del libro). El libro cortó la salida en dos líneas con «…»; aquí está toda.
+OPENAI_PETICION_EN = "Explain the moon landing to a 6 year old in a few sentences."
+OPENAI_CRUDO_EN = ["Explain the theory of gravity to a 6 year old.",
+                   "Explain the theory of relativity to a 6 year old in a few sentences.",
+                   "Explain the big bang theory to a 6 year old.",
+                   "Explain evolution to a 6 year old."]
+# La regla de arriba (REGLA), en inglés: una línea es otra petición si empieza por uno de estos verbos de petición en
+# imperativo o acaba en «?».
+VERBOS_DE_PETICION_EN = ("explain", "describe", "write", "tell", "give", "list", "translate", "summarize",
+                         "summarise", "what", "how", "why", "show", "make", "create", "name", "define")
+FUENTE_OPENAI = ("../../libro-ia-libro/notas/fuentes/openai-2022-instruction-following-wayback.html")  # si está al lado
 
 # ==========================================================
 
@@ -236,6 +249,32 @@ def medir(base, instruido):
     return res, tiempos
 
 
+def es_peticion_en(linea):
+    """La regla de REGLA, en inglés: otra petición si empieza por un verbo de petición en imperativo o acaba en «?»."""
+    t = linea.strip()
+    return bool(t) and (t.endswith("?") or t.split()[0].lower().strip(",.") in VERBOS_DE_PETICION_EN)
+
+
+def seccion_gpt3():
+    """Orden 178.1: la continuación entera de GPT-3 ante la petición de la Luna (el original en inglés), con el
+    recuento de cuántas peticiones encadena. Devuelve las líneas de la sección."""
+    lineas = [x for x in OPENAI_CRUDO_EN if x.strip()]
+    assert lineas, "se esperaba la continuación de GPT-3"
+    peticiones = [es_peticion_en(x) for x in lineas]
+    out = ["=" * 74, "LA CONTINUACIÓN ENTERA DE GPT-3 (OpenAI, 27 de enero de 2022)", "=" * 74,
+           "El blog de OpenAI «Aligning language models to follow instructions» enseña lo que escribe GPT-3 (en crudo, sin",
+           "adiestrar) ante la petición de la Luna. El libro la cortó en dos líneas con «…»; esto es lo que escribe, entero,",
+           "en el original en inglés, una línea por renglón y sin tocar nada:", "",
+           f"Petición: {OPENAI_PETICION_EN}", "", "GPT-3 en crudo escribe:"]
+    out += [f"  {k}. {x}" for k, x in enumerate(lineas, 1)]
+    out += ["", f"Líneas que escribe: {len(lineas)}. Cada una es otra petición del mismo estilo (según la regla en inglés: "
+                "empieza por un verbo de petición en imperativo o acaba en «?»)"
+            + (": sí." if all(peticiones) else f": {sum(peticiones)} de {len(lineas)}."),
+            f"Peticiones que encadena: {sum(peticiones)}. "
+            "Ninguna es una respuesta a la de la Luna."]
+    return out
+
+
 def selftest():
     fallos = []
     base, instruido = PAREJAS[1]       # el pequeño: es el que se carga deprisa
@@ -283,12 +322,31 @@ def selftest():
         revienta = True
     cortes = (inicio("uno dos, tres cuatro", 2, True) == "uno dos…" and inicio("uno dos.", 5, True) == "uno dos."
               and inicio("Uno. Dos tres", 1, False) == "Uno." and revienta)
+    # Orden 178: la sección de GPT-3. Nulo: una respuesta de verdad («People went to the moon…») no cuenta como petición;
+    # señal: las cuatro líneas de OpenAI sí; invariante: el recuento es el de las líneas, y, si la copia del blog está
+    # al lado (en el repositorio privado), cada línea sale tal cual en su texto.
+    gpt3_nula = (not es_peticion_en("People went to the moon, and they took pictures of what they saw.")
+                 and not es_peticion_en(""))
+    sec = seccion_gpt3()
+    gpt3_senal = all(es_peticion_en(x) for x in OPENAI_CRUDO_EN) and len(OPENAI_CRUDO_EN) == 4
+    gpt3_inv = any(l.startswith("Peticiones que encadena: 4.") for l in sec)
+    fuente = None
+    try:
+        import html as _html
+        import os as _os
+        if _os.path.exists(FUENTE_OPENAI):
+            t = _html.unescape(re.sub(r"<[^>]+>", "\n", open(FUENTE_OPENAI, encoding="utf-8", errors="replace").read()))
+            fuente = all(x in t for x in OPENAI_CRUDO_EN) and OPENAI_PETICION_EN in t
+    except OSError:
+        fuente = None
+    gpt3_bien = gpt3_nula and gpt3_senal and gpt3_inv and fuente is not False
     ok3 = (a == b and en_crudo("x") == "x\n" and "system" in formato and formato.rstrip().endswith("assistant")
-           and sin_signos and cortes)
+           and sin_signos and cortes and gpt3_bien)
     print(f"[3] invariante        dos ejecuciones iguales: {'sí' if a == b else 'NO'}; crudo = petición + salto de línea; "
           f"adiestrada con su instrucción de serie: {'sí' if ('system' in formato) else 'NO'}; "
           f"cada pregunta sin signos es la pregunta sin «¿» ni «?»: {'sí' if sin_signos else 'NO'}; "
-          f"el corte de la tabla: {'bien' if cortes else 'MAL'}")
+          f"el corte de la tabla: {'bien' if cortes else 'MAL'}; la continuación de GPT-3 (4 peticiones; sale tal cual en la "
+          f"copia del blog: {'sí' if fuente else 'no se pudo mirar' if fuente is None else 'NO'}): {'bien' if gpt3_bien else 'MAL'}")
     if not ok3:
         fallos.append("invariante: dos ejecuciones distintas, o el montaje de los dos formatos no es el esperado")
     print()
@@ -303,9 +361,14 @@ def selftest():
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--solo-gpt3", action="store_true",
+                    help="imprime solo la sección de la continuación de GPT-3 (sin cargar ningún modelo)")
     args = ap.parse_args()
     if args.selftest:
         sys.exit(selftest())
+    if args.solo_gpt3:
+        print("\n".join(seccion_gpt3()))
+        return
 
     torch.manual_seed(SEMILLA)
     print(f"Medido el {datetime.date.today()} en {platform.platform()}; el trozo más probable, sin sorteo "
@@ -349,6 +412,8 @@ def main():
         print(f"{etiqueta:>7}  {forma:<9} {version:<11} contesta {clases.count('contesta')} de {len(clases)}")
     for l in lo_que_cita_el_libro(todo):
         print(l)
+    print()
+    print("\n".join(seccion_gpt3()))      # Orden 178.1
 
 
 if __name__ == "__main__":

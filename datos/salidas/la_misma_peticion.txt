@@ -1,4 +1,4 @@
-Medido el 2026-11-17 en macOS-26.7.1-arm64-arm-64bit; el trozo más probable, sin sorteo (do_sample=False), en procesador, hasta 80 trozos o hasta que cierra su turno.
+Medido el 2026-11-19 en macOS-26.7.1-arm64-arm-64bit; el trozo más probable, sin sorteo (do_sample=False), en procesador, hasta 80 trozos o hasta que cierra su turno.
 Bibliotecas: torch 2.14.0.
 En crudo: la petición sola, seguida de un salto de línea. Adiestrada: la petición dentro de su formato de conversación, con la instrucción de serie de su plantilla.
 
@@ -7,7 +7,7 @@ La regla, escrita: se mira solo la primera línea no vacía de lo que escribe. �
 ==========================================================================
 TAMAÑO 7.000M
 ==========================================================================
-tiempo en esta máquina: en crudo 1,6 min; adiestrada 2,0 min (carga del modelo incluida).
+tiempo en esta máquina: en crudo 1,8 min; adiestrada 2,3 min (carga del modelo incluida).
 
 --- petición 1 ---
   orden:               Explica a un niño de seis años, en unas pocas frases, por qué el cielo es azul.
@@ -475,3 +475,21 @@ Claro, aquí tienes tres consejos para mejorar tu calidad de sueño:
 
 *Qwen2.5 7.000M, adiestrada:* «Hola pequeño! El cielo parece azul porque…»
 
+
+==========================================================================
+LA CONTINUACIÓN ENTERA DE GPT-3 (OpenAI, 27 de enero de 2022)
+==========================================================================
+El blog de OpenAI «Aligning language models to follow instructions» enseña lo que escribe GPT-3 (en crudo, sin
+adiestrar) ante la petición de la Luna. El libro la cortó en dos líneas con «…»; esto es lo que escribe, entero,
+en el original en inglés, una línea por renglón y sin tocar nada:
+
+Petición: Explain the moon landing to a 6 year old in a few sentences.
+
+GPT-3 en crudo escribe:
+  1. Explain the theory of gravity to a 6 year old.
+  2. Explain the theory of relativity to a 6 year old in a few sentences.
+  3. Explain the big bang theory to a 6 year old.
+  4. Explain evolution to a 6 year old.
+
+Líneas que escribe: 4. Cada una es otra petición del mismo estilo (según la regla en inglés: empieza por un verbo de petición en imperativo o acaba en «?»): sí.
+Peticiones que encadena: 4. Ninguna es una respuesta a la de la Luna.
