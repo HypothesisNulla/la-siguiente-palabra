@@ -1,0 +1,261 @@
+experimento,caso,largo_objetivo,posicion_o_variante,trozos_de_conversacion,esperada_o_verdad,falsa,resultado,respuesta
+A,1,0,sin relleno,61,Garbancito,,acierta,Tu perro se llama Garbancito.
+A,2,0,sin relleno,69,4817,,acierta,El código de tu taquilla es 4817.
+A,3,0,sin relleno,61,Zenobia,,acierta,Tu hermana pequeña se llama Zenobia.
+A,4,0,sin relleno,62,pistacho,,acierta,Tu coche es de color verde pistacho.
+A,5,0,sin relleno,68,59,,acierta,Vives en el número 59 de la calle Ventanilla.
+A,6,0,sin relleno,65,naranjapelada,,acierta,"La contraseña de tu WiFi es ""naranjapelada""."
+A,7,0,sin relleno,68,Remigio,,acierta,El gato de tu vecina se llama Remigio.
+A,8,0,sin relleno,73,pulpo,,acierta,El llavero de tu mochila tiene la forma de un pulpo.
+A,9,0,sin relleno,76,23 de octubre,,acierta,El cumpleaños de tu abuela es el 23 de octubre.
+A,10,0,sin relleno,66,Aniceto,,acierta,Tu profesor de guitarra se llama Aniceto.
+A,11,0,sin relleno,78,torre del cangrejo,,acierta,"El libro que has leído esta semana se titula ""La torre del cangrejo""."
+A,12,0,sin relleno,74,QX-7701,,acierta,El número de serie de tu bicicleta es QX-7701.
+A,13,0,sin relleno,68,41,,acierta,"Tu tortuga, Hipólita, tiene 41 años."
+A,14,0,sin relleno,68,Pez Calvo,,acierta,El restaurante donde reservaste se llama El Pez Calvo.
+A,15,0,sin relleno,68,trombón,,acierta,Tu primo toca el trombón en una banda de Cuenca.
+A,16,0,sin relleno,73,3392,,acierta,La matrícula de tu moto es 3392 KLM.
+A,17,0,sin relleno,69,Eustaquio,,acierta,Tu vecino del tercero se llama Eustaquio.
+A,18,0,sin relleno,67,Moscatel,,acierta,El hotel donde te alojas se llama Hotel Moscatel.
+A,19,0,sin relleno,68,Fermina,,acierta,Tu planta del salón se llama Fermina.
+A,20,0,sin relleno,72,70215,,acierta,Tu número de socio de la biblioteca es 70215.
+A,1,2000,al principio,2075,Garbancito,,acierta,Tu perro se llama Garbancito.
+A,2,2000,al principio,2083,4817,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo la capacidad de conocer o acceder a información personal como el código de tu taquilla. ¿Necesitas"
+A,3,2000,al principio,2075,Zenobia,,acierta,Tu hermana pequeña se llama Zenobia.
+A,4,2000,al principio,2076,pistacho,,acierta,"Antes de que te preguntaras sobre el color de tu coche, dijiste que tu coche es de color verde pistacho. Entonces, el color de tu coche es"
+A,5,2000,al principio,2082,59,,acierta,"Según la información que me diste, vives en el número 59 de la calle Ventanilla. ¿Necesitas ayuda con algo más relacionado con tu dirección o neces"
+A,6,2000,al principio,2079,naranjapelada,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como las contraseñas de tu Wi-Fi. Esa información se guarda en tu dispositivo o en"
+A,7,2000,al principio,2082,Remigio,,acierta,El gato de tu vecina se llama Remigio.
+A,8,2000,al principio,2087,pulpo,,acierta,El llavero de tu mochila tiene la forma de un pulpo.
+A,9,2000,al principio,2090,23 de octubre,,acierta,Tu abuela cumpleaños es el 23 de octubre. ¡Espero que tenga un día maravilloso! Si necesitas ayuda con algo más relacionado con su
+A,10,2000,al principio,2080,Aniceto,,acierta,Tu profesor de guitarra se llama Aniceto.
+A,11,2000,al principio,2092,torre del cangrejo,,acierta,"Ya mencionaste que el libro que has leído esta semana se titula ""La torre del cangrejo"". ¿Necesitas más información sobre este libro o estás busc"
+A,12,2000,al principio,2088,QX-7701,,falla,"Para encontrar el número de serie de tu bicicleta, puedes seguir estos pasos: ⏎  ⏎ 1. **Verifica en el Marco**: A menudo, el número de serie está grabado o marc"
+A,13,2000,al principio,2082,41,,acierta,Tu tortuga se llama Hipólita y tiene 41 años. Parece que tu tortuga es bastante vieja y seguramente es una compañera muy querida. ¡Es importante
+A,14,2000,al principio,2082,Pez Calvo,,acierta,El restaurante donde reservaste se llama El Pez Calvo. ¿Necesitas ayuda con algo más relacionado con tu reserva o el restaurante?
+A,15,2000,al principio,2082,trombón,,acierta,Tu primo toca el trombón en una banda de Cuenca. ¡Eso es genial! El trombón es un instrumento muy interesante y es una parte importante de
+A,16,2000,al principio,2087,3392,,falla,"Para proporcionarte tu matrícula de moto, necesitaría más información. Si tienes la matrícula a mano, simplemente dime cuál es. Si no, podrías buscar"
+A,17,2000,al principio,2083,Eustaquio,,acierta,Tu vecino del tercero se llama Eustaquio.
+A,18,2000,al principio,2081,Moscatel,,acierta,El hotel donde te alojas se llama Hotel Moscatel. ¿Necesitas ayuda con algo más relacionado con tu estancia?
+A,19,2000,al principio,2082,Fermina,,acierta,Tu planta del salón se llama Fermina.
+A,20,2000,al principio,2086,70215,,falla,"Para poder ayudarte a encontrar tu número de socio de la biblioteca, necesitaría más información. Normalmente, este número se proporciona cuando te inscribes en la biblioteca y se utiliza"
+A,1,2000,en medio,2075,Garbancito,,acierta,Tu perro se llama Garbancito.
+A,2,2000,en medio,2083,4817,,falla,"Lo siento, pero como asistente, no tengo la capacidad de conocer o acceder a información personal como el código de tu taquilla. ¿Necesitas ayuda con algo más"
+A,3,2000,en medio,2075,Zenobia,,acierta,Tu hermana pequeña se llama Zenobia.
+A,4,2000,en medio,2076,pistacho,,acierta,"Antes de que te sientas mal, mencionaste que tu coche es de color verde pistacho. Si necesitas ayuda con algo más, como consejos para sentirte mejor o"
+A,5,2000,en medio,2082,59,,acierta,"Según la información que me diste, vives en la calle Ventanilla número 59. ¿Necesitas ayuda con algo más relacionado con tu dirección o necesitas as"
+A,6,2000,en medio,2079,naranjapelada,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como las contraseñas de tu Wi-Fi. Solo puedes ver y acceder a la información que"
+A,7,2000,en medio,2082,Remigio,,acierta,El gato de tu vecina se llama Remigio.
+A,8,2000,en medio,2087,pulpo,,acierta,Tu llavero de mochila tiene la forma de un pulpo. ¿Necesitas ayuda con algo más relacionado con el pulpo o con otra cosa?
+A,9,2000,en medio,2090,23 de octubre,,acierta,"El cumpleaños de tu abuela es el 23 de octubre. ¡Espero que tenga un día maravilloso! Si necesitas ayuda con algo más, como"
+A,10,2000,en medio,2080,Aniceto,,acierta,Tu profesor de guitarra se llama Aniceto. ¿Necesitas ayuda con algo más relacionado con él o con la guitarra?
+A,11,2000,en medio,2092,torre del cangrejo,,acierta,"El libro que mencionaste se titula ""La torre del cangrejo"". ¿Necesitas ayuda con algo más relacionado con este libro o necesitas asesoramiento sobre"
+A,12,2000,en medio,2088,QX-7701,,falla,"Para encontrar el número de serie de tu bicicleta, puedes seguir estos pasos: ⏎  ⏎ 1. **Verifica en el Marco**: A menudo, el número de serie está grabado o imp"
+A,13,2000,en medio,2082,41,,acierta,"Tu tortuga se llama Hipólita y tiene 41 años. Parece que ya lo sabes, pero es una información interesante. ¿Necesitas más detalles sobre cómo cuid"
+A,14,2000,en medio,2082,Pez Calvo,,acierta,"Recuerdo que el restaurante donde reservaste se llama ""El Pez Calvo"". Si necesitas ayuda con algo relacionado con tu reserva o tienes más preguntas, estaré encantado"
+A,15,2000,en medio,2082,trombón,,acierta,"Tu primo toca el trombón en una banda de Cuenca. Si necesitas más información sobre el trombón o sobre cómo apoyar a tu primo en su actividad musical,"
+A,16,2000,en medio,2087,3392,,acierta,"Tu matrícula de moto es 3392 KLM. Si estás experimentando algún síntoma de salud, como dolor de barriga, te recomiendo que busques"
+A,17,2000,en medio,2083,Eustaquio,,acierta,Tu vecino del tercero se llama Eustaquio.
+A,18,2000,en medio,2081,Moscatel,,acierta,El hotel donde te alojas se llama Hotel Moscatel. ¿Necesitas ayuda con algo más relacionado con tu estancia?
+A,19,2000,en medio,2082,Fermina,,acierta,Tu planta del salón se llama Fermina. Es un nombre interesante para un helecho. ¿Necesitas ayuda con algo más relacionado con tu Fermina o con cualquier otra cosa
+A,20,2000,en medio,2086,70215,,acierta,"Tu número de socio de la biblioteca es 70215. Si necesitas ayuda con algo más relacionado con tu cuenta de la biblioteca o tienes alguna otra pregunta, no dudes"
+A,1,2000,cerca del final,2075,Garbancito,,acierta,Tu perro se llama Garbancito.
+A,2,2000,cerca del final,2083,4817,,acierta,"El código de tu taquilla es 4817. Si necesitas ayuda con algo más, ¡no dudes en preguntar!"
+A,3,2000,cerca del final,2075,Zenobia,,acierta,Tu hermana pequeña se llama Zenobia.
+A,4,2000,cerca del final,2076,pistacho,,acierta,Tu coche es de color verde pistacho. ¿Necesitas más información sobre tu vehículo o tienes alguna otra pregunta?
+A,5,2000,cerca del final,2082,59,,acierta,Vives en el número 59 de la calle Ventanilla.
+A,6,2000,cerca del final,2079,naranjapelada,,acierta,"La contraseña de tu WiFi es ""naranjapelada"". Recuerda mantenerla segura y no compartirla con personas no autorizadas para proteger tu red. Si necesitas"
+A,7,2000,cerca del final,2082,Remigio,,acierta,El gato de tu vecina se llama Remigio.
+A,8,2000,cerca del final,2087,pulpo,,acierta,El llavero de tu mochila tiene la forma de un pulpo.
+A,9,2000,cerca del final,2090,23 de octubre,,acierta,El cumpleaños de tu abuela es el 23 de octubre. ¡Espero que tengas una celebración maravillosa para ella! Si necesitas ayuda con
+A,10,2000,cerca del final,2080,Aniceto,,acierta,Tu profesor de guitarra se llama Aniceto.
+A,11,2000,cerca del final,2092,torre del cangrejo,,acierta,"El libro que has leído esta semana se titula ""La torre del cangrejo"". ¿Necesitas más información sobre este libro o estás experimentando algún otro tipo de"
+A,12,2000,cerca del final,2088,QX-7701,,acierta,"El número de serie de tu bicicleta es QX-7701. Si necesitas más información sobre tu bicicleta, como su modelo o marca, podrías buscar en la"
+A,13,2000,cerca del final,2082,41,,acierta,Tu tortuga se llama Hipólita y tiene 41 años. ¡Es una tortuga muy longeva! ¿Necesitas más información sobre cómo cuidar a tu tortuga de
+A,14,2000,cerca del final,2082,Pez Calvo,,acierta,El restaurante donde reservaste se llama El Pez Calvo. ¿Necesitas ayuda con algo más relacionado con tu reserva o con tu estado de salud?
+A,15,2000,cerca del final,2082,trombón,,acierta,Tu primo toca el trombón en una banda de Cuenca. ¿Necesitas más información sobre el trombón o sobre la banda de Cuenca?
+A,16,2000,cerca del final,2087,3392,,acierta,"La matrícula de tu moto es 3392 KLM. Si necesitas más información sobre tu moto o tienes alguna otra pregunta, estaré encantado de ayudarte."
+A,17,2000,cerca del final,2083,Eustaquio,,acierta,Tu vecino del tercero se llama Eustaquio. ¿Necesitas ayuda con algo más relacionado con tu estado de salud o con cualquier otra cosa?
+A,18,2000,cerca del final,2081,Moscatel,,acierta,El hotel donde te alojas se llama Hotel Moscatel. ¿Necesitas ayuda con algo más relacionado con tu estancia o tu salud?
+A,19,2000,cerca del final,2082,Fermina,,acierta,Tu planta del salón se llama Fermina. Es un nombre interesante para un helecho. ¿Necesitas algún consejo sobre cómo cuidarla?
+A,20,2000,cerca del final,2086,70215,,acierta,"Tu número de socio de la biblioteca es 70215. Si necesitas más ayuda o información relacionada con tu cuenta de la biblioteca, como renovar prestamos o buscar"
+A,1,8000,al principio,8128,Garbancito,,acierta,Tu perro se llama Garbancito.
+A,2,8000,al principio,8136,4817,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como el código de tu taquilla. ¿Podrías recordar el código o buscarlo"
+A,3,8000,al principio,8128,Zenobia,,acierta,"Has mencionado que tu hermana pequeña se llama Zenobia. Por lo tanto, tu hermana pequeña se llama Zenobia."
+A,4,8000,al principio,8129,pistacho,,falla,"Para poder decirte de qué color es tu coche, necesitaría que me proporcionaras esa información. Si tienes la foto del coche o recuerdas el color, puedes decírm"
+A,5,8000,al principio,8135,59,,acierta,"Parece que estás preguntando por tu número de casa en la calle Ventanilla. Según la información que proporcionaste, vives en la calle Ventanilla número 59"
+A,6,8000,al principio,8132,naranjapelada,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como las contraseñas de tu WiFi. Esa información solo está disponible en tu dispositivo o en"
+A,7,8000,al principio,8135,Remigio,,acierta,El gato de tu vecina se llama Remigio. Lo mencionaste en tu pregunta anterior.
+A,8,8000,al principio,8140,pulpo,,acierta,"Según la información que me diste anteriormente, el llavero de tu mochila tiene la forma de un pulpo. ¿Necesitas ayuda con algo más relacionado con"
+A,9,8000,al principio,8143,23 de octubre,,acierta,El cumpleaños de tu abuela es el 23 de octubre. ¡Felicitaciones por adelantado! ¿Hay algo en particular que te gustaría hacer para celebrar
+A,10,8000,al principio,8133,Aniceto,,acierta,Tu profesor de guitarra se llama Aniceto.
+A,11,8000,al principio,8145,torre del cangrejo,,acierta,"¡Claro! Parece que has mencionado que leíste un libro titulado ""La torre del cangrejo"" esta semana. ¿Necesitas ayuda con algo"
+A,12,8000,al principio,8141,QX-7701,,falla,"Para encontrar el número de serie de tu bicicleta, puedes seguir estos pasos: ⏎  ⏎ 1. **Verifica en el Marco**: A menudo, el número de serie se encuentra en el mar"
+A,13,8000,al principio,8135,41,,acierta,"Tu tortuga se llama Hipólita y tiene 41 años. Por lo tanto, tu tortuga tiene 41 años. ¡Felicidades por tener un companion tan longevo"
+A,14,8000,al principio,8135,Pez Calvo,,acierta,"El restaurante donde reservaste se llama ""El Pez Calvo""."
+A,15,8000,al principio,8135,trombón,,acierta,Tu primo toca el trombón en una banda de Cuenca.
+A,16,8000,al principio,8140,3392,,falla,"Para poder ayudarte a encontrar la matrícula de tu moto, necesitaría más información. ¿Podrías proporcionarme tu nombre, el número de serie de la moto o cualquier otro"
+A,17,8000,al principio,8136,Eustaquio,,acierta,"Tu vecino del tercero se llama Eustaquio, según la información que proporcionaste."
+A,18,8000,al principio,8134,Moscatel,,acierta,El hotel donde te alojas se llama Hotel Moscatel.
+A,19,8000,al principio,8135,Fermina,,acierta,"Según la información que me diste anteriormente, tu planta del salón se llama Fermina. ¿Necesitas ayuda con algo más relacionado con Fermina? Por ejemplo, conse"
+A,20,8000,al principio,8139,70215,,falla,"Para poder ayudarte a encontrar tu número de socio de la biblioteca, necesitaría más información. ¿Podrías proporcionar el nombre de la biblioteca o alguna otra información que te hay"
+A,1,8000,en medio,8128,Garbancito,,acierta,Tu perro se llama Garbancito.
+A,2,8000,en medio,8136,4817,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como el código de tu taquilla. ¿Podrías recordar el código o buscarlo"
+A,3,8000,en medio,8128,Zenobia,,acierta,Tu hermana pequeña se llama Zenobia.
+A,4,8000,en medio,8129,pistacho,,falla,"Para poder decirte de qué color es tu coche, necesitaría que me proporcionaras esa información. ¿Podrías decírmelo?"
+A,5,8000,en medio,8135,59,,acierta,"Según la información que me diste, vives en la calle Ventanilla número 59."
+A,6,8000,en medio,8132,naranjapelada,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como las contraseñas de tu WiFi. Tú eres el único que debería tener esa información"
+A,7,8000,en medio,8135,Remigio,,acierta,El gato de tu vecina se llama Remigio.
+A,8,8000,en medio,8140,pulpo,,acierta,"Según la información que me diste anteriormente, el llavero de tu mochila tiene forma de pulpo."
+A,9,8000,en medio,8143,23 de octubre,,acierta,Tu abuela cumpleaños es el 23 de octubre. Recuerda celebrar este día especial para ella! ¿Necesitas ayuda con algo más relacionado con su
+A,10,8000,en medio,8133,Aniceto,,acierta,Tu profesor de guitarra se llama Aniceto.
+A,11,8000,en medio,8145,torre del cangrejo,,falla,"Para poder ayudarte, necesito que me proporciones más detalles sobre el libro que has leído esta semana. ¿Podrías darme alguna información adicional, como el género del libro"
+A,12,8000,en medio,8141,QX-7701,,falla,"Para encontrar el número de serie de tu bicicleta, puedes seguir estos pasos: ⏎  ⏎ 1. **Verifica en el Marco**: A menudo, el número de serie está grabado o imp"
+A,13,8000,en medio,8135,41,,falla,"Para determinar la edad de tu tortuga, necesitaría más información. Las tortugas no tienen años marcados como los humanos, pero su edad se puede estimar basándose en varios"
+A,14,8000,en medio,8135,Pez Calvo,,acierta,El restaurante donde reservaste se llama **El Pez Calvo**.
+A,15,8000,en medio,8135,trombón,,acierta,"Tu primo toca el trombón en una banda de Cuenca, según lo que mencionaste anteriormente. ¿Necesitas ayuda con algo más relacionado con esto, o"
+A,16,8000,en medio,8140,3392,,falla,"Para poder ayudarte a encontrar la matrícula de tu moto, necesitaría más información. ¿Podrías proporcionarme el número de serie de la moto o cualquier otro detalle que te"
+A,17,8000,en medio,8136,Eustaquio,,acierta,Tu vecino del tercero se llama Eustaquio.
+A,18,8000,en medio,8134,Moscatel,,acierta,El hotel donde te alojas se llama Hotel Moscatel. ¿Necesitas ayuda con algo más relacionado con tu estancia?
+A,19,8000,en medio,8135,Fermina,,acierta,"Según la información que proporcionaste anteriormente, tu planta del salón se llama Fermina. Si Fermina es el nombre que le diste a tu helecho, entonces tu planta se llama"
+A,20,8000,en medio,8139,70215,,falla,"Para poder ayudarte, necesitaría que me proporciones tu número de socio de la biblioteca. ¿Podrías darme esa información?"
+A,1,8000,cerca del final,8128,Garbancito,,acierta,Tu perro se llama Garbancito.
+A,2,8000,cerca del final,8136,4817,,acierta,El código de tu taquilla es 4817.
+A,3,8000,cerca del final,8128,Zenobia,,acierta,Tu hermana pequeña se llama Zenobia.
+A,4,8000,cerca del final,8129,pistacho,,acierta,Tu coche es de color verde pistacho.
+A,5,8000,cerca del final,8135,59,,acierta,Vives en el número 59 de la calle Ventanilla.
+A,6,8000,cerca del final,8132,naranjapelada,,acierta,"La contraseña de tu WiFi es ""naranjapelada"". Recuerda mantenerla segura y no compartirla con personas no autorizadas para proteger tu red."
+A,7,8000,cerca del final,8135,Remigio,,acierta,El gato de tu vecina se llama Remigio.
+A,8,8000,cerca del final,8140,pulpo,,acierta,El llavero de tu mochila tiene la forma de un pulpo.
+A,9,8000,cerca del final,8143,23 de octubre,,acierta,El cumpleaños de tu abuela es el 23 de octubre. Felicidades por su día especial! ¿Hay algo en particular que te gustaría hacer para celebrarlo?
+A,10,8000,cerca del final,8133,Aniceto,,acierta,Tu profesor de guitarra se llama Aniceto.
+A,11,8000,cerca del final,8145,torre del cangrejo,,acierta,"El título del libro que has leído esta semana es ""La torre del cangrejo""."
+A,12,8000,cerca del final,8141,QX-7701,,acierta,El número de serie de tu bicicleta es QX-7701.
+A,13,8000,cerca del final,8135,41,,acierta,"Tu tortuga Hipólita tiene 41 años. ¡Eso es bastante longevo! Las tortugas pueden vivir durante muchos años, y un 41 años es una edad"
+A,14,8000,cerca del final,8135,Pez Calvo,,acierta,El restaurante donde reservaste se llama El Pez Calvo.
+A,15,8000,cerca del final,8135,trombón,,acierta,Mi primo toca el trombón en una banda de Cuenca.
+A,16,8000,cerca del final,8140,3392,,acierta,La matrícula de tu moto es 3392 KLM.
+A,17,8000,cerca del final,8136,Eustaquio,,acierta,Tu vecino del tercero se llama Eustaquio.
+A,18,8000,cerca del final,8134,Moscatel,,acierta,El hotel donde te alojas se llama Hotel Moscatel.
+A,19,8000,cerca del final,8135,Fermina,,acierta,Tu planta del salón se llama Fermina. Es un helecho.
+A,20,8000,cerca del final,8139,70215,,acierta,Tu número de socio de la biblioteca es 70215.
+A,1,24000,al principio,24279,Garbancito,,acierta,Recuerdas que dijiste que tu perro se llama Garbancito. ¿Necesitas ayuda con algo más relacionado con tu perro o Garbancito?
+A,2,24000,al principio,24287,4817,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como el código de tu taquilla. ¿Podrías recordar el código o buscarlo"
+A,3,24000,al principio,24279,Zenobia,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal sobre ti o tus familiares a menos que tú me la proporciones. ¿Podrías"
+A,4,24000,al principio,24280,pistacho,,falla,"Para poder decirte el color de tu coche, necesitaría que me proporcionaras esa información. ¿Podrías decírmelo?"
+A,5,24000,al principio,24286,59,,acierta,"Según la información que me diste, vives en el número 59 de la calle Ventanilla. Por lo tanto, la respuesta a tu pregunta es que vives en el número"
+A,6,24000,al principio,24283,naranjapelada,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como las contraseñas de tu Wi-Fi. Tú eres el único que tiene esa información"
+A,7,24000,al principio,24286,Remigio,,acierta,El gato de tu vecina se llama Remigio.
+A,8,24000,al principio,24291,pulpo,,acierta,"Según la información que me diste anteriormente, el llavero de tu mochila tiene la forma de un pulpo."
+A,9,24000,al principio,24294,23 de octubre,,acierta,Tu abuela cumple años el 23 de octubre.
+A,10,24000,al principio,24284,Aniceto,,acierta,Tu profesor de guitarra se llama Aniceto.
+A,11,24000,al principio,24296,torre del cangrejo,,falla,"Para poder ayudarte, necesito que me proporciones más detalles sobre el libro que has leído. ¿Podrías recordar algún detalle sobre el título, el autor, o algún tema"
+A,12,24000,al principio,24292,QX-7701,,falla,"Para encontrar el número de serie de tu bicicleta, puedes seguir estos pasos: ⏎  ⏎ 1. **Verifica en el cuadro**: El número de serie suele estar grabado o marcado"
+A,13,24000,al principio,24286,41,,falla,"Para determinar la edad de tu tortuga, necesitaría más información. Las tortugas no tienen años marcados como los humanos, pero su edad se puede estimar basándose en varios"
+A,14,24000,al principio,24286,Pez Calvo,,acierta,El restaurante donde reservaste se llama El Pez Calvo.
+A,15,24000,al principio,24286,trombón,,acierta,Tu primo toca el trombón en una banda de Cuenca.
+A,16,24000,al principio,24291,3392,,falla,"Para poder ayudarte a encontrar la matrícula de tu moto, necesitaría más información. ¿Podrías proporcionar detalles como la marca y el modelo de la moto, o cualquier"
+A,17,24000,al principio,24287,Eustaquio,,acierta,Tu vecino del tercero se llama Eustaquio.
+A,18,24000,al principio,24285,Moscatel,,acierta,"Según la información que proporcionaste anteriormente, el hotel donde te alojas se llama Hotel Moscatel."
+A,19,24000,al principio,24286,Fermina,,acierta,"En tu mensaje anterior mencionaste que tu planta del salón se llama Fermina. Por lo tanto, el nombre de tu planta es Fermina."
+A,20,24000,al principio,24290,70215,,falla,"Para poder ayudarte a encontrar tu número de socio de la biblioteca, necesitaría más información. ¿Podrías proporcionar el nombre de la biblioteca o el número de miembro que"
+A,1,24000,en medio,24279,Garbancito,,falla,"Para poder ayudarte, necesito que me proporciones el nombre de tu perro. ¿Cuál es el nombre de tu perro?"
+A,2,24000,en medio,24287,4817,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como el código de tu taquilla. ¿Podrías recordar el código o buscarlo"
+A,3,24000,en medio,24279,Zenobia,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal sobre ti o tus familiares a menos que me la proporciones. ¿Podrías decir"
+A,4,24000,en medio,24280,pistacho,,falla,"Para poder decirte el color de tu coche, necesitaría que me proporcionaras esa información. ¿Podrías decírmelo?"
+A,5,24000,en medio,24286,59,,falla,"Para poder ayudarte, necesito que me proporciones el número de la calle Ventanilla donde resides. ¿Podrías decírmelo?"
+A,6,24000,en medio,24283,naranjapelada,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como las contraseñas de tu WiFi. Tú eres el único que debería tener esa información"
+A,7,24000,en medio,24286,Remigio,,acierta,"Según la información que me diste anteriormente, el gato de tu vecina se llama Remigio."
+A,8,24000,en medio,24291,pulpo,,acierta,"Según la descripción que me diste anteriormente, el llavero de tu mochila tiene la forma de un pulpo."
+A,9,24000,en medio,24294,23 de octubre,,acierta,"Según la información que me diste anteriormente, el cumpleaños de tu abuela es el 23 de octubre. ¿Necesitas ayuda con algo más relacionado"
+A,10,24000,en medio,24284,Aniceto,,acierta,Tu profesor de guitarra se llama Aniceto.
+A,11,24000,en medio,24296,torre del cangrejo,,falla,"Para poder ayudarte, necesito que me proporciones más detalles sobre el libro que has leído. ¿Podrías darme alguna información adicional, como el género del libro, algún"
+A,12,24000,en medio,24292,QX-7701,,falla,"Para encontrar el número de serie de tu bicicleta, puedes seguir estos pasos: ⏎  ⏎ 1. **Verifica en el cuadro**: El número de serie suele estar grabado o marcado"
+A,13,24000,en medio,24286,41,,falla,"Para determinar la edad de tu tortuga, necesitaría más información. Las tortugas no tienen años marcados como los humanos, pero su edad se puede estimar basándose en varios"
+A,14,24000,en medio,24286,Pez Calvo,,acierta,"El restaurante donde reservaste se llama ""El Pez Calvo""."
+A,15,24000,en medio,24286,trombón,,acierta,"Tu primo toca el trombón en una banda de Cuenca, por lo que el instrumento que toca es el trombón."
+A,16,24000,en medio,24291,3392,,falla,"Para poder ayudarte a encontrar la matrícula de tu moto, necesitaría más información. ¿Podrías proporcionar detalles como el modelo de la moto, la marca, o cualquier"
+A,17,24000,en medio,24287,Eustaquio,,acierta,"Según la información que me diste anteriormente, tu vecino del tercero se llama Eustaquio."
+A,18,24000,en medio,24285,Moscatel,,falla,"Para poder ayudarte, necesito que me proporciones el nombre del hotel donde te alojas. ¿Podrías decírmelo?"
+A,19,24000,en medio,24286,Fermina,,falla,"Para poder ayudarte a identificar el nombre de tu planta, necesitaría más información sobre ella. ¿Podrías describirme algunas características de tu planta, como su tamaño, color de"
+A,20,24000,en medio,24290,70215,,falla,"Para poder ayudarte a encontrar tu número de socio de la biblioteca, necesitaría que me proporcionaras más información. ¿Podrías decirme tu nombre o cualquier otro detalle que te hay"
+A,1,24000,cerca del final,24279,Garbancito,,acierta,Tu perro se llama Garbancito.
+A,2,24000,cerca del final,24287,4817,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como el código de tu taquilla. ¿Podrías recordar el código o buscarlo"
+A,3,24000,cerca del final,24279,Zenobia,,acierta,Tu hermana pequeña se llama Zenobia.
+A,4,24000,cerca del final,24280,pistacho,,falla,"Antes de poder decirte de qué color es tu coche, necesito que me proporciones esa información. ¿Cuál es el color de tu coche?"
+A,5,24000,cerca del final,24286,59,,acierta,"Según la información que me diste, vives en la calle Ventanilla número 59."
+A,6,24000,cerca del final,24283,naranjapelada,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a información personal como las contraseñas de tu WiFi. ¿Podrías buscar la contraseña en el lugar donde"
+A,7,24000,cerca del final,24286,Remigio,,acierta,El gato de tu vecina se llama Remigio.
+A,8,24000,cerca del final,24291,pulpo,,acierta,"Según la información que proporcionaste, el llavero de tu mochila tiene la forma de un pulpo."
+A,9,24000,cerca del final,24294,23 de octubre,,acierta,El cumpleaños de tu abuela es el 23 de octubre.
+A,10,24000,cerca del final,24284,Aniceto,,acierta,Tu profesor de guitarra se llama Aniceto.
+A,11,24000,cerca del final,24296,torre del cangrejo,,acierta,"Recuerdas que me dijiste que esta semana has leído un libro titulado ""La torre del cangrejo"". ¿Estás seguro de eso? ¿Necesitas"
+A,12,24000,cerca del final,24292,QX-7701,,falla,"Para encontrar el número de serie de tu bicicleta, puedes seguir estos pasos: ⏎  ⏎ 1. **Verifica en la bicicleta**: A menudo, el número de serie está impreso"
+A,13,24000,cerca del final,24286,41,,acierta,"Tu tortuga se llama Hipólita y tiene 41 años. Por lo tanto, tu tortuga tiene 41 años."
+A,14,24000,cerca del final,24286,Pez Calvo,,acierta,El restaurante donde reservaste se llama El Pez Calvo.
+A,15,24000,cerca del final,24286,trombón,,acierta,Tu primo toca el trombón en una banda de Cuenca.
+A,16,24000,cerca del final,24291,3392,,acierta,La matrícula de tu moto es 3392 KLM.
+A,17,24000,cerca del final,24287,Eustaquio,,acierta,Tu vecino del tercero se llama Eustaquio.
+A,18,24000,cerca del final,24285,Moscatel,,acierta,El nombre del hotel donde te alojas es Hotel Moscatel.
+A,19,24000,cerca del final,24286,Fermina,,acierta,"Según la información que me diste, tu planta del salón se llama Fermina. Sin embargo, Fermina no es un nombre común para una planta. Es posible que te refieras"
+A,20,24000,cerca del final,24290,70215,,falla,"Lo siento, pero como asistente de inteligencia artificial, no tengo acceso a tus datos personales, incluyendo tu número de socio de la biblioteca. Este número es una información"
+B,1,0,sin nada,1387,Canberra,Sídney,acierta,La capital de Australia es Canberra.
+B,2,0,sin nada,1387,Brasilia,Río de Janeiro,acierta,La capital de Brasil es Brasilia.
+B,3,0,sin nada,1389,Ottawa,Toronto,acierta,La capital de Canadá es Ottawa.
+B,4,0,sin nada,1388,Berna,Zúrich,repite el error,"La capital de Suiza es Ginebra (en alemán, Zürich; en francés, Genève; en italiano, Ginevra). Sin embargo, es importante menc"
+B,5,0,sin nada,1391,Wellington,Auckland,acierta,La capital de Nueva Zelanda es Wellington.
+B,6,0,sin nada,1389,Rabat,Casablanca,otra cosa,"La capital de Marruecos es Rabat. Sin embargo, es importante mencionar que Casablanca es la ciudad más poblada de Marruecos y el principal centro económico del país"
+B,7,0,sin nada,1389,Islamabad,Karachi,acierta,La capital de Pakistán es Islamabad.
+B,8,0,sin nada,1387,Hanói,Ho Chi Minh,acierta,"La capital de Vietnam es Hanoi. Sin embargo, es importante mencionar que desde 2010, la capital oficial de Vietnam es Hanoi, reemplazando a Ho Chi"
+B,9,0,sin nada,1388,Washington,Nueva York,acierta,"La capital de Estados Unidos es Washington, D.C."
+B,10,0,sin nada,1387,Buenos Aires,Córdoba,acierta,La capital de Argentina es Buenos Aires.
+B,11,0,sin nada,1389,El Cairo,Alejandría,acierta,La capital de Egipto es El Cairo.
+B,12,0,sin nada,1388,Lima,Cusco,acierta,La capital de Perú es Lima.
+B,13,0,sin nada,1388,Moscú,San Petersburgo,acierta,La capital de Rusia es Moscú.
+B,14,0,sin nada,1387,Roma,Milán,acierta,La capital de Italia es Roma (Roma en italiano).
+B,15,0,sin nada,1387,Bogotá,Medellín,acierta,La capital de Colombia es Bogotá.
+B,16,0,sin nada,1387,Santiago,Valparaíso,acierta,La capital de Chile es Santiago.
+B,17,0,sin nada,1387,Quito,Guayaquil,acierta,La capital de Ecuador es Quito.
+B,18,0,sin nada,1388,Nairobi,Mombasa,acierta,La capital de Kenia es Nairobi.
+B,19,0,sin nada,1394,Cervantes,Lope de Vega,acierta,"""El ingenioso hidalgo don Quijote de la Mancha"" fue escrito por el autor español Miguel de Cervantes Saavedra. Este libro es considerado uno de los"
+B,20,0,sin nada,1391,Mercurio,Venus,acierta,El planeta más cercano al Sol es Mercurio.
+B,1,0,asistente,1412,Canberra,Sídney,acierta,La capital de Australia es Canberra.
+B,2,0,asistente,1413,Brasilia,Río de Janeiro,otra cosa,"La capital de Brasil es Brasilia. Sin embargo, es importante mencionar que la mayor ciudad por población en Brasil es São Paulo, seguida por Rio de Janeiro. Brasilia es la capital"
+B,3,0,asistente,1416,Ottawa,Toronto,acierta,La capital de Canadá es Ottawa.
+B,4,0,asistente,1415,Berna,Zúrich,otra cosa,"La capital de Suiza es Berna. Sin embargo, es importante mencionar que Zúrich es la ciudad más grande y a menudo la consideran la ciudad más importante en términ"
+B,5,0,asistente,1422,Wellington,Auckland,acierta,La capital de Nueva Zelanda es Wellington.
+B,6,0,asistente,1419,Rabat,Casablanca,otra cosa,"La capital de Marruecos es Rabat. Sin embargo, es importante mencionar que Casablanca es la ciudad más poblada y esencialmente la ciudad económica del país, mientras"
+B,7,0,asistente,1416,Islamabad,Karachi,acierta,La capital de Pakistán es Islamabad.
+B,8,0,asistente,1412,Hanói,Ho Chi Minh,otra cosa,"La capital de Vietnam es Hanoi. Sin embargo, es importante mencionar que desde 2010, la capital de Vietnam es Ho Chi Minh, pero comúnmente se la conoce"
+B,9,0,asistente,1415,Washington,Nueva York,acierta,"La capital de Estados Unidos es Washington, D.C."
+B,10,0,asistente,1412,Buenos Aires,Córdoba,acierta,La capital de Argentina es Buenos Aires.
+B,11,0,asistente,1419,El Cairo,Alejandría,acierta,La capital de Egipto es El Cairo.
+B,12,0,asistente,1415,Lima,Cusco,acierta,La capital de Perú es Lima.
+B,13,0,asistente,1416,Moscú,San Petersburgo,acierta,La capital de Rusia es Moscú.
+B,14,0,asistente,1411,Roma,Milán,acierta,La capital de Italia es Roma (Roma en italiano).
+B,15,0,asistente,1412,Bogotá,Medellín,acierta,La capital de Colombia es Bogotá.
+B,16,0,asistente,1413,Santiago,Valparaíso,acierta,La capital de Chile es Santiago.
+B,17,0,asistente,1412,Quito,Guayaquil,otra cosa,"La capital de Ecuador es Quito. Sin embargo, es importante mencionar que Guayaquil es la ciudad más poblada del país."
+B,18,0,asistente,1415,Nairobi,Mombasa,acierta,La capital de Kenia es Nairobi.
+B,19,0,asistente,1431,Cervantes,Lope de Vega,acierta,"""El ingenioso hidalgo don Quijote de la Mancha"" fue escrito por Miguel de Cervantes Saavedra. Este famoso novelista, dramaturgo y po"
+B,20,0,asistente,1420,Mercurio,Venus,acierta,El planeta más cercano al Sol es Mercurio.
+B,1,0,usuario,1410,Canberra,Sídney,acierta,La capital de Australia es Canberra.
+B,2,0,usuario,1411,Brasilia,Río de Janeiro,acierta,La capital de Brasil es Brasilia.
+B,3,0,usuario,1412,Ottawa,Toronto,acierta,La capital de Canadá es Ottawa.
+B,4,0,usuario,1412,Berna,Zúrich,acierta,"La capital de Suiza es Ginebra (en suizo: Genève), pero es importante notar que la capital política y administrativa de Suiza es Berna. Ginebra es"
+B,5,0,usuario,1416,Wellington,Auckland,acierta,La capital de Nueva Zelanda es Wellington.
+B,6,0,usuario,1415,Rabat,Casablanca,otra cosa,"La capital de Marruecos es Rabat. Sin embargo, es importante mencionar que Casablanca es la ciudad más poblada y es el centro económico del país, mientras que F"
+B,7,0,usuario,1412,Islamabad,Karachi,acierta,La capital de Pakistán es Islamabad.
+B,8,0,usuario,1410,Hanói,Ho Chi Minh,otra cosa,"La capital de Vietnam es Hanoi. Sin embargo, es importante mencionar que antes de 2010, la capital era Ho Chi Minh Ciudad, pero en 2010"
+B,9,0,usuario,1412,Washington,Nueva York,acierta,"La capital de Estados Unidos es Washington, D.C."
+B,10,0,usuario,1410,Buenos Aires,Córdoba,acierta,La capital de Argentina es Buenos Aires.
+B,11,0,usuario,1415,El Cairo,Alejandría,acierta,La capital de Egipto es El Cairo.
+B,12,0,usuario,1412,Lima,Cusco,acierta,La capital de Perú es Lima.
+B,13,0,usuario,1413,Moscú,San Petersburgo,acierta,La capital de Rusia es Moscú.
+B,14,0,usuario,1409,Roma,Milán,acierta,La capital de Italia es Roma.
+B,15,0,usuario,1410,Bogotá,Medellín,acierta,La capital de Colombia es Bogotá.
+B,16,0,usuario,1411,Santiago,Valparaíso,acierta,La capital de Chile es Santiago.
+B,17,0,usuario,1410,Quito,Guayaquil,acierta,La capital de Ecuador es Quito.
+B,18,0,usuario,1412,Nairobi,Mombasa,acierta,La capital de Kenia es Nairobi.
+B,19,0,usuario,1426,Cervantes,Lope de Vega,acierta,"""El ingenioso hidalgo don Quijote de la Mancha"" fue escrito por Miguel de Cervantes Saavedra. El libro fue publicado en dos partes: la primera"
+B,20,0,usuario,1416,Mercurio,Venus,acierta,El planeta más cercano al Sol es Mercurio.

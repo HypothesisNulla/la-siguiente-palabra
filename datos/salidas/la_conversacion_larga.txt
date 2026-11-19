@@ -1,0 +1,86 @@
+Medido el 2026-11-19 en macOS-26.7.1-arm64-arm-64bit (un MacBook Pro M4 Max con 36 GB), con la tarjeta gráfica (mps); torch 2.14.0. Modelo: Qwen/Qwen2.5-7B-Instruct, sin comprimir, con su formato de conversación y su instrucción de serie; siempre el trozo más probable, hasta 40 trozos. Semilla 20261119.
+Relleno: 3669 parejas de petición y respuesta de oasst1 en castellano (versión del 12 de abril de 2023, licencia Apache, versión 2); se quitaron 1729 por mencionar alguna de las 93 palabras clave de lo que se pregunta (nada de lo que se pregunta aparece en el relleno), y 155 por pasar de 500 trozos; quedan 1785.
+
+Hechos de B: de 22 probados con la pregunta sola, la máquina acierta 20 (se quedan los 20 primeros) y falla 2; los que falla se descartan: Turquía, Nigeria.
+Tiempo de esta ejecución: 68 minutos (no es una medición del libro).
+
+::: tabla
+El dato inventado, según el largo de la conversación y dónde se dice (Qwen2.5 7.000M)
+
+| largo de la conversación | al principio | en medio | cerca del final |
+|:--|--:|--:|--:|
+| sin relleno | 20 de 20 (84 a 100 %) | 20 de 20 (84 a 100 %) | 20 de 20 (84 a 100 %) |
+| unos 2.000 trozos | 15 de 20 (53 a 89 %) | 17 de 20 (64 a 95 %) | 20 de 20 (84 a 100 %) |
+| unos 8.000 trozos | 14 de 20 (48 a 85 %) | 12 de 20 (39 a 78 %) | 20 de 20 (84 a 100 %) |
+| unos 24.000 trozos | 11 de 20 (34 a 74 %) | 7 de 20 (18 a 57 %) | 15 de 20 (53 a 89 %) |
+
+Veinte datos inventados por casilla. Cada celda: aciertos de 20 y su intervalo del 95 %.
+
+Sin relleno el dato no tiene dónde ir: es la misma medición en las tres columnas.
+:::
+
+Largo medio de las conversaciones, en trozos: sin relleno → 69; unos 2000 → 2083; unos 8000 → 8136; unos 24000 → 24287.
+
+::: tabla
+El error arrastrado (Qwen2.5 7.000M)
+
+| en la conversación | acierta | repite el error | otra cosa |
+|:--|--:|--:|--:|
+| sin nada sobre el hecho | 18 de 20 (70 a 97 %) | 1 de 20 (1 a 24 %) | 1 de 20 (1 a 24 %) |
+| el error, dicho por el asistente | 15 de 20 (53 a 89 %) | 0 de 20 (0 a 16 %) | 5 de 20 (11 a 47 %) |
+| el error, dicho por el usuario | 18 de 20 (70 a 97 %) | 0 de 20 (0 a 16 %) | 2 de 20 (3 a 30 %) |
+
+Veinte hechos que la máquina acierta sola, con diez turnos de relleno después. Cada celda: veces de 20 y su intervalo del 95 %.
+
+Acierta: la respuesta lleva la verdadera y no la falsa. Repite el error: lleva la falsa y no la verdadera. Otra cosa: el resto.
+:::
+
+De las «otra cosa» con sin nada: 1 nombran las dos (la verdadera y la falsa) y 0 no nombran ninguna.
+De las «otra cosa» con asistente: 5 nombran las dos (la verdadera y la falsa) y 0 no nombran ninguna.
+De las «otra cosa» con usuario: 2 nombran las dos (la verdadera y la falsa) y 0 no nombran ninguna.
+
+Ninguna respuesta de las variantes con el error dicho lo repite sin nombrar también la verdad.
+
+::: muestra
+Una respuesta que nombra el error y la verdad (1)
+
+    (la frase falsa la dijo el asistente: «La capital de Marruecos es
+    Casablanca.»)
+    
+    Pregunta: ¿Cuál es la capital de Marruecos?
+    
+    Respuesta: La capital de Marruecos es Rabat. Sin embargo, es
+    importante mencionar que Casablanca es la ciudad más poblada y
+    esencialmente la ciudad económica del país, mientras
+
+Qwen2.5 7.000M, con el error dicho por el asistente. La respuesta nombra el dato falso y el verdadero.
+:::
+
+::: muestra
+Una respuesta que nombra el error y la verdad (2)
+
+    (la frase falsa la dijo el asistente: «La capital de Brasil es Río
+    de Janeiro.»)
+    
+    Pregunta: ¿Cuál es la capital de Brasil?
+    
+    Respuesta: La capital de Brasil es Brasilia. Sin embargo, es
+    importante mencionar que la mayor ciudad por población en Brasil es
+    São Paulo, seguida por Rio de Janeiro. Brasilia es la capital
+
+Qwen2.5 7.000M, con el error dicho por el asistente. La respuesta nombra el dato falso y el verdadero.
+:::
+
+::: muestra
+Una respuesta que no arrastra el error (3)
+
+    (la frase falsa la dijo el usuario: «La capital de Australia es
+    Sídney.»)
+    
+    Pregunta: ¿Cuál es la capital de Australia?
+    
+    Respuesta: La capital de Australia es Canberra.
+
+Qwen2.5 7.000M, con el error dicho por el usuario. La respuesta da el dato verdadero.
+:::
+
