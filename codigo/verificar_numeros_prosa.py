@@ -104,6 +104,11 @@ EXENCIONES (Orden 137.2: «nada de exenciones genéricas»). Solo de la lista `c
     en vez de en las salidas («fracción: 90,1 / 100; fuente: notas/fuentes/…»).
     Orden 157: también valen «una de cada cuatro», «una de cada cinco», «una vez de cada cinco», «cuatro de cada diez», «nueve de cada
     diez» y, como razones, «seis veces» y «tres veces y media» (para «más de seis veces más»: `fracción: 151.665 / 22.944`).
+  - Orden 177: «redondeo: de 6737» también vale para un número que acaba en ceros (6700, 4800) cuando el párrafo dice que
+    está redondeando («redonde…»): el exacto, que sale en las salidas, redondeado a la escala de esos ceros, da el número.
+  - Orden 177: «trozo de cifra: de 32.472.340»: el número de la prosa («324», «340», «44») es un trozo de las cifras de un
+    valor que SÍ sale en las salidas del capítulo: sus dígitos van seguidos dentro de los de ese valor. Y una cifra con
+    comas del inglés («32,444,340», con dos comas o más) sale de las salidas como el número entero que es.
   - «suma a la vista: 5 + 1 + 7»: el número es una cuenta hecha delante del lector con números que están en el
     mismo párrafo. Los sumandos, escritos en la exención, tienen que salir en el párrafo (con cifra o con
     letra, del uno al nueve) y sumar el número exento (Orden 140.2).
@@ -122,7 +127,7 @@ FICHERO_EXENTAS = "cifras-exentas.md"
 
 MIN_FRAGMENTO = 12                      # caracteres del trozo de frase de una exención
 MOTIVOS = ("año", "fecha", "referencia", "inventado", "fuente", "redondeo", "suma a la vista", "cálculo", "ejemplo", "fracción",
-           "fuente-no-libre")
+           "fuente-no-libre", "trozo de cifra")
 DECLARA_INVENTADO = ("inventad", "imagina", "supón", "ficticio")
 REFERENCIAS = {"capítulo", "capítulos", "cap.", "caps.", "figura", "figuras", "tabla", "tablas", "página", "páginas",
                "pág.", "págs.", "apartado", "regla", "anexo", "nota", "paso", "punto", "línea"}
@@ -310,6 +315,9 @@ def valores_de_salidas(textos):
                 vistos.add(v * 100)
             elif v > 1 and v <= 100:
                 vistos.add(v / 100)
+        # Orden 177: «32,444,340», con las comas del inglés (dos o más): es el entero 32444340, no un decimal
+        for m in re.finditer(r"(?<![\w.,])\d{1,3}(?:,\d{3}){2,}(?![\w]|,\d)", t):
+            vistos.add(Decimal(m.group().replace(",", "")))
     return vistos
 
 
@@ -491,6 +499,9 @@ def leer_exenciones(raiz):
             continue
         if base == "redondeo" and not re.search(r"redondeo:\s*de\s+\d[\d.]*(?:,\d+)?", motivo):
             errores.append(f"exención de redondeo sin «redondeo: de 79,40 %» (el valor exacto): {l}")
+            continue
+        if base == "trozo de cifra" and not re.search(r"trozo de cifra:\s*de\s+\d[\d.]*", motivo):
+            errores.append(f"exención de trozo de cifra sin «trozo de cifra: de 32.472.340» (el valor entero): {l}")
             continue
         if base == "fracción" and not re.search(r"fracción:\s*\d[\d.]*(?:,\d+)?\s*/\s*\d", motivo):
             errores.append(f"exención de fracción sin «fracción: 32 / 45» (los dos números del cociente): {l}")
@@ -735,12 +746,24 @@ def exencion_no_vale(e, h, parrafo, valores, raiz=".", cap=None, apartado=""):
         exacto, dec = valor_de(re.search(r"redondeo:\s*de\s+(\d[\d.]*(?:,\d+)?)", motivo).group(1))
         if exacto not in valores:
             return f"el valor exacto {exacto} no está en las salidas guardadas del capítulo"
-        if exacto.quantize(Decimal(1).scaleb(-h["dec"]), rounding=ROUND_HALF_UP) != h["valor"]:
+        ceros = cuantos_ceros(h["valor"]) if h["dec"] == 0 and h["valor"] == h["valor"].to_integral_value() else 0
+        a_los_ceros = (ceros >= 2 and "redonde" in parrafo.lower() and h["forma"] == "cifra"
+                       and (exacto / Decimal(10) ** ceros).quantize(Decimal(1), rounding=ROUND_HALF_UP)
+                       * Decimal(10) ** ceros == h["valor"])           # Orden 177: «redondeando… 6700» de 6737
+        if a_los_ceros:
+            pass
+        elif exacto.quantize(Decimal(1).scaleb(-h["dec"]), rounding=ROUND_HALF_UP) != h["valor"]:
             # Orden 148: un número escrito con la palabra de su escala («quince millones») es el redondeo del exacto a
             # esa escala (15.048.831 → 15.000.000), no a los decimales
             porque = redondeo_a_la_escala(h["texto"], h["valor"], h["marca"], exacto)
             if porque:
                 return porque or f"{exacto} redondeado a {h['dec']} decimales no da {h['valor']}"
+    if base == "trozo de cifra":
+        entero, _ = valor_de(re.search(r"trozo de cifra:\s*de\s+(\d[\d.]*)", motivo).group(1))
+        if entero not in valores:
+            return f"el valor {entero} no está en las salidas guardadas del capítulo"
+        if re.sub(r"\D", "", h["texto"]) not in str(int(entero)):
+            return f"«{h['texto']}» no es un trozo seguido de las cifras de {entero}"
     if base == "suma a la vista":
         sumandos = [int(x) for x in re.findall(r"\d+", re.search(r"suma a la vista:([^;]*)", motivo).group(1))]
         if sum(sumandos) != h["valor"]:
@@ -1202,6 +1225,46 @@ def _selftest():
         print(f"                      fuera de margen: sin aceptar, fallos {len(e8) > 0}; aceptada, fallos {len(e9)} (esperado True y 0)")
         if not any("0,5 %" in x for x in e8) or e9:
             fallos.append(f"invariante: una aproximación fuera de margen debía fallar y, aceptada, pasar; salió {e8} y {e9}")
+    # Orden 177: las comas del inglés, el redondeo a los ceros y el trozo de cifra
+    cap177 = ("# Cap\n\nEscribió 32.444.340 y el exacto era 32.472.340. Las tres primeras cifras, «324», son las buenas. "
+              "Redondeando, como a ojo, 6700 por 4800 son algo más de 32 millones.\n")
+    with tempfile.TemporaryDirectory() as d10:
+        raiz10, sal10 = _libro_de_mentira(
+            d10, cap177, "El producto es 32,444,340 y el exacto 32.472.340; son 6737 y 4820; sobre 10\n")
+        ruta10 = raiz10 / "notas" / "reforma-nov" / FICHERO_EXENTAS
+        buenas177 = ("- cap01 | 324 | Las tres primeras cifras, | trozo de cifra: de 32.472.340\n"
+                     "- cap01 | 6700 | Redondeando, como a ojo, 6700 por | redondeo: de 6737\n"
+                     "- cap01 | 4800 | Redondeando, como a ojo, 6700 por 4800 | redondeo: de 4820\n")
+        ruta10.write_text("# x\n\n" + buenas177, encoding="utf-8")
+        _, e10 = correr(raiz10, sal10, [1], estricto=True)
+        print(f"                      comas del inglés, redondeo a los ceros y trozo de cifra, bien escritos: fallos {len(e10)} (esperado 0)")
+        if e10:
+            fallos.append(f"invariante: las exenciones de la Orden 177 debían valer; salió {e10}")
+        malas177 = {
+            "un trozo que no va seguido en las cifras": (buenas177.replace("| trozo de cifra: de 32.472.340", "| trozo de cifra: de 32.444.340").replace("| 324 |", "| 342 |"), "no"),
+            "un trozo de un valor que no sale en las salidas": (buenas177.replace("de 32.472.340", "de 99.472.340"), "no está en las salidas"),
+            "redondeo a los ceros que da otro número": (buenas177.replace("redondeo: de 6737", "redondeo: de 6637"), "no"),
+        }
+        rotas10 = []
+        for nombre, (lineas, quiero) in malas177.items():
+            ruta10.write_text("# x\n\n" + lineas, encoding="utf-8")
+            _, e = correr(raiz10, sal10, [1], estricto=True)
+            if not e:
+                rotas10.append((nombre, e))
+    # y el redondeo a los ceros solo vale si el párrafo dice que está redondeando
+    with tempfile.TemporaryDirectory() as d11:
+        raiz11, sal11 = _libro_de_mentira(
+            d11, cap177.replace("Redondeando, como a ojo,", "Como a ojo,"),
+            "El producto es 32,444,340 y el exacto 32.472.340; son 6737 y 4820; sobre 10\n")
+        ruta11 = raiz11 / "notas" / "reforma-nov" / FICHERO_EXENTAS
+        ruta11.write_text("# x\n\n" + buenas177.replace("Redondeando, como a ojo, ", "Como a ojo, "), encoding="utf-8")
+        _, e11 = correr(raiz11, sal11, [1], estricto=True)
+        if not e11:
+            rotas10.append(("redondear sin decir que se redondea", e11))
+    if True:
+        print(f"                      cuatro malas de la Orden 177: sin rechazar {len(rotas10)} (esperado 0)")
+        if rotas10:
+            fallos.append(f"invariante: estas de la Orden 177 debían rechazarse: {rotas10}")
     print()
     if fallos:
         for f in fallos:

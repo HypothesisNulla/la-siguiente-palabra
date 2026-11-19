@@ -390,8 +390,18 @@ def selftest():
         ("vuelve", "6.6989", False), ("orden", "Bash", {"command": "echo otra"}),
         ("vuelve", "otra", False)], esta))
     bloques = bloques_muestra(tres, esta, "3 vueltas, 0 órdenes con error", True)
-    partido_bien = (len(bloques) == 2 and bloques[0][0] == "La primera vuelta: mirar la carpeta"
-                    and bloques[1][0] == "La segunda vuelta y la respuesta"
+    # Orden 177: además de esos dos, las dos recortadas del cuerpo del capítulo: la instrucción con la primera orden
+    # (sin la línea de la descripción) y solo la respuesta final, con la cuenta en letra.
+    recortadas_bien = (len(bloques) == 4 and bloques[2][0] == "La instrucción y la primera orden"
+                       and bloques[3][0] == "La respuesta, después de la segunda vuelta"
+                       and bloques[2][1][-2:] == ["Da esta orden (herramienta Bash):", "ls -la && head -50 *"]
+                       and not any("Descripción" in l for l in bloques[2][1])
+                       and not any(l.startswith("Escribe el asistente") for l in bloques[3][1])
+                       and bloques[3][2] == ["Tal cual. En total, tres vueltas, ninguna orden con error; acierta."]
+                       and en_letras_f(1, "vuelta", "vueltas") == "una vuelta"
+                       and en_letras_f(2, "orden con error", "órdenes con error") == "dos órdenes con error")
+    partido_bien = (len(bloques) == 4 and bloques[0][0] == "La primera vuelta: mirar la carpeta"
+                    and bloques[1][0] == "La segunda vuelta y la respuesta" and recortadas_bien
                     and not any("echo 6.6989" in l for l in bloques[0][1])
                     and "Ahora calculo." in " ".join(bloques[1][1])
                     and bloques[1][1][0] == "Escribe el asistente:"
@@ -415,7 +425,8 @@ def selftest():
           f"repositorio, sin CLAUDE.md y con solo los ocho CSV: {carpeta_bien}; recorte que lo "
           f"dice: {recorte_bien}; en la muestra del libro no sale el nombre de usuario ni el grupo y "
           f"el recorte lo dice: {sin_usuario}; las columnas quitadas son solo esas dos: {solo_dos}; "
-          f"la muestra en dos bloques, cada uno de menos de {MAX_LINEAS_BLOQUE} líneas: "
+          f"la muestra en dos bloques (y las dos recortadas del cuerpo del capítulo), cada uno de menos de "
+          f"{MAX_LINEAS_BLOQUE} líneas: "
           f"{partido_bien}; marcas de salida ajena alrededor de los bloques y de nada más: "
           f"{marcas_bien}: {'bien' if p3 else 'MAL'}")
 
@@ -469,6 +480,15 @@ def muestra_de(leido, desde=0, hasta=None, con_instruccion=True):
     return lineas
 
 
+def en_letras_f(n, uno, varios):
+    """«ninguna orden con error», «una vuelta», «dos vueltas»: un número pequeño en letra, en femenino
+    (vuelta y orden lo son), seguido de su nombre en singular o plural."""
+    letras = {0: "ninguna", 1: "una", 2: "dos", 3: "tres", 4: "cuatro", 5: "cinco", 6: "seis", 7: "siete",
+              8: "ocho", 9: "nueve", 10: "diez"}
+    assert n in letras, f"el programa solo sabe decir hasta diez en letra; son {n}"
+    return f"{letras[n]} {uno if n <= 1 else varios}"        # «ninguna orden», «una orden», «dos órdenes»
+
+
 def bloques_muestra(leido, final, cuenta, gana):
     """La muestra del libro en DOS bloques (Orden 118; uno solo de 61 líneas no cabe en una página,
     verificar_anchos.py): la primera vuelta (la instrucción, la primera orden y lo que le vuelve) y
@@ -489,6 +509,21 @@ def bloques_muestra(leido, final, cuenta, gana):
         corte -= 1
     primera = muestra_de(leido, 0, corte)
     segunda = muestra_de(leido, corte, None, con_instruccion=False) + cola
+    # Orden 177: las dos muestras recortadas que el cuerpo del capítulo 14 enseña (las dos enteras, de arriba,
+    # pasan al Anexo A14): la instrucción con la primera orden, sin la línea de la descripción, y solo la
+    # respuesta final del asistente.
+    orden1 = leido["pasos"][ordenes[0]]
+    recortada1 = (lineas_de(f"Instrucción: {instruccion()}") + [""]
+                  + [l for t in ([f"Da esta orden (herramienta {orden1[2]}):"]
+                                 + recortar(orden1[3].get("command", ""), LIMITE_ORDEN).split("\n"))
+                     for l in lineas_de(t)])
+    recortada2 = lineas_de(recortar(final or "(ninguna)", LIMITE_TEXTO))
+    en_letras = (f"{en_letras_f(leido['vueltas'], 'vuelta', 'vueltas')}, "
+                 f"{en_letras_f(leido['errores'], 'orden con error', 'órdenes con error')}")
+    cuerpo = [("La instrucción y la primera orden", recortada1,
+               ["La sesión entera, con lo que le vuelve a cada orden, está en el Anexo A14."]),
+              ("La respuesta, después de la segunda vuelta", recortada2,
+               [f"Tal cual. En total, {en_letras}; {'acierta' if gana else 'no acierta'}."])]
     return [("La primera vuelta: mirar la carpeta", primera,
              ["Cada paso es lo que escribe el asistente, la orden que da con una herramienta (la "
               "terminal) y lo que esa herramienta le devuelve.",
@@ -496,7 +531,7 @@ def bloques_muestra(leido, final, cuenta, gana):
               "le han quitado las columnas del propietario y del grupo, y el principio de uno de "
               "ellos; se dice cuánto falta."]),
             ("La segunda vuelta y la respuesta", segunda,
-             ["Las órdenes, lo que vuelve y la respuesta están tal cual.", veredicto])]
+             ["Las órdenes, lo que vuelve y la respuesta están tal cual.", veredicto])] + cuerpo
 
 
 def lanzar(carpeta):

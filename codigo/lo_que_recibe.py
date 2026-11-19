@@ -29,6 +29,9 @@ CSV = "../datos/salidas/ordenes_escritas.csv"
 TITULO_VUELTA = "Una vuelta entera: la orden, lo que hace el programa y la respuesta"
 A, B, PRODUCTO = 6396, 7576, 48456096
 MAX_RENGLONES = 40          # lo que cabe de una muestra en una página (formato.py)
+TITULO_FINAL = "Lo que recibe la máquina, con la frase colada (el final)"
+NOTA_FINAL = ("Las marcas son las del formato de conversación del capítulo 12. Lo que devuelve la calculadora "
+              "entra en el turno «user», el de la persona, entre dos marcas de respuesta de herramienta.")
 
 # ==========================================================
 
@@ -72,6 +75,12 @@ def troceador():
     return AutoTokenizer.from_pretrained(MODELO_GRANDE[1])
 
 
+def el_final(lineas):
+    """Los renglones desde el último turno «user» hasta el final."""
+    desde = max(i for i, l in enumerate(lineas) if l.startswith("<|im_start|>user"))
+    return lineas[desde:]
+
+
 def selftest():
     ok = True
     tok = troceador()
@@ -91,7 +100,13 @@ def selftest():
     p2 = (texto.count(orden) == 1 and texto.count(FRASE_COLADA) == 1
           and r_ini < texto.find(str(PRODUCTO)) < texto.find(FRASE_COLADA) < r_fin)
     ok &= p2
-    print(f"[2] señal implantada  orden, producto y frase, en su sitio: {'bien' if p2 else 'MAL'}")
+    # Orden 177: el final que enseña el cuerpo del capítulo son seis renglones, desde el último «user»
+    final = el_final(renglones(texto.rstrip("\n")))
+    p2 &= (len(final) == 6 and final[0] == "<|im_start|>user" and final[1] == "<tool_response>"
+           and final[-1] == "<|im_start|>assistant" and FRASE_COLADA in final[3])
+    ok &= p2
+    print(f"[2] señal implantada  orden, producto y frase, en su sitio; el final son seis renglones desde el "
+          f"último «user»: {'bien' if p2 else 'MAL'}")
     # [3] invariante: el texto de la primera vuelta es el principio del de la segunda (a la
     #     máquina no se le cambia nada de lo que ya tenía delante; solo se le añade), y lo que
     #     devuelve la calculadora entra con la misma marca que la pregunta, «user»
@@ -145,6 +160,10 @@ def main():
     for titulo, parte in zip(titulos, partes):
         print("\n".join(muestra_editorial(titulo, parte, [nota])))
         print()
+    # Orden 177: el cuerpo del capítulo 14 enseña solo el final (la muestra entera pasa al Anexo A14): desde el
+    # último turno «user», el que lleva lo que devolvió la calculadora, hasta donde empieza a escribir la máquina.
+    print("\n".join(muestra_editorial(TITULO_FINAL, el_final(lineas), [NOTA_FINAL])))
+    print()
 
 
 if __name__ == "__main__":

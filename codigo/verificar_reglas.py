@@ -17,6 +17,12 @@ PROHIBIDAS = ["softmax","vector","matriz","matrices","gradiente","token","embedd
     "producto escalar","funcion de perdida","backprop","tensor","capa oculta",
     "n-grama","bigrama","trigrama"]
 GRIEGO = re.compile(r'[Ͱ-Ͽ]')
+# Orden 179 (19 nov 2026, «Sí, pero mantenemos el nombre original π0», Carlos): «π0» es el nombre propio de un modelo
+# (el de Physical Intelligence) y el libro lo escribe tal cual. La excepción tiene tres límites: vale SOLO para el nombre
+# «π0» entero (ni «π» suelta, ni «π01», ni otra letra griega), SOLO en los ficheros de esta lista (donde aparece como
+# nombre) y NADA MÁS: el resto de la línea se vigila igual. Cuando se reescriba el cap. 16 (que dice «pi cero») y
+# aparezca en otro fichero, se añade aquí a mano.
+NOMBRES_PROPIOS = {'π0': ('anexo-a14-la-siguiente-palabra-con-manos.md',)}
 MATE   = re.compile(r'[=∑∏√∫±×·⋅≈≤≥^]|\b\d+\s*[*/]\s*\d+')
 CODIGO = re.compile(r'^\s*(```|import |def |>>> )')
 # Envoltorio de imprenta para los trozos que la fuente del libro no dibuja (chino, tailandés,
@@ -71,9 +77,23 @@ def puentes_de(ruta):
     return anclas
 
 
-def revisar(lineas, es_el_mapa=False, anclas=()):
+def nombres_de(ruta):
+    """Los nombres propios con letra griega que este fichero puede llevar (NOMBRES_PROPIOS)."""
+    nombre = os.path.basename(ruta)
+    return tuple(n for n, ficheros in NOMBRES_PROPIOS.items() if nombre in ficheros)
+
+
+def sin_nombres_propios(l, nombres):
+    """La línea sin esos nombres propios, enteros y sueltos: «π0» sí, «π01», «ππ0» o «π» no."""
+    for n in nombres:
+        l = re.sub(r'(?<![\wͰ-Ͽ])' + re.escape(n) + r'(?![\w])', 'NOMBRE', l)
+    return l
+
+
+def revisar(lineas, es_el_mapa=False, anclas=(), nombres=()):
     """Devuelve la lista de incidencias: (número de línea, clase, término, trozo).
-    `anclas`: las frases de los puentes de este fichero (puentes_de)."""
+    `anclas`: las frases de los puentes de este fichero (puentes_de). `nombres`: los nombres propios con letra
+    griega que este fichero puede llevar (nombres_de)."""
     fallos = []
     en_muestra = False
     en_bloque = False        # dentro de un «::: tabla» o un «::: muestra», título y notas incluidos
@@ -100,7 +120,7 @@ def revisar(lineas, es_el_mapa=False, anclas=()):
                     if p in LIBRES_EN_UN_PUENTE and (en_bloque or any(a in l for a in anclas)):
                         continue
                     fallos.append((i, 'jerga', p, l.strip()[:70]))
-        if GRIEGO.search(l): fallos.append((i, 'griego', '', l.strip()[:70]))
+        if GRIEGO.search(sin_nombres_propios(l, nombres)): fallos.append((i, 'griego', '', l.strip()[:70]))
         if MATE.search(l):   fallos.append((i, 'notacion', '', l.strip()[:70]))
         if CODIGO.match(l):  fallos.append((i, 'codigo', '', l.strip()[:70]))
     return fallos
@@ -172,15 +192,26 @@ def selftest():
     en_bloque = not revisar(en_tabla) and not revisar(["::: muestra", "    token", ":::"])
     mezclado = clases(revisar([puente + " Y un vector."], anclas=[ancla])) == ['jerga']
     puentes_ok = en_su_puente and sin_puente and en_prosa and en_bloque and mezclado
+    # Orden 179: «π0», el nombre propio, solo entero, solo en su fichero y sin dejar pasar nada más.
+    nombre_ok = not revisar(["Es π0, de Physical Intelligence, octubre de 2024."], nombres=('π0',))
+    nombre_en_otro = clases(revisar(["Es π0, de Physical Intelligence."], nombres=nombres_de("cap14.md"))) == ['griego']
+    nombre_en_su_fichero = not revisar(["Es π0, de Physical Intelligence."],
+                                        nombres=nombres_de("anexo-a14-la-siguiente-palabra-con-manos.md"))
+    pi_suelta = clases(revisar(["Aquí π0, y aquí π suelta."], nombres=('π0',))) == ['griego']
+    otras = (clases(revisar(["Es π01, de otra empresa."], nombres=('π0',))) == ['griego']
+             and clases(revisar(["Es π0 y también α."], nombres=('π0',))) == ['griego']
+             and clases(revisar(["Es π0 y también π0 × 3."], nombres=('π0',))) == ['notacion'])
+    nombre_bien = nombre_ok and nombre_en_otro and nombre_en_su_fichero and pi_suelta and otras
     print(f"[3] invariante        en el mapa queda {clases(en_el_mapa)} "
           f"({'bien: solo la notación' if solo_notacion else 'MAL'}); "
           f"envoltorio de imprenta: {len(envuelto)} incidencias; texto de máquina en una muestra "
           f"exento, y fuera de ella o en su título, no: {exenta}; «token» libre en su puente y en "
-          f"una tabla o muestra, y no en la prosa: {puentes_ok}")
-    if not solo_notacion or envuelto or not exenta or not puentes_ok:
+          f"una tabla o muestra, y no en la prosa: {puentes_ok}; «π0» entero y solo en su fichero (ni «π» suelta, "
+          f"ni «π01», ni otra letra griega, ni nada más de la línea): {nombre_bien}")
+    if not solo_notacion or envuelto or not exenta or not puentes_ok or not nombre_bien:
         fallos.append("invariante: el mapa levanta solo la jerga, el envoltorio no es notación, "
                       "solo el texto de máquina de una muestra está exento y «token» solo se "
-                      "libra en su puente y en tablas y muestras")
+                      "libra en su puente y en tablas y muestras; «π0» se libra solo entero y en su fichero")
 
     print()
     if fallos:
@@ -208,7 +239,7 @@ ES_EL_MAPA = 'mapa-de-los-sotanos' in path
 if ES_EL_MAPA:
     print("NOTA: es el mapa de los sótanos; se permite la jerga y NO se permite nada más.")
 
-fallos = revisar(lineas, ES_EL_MAPA, puentes_de(path))
+fallos = revisar(lineas, ES_EL_MAPA, puentes_de(path), nombres_de(path))
 if fallos:
     for f in fallos:
         print(f"  linea {f[0]:>4}  {f[1]:<9} {f[2]:<16} {f[3]}")

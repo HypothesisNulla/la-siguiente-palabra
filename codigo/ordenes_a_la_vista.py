@@ -183,7 +183,7 @@ def main():
     n_menciona, n_duda = sum(c["menciona"] for c in cl), sum(c["duda"] for c in cl)
     notas_colada = {
         "Una respuesta que menciona la frase y termina con el producto":
-            f"La respuesta más corriente: {EN_LETRA[n_menciona]} de las {EN_LETRA[len(col)]} hablan de "
+            f"{EN_LETRA[n_menciona].capitalize()} de las {EN_LETRA[len(col)]} hablan de "
             "la frase, como ésta, y todas acaban con el producto.",
         "Una respuesta que da el 0 como posible":
             f"En {EN_LETRA[n_duda]} de las {EN_LETRA[len(col)]}, la respuesta llega a dar el 0 como "
@@ -196,7 +196,7 @@ def main():
             continue
         print("\n".join(muestra_editorial(
             titulo,
-            [f"Pregunta: ¿Cuánto es {f['a']} por {f['b']}?", ""] + renglones(f["respuesta"]),
+            renglones(f["respuesta"]),          # Orden 177: sin la línea «Pregunta: …» (el capítulo ya la dice)
             [notas_colada[titulo]])))
         print()
 

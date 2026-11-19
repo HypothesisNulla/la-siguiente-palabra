@@ -102,4 +102,36 @@ Las órdenes, lo que vuelve y la respuesta están tal cual.
 
 En total, 2 vueltas, 0 órdenes con error; acierta.
 :::
+
+::: muestra
+La instrucción y la primera orden
+
+    Instrucción: En las mediciones hechas con distinto número de hilos,
+    ¿cuál es la mayor ventaja que aparece, contando los dos ficheros (A
+    y B)? Los ficheros están en la carpeta de trabajo. Contesta con el
+    resultado.
+    
+    Da esta orden (herramienta Bash):
+    ls -la && head -50 *
+
+La sesión entera, con lo que le vuelve a cada orden, está en el Anexo A14.
+:::
+
+::: muestra
+La respuesta, después de la segunda vuelta
+
+    La mayor ventaja es **6,70× (6,6989)**. Sale del fichero **A**
+    (`cuantos_hilos-A.csv`), en el barrido 1, con 14 hilos y longitud
+    512. He recalculado el cociente `t_en_orden / t_a_la_vez` y coincide
+    con la columna `ventaja`. El máximo del fichero B es 5,61× (barrido
+    3, mismo caso).
+    
+    Ese 6,70 parece un valor atípico. En esa medición la ejecución en
+    orden tardó más de lo normal (0,204 s, frente a unos 0,17–0,18 s en
+    los demás barridos), y eso hace que la ventaja salga más alta. En
+    los demás barridos de ese caso, en A y en B, la ventaja se queda en
+    torno a 5,6×.
+
+Tal cual. En total, dos vueltas, ninguna orden con error; acierta.
+:::
 [salida ajena: termina]

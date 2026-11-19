@@ -372,11 +372,31 @@ def selftest():
         t = enunciado(tk, [{"role": "user", "content": "x"}], True)
         plantillas.append(len(tk.encode("<tool_call>", add_special_tokens=False)) == 1
                           and '"calculadora"' in t)
-    p3 = malas == 0 and lect == [7006652, 7006652, 7006652, None] and all(plantillas)
+    # Orden 177: las dos salidas nuevas del cuerpo del capítulo 14, con datos de mentira: la tabla de cuatro filas
+    # (dos números por fila, en su orden) y el crudo recortado (acaba en la frase del manual y en «[...]»).
+    def falsas(acierta, ordena):
+        return [{"numero": 1 if acierta(i) else 0, "prod": 1, "ordenes": 1 if ordena(i) else 0}
+                for i in range(N_PREGUNTAS)]
+    res_falso = {("libre", "sin"): falsas(lambda i: False, lambda i: False),
+                 ("libre", "con"): falsas(lambda i: True, lambda i: True),
+                 ("con restricción", "sin"): falsas(lambda i: False, lambda i: False),
+                 ("con restricción", "con"): falsas(lambda i: i < 6, lambda i: i < 6)}
+    t4 = tabla_cuatro_filas(res_falso, "32.000M adiestrado")
+    filas4 = [l for l in t4 if l.startswith("| ") and " de 20 " in l]
+    crudo = crudo_recortado(1111, 2222, f"<response>x</response>\n\n# Instructions\n\n{MARCA_RECORTE} The "
+                                         "expression will be a string.")
+    cuatro_bien = (t4[1] == "Multiplicar con y sin calculadora (Qwen2.5 32.000M)" and len(filas4) == 4
+                   and filas4[0].startswith("| libre, sin herramienta") and "0 de 20 | 0 de 20" in filas4[0]
+                   and "20 de 20 | 20 de 20" in filas4[1]
+                   and f"«{RESTRICCION}», con calculadora" in filas4[3] and "6 de 20 | 6 de 20" in filas4[3]
+                   and "    " + MARCA_RECORTE in crudo and not any("The expression" in l for l in crudo)
+                   and crudo.index("    [...]") == crudo.index("    " + MARCA_RECORTE) + 1)
+    p3 = malas == 0 and lect == [7006652, 7006652, 7006652, None] and all(plantillas) and cuatro_bien
     ok &= p3
     print(f"[3] invariante        calculadora contra aritmética exacta: {malas} distintas de "
           f"200; lector de números: {lect}; plantillas con la herramienta y «<tool_call>» de "
-          f"un trozo: {sum(plantillas)} de 3: {'bien' if p3 else 'MAL'}")
+          f"un trozo: {sum(plantillas)} de 3; la tabla de cuatro filas y el crudo recortado del capítulo: "
+          f"{'bien' if cuatro_bien else 'MAL'}: {'bien' if p3 else 'MAL'}")
 
     print()
     print("SELFTEST: las tres pruebas pasan." if ok else "SELFTEST: FALLA.")
@@ -397,7 +417,38 @@ CASI_TODO = 0.9             # «se lleva casi todo»: la marca que abre una orde
 FORMAS = [("con restricción", PREGUNTA), ("libre", PREGUNTA_LIBRE)]
 # Lo que añade la pregunta con restricción detrás de la pregunta sola (para la nota de la tabla).
 RESTRICCION = PREGUNTA.split("? ", 1)[1].rstrip(".")
+MARCA_RECORTE = "The user wants to know the result of a mathematical expression."   # donde se recorta el crudo
 assert PREGUNTA.split("? ", 1)[0] + "?" == PREGUNTA_LIBRE, "la nota dice que la libre es la pregunta sola"
+
+
+def tabla_cuatro_filas(res, nombre):
+    """Orden 177: la tabla corta que enseña el cuerpo del capítulo 14 (la de seis filas pasa al Anexo A14): las
+    dos maneras de preguntar, sin herramienta y con calculadora, sin la frase colada. Dos números por fila."""
+    def fila4(forma, clave, rotulo):
+        rs = res[forma, clave]
+        return [rotulo, f"{sum(r['numero'] == r['prod'] for r in rs)} de {N_PREGUNTAS}",
+                f"{sum(r['ordenes'] > 0 for r in rs)} de {N_PREGUNTAS}"]
+    filas = [fila4("libre", "sin", "libre, sin herramienta"),
+             fila4("libre", "con", "libre, con calculadora"),
+             fila4("con restricción", "sin", f"con «{RESTRICCION}», sin herramienta"),
+             fila4("con restricción", "con", f"con «{RESTRICCION}», con calculadora")]
+    return tabla_editorial(
+        f"Multiplicar con y sin calculadora (Qwen2.5 {nombre.split()[0]})",
+        ["cómo se le pregunta", "aciertos", "escribe una orden"], filas, "idd",
+        ["Libre: la pregunta sola. Acierta: el último número que escribe es el producto exacto."])
+
+
+def crudo_recortado(a, b, escrito):
+    """Orden 177: la muestra del modelo en crudo que enseña el cuerpo del capítulo 14, recortada: hasta la primera
+    frase del manual de instrucciones que escribe, y «[...]». La entera pasa al Anexo A14."""
+    corto = escrito.strip()
+    assert MARCA_RECORTE in corto, "se esperaba la frase del manual de instrucciones donde se recorta"
+    corto = corto[:corto.index(MARCA_RECORTE) + len(MARCA_RECORTE)]
+    return muestra_editorial(
+        "Lo que escribe Qwen2.5 7.000M en crudo, ante la primera pregunta",
+        [f"Pregunta: {PREGUNTA.format(a=a, b=b)}", ""] + renglones(corto) + ["[...]"],
+        ["Sin adiestrar. Escribe algo parecido a una orden, pero con otra marca, y sigue con un manual de "
+         "instrucciones en inglés que nadie le ha pedido."])
 
 
 def extremos_acertados(numero, producto):
@@ -464,6 +515,8 @@ def main():
          f"Frase colada: la calculadora devuelve el resultado y, detrás, «{FRASE_COLADA}». La "
          "última columna cuenta cuántas veces acaba en ese 0."])))
     print()
+    print("\n".join(tabla_cuatro_filas(res, nombre)))
+    print()
 
     # B: una vuelta entera, literal (la primera pregunta con restricción en la que escribió una
     #    orden; si no hubo, la primera libre)
@@ -485,8 +538,8 @@ def main():
         lineas.pop()
         print("\n".join(muestra_editorial(
             "Una vuelta entera: la orden, lo que hace el programa y la respuesta",
-            lineas, ["El modelo grande con calculadora: escribe la orden, el programa hace la cuenta "
-                     "y le devuelve el resultado, y la máquina lo copia."])))
+            lineas, [f"Qwen2.5 {nombre.split()[0]} con calculadora: escribe la orden, el programa hace la "
+                     "cuenta y le devuelve el resultado, y la máquina lo copia."])))
         print()
 
     # C: el primer trozo, en la misma pregunta: con restricción con y sin calculadora, y libre
@@ -532,9 +585,8 @@ def main():
         "Lo que escribe sin herramienta, si no se le pide solo el número",
         [f"Pregunta: {PREGUNTA_LIBRE.format(a=r['a'], b=r['b'])}", ""]
         + renglones(r["respuesta"].strip()),
-        [f"El modelo grande, sin calculadora. El producto exacto es {miles(r['prod'])}"
-         + (": acierta las cifras de los extremos y falla las del centro."
-            if extremos_acertados(r["numero"], r["prod"]) else ".")])))
+        [f"Qwen2.5 {nombre.split()[0]}, sin calculadora. Las comas son las del inglés, que separan los miles."])))
+    assert re.search(r"\d,\d{3}", r["respuesta"]), "la nota dice que las comas son las del inglés"
     print()
     del modelo, corto, largo
     liberar()
@@ -580,6 +632,8 @@ def main():
              "orden, pero con otra marca, y sigue con instrucciones inventadas, en inglés, hasta que "
              "se le corta."])))
         assert cortado, "la nota dice que sigue «hasta que se le corta»"
+        print()
+        print("\n".join(crudo_recortado(a, b, escrito)))
         print()
 
     with open(SALIDA_CSV, "w", encoding="utf-8", newline="") as fh:
