@@ -1,0 +1,308 @@
+Medido el 2026-11-19 en macOS-26.7.1-arm64-arm-64bit (un MacBook Pro M4 Max con 36 GB), en la CPU, en bfloat16 (sin tarjeta gráfica); torch 2.14.0, transformers 5.17.0. Siempre el trozo más probable, sin sorteo, hasta 60 trozos o hasta completar 3 líneas nuevas. Semilla 20261119.
+
+==========================================================================
+CASO A — Qwen2.5 500M, en crudo
+==========================================================================
+Petición (sola, con un salto de línea detrás): Dame tres consejos para dormir mejor.
+Escribe 30 trozos y para porque se completaron las 3 líneas nuevas. Los trozos de la petición: 10.
+
+::: muestra
+Caso A: lo que escribe, entero y tal cual
+
+    Dame tres consejos para dormir mejor.
+    Dame tres consejos para dormir mejor.
+    Dame tres consejos para dormir mejor.
+
+Qwen2.5 500M, en crudo, siempre el trozo más probable.
+:::
+
+::: tabla
+Caso A: los tres sitios de cada línea nueva (Qwen2.5 500M, en crudo)
+
+| línea | sitio | escribe | papeletas de cada 100 | el de la línea de encima | papeletas de ése | puesto de ése |
+|:--|:--|:--|--:|:--|:--|--:|
+| 1 | primer trozo | `D` | 13,8 | `D` | 13,8 | 1 |
+| 1 | hueco del tema | — (no difiere de la de encima) |  |  |  |  |
+| 1 | la palabra «mejor» del cierre de la petición | `_mejor` | 97,5 |  |  |  |
+| 1 | salto de línea | `.\n` | 57,6 |  |  |  |
+| 2 | primer trozo | `D` | 9,5 | `D` | 9,5 | 1 |
+| 2 | hueco del tema | — (no difiere de la de encima) |  |  |  |  |
+| 2 | la palabra «mejor» del cierre de la petición | `_mejor` | 97,3 |  |  |  |
+| 2 | salto de línea | `.\n` | 48,0 |  |  |  |
+| 3 | primer trozo | `D` | 11,4 | `D` | 11,4 | 1 |
+| 3 | hueco del tema | — (no difiere de la de encima) |  |  |  |  |
+| 3 | la palabra «mejor» del cierre de la petición | `_mejor` | 98,1 |  |  |  |
+| 3 | salto de línea | `.\n` | 48,6 |  |  |  |
+
+«_» marca el espacio pegado delante del trozo; «\n» es el salto de línea. Papeletas: de cada cien, las que lleva ese trozo.
+
+«El de la línea de encima» es el trozo que tenía la línea anterior en ese mismo sitio; «puesto»: el que ocupa aquí entre todos.
+:::
+
+::: tabla
+Caso A: el recorrido entero, trozo a trozo (Qwen2.5 500M, en crudo)
+
+| paso | trozo que escribe | papeletas de cada 100 | segundo más probable | tercero más probable | sitio marcado |
+|:--|:--|--:|:--|:--|:--|
+| 1 | `D` | 13,8 | `1` 4,0 | `La` 3,5 | línea 1: primer trozo |
+| 2 | `ame` | 90,9 | `ime` 2,1 | `orm` 1,5 |  |
+| 3 | `_tres` | 91,8 | `_` 2,2 | `_cinco` 0,7 |  |
+| 4 | `_conse` | 99,0 | `_Conse` 0,2 | `_cons` 0,1 |  |
+| 5 | `jos` | 99,9 | `jo` 0,1 | `j` 0,0 |  |
+| 6 | `_para` | 96,1 | `_que` 1,1 | `_de` 0,3 |  |
+| 7 | `_dorm` | 98,9 | `_que` 0,1 | `_conseguir` 0,1 |  |
+| 8 | `ir` | 100,0 | `ire` 0,0 | `irl` 0,0 |  |
+| 9 | `_mejor` | 97,5 | `\n` 0,5 | `_más` 0,4 | línea 1: «mejor» |
+| 10 | `.\n` | 57,6 | `\n` 14,6 | `.` 12,9 | línea 1: salto de línea |
+| 11 | `D` | 9,5 | `La` 4,5 | `El` 4,0 | línea 2: primer trozo |
+| 12 | `ame` | 61,4 | `orm` 15,5 | `ime` 5,0 |  |
+| 13 | `_tres` | 87,7 | `_` 2,2 | `_cinco` 1,1 |  |
+| 14 | `_conse` | 98,6 | `_Conse` 0,2 | `_cons` 0,1 |  |
+| 15 | `jos` | 100,0 | `jo` 0,0 | `j` 0,0 |  |
+| 16 | `_para` | 97,0 | `_que` 0,8 | `_de` 0,3 |  |
+| 17 | `_dorm` | 99,2 | `_que` 0,1 | `_conseguir` 0,0 |  |
+| 18 | `ir` | 100,0 | `ire` 0,0 | `irl` 0,0 |  |
+| 19 | `_mejor` | 97,3 | `\n` 0,5 | `_más` 0,3 | línea 2: «mejor» |
+| 20 | `.\n` | 48,0 | `\n` 20,0 | `.` 15,6 | línea 2: salto de línea |
+| 21 | `D` | 11,4 | `La` 3,9 | `El` 3,5 | línea 3: primer trozo |
+| 22 | `ame` | 78,0 | `orm` 7,3 | `ime` 3,0 |  |
+| 23 | `_tres` | 90,6 | `_` 1,7 | `_cinco` 0,9 |  |
+| 24 | `_conse` | 98,9 | `_Conse` 0,2 | `_recomend` 0,1 |  |
+| 25 | `jos` | 100,0 | `jo` 0,0 | `j` 0,0 |  |
+| 26 | `_para` | 97,5 | `_que` 0,7 | `_de` 0,3 |  |
+| 27 | `_dorm` | 99,5 | `_que` 0,0 | `_hacer` 0,0 |  |
+| 28 | `ir` | 100,0 | `ire` 0,0 | `irl` 0,0 |  |
+| 29 | `_mejor` | 98,1 | `\n` 0,3 | `_mejores` 0,2 | línea 3: «mejor» |
+| 30 | `.\n` | 48,6 | `\n` 20,3 | `.` 15,8 | línea 3: salto de línea |
+
+En cada paso sale el trozo más probable (el segundo y el tercero, con sus papeletas de cada cien, no salen).
+:::
+(tiempo de este caso: 4 s; no es una medición del libro)
+
+==========================================================================
+CASO B — Pythia 6.900M, en crudo
+==========================================================================
+Petición (sola, con un salto de línea detrás): Explain the moon landing to a 6 year old in a few sentences.
+Escribe 60 trozos y para porque se llegó a los 60 trozos. Los trozos de la petición: 16.
+
+::: muestra
+Caso B: lo que escribe, entero y tal cual
+
+    
+    I’m not sure if this is a good idea, but I’m going to try it. I’m
+    going to try to explain the moon landing to my 6 year old daughter.
+    I’m going to try to explain it in a way that she can understand. I’m
+
+Pythia 6.900M, en crudo, siempre el trozo más probable.
+:::
+
+::: tabla
+Caso B: los tres sitios de cada línea nueva (Pythia 6.900M, en crudo)
+
+| línea | sitio | escribe | papeletas de cada 100 | el de la línea de encima | papeletas de ése | puesto de ése |
+|:--|:--|:--|--:|:--|:--|--:|
+| 1 | línea vacía antes (el salto de línea gana) | `\n` | 89,1 | `Ex` | 0,1 | 15 |
+| 1 | primer trozo | `I` | 5,9 | `Ex` | 1,6 | 7 |
+| 1 | hueco del tema (ya en el primer trozo) | `I` | 5,9 | `Ex` | 1,6 | 7 |
+| 1 | la palabra «old» del cierre de la petición | `_old` | 98,5 |  |  |  |
+| 1 | salto de línea | — (la línea sigue abierta al acabar) |  |  |  |  |
+
+«_» marca el espacio pegado delante del trozo; «\n» es el salto de línea. Papeletas: de cada cien, las que lleva ese trozo.
+
+«El de la línea de encima» es el trozo que tenía la línea anterior en ese mismo sitio; «puesto»: el que ocupa aquí entre todos.
+:::
+
+::: tabla
+Caso B: el recorrido entero, trozo a trozo (Pythia 6.900M, en crudo)
+
+| paso | trozo que escribe | papeletas de cada 100 | segundo más probable | tercero más probable | sitio marcado |
+|:--|:--|--:|:--|:--|:--|
+| 1 | `\n` | 89,1 | `6` 1,1 | `-` 0,6 | línea 1: línea vacía antes |
+| 2 | `I` | 5,9 | `The` 4,3 | `A` 3,3 | línea 1: primer trozo |
+| 3 | `’` | 8,0 | `_think` 6,2 | `'m` 5,8 |  |
+| 4 | `m` | 47,5 | `ve` 25,4 | `ll` 17,5 |  |
+| 5 | `_not` | 24,1 | `_sure` 8,9 | `_going` 6,9 |  |
+| 6 | `_sure` | 31,6 | `_a` 9,6 | `_going` 9,1 |  |
+| 7 | `_if` | 18,4 | `_what` 12,7 | `_how` 11,9 |  |
+| 8 | `_this` | 16,9 | `_I` 15,9 | `_you` 12,4 |  |
+| 9 | `_is` | 45,3 | `_was` 5,8 | `_question` 5,1 |  |
+| 10 | `_a` | 18,7 | `_the` 17,6 | `_an` 3,9 |  |
+| 11 | `_good` | 10,5 | `_joke` 5,0 | `_question` 3,0 |  |
+| 12 | `_idea` | 32,7 | `_question` 11,3 | `_example` 10,0 |  |
+| 13 | `,` | 30,2 | `_or` 26,7 | `.` 16,2 |  |
+| 14 | `_but` | 67,7 | `_or` 7,6 | `_and` 3,0 |  |
+| 15 | `_I` | 30,7 | `_it` 12,8 | `_if` 5,0 |  |
+| 16 | `’` | 40,3 | `_think` 7,9 | `_have` 4,8 |  |
+| 17 | `m` | 52,9 | `ve` 19,5 | `ll` 17,2 |  |
+| 18 | `_going` | 33,0 | `_thinking` 5,4 | `_curious` 3,5 |  |
+| 19 | `_to` | 97,1 | `_with` 1,0 | `_ahead` 0,2 |  |
+| 20 | `_try` | 24,7 | `_do` 9,1 | `_give` 7,1 |  |
+| 21 | `_it` | 42,1 | `_to` 15,5 | `.` 11,3 |  |
+| 22 | `.` | 46,9 | `_anyway` 13,4 | `_out` 10,5 |  |
+| 23 | `_I` | 30,3 | `\n` 18,4 | `_My` 4,4 |  |
+| 24 | `’` | 45,6 | `_have` 6,2 | `_think` 3,5 |  |
+| 25 | `m` | 52,7 | `ve` 24,9 | `ll` 19,4 |  |
+| 26 | `_going` | 34,6 | `_not` 9,3 | `_a` 5,6 |  |
+| 27 | `_to` | 97,8 | `_with` 0,3 | `_on` 0,3 |  |
+| 28 | `_try` | 14,3 | `_explain` 7,2 | `_write` 5,6 |  |
+| 29 | `_to` | 56,8 | `_and` 11,2 | `_it` 6,8 |  |
+| 30 | `_explain` | 51,1 | `_write` 4,2 | `_get` 2,9 |  |
+| 31 | `_the` | 46,8 | `_to` 22,1 | `_it` 2,8 |  |
+| 32 | `_moon` | 50,7 | `_Apollo` 3,7 | `_Moon` 2,7 |  |
+| 33 | `_landing` | 94,5 | `_land` 4,2 | `_to` 0,2 |  |
+| 34 | `_to` | 68,5 | `_in` 17,3 | `,` 2,3 |  |
+| 35 | `_my` | 45,1 | `_a` 39,8 | `_the` 2,0 |  |
+| 36 | `_6` | 41,6 | `_son` 9,3 | `_kids` 8,2 |  |
+| 37 | `_year` | 85,9 | `-` 10,3 | `_yr` 1,4 |  |
+| 38 | `_old` | 98,5 | `-` 1,2 | `\n` 0,1 | línea 1: «old» |
+| 39 | `_daughter` | 32,1 | `_son` 22,0 | `.` 9,2 |  |
+| 40 | `.` | 32,9 | `_in` 29,0 | `,` 9,4 |  |
+| 41 | `_I` | 28,7 | `\n` 15,4 | `_She` 7,7 |  |
+| 42 | `’` | 55,6 | `_don` 4,6 | `_have` 3,6 |  |
+| 43 | `m` | 65,3 | `ll` 18,7 | `ve` 14,6 |  |
+| 44 | `_going` | 48,9 | `_not` 18,0 | `_sure` 4,6 |  |
+| 45 | `_to` | 98,7 | `_with` 0,3 | `_start` 0,1 |  |
+| 46 | `_try` | 33,2 | `_start` 8,4 | `_do` 7,4 |  |
+| 47 | `_to` | 81,2 | `_and` 4,6 | `.` 1,7 |  |
+| 48 | `_explain` | 46,6 | `_do` 11,8 | `_make` 6,3 |  |
+| 49 | `_it` | 33,5 | `_the` 29,6 | `_to` 10,9 |  |
+| 50 | `_in` | 51,6 | `_to` 11,5 | `_as` 6,2 |  |
+| 51 | `_a` | 54,7 | `_the` 8,4 | `_as` 6,1 |  |
+| 52 | `_way` | 59,1 | `_few` 31,6 | `_couple` 1,0 |  |
+| 53 | `_that` | 80,8 | `_she` 14,0 | `_he` 1,2 |  |
+| 54 | `_she` | 44,0 | `_will` 11,1 | `_a` 5,3 |  |
+| 55 | `_can` | 46,8 | `_will` 25,1 | `’` 6,3 |  |
+| 56 | `_understand` | 81,6 | `_grasp` 2,8 | `_easily` 2,2 |  |
+| 57 | `.` | 52,5 | `,` 19,3 | `_and` 10,3 |  |
+| 58 | `_I` | 39,6 | `\n` 18,7 | `_And` 3,7 |  |
+| 59 | `’` | 68,6 | `_don` 4,4 | `_want` 3,4 |  |
+| 60 | `m` | 88,7 | `ll` 8,3 | `ve` 2,7 |  |
+
+En cada paso sale el trozo más probable (el segundo y el tercero, con sus papeletas de cada cien, no salen).
+:::
+(tiempo de este caso: 117 s; no es una medición del libro)
+
+==========================================================================
+CASO C — Qwen2.5 500M, en crudo
+==========================================================================
+Petición (sola, con un salto de línea detrás): Explica la llegada a la Luna a un niño de seis años, en unas pocas frases.
+Escribe 60 trozos y para porque se llegó a los 60 trozos. Los trozos de la petición: 22.
+
+::: muestra
+Caso C: lo que escribe, entero y tal cual
+
+    El niño de seis años se acerca a la Luna, como si fuera un pequeño
+    astronauta, y se acerca a la Tierra, como si fuera un pequeño
+    astronauta, y se acerca a la Tierra, como si fuera un pequeño
+    astronauta, y se acerca a la
+
+Qwen2.5 500M, en crudo, siempre el trozo más probable.
+:::
+
+::: tabla
+Caso C: los tres sitios de cada línea nueva (Qwen2.5 500M, en crudo)
+
+| línea | sitio | escribe | papeletas de cada 100 | el de la línea de encima | papeletas de ése | puesto de ése |
+|:--|:--|:--|--:|:--|:--|--:|
+| 1 | primer trozo | `El` | 15,3 | `Exp` | 0,1 | 122 |
+| 1 | hueco del tema (ya en el primer trozo) | `El` | 15,3 | `Exp` | 0,1 | 122 |
+| 1 | la palabra «años» del cierre de la petición | `_años` | 98,7 |  |  |  |
+| 1 | salto de línea | — (la línea sigue abierta al acabar) |  |  |  |  |
+
+«_» marca el espacio pegado delante del trozo; «\n» es el salto de línea. Papeletas: de cada cien, las que lleva ese trozo.
+
+«El de la línea de encima» es el trozo que tenía la línea anterior en ese mismo sitio; «puesto»: el que ocupa aquí entre todos.
+:::
+
+::: tabla
+Caso C: el recorrido entero, trozo a trozo (Qwen2.5 500M, en crudo)
+
+| paso | trozo que escribe | papeletas de cada 100 | segundo más probable | tercero más probable | sitio marcado |
+|:--|:--|--:|:--|:--|:--|
+| 1 | `El` | 15,3 | `La` 6,0 | `Una` 5,3 | línea 1: primer trozo |
+| 2 | `_niño` | 25,6 | `_día` 8,3 | `_pequeño` 5,0 |  |
+| 3 | `_de` | 24,0 | `_se` 10,7 | `,` 6,5 |  |
+| 4 | `_seis` | 87,8 | `_` 6,0 | `_six` 1,5 |  |
+| 5 | `_años` | 98,7 | `_a` 0,5 | `_está` 0,1 | línea 1: «años» |
+| 6 | `_se` | 12,8 | `,` 10,6 | `_está` 6,4 |  |
+| 7 | `_ac` | 18,1 | `_va` 5,2 | `_ha` 4,9 |  |
+| 8 | `erca` | 78,5 | `erc` 13,6 | `aba` 2,7 |  |
+| 9 | `_a` | 69,1 | `_al` 9,4 | `_con` 3,4 |  |
+| 10 | `_la` | 88,8 | `_una` 3,7 | `_las` 1,1 |  |
+| 11 | `_Luna` | 89,9 | `_Ti` 2,9 | `_l` 2,1 |  |
+| 12 | `,` | 28,6 | `_con` 17,3 | `_y` 10,5 |  |
+| 13 | `_como` | 11,5 | `_una` 8,9 | `_en` 7,4 |  |
+| 14 | `_si` | 27,4 | `_un` 20,0 | `_una` 13,8 |  |
+| 15 | `_fuera` | 32,1 | `_est` 8,6 | `_hub` 7,6 |  |
+| 16 | `_un` | 47,4 | `_una` 14,5 | `_el` 7,3 |  |
+| 17 | `_pequeño` | 18,4 | `_niño` 16,3 | `_gran` 2,2 |  |
+| 18 | `_astronaut` | 5,8 | `_explor` 2,9 | `_avent` 2,7 |  |
+| 19 | `a` | 98,5 | `as` 1,2 | `o` 0,2 |  |
+| 20 | `,` | 33,8 | `_que` 18,1 | `.` 11,0 |  |
+| 21 | `_y` | 16,3 | `_con` 8,7 | `_que` 5,0 |  |
+| 22 | `_se` | 20,1 | `_está` 3,1 | `_observ` 2,4 |  |
+| 23 | `_ac` | 7,4 | `_encuentra` 5,8 | `_dir` 5,1 |  |
+| 24 | `erca` | 52,3 | `aba` 15,0 | `erc` 6,2 |  |
+| 25 | `_a` | 13,7 | `_con` 13,7 | `_hasta` 12,1 |  |
+| 26 | `_la` | 39,1 | `_su` 7,2 | `_él` 6,4 |  |
+| 27 | `_Ti` | 27,3 | `_Luna` 24,1 | `_ti` 5,7 |  |
+| 28 | `erra` | 99,9 | `erras` 0,1 | `ERR` 0,0 |  |
+| 29 | `,` | 41,6 | `_para` 10,5 | `.` 9,3 |  |
+| 30 | `_como` | 36,8 | `_para` 5,3 | `_que` 3,4 |  |
+| 31 | `_si` | 72,5 | `_un` 11,1 | `_una` 5,3 |  |
+| 32 | `_fuera` | 75,2 | `_est` 5,8 | `_fuer` 4,2 |  |
+| 33 | `_un` | 67,2 | `_una` 18,1 | `_el` 4,9 |  |
+| 34 | `_pequeño` | 25,3 | `_niño` 18,5 | `_astronaut` 8,7 |  |
+| 35 | `_astronaut` | 24,4 | `_explor` 5,8 | `_hé` 4,0 |  |
+| 36 | `a` | 97,9 | `o` 1,6 | `as` 0,5 |  |
+| 37 | `,` | 14,4 | `.` 12,7 | `_de` 7,7 |  |
+| 38 | `_y` | 36,5 | `_pero` 12,6 | `_para` 9,8 |  |
+| 39 | `_se` | 82,8 | `_luego` 0,7 | `...` 0,7 |  |
+| 40 | `_ac` | 95,2 | `_ap` 0,3 | `_a` 0,2 |  |
+| 41 | `erca` | 99,8 | `erc` 0,0 | `uesta` 0,0 |  |
+| 42 | `_a` | 94,7 | `_al` 2,2 | `_hasta` 0,3 |  |
+| 43 | `_la` | 48,1 | `_su` 6,9 | `_un` 5,4 |  |
+| 44 | `_Ti` | 31,3 | `_Luna` 24,4 | `_Mart` 4,2 |  |
+| 45 | `erra` | 99,9 | `erras` 0,1 | `err` 0,0 |  |
+| 46 | `,` | 77,7 | `.` 7,7 | `...` 3,4 |  |
+| 47 | `_como` | 97,9 | `_y` 0,2 | `_cómo` 0,1 |  |
+| 48 | `_si` | 99,5 | `_una` 0,1 | `_un` 0,1 |  |
+| 49 | `_fuera` | 99,4 | `_fuer` 0,3 | `_sea` 0,0 |  |
+| 50 | `_un` | 98,6 | `_el` 0,6 | `...` 0,2 |  |
+| 51 | `_pequeño` | 97,4 | `_niño` 1,2 | `_pequeña` 0,4 |  |
+| 52 | `_astronaut` | 98,4 | `_pequeño` 0,1 | `...` 0,1 |  |
+| 53 | `a` | 100,0 | `as` 0,0 | `o` 0,0 |  |
+| 54 | `,` | 54,0 | `.` 25,5 | `...` 6,4 |  |
+| 55 | `_y` | 94,7 | `_pero` 0,8 | `_e` 0,5 |  |
+| 56 | `_se` | 96,7 | `...` 1,6 | `…` 0,2 |  |
+| 57 | `_ac` | 99,5 | `_a` 0,1 | `_ap` 0,0 |  |
+| 58 | `erca` | 99,9 | `arra` 0,0 | `ula` 0,0 |  |
+| 59 | `_a` | 99,4 | `...` 0,1 | `_al` 0,1 |  |
+| 60 | `_la` | 99,7 | `...` 0,1 | `_las` 0,0 |  |
+
+En cada paso sale el trozo más probable (el segundo y el tercero, con sus papeletas de cada cien, no salen).
+:::
+(tiempo de este caso: 11 s; no es una medición del libro)
+
+==========================================================================
+LA PRUEBA DE QUE LO DECIDE LA LÍNEA DE ENCIMA
+==========================================================================
+El primer trozo de la línea nueva, con la línea de encima y como principio de un texto vacío (solo el token de inicio de texto de cada máquina: «<|endoftext|>», el que separa un documento de otro en el entrenamiento).
+
+::: tabla
+Un primer trozo, con la línea de encima y con un texto vacío
+
+| caso | máquina | trozo | es | con la línea de encima | puesto | con el texto vacío | puesto | cuántas veces más |
+|:--|:--|:--|:--|:--|--:|:--|--:|--:|
+| A | Qwen2.5 500M | el primer trozo que escribe | `D` | 13,8 | 1 | 0,1 | 84 | 126 veces |
+| B | Pythia 6.900M | el primer trozo que escribe | `\n` | 89,1 | 1 | 2,3 | 3 | 39 veces |
+| B | Pythia 6.900M | el primer trozo de la petición | `Ex` | 0,1 | 15 | 0,1 | 146 | 1,5 veces |
+| C | Qwen2.5 500M | el primer trozo que escribe | `El` | 15,3 | 1 | menos de 0,1 | 531 | 1.608 veces |
+| C | Qwen2.5 500M | el primer trozo de la petición | `Exp` | 0,1 | 122 | menos de 0,1 | 3.970 | 68 veces |
+
+Papeletas de cada cien. «Con el texto vacío»: solo el token de inicio de texto delante, sin ninguna petición.
+
+«Puesto»: el que ocupa ese trozo entre todos los posibles (1 = el más probable).
+:::
+
+(Tiempo de esta ejecución: 2 minutos; no es una medición del libro.)
