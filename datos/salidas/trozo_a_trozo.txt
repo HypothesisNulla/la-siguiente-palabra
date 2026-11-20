@@ -1,4 +1,4 @@
-Medido el 2026-11-19 en macOS-26.7.1-arm64-arm-64bit (un MacBook Pro M4 Max con 36 GB), en la CPU, en bfloat16 (sin tarjeta gráfica); torch 2.14.0, transformers 5.17.0. Siempre el trozo más probable, sin sorteo, hasta 60 trozos o hasta completar 3 líneas nuevas. Semilla 20261119.
+Medido el 2026-11-20 en macOS-26.7.1-arm64-arm-64bit (un MacBook Pro M4 Max con 36 GB), en la CPU, en bfloat16 (sin tarjeta gráfica); torch 2.14.0, transformers 5.17.0. Siempre el trozo más probable, sin sorteo, hasta 60 trozos o hasta completar 3 líneas nuevas. Semilla 20261119.
 
 ==========================================================================
 CASO A — Qwen2.5 500M, en crudo
@@ -76,6 +76,24 @@ Caso A: el recorrido entero, trozo a trozo (Qwen2.5 500M, en crudo)
 | 30 | `.\n` | 48,6 | `\n` 20,3 | `.` 15,8 | línea 3: salto de línea |
 
 En cada paso sale el trozo más probable (el segundo y el tercero, con sus papeletas de cada cien, no salen).
+:::
+
+::: tabla
+Trozo a trozo, la primera línea nueva (Qwen2.5 500M, en crudo)
+
+| trozo que escribe | papeletas de cada cien | el segundo más probable |
+|:--|--:|:--|
+| «D» | 13,8 | «1», 4,0 |
+| «ame» | 90,9 | «ime», 2,1 |
+| « tres» | 91,8 | « », 2,2 |
+| « conse» | 99,0 | « Conse», 0,2 |
+| «jos» | 99,9 | «jo», 0,1 |
+| « para» | 96,1 | « que», 1,1 |
+| « dorm» | 98,9 | « que», 0,1 |
+| «ir» | 100,0 | «ire», 0,0 |
+| « mejor» | 97,5 | el salto de línea, 0,5 |
+
+El espacio delante de un trozo es parte del trozo. Las líneas segunda y tercera se escriben igual: su «D» gana con 9,5 y 11,4 papeletas, y los demás trozos, con más de 60.
 :::
 (tiempo de este caso: 4 s; no es una medición del libro)
 
@@ -180,7 +198,7 @@ Caso B: el recorrido entero, trozo a trozo (Pythia 6.900M, en crudo)
 
 En cada paso sale el trozo más probable (el segundo y el tercero, con sus papeletas de cada cien, no salen).
 :::
-(tiempo de este caso: 117 s; no es una medición del libro)
+(tiempo de este caso: 114 s; no es una medición del libro)
 
 ==========================================================================
 CASO C — Qwen2.5 500M, en crudo

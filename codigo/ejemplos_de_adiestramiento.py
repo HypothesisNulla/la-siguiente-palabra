@@ -63,7 +63,7 @@ import random
 import sys
 import urllib.request
 
-from formato import muestra_editorial, partir
+from formato import muestra_editorial, partir, tabla_editorial
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 
@@ -216,8 +216,23 @@ def muestra_del_libro(elegidas):
         lineas.append("")
     return muestra_editorial(
         "Tres ejemplos del libro de conversaciones", lineas[:-1],
-        ["Tres conversaciones distintas, tal como las escribieron. La petición la escribió una persona, y la "
+        ["Tres conversaciones distintas, tal como las escribieron. El mensaje lo escribió una persona, y la "
          "respuesta, otra que hacía de asistente."])
+
+
+def tabla_quien_hace_que():
+    """La tabla «Quién hace qué en cada fase» del capítulo 12 (Orden 182, 20 de noviembre de 2026): lo que el libro cuenta de las
+    tres fases del adiestramiento de OpenAI de 2022 (el artículo de InstructGPT) y de cómo las hizo OpenAssistant. No es una
+    medición: es una descripción, y la imprime el programa para que el libro la copie y la regla 6 se cumpla."""
+    return tabla_editorial(
+        "Quién hace qué en cada fase",
+        ["fase", "quién escribe el mensaje", "quién escribe la respuesta", "quién decide si es buena"],
+        [["1. el libro de conversaciones", "una persona", "una persona", "nadie: se copia tal cual"],
+         ["2. el juez", "una persona", "la máquina, varias", "personas, que las ordenan"],
+         ["3. estudiar para el juez", "mensajes ya guardados", "la máquina", "el juez, con una nota"]],
+        "iiii",
+        ["Las tres fases del adiestramiento, en el trabajo de OpenAI de 2022. En OpenAssistant, también las respuestas de la "
+         "segunda fase las escribieron personas."])
 
 
 def imprimir(m, etiqueta):
@@ -267,6 +282,8 @@ def main():
 
     print(f"{'=' * 74}\nLO QUE EL LIBRO CITA DE AQUÍ (capítulo 12)\n{'=' * 74}\n")
     print("\n".join(muestra_del_libro(elegir(f1, FASE_1_CANDIDATAS))))
+    print()
+    print("\n".join(tabla_quien_hace_que()))
 
 
 if __name__ == "__main__":

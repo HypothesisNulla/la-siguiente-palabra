@@ -155,7 +155,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, DynamicCache
 
 from ejemplos_de_adiestramiento import arboles, vale
-from formato import muestra_editorial, partir, tabla_editorial
+from formato import miles, muestra_editorial, partir, tabla_editorial
 
 
 def _comprobar_constantes():
@@ -422,11 +422,16 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--solo-ejemplos", action="store_true", help="imprime solo las respuestas literales de B, desde el CSV, sin la máquina")
+    ap.add_argument("--del-libro", action="store_true", help="imprime lo que el capítulo 13 y el A13 copian, desde el CSV, sin la máquina")
     args = ap.parse_args()
     if args.selftest:
         sys.exit(selftest())
     if args.solo_ejemplos:
         ejemplos_desde_csv()
+        return
+    if args.del_libro:
+        print(f"\n{'=' * 74}\nLO QUE EL LIBRO CITA DE AQUÍ (capítulo 13 y Anexo A13)\n{'=' * 74}\n")
+        print("\n".join(del_libro(leer_csv())))
         return
     t0 = time.time()
     tok, modelo, dispositivo = cargar()
@@ -549,6 +554,73 @@ def imprimir_ejemplos(respuestas_b):
             partir(f"(la frase falsa la dijo {quien}: «{h[4]}»)") + ["", *partir(f"Pregunta: {h[1]}"), ""] + partir(f"Respuesta: {r}"),
             [f"Qwen2.5 7.000M, con el error dicho por {quien}. La respuesta {final[que]}."])))
         print()
+
+
+NOTA_B_DEL_LIBRO = ("Veces de veinte. «Nombra los dos»: la respuesta lleva el dato bueno y el falso; casi siempre es una respuesta "
+                    "correcta que añade algo cierto, como que Casablanca es la ciudad más poblada.")
+
+
+def leer_csv():
+    """Las filas del CSV de respuestas, como diccionarios."""
+    with open(SALIDA_CSV, encoding="utf-8", newline="") as f:
+        return list(csv.DictReader(f))
+
+
+def del_libro(filas):
+    """Lo que el capítulo 13 y el Anexo A13 copian de esta medición (Orden 182, 20 de noviembre de 2026), con las palabras del
+    libro: la muestra «Lo que contesta cuando lo ha perdido» y las dos tablas, con solo los recuentos. Todo sale del CSV."""
+    A = [r for r in filas if r["experimento"] == "A"]
+    B = [r for r in filas if r["experimento"] == "B"]
+
+    def aciertos(largo, pos):
+        c = [r for r in A if int(r["largo_objetivo"]) == largo and r["posicion_o_variante"] == pos]
+        assert len(c) == len(DATOS), f"la casilla {largo}, {pos} no tiene sus {len(DATOS)} respuestas"
+        return sum(r["resultado"] == "acierta" for r in c)
+
+    # la tabla A
+    medio_sin = [int(r["trozos_de_conversacion"]) for r in A if int(r["largo_objetivo"]) == 0]
+    sin = round(sum(medio_sin) / len(medio_sin) / 10) * 10
+    filas_a = [[f"sin relleno (unos {sin} trozos)"] + [str(aciertos(0, "sin relleno"))] * 3]
+    for largo in LARGOS[1:]:
+        filas_a.append([f"unos {miles(largo)} trozos"] + [str(aciertos(largo, n)) for n, _ in POSICIONES])
+    ocho = (aciertos(8000, "al principio"), aciertos(8000, "en medio"))
+    sal = tabla_editorial(
+        "El dato inventado, según el largo de la conversación y dónde se dice",
+        ["largo de la conversación"] + [n for n, _ in POSICIONES], filas_a, "iddd",
+        [f"Aciertos de veinte datos inventados en cada casilla. Con veinte casos, la incertidumbre es grande: {ocho[0]} y "
+         f"{ocho[1]}, por ejemplo, no se distinguen. Sin relleno, el dato no tiene dónde ir, y las tres columnas son la misma medición."])
+    # la tabla B
+    por_hecho = {h[2]: h for h in HECHOS}
+    filas_b = []
+    for var, rotulo in (("sin nada", "nada sobre el hecho"), ("asistente", "el error, dicho por el asistente"),
+                        ("usuario", "el error, dicho por la persona")):
+        cuenta = {"acierta": 0, "repite el error": 0, "nombra los dos": 0}
+        for r in (x for x in B if x["posicion_o_variante"] == var):
+            h = por_hecho[r["esperada_o_verdad"]]
+            if r["resultado"] == "otra cosa":
+                assert contiene(r["respuesta"], h[2]) and contiene(r["respuesta"], h[3]), \
+                    f"una respuesta «otra cosa» que no nombra los dos: {r['respuesta']!r}"
+                cuenta["nombra los dos"] += 1
+            else:
+                cuenta[r["resultado"]] += 1
+        assert sum(cuenta.values()) == HECHOS_B, f"{var}: no suman {HECHOS_B}: {cuenta}"
+        filas_b.append([rotulo, str(cuenta["acierta"]), str(cuenta["repite el error"]), str(cuenta["nombra los dos"])])
+    tab_b = tabla_editorial(
+        "El error dicho diez turnos antes",
+        ["en la conversación", "contesta lo bueno", "contesta lo falso", "nombra los dos"], filas_b, "iddd", [NOTA_B_DEL_LIBRO])
+    # la muestra del dato perdido: la pregunta 1 (el perro), con 24.000 trozos y el dato en medio; y sin relleno
+    perdida = next(r for r in A if r["caso"] == "1" and int(r["largo_objetivo"]) == LARGOS[-1] and r["posicion_o_variante"] == "en medio")
+    sin_relleno = next(r for r in A if r["caso"] == "1" and int(r["largo_objetivo"]) == 0)
+    assert perdida["resultado"] == "falla" and sin_relleno["resultado"] == "acierta", "la muestra enseña un dato perdido y uno bien"
+    texto = perdida["respuesta"].replace(" ⏎ ", "\n")
+    cuerpo = [f"Pregunta: {DATOS[0][1]}", ""]
+    for l in texto.split("\n"):
+        cuerpo += partir(l) if l else [""]
+    muestra = muestra_editorial(
+        "Lo que contesta cuando lo ha perdido", cuerpo,
+        [f"Qwen2.5 7.000M, con el dato dicho en medio de unos {miles(LARGOS[-1])} trozos de conversación. Sin nada entre medias, "
+         f"contesta «{sin_relleno['respuesta']}»."])
+    return muestra + [""] + sal + [""] + tab_b
 
 
 def ejemplos_desde_csv():

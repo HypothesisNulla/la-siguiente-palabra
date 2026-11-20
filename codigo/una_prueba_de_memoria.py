@@ -97,9 +97,9 @@ def bloque_tabla(tabla):
         ["paja en medio, en símbolos", "sin el arreglo", "con el arreglo"],
         [[str(d), de_cada_cien(tabla[d][0]), de_cada_cien(tabla[d][3])] for d in mr.DISTANCIAS],
         "ddd",
-        # Orden 153: la nota del texto, «Acertando a ciegas, unas doce de cada cien», con el 12,5 de
+        # Orden 153 (y 182): la nota del texto, «Acertando a ciegas, se acertarían unas doce pruebas de cada cien», con el 12,5 de
         # la cuenta redondeado hacia abajo y marcado con «unas»; el 12,5 entero está en el anexo A6.
-        [f"Acertando a ciegas, unas {EN_LETRA[int(100 * azar)]} de cada cien. Cada cifra es la media "
+        [f"Acertando a ciegas, se acertarían unas {EN_LETRA[int(100 * azar)]} pruebas de cada cien. Cada cifra es la media "
          f"de {EN_LETRA[mr.SEMILLAS_MEMORIA]} entrenamientos desde cero."])
 
 

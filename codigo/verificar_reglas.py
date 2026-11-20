@@ -23,11 +23,16 @@ GRIEGO = re.compile(r'[Ͱ-Ͽ]')
 # nombre) y NADA MÁS: el resto de la línea se vigila igual. Cuando se reescriba el cap. 16 (que dice «pi cero») y
 # aparezca en otro fichero, se añade aquí a mano.
 NOMBRES_PROPIOS = {'π0': ('anexo-a14-la-siguiente-palabra-con-manos.md',)}
+# Orden 182 (20 nov 2026): el título de un informe de otro, en inglés y entre comillas, se cita tal cual aunque lleve una palabra
+# prohibida («Tokens» en «Context Rot: How Increasing Input Tokens Impacts LLM Performance», de Chroma, que cita el A13). Se
+# quita de la línea SOLO ese título entero, SOLO en los ficheros de esta lista; el resto de la línea se vigila igual.
+TITULOS_EN_INGLES = {'Context Rot: How Increasing Input Tokens Impacts LLM Performance': ('anexo-a13-donde-se-rompe.md',)}
 MATE   = re.compile(r'[=∑∏√∫±×·⋅≈≤≥^]|\b\d+\s*[*/]\s*\d+')
 CODIGO = re.compile(r'^\s*(```|import |def |>>> )')
 # Envoltorio de imprenta para los trozos que la fuente del libro no dibuja (chino, tailandés,
 # árabe). Es formato, no notación: se quita antes de buscar.
-MARCADO = re.compile(r'`\\[a-záéíóúñ]+\{(.*?)\}`\{=latex\}')
+# Orden 184: también el comando sin argumentos (`\\crucecita`{=latex}, la † del cierre de cada capítulo): es formato, no notación.
+MARCADO = re.compile(r'`\\[a-záéíóúñ]+(?:\{(.*?)\})?`\{=latex\}')
 
 
 def norm(s):
@@ -83,6 +88,12 @@ def nombres_de(ruta):
     return tuple(n for n, ficheros in NOMBRES_PROPIOS.items() if nombre in ficheros)
 
 
+def titulos_de(ruta):
+    """Los títulos en inglés que este fichero puede citar (TITULOS_EN_INGLES)."""
+    nombre = os.path.basename(ruta)
+    return tuple(n for n, ficheros in TITULOS_EN_INGLES.items() if nombre in ficheros)
+
+
 def sin_nombres_propios(l, nombres):
     """La línea sin esos nombres propios, enteros y sueltos: «π0» sí, «π01», «ππ0» o «π» no."""
     for n in nombres:
@@ -90,7 +101,7 @@ def sin_nombres_propios(l, nombres):
     return l
 
 
-def revisar(lineas, es_el_mapa=False, anclas=(), nombres=()):
+def revisar(lineas, es_el_mapa=False, anclas=(), nombres=(), titulos=()):
     """Devuelve la lista de incidencias: (número de línea, clase, término, trozo).
     `anclas`: las frases de los puentes de este fichero (puentes_de). `nombres`: los nombres propios con letra
     griega que este fichero puede llevar (nombres_de)."""
@@ -113,6 +124,8 @@ def revisar(lineas, es_el_mapa=False, anclas=(), nombres=()):
         if l.strip().startswith('*[') or l.strip().startswith('[NO EJECUTADO'):
             continue
         l = MARCADO.sub(r'\1', l)
+        for titulo in titulos:
+            l = l.replace(titulo, 'TITULO')
         n = norm(l)
         if not es_el_mapa:
             for p in PROHIBIDAS:
@@ -202,12 +215,19 @@ def selftest():
              and clases(revisar(["Es π0 y también α."], nombres=('π0',))) == ['griego']
              and clases(revisar(["Es π0 y también π0 × 3."], nombres=('π0',))) == ['notacion'])
     nombre_bien = nombre_ok and nombre_en_otro and nombre_en_su_fichero and pi_suelta and otras
+    # Orden 182: el título del informe de Chroma, entero y solo en su fichero, sin dejar pasar nada más de la línea.
+    tit = 'Context Rot: How Increasing Input Tokens Impacts LLM Performance'
+    titulo_bien = (not revisar([f"Chroma, «{tit}», 14 de julio de 2025."], titulos=titulos_de("anexo-a13-donde-se-rompe.md"))
+                   and clases(revisar([f"Chroma, «{tit}»."], titulos=titulos_de("cap13.md"))) == ['jerga']
+                   and clases(revisar([f"Chroma, «{tit}», y un vector."], titulos=(tit,))) == ['jerga']
+                   and clases(revisar(["Chroma, «Context Rot: Input Tokens»."], titulos=(tit,))) == ['jerga'])
+    nombre_bien = nombre_bien and titulo_bien
     print(f"[3] invariante        en el mapa queda {clases(en_el_mapa)} "
           f"({'bien: solo la notación' if solo_notacion else 'MAL'}); "
           f"envoltorio de imprenta: {len(envuelto)} incidencias; texto de máquina en una muestra "
           f"exento, y fuera de ella o en su título, no: {exenta}; «token» libre en su puente y en "
           f"una tabla o muestra, y no en la prosa: {puentes_ok}; «π0» entero y solo en su fichero (ni «π» suelta, "
-          f"ni «π01», ni otra letra griega, ni nada más de la línea): {nombre_bien}")
+          f"ni «π01», ni otra letra griega, ni nada más de la línea) y el título de Chroma, entero y en su fichero: {nombre_bien}")
     if not solo_notacion or envuelto or not exenta or not puentes_ok or not nombre_bien:
         fallos.append("invariante: el mapa levanta solo la jerga, el envoltorio no es notación, "
                       "solo el texto de máquina de una muestra está exento y «token» solo se "
@@ -239,7 +259,7 @@ ES_EL_MAPA = 'mapa-de-los-sotanos' in path
 if ES_EL_MAPA:
     print("NOTA: es el mapa de los sótanos; se permite la jerga y NO se permite nada más.")
 
-fallos = revisar(lineas, ES_EL_MAPA, puentes_de(path), nombres_de(path))
+fallos = revisar(lineas, ES_EL_MAPA, puentes_de(path), nombres_de(path), titulos_de(path))
 if fallos:
     for f in fallos:
         print(f"  linea {f[0]:>4}  {f[1]:<9} {f[2]:<16} {f[3]}")

@@ -113,7 +113,7 @@ import re
 import sys
 import time
 
-from formato import coma, miles
+from formato import coma, miles, tabla_editorial
 
 CASO = {i: re.compile(e, re.I) for i, e in EXPRESIONES.items()}
 EMPIEZA = {"inglés": re.compile(PRINCIPIO_DE_LINEA + ETIQUETA + r"(?:please[,\s]+)?" + EN_PIDE, re.I),
@@ -459,13 +459,62 @@ def selftest():
     return 0
 
 
+SALIDA = "../datos/salidas/la_lista_de_ejercicios.txt"
+
+
+def cifras_de_la_salida(texto):
+    """Las cifras de cada idioma que la tabla del libro copia, leídas de la propia salida de este programa (no se vuelve a
+    recorrer la web, que son más de una hora): {idioma: (documentos, casos que dicen lo del niño, casos que son una petición,
+    de ésos, seguidos de otra petición, de ésos, en una lista)}."""
+    out = {}
+    for idioma in sorted(CORPUS):
+        i = texto.index(f"{idioma.upper()}: ")
+        j = texto.find("=" * 74 + "\n" + f"{idioma.upper()}: ", i + 1)
+        trozo = texto[i:] if j < 0 else texto[i:j]
+        sig = [s for s in sorted(CORPUS) if s != idioma]
+        for s in sig:
+            k = trozo.find("=" * 74 + "\n" + f"{s.upper()}: ")
+            if k >= 0:
+                trozo = trozo[:k]
+        docs = re.search(r"Recorridos ([\d.]+) documentos", trozo)
+        todos, pet = trozo.split("SOLO LAS PETICIONES")
+        casos_todos = re.search(r"Casos: (\d+)\.", todos)
+        casos_pet = re.search(r"Casos: (\d+)\.", pet)
+        seguidas = re.search(r"\(a\) detrás viene otra petición: (\d+) ", pet)
+        lista = re.search(r"Forman parte de una lista \([^)]*\): (\d+) ", pet)
+        assert all((docs, casos_todos, casos_pet, seguidas, lista)), f"no se encuentran las cifras de {idioma} en la salida"
+        out[idioma] = (docs.group(1), int(casos_todos.group(1)), int(casos_pet.group(1)), int(seguidas.group(1)), int(lista.group(1)))
+    return out
+
+
+def tabla_del_libro(texto):
+    """La tabla «La petición del niño de seis años, en la web» del Anexo A12 (Orden 182): lo que el libro copia de la salida."""
+    cifras = cifras_de_la_salida(texto)
+    filas = [[idioma, cifras[idioma][0]] + [str(x) for x in cifras[idioma][1:]] for idioma in ("inglés", "castellano")]
+    return tabla_editorial(
+        "La petición del niño de seis años, en la web",
+        ["", "páginas leídas", "la frase sale", "como petición", "seguida de otra petición", "en una lista de tres o más"],
+        filas, "idddd" + "d",
+        ["«La frase sale» cuenta también las líneas que solo hablan de explicar algo a un niño, sin pedirlo. Las dos últimas "
+         "columnas cuentan solo las que son una petición: «seguida de otra petición» mira la línea siguiente no vacía, y "
+         "«en una lista» quiere decir tres o más peticiones seguidas."])
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--tabla-del-libro", action="store_true",
+                    help="imprime la tabla del Anexo A12 con las cifras de SALIDA (sin volver a recorrer la web)")
     ap.add_argument("--idioma", choices=sorted(CORPUS), help="mide solo ese idioma (por omisión, los dos)")
     args = ap.parse_args()
     if args.selftest:
         sys.exit(selftest())
+    if args.tabla_del_libro:
+        with open(SALIDA, encoding="utf-8") as f:
+            tabla = tabla_del_libro(f.read())
+        print(f"\n{'=' * 74}\nLO QUE EL LIBRO CITA DE AQUÍ (Anexo A12)\n{'=' * 74}\n")
+        print("\n".join(tabla))
+        return
     import pyarrow
     print(f"Medido el {datetime.date.today()} en {platform.platform()}; pyarrow {pyarrow.__version__}; "
           f"{platform.python_version()}. Sin modelo: se lee texto y se cuenta.")

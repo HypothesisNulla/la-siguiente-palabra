@@ -1,4 +1,4 @@
-Sacado el 2026-11-16 en macOS-26.7.1-arm64-arm-64bit. La salida no depende de la máquina: lee un fichero guardado.
+Sacado el 2026-11-20 en macOS-26.7.1-arm64-arm-64bit. La salida no depende de la máquina: lee un fichero guardado.
 Fuente: OpenAssistant/oasst1 (https://huggingface.co/datasets/OpenAssistant/oasst1), licencia Apache 2.0.
 Versión: 2023-04-12_oasst_ready.trees.jsonl.gz; md5 de la copia: bd119c17938362c3ea25bc1523e99551.
 Los mensajes de abajo los escribieron voluntarios de OpenAssistant, no el autor de este repositorio: van tal cual, con sus faltas, y se publican con la licencia del conjunto, que pide atribución: licencia Apache 2.0.
@@ -298,5 +298,17 @@ Tres ejemplos del libro de conversaciones
     Asistente: Escala de Re menor tiene las siguientes notas:
       Re – Mi – Fa – Sol – La – Si♭ – Do.
 
-Tres conversaciones distintas, tal como las escribieron. La petición la escribió una persona, y la respuesta, otra que hacía de asistente.
+Tres conversaciones distintas, tal como las escribieron. El mensaje lo escribió una persona, y la respuesta, otra que hacía de asistente.
+:::
+
+::: tabla
+Quién hace qué en cada fase
+
+| fase | quién escribe el mensaje | quién escribe la respuesta | quién decide si es buena |
+|:--|:--|:--|:--|
+| 1. el libro de conversaciones | una persona | una persona | nadie: se copia tal cual |
+| 2. el juez | una persona | la máquina, varias | personas, que las ordenan |
+| 3. estudiar para el juez | mensajes ya guardados | la máquina | el juez, con una nota |
+
+Las tres fases del adiestramiento, en el trabajo de OpenAI de 2022. En OpenAssistant, también las respuestas de la segunda fase las escribieron personas.
 :::

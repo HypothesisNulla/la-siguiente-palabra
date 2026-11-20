@@ -104,6 +104,12 @@ OPENAI_CRUDO_EN = ["Explain the theory of gravity to a 6 year old.",
                    "Explain the theory of relativity to a 6 year old in a few sentences.",
                    "Explain the big bang theory to a 6 year old.",
                    "Explain evolution to a 6 year old."]
+# Orden 182: las mismas cuatro líneas en castellano, una a una (traducción de Claude), porque el capítulo 12 las enseña
+# así, en una cita en bloque, y la regla 6 pide que la cita salga tal cual de una salida.
+OPENAI_CRUDO_ES = ["Explica la teoría de la gravedad a un niño de seis años.",
+                   "Explica la teoría de la relatividad a un niño de seis años, en unas pocas frases.",
+                   "Explica la teoría del big bang a un niño de seis años.",
+                   "Explica la evolución a un niño de seis años."]
 # La regla de arriba (REGLA), en inglés: una línea es otra petición si empieza por uno de estos verbos de petición en
 # imperativo o acaba en «?».
 VERBOS_DE_PETICION_EN = ("explain", "describe", "write", "tell", "give", "list", "translate", "summarize",
@@ -267,6 +273,9 @@ def seccion_gpt3():
            "en el original en inglés, una línea por renglón y sin tocar nada:", "",
            f"Petición: {OPENAI_PETICION_EN}", "", "GPT-3 en crudo escribe:"]
     out += [f"  {k}. {x}" for k, x in enumerate(lineas, 1)]
+    assert len(OPENAI_CRUDO_ES) == len(lineas), "la traducción tiene que tener una línea por línea del original"
+    out += ["", "Las mismas cuatro líneas, en castellano (traducción de Claude, una a una, que es como las cita el capítulo 12):", ""]
+    out += [f"  {x}" for x in OPENAI_CRUDO_ES]
     out += ["", f"Líneas que escribe: {len(lineas)}. Cada una es otra petición del mismo estilo (según la regla en inglés: "
                 "empieza por un verbo de petición en imperativo o acaba en «?»)"
             + (": sí." if all(peticiones) else f": {sum(peticiones)} de {len(lineas)}."),

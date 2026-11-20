@@ -108,3 +108,18 @@ Ejemplos de las PETICIONES, elegidos con la semilla 20261119 (no a mano); se sal
 
 --- detrás viene la RESPUESTA u otra cosa (0) ---
 (no hay ninguno)
+
+==========================================================================
+LO QUE EL LIBRO CITA DE AQUÍ (Anexo A12)
+==========================================================================
+
+::: tabla
+La petición del niño de seis años, en la web
+
+|  | páginas leídas | la frase sale | como petición | seguida de otra petición | en una lista de tres o más |
+|:--|--:|--:|--:|--:|--:|
+| inglés | 14.868.862 | 107 | 15 | 2 | 0 |
+| castellano | 16.000.000 | 3 | 1 | 0 | 0 |
+
+«La frase sale» cuenta también las líneas que solo hablan de explicar algo a un niño, sin pedirlo. Las dos últimas columnas cuentan solo las que son una petición: «seguida de otra petición» mira la línea siguiente no vacía, y «en una lista» quiere decir tres o más peticiones seguidas.
+:::

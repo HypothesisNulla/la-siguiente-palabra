@@ -491,5 +491,12 @@ GPT-3 en crudo escribe:
   3. Explain the big bang theory to a 6 year old.
   4. Explain evolution to a 6 year old.
 
+Las mismas cuatro líneas, en castellano (traducción de Claude, una a una, que es como las cita el capítulo 12):
+
+  Explica la teoría de la gravedad a un niño de seis años.
+  Explica la teoría de la relatividad a un niño de seis años, en unas pocas frases.
+  Explica la teoría del big bang a un niño de seis años.
+  Explica la evolución a un niño de seis años.
+
 Líneas que escribe: 4. Cada una es otra petición del mismo estilo (según la regla en inglés: empieza por un verbo de petición en imperativo o acaba en «?»): sí.
 Peticiones que encadena: 4. Ninguna es una respuesta a la de la Luna.

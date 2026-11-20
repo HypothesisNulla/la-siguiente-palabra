@@ -39,6 +39,10 @@ CITA = r'`\\(?:ref|dondeesta|pageref|vpageref)\{[^}]*\}`\{=latex\}'   # cita a u
 SECCION_JUBILADAS = "## Palabras jubiladas"
 SECCION_PUENTES = "## Puentes"
 PROHIBIDAS_CON_PUENTE = ("token", "parametro")   # las de la regla 1 que un puente deja decir una vez
+# Orden 184 (20 nov 2026): el título de un informe de otro, en inglés y entre comillas, se cita tal cual aunque lleve «Tokens»
+# («Context Rot: How Increasing Input Tokens Impacts LLM Performance», de Chroma). Es la misma excepción de verificar_reglas.py
+# (TITULOS_EN_INGLES): solo ese título entero y solo en su fichero; el resto de la línea se vigila igual.
+TITULOS_EN_INGLES = {"Context Rot: How Increasing Input Tokens Impacts LLM Performance": ("anexo-a13-donde-se-rompe.md",)}
 EL_MAPA = "mapa-de-los-sotanos"                  # el capítulo de los nombres técnicos: ahí valen todas
 
 # ==========================================================
@@ -54,6 +58,14 @@ def norm(s):
     """Minúsculas y sin tildes, para buscar «parametro» y que valga «parámetro»."""
     return "".join(c for c in unicodedata.normalize("NFD", s.lower())
                    if unicodedata.category(c) != "Mn")
+
+
+def sin_titulos(fichero, texto):
+    """El texto sin los títulos en inglés que ese fichero puede citar (TITULOS_EN_INGLES)."""
+    for titulo, ficheros in TITULOS_EN_INGLES.items():
+        if os.path.basename(fichero) in ficheros:
+            texto = texto.replace(titulo, "TITULO")
+    return texto
 
 
 def leer_vocabulario(raiz):
@@ -208,7 +220,7 @@ def revisar_puentes(raiz):
         if aparte or EL_MAPA in f:
             continue
         for prohibida in PROHIBIDAS_CON_PUENTE:
-            if prohibida in norm(t) \
+            if prohibida in norm(sin_titulos(f, t)) \
                     and not any(prohibida in k and v == (f, n) for k, v in su_linea.items()):
                 fallos.append(f"«{prohibida}» fuera de su puente en {f} línea {n}\n      {t.strip()[:90]}")
     return filas, fallos
@@ -377,6 +389,16 @@ def selftest(raiz):
           f"de él y en el mapa: {'pasa, bien' if ok else 'SUSPENDE, mal'}")
     if not ok:
         fallos.append(f"puentes en su sitio: el libro de juguete debía pasar y suspende: {f4[0]}")
+
+    # Orden 184: el título de Chroma, entero y en su fichero, no cuenta; en otro fichero, o con algo más de «token», sí.
+    tit = "Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+    titulo_ok = ("token" not in norm(sin_titulos("anexo-a13-donde-se-rompe.md", f"Chroma, «{tit}»."))
+                 and "token" in norm(sin_titulos("cap02-b.md", f"Chroma, «{tit}»."))
+                 and "token" in norm(sin_titulos("anexo-a13-donde-se-rompe.md", f"Chroma, «{tit}» y un token.")))
+    print(f"[4b] el título de Chroma   «Tokens» en su título, en su fichero, no cuenta; en otro fichero o con otro «token», sí: "
+          f"{'bien' if titulo_ok else 'MAL'}")
+    if not titulo_ok:
+        fallos.append("el título de Chroma tiene que quedar fuera de la vigilancia de «token» solo entero y en su fichero")
 
     f5 = juguete([("cap02-b.md", "videojuegos.", "videojuegos. Cada token es un número.")])
     ok = any("«token» fuera de su puente" in x for x in f5)

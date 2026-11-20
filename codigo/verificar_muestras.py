@@ -200,7 +200,14 @@ def parrafos_de_ejemplos(texto):
         parrafos.append(' '.join(x.strip() for x in actual))
     etiqueta = re.compile(r'^\*[^*]+:\*\s*«.+»[.,;:]?$')
     negrita = re.compile(r'^\*\*[^*]+\*\*$')
+    # Orden 182: una petición en negrita + un párrafo que la presenta («*GPT-3, de OpenAI, en crudo,* escribe cuatro líneas
+    # más:») + una cita con «>»: la petición también tiene que estar tal cual en la salida (la cita ya se comprueba aparte).
+    presentacion = re.compile(r'^\*[^*]+[,:]\*\s.*:$')
     out = []
+    for i in range(len(parrafos) - 2):
+        if (negrita.match(parrafos[i]) and presentacion.match(parrafos[i + 1]) and parrafos[i + 2].startswith('>')
+                and (parrafos[i], 'petición') not in out):
+            out.append((parrafos[i], 'petición'))
     for i, p in enumerate(parrafos):
         if etiqueta.match(p):
             out.append((p, 'etiqueta'))

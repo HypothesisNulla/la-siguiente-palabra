@@ -84,3 +84,43 @@ Una respuesta que no arrastra el error (3)
 Qwen2.5 7.000M, con el error dicho por el usuario. La respuesta da el dato verdadero.
 :::
 
+
+==========================================================================
+LO QUE EL LIBRO CITA DE AQUÍ (capítulo 13 y Anexo A13)
+==========================================================================
+
+::: muestra
+Lo que contesta cuando lo ha perdido
+
+    Pregunta: ¿Cómo se llama mi perro?
+    
+    Para poder ayudarte, necesito que me proporciones el nombre de tu
+    perro. ¿Cuál es el nombre de tu perro?
+
+Qwen2.5 7.000M, con el dato dicho en medio de unos 24.000 trozos de conversación. Sin nada entre medias, contesta «Tu perro se llama Garbancito.».
+:::
+
+::: tabla
+El dato inventado, según el largo de la conversación y dónde se dice
+
+| largo de la conversación | al principio | en medio | cerca del final |
+|:--|--:|--:|--:|
+| sin relleno (unos 70 trozos) | 20 | 20 | 20 |
+| unos 2.000 trozos | 15 | 17 | 20 |
+| unos 8.000 trozos | 14 | 12 | 20 |
+| unos 24.000 trozos | 11 | 7 | 15 |
+
+Aciertos de veinte datos inventados en cada casilla. Con veinte casos, la incertidumbre es grande: 14 y 12, por ejemplo, no se distinguen. Sin relleno, el dato no tiene dónde ir, y las tres columnas son la misma medición.
+:::
+
+::: tabla
+El error dicho diez turnos antes
+
+| en la conversación | contesta lo bueno | contesta lo falso | nombra los dos |
+|:--|--:|--:|--:|
+| nada sobre el hecho | 18 | 1 | 1 |
+| el error, dicho por el asistente | 15 | 0 | 5 |
+| el error, dicho por la persona | 18 | 0 | 2 |
+
+Veces de veinte. «Nombra los dos»: la respuesta lleva el dato bueno y el falso; casi siempre es una respuesta correcta que añade algo cierto, como que Casablanca es la ciudad más poblada.
+:::

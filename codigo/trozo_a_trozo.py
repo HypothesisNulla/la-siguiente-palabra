@@ -296,6 +296,38 @@ def tabla_del_recorrido(tok, letra, modelo, r, marcas):
         ["En cada paso sale el trozo más probable (el segundo y el tercero, con sus papeletas de cada cien, no salen)."])
 
 
+def tabla_primera_linea(tok, r, modelo_nombre):
+    """La tabla del libro (Anexo A12, Orden 182): la primera línea nueva del caso A, trozo a trozo, sin el trozo que lleva el
+    salto de línea, con el segundo más probable de cada paso; y la nota con lo que pasa en las líneas segunda y tercera. Las
+    cifras salen del recorrido: la nota revienta si las tres líneas no se escriben igual."""
+    ids = [p["id"] for p in r["pasos"]]
+    completas, _ = lineas_de(tok, ids)
+    assert len(completas) >= 3 and completas[0] == completas[1] == completas[2], \
+        "se esperaban tres líneas nuevas iguales (la nota del libro dice que se escriben igual)"
+    n = len(completas[0])
+
+    def texto(i):
+        return tok.decode([int(i)])
+
+    filas = []
+    for k in range(n - 1):                       # sin el último trozo, el que lleva el salto de línea
+        p = r["pasos"][k]
+        i2, q2 = p["top"][1]
+        segundo = "el salto de línea" if tiene_salto(tok, i2) else f"«{texto(i2)}», {pap(q2)}"
+        if tiene_salto(tok, i2):
+            segundo += f", {pap(q2)}"
+        filas.append([f"«{texto(p['id'])}»", pap(p["p"]), segundo])
+    primero = texto(r["pasos"][0]["id"])
+    d2, d3 = r["pasos"][n]["p"], r["pasos"][2 * n]["p"]
+    resto = [r["pasos"][s * n + k]["p"] for s in (1, 2) for k in range(1, n - 1)]
+    mas_de = int(100 * min(resto) // 10 * 10)
+    return tabla_editorial(
+        f"Trozo a trozo, la primera línea nueva ({ETIQUETA[modelo_nombre]}, en crudo)",
+        ["trozo que escribe", "papeletas de cada cien", "el segundo más probable"], filas, "idi",
+        [f"El espacio delante de un trozo es parte del trozo. Las líneas segunda y tercera se escriben igual: su «{primero}» gana "
+         f"con {pap(d2)} y {pap(d3)} papeletas, y los demás trozos, con más de {mas_de}."])
+
+
 def caso_impreso(tok, modelo_nombre, modelo, letra, peticion, cierre):
     t0 = time.time()
     r = recorrer(tok, modelo, peticion)
@@ -314,6 +346,9 @@ def caso_impreso(tok, modelo_nombre, modelo, letra, peticion, cierre):
     print("\n".join(tabla_de_sitios(tok, letra, modelo_nombre, r, filas)))
     print()
     print("\n".join(tabla_del_recorrido(tok, letra, modelo_nombre, r, marcas)))
+    if letra == "A":
+        print()
+        print("\n".join(tabla_primera_linea(tok, r, modelo_nombre)))
     print(f"(tiempo de este caso: {coma(time.time() - t0, 0)} s; no es una medición del libro)")
     return r, filas
 
