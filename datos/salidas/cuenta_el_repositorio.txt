@@ -1,13 +1,13 @@
 --- selftest ---
 [1] test nulo         una carpeta sin programas: [0, 0, 0, 0]
 [2] señal implantada  8 programas, 1 .sh y 4 salidas: [1, 2, 3, 2]; como se espera: sí
-[3] invariante        167 programas en cuatro clases (14, 58, 87, 8); de los 167 .py de codigo/, cada uno en una sola: sí
+[3] invariante        181 programas en cuatro clases (15, 60, 98, 8); de los 181 .py de codigo/, cada uno en una sola: sí
                       corpus: vacío (0, 0); tres ficheros de 10, 20 y 30 bytes (3, 60); el de verdad, 300 ficheros y 138.273.144 bytes, leídos 138.273.144
 
 SELFTEST: las tres pruebas pasan.
 
 ########## cuántos programas hay en codigo/ ##########
-fecha: 2026-10-24 11:30 UTC
+fecha: 2026-11-21 17:38 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: cuenta ficheros
 
@@ -20,35 +20,35 @@ Programas de codigo/, por clase
 
 | clase | programas |
 |:--|--:|
-| verificadores | 14 |
-| programas de figuras | 58 |
-| programas de medición | 87 |
+| verificadores | 15 |
+| programas de figuras | 60 |
+| programas de medición | 98 |
 | programas que ayudan a los demás | 8 |
-| **en total** | **167** |
+| **en total** | **181** |
 
 Cada programa está en una sola clase.
 :::
 
 EL CORPUS DE ENTRENAMIENTO
 
-  ficheros de datos/corpus_es/                           300
+  ficheros de datos/entrada/corpus_es/                           300
   bytes que suman (los de los ficheros)          138.273.144
   en millones de bytes                                 138,3
 
-VERIFICADORES (14)
+VERIFICADORES (15)
 
   verificar_anchos, verificar_asepsia, verificar_catalogo,
   verificar_cifras, verificar_conclusiones, verificar_figuras,
-  verificar_muestras, verificar_notas, verificar_referencias,
-  verificar_reglas, verificar_selftests, verificar_titulos,
-  verificar_trato, verificar_vocabulario.
+  verificar_muestras, verificar_notas, verificar_numeros_prosa,
+  verificar_referencias, verificar_reglas, verificar_selftests,
+  verificar_titulos, verificar_trato, verificar_vocabulario.
 
-PROGRAMAS DE FIGURAS (58)
+PROGRAMAS DE FIGURAS (60)
 
   figura_apilar, figura_casillas_vacias, figura_cien_papeletas,
   figura_cifra_a_cifra, figura_con_manos, figura_copias_muestra,
-  figura_cuadrado_del_colegio, figura_cuadricula,
-  figura_cuanto_ha_leido, figura_cuatro_retratos,
+  figura_cuadrado_de_la_red, figura_cuadrado_del_colegio,
+  figura_cuadricula, figura_cuanto_ha_leido, figura_cuatro_retratos,
   figura_culpa_hacia_atras_colegio, figura_de_la_regla_al_cuadrado,
   figura_diez_digitos, figura_dos_valles, figura_el_colegio,
   figura_el_comite, figura_el_empujon, figura_el_reparto,
@@ -62,16 +62,16 @@ PROGRAMAS DE FIGURAS (58)
   figura_maquina_del_quijote, figura_maquina_entera,
   figura_mirada_a_mano, figura_misma_direccion,
   figura_pagina_el_caballero, figura_paginas_libreta,
-  figura_prueba_de_chollet, figura_que_es_aprender,
-  figura_que_es_una_capa, figura_red_desenrollada,
-  figura_reloj_a_mano, figura_saltan_la_regla,
-  figura_seguir_entrenando, figura_seis_maneras,
-  figura_siete_segmentos, figura_sorteo_del_arranque,
-  figura_tablero, figura_todo_o_nada, figura_tres_fases,
-  figura_trocear_a_mano, figura_una_capa, figura_una_neurona,
-  figura_una_raya, figuras_el_comite_por_dentro.
+  figura_papelera_cuerpo, figura_prueba_de_chollet,
+  figura_que_es_aprender, figura_que_es_una_capa,
+  figura_red_desenrollada, figura_reloj_a_mano,
+  figura_saltan_la_regla, figura_seguir_entrenando,
+  figura_seis_maneras, figura_siete_segmentos,
+  figura_sorteo_del_arranque, figura_tablero, figura_todo_o_nada,
+  figura_tres_fases, figura_trocear_a_mano, figura_una_capa,
+  figura_una_neurona, figura_una_raya, figuras_el_comite_por_dentro.
 
-PROGRAMAS DE MEDICIÓN (87)
+PROGRAMAS DE MEDICIÓN (98)
 
   aprender_la_trampa, banco_segun_el_diccionario, banco_y_paris,
   bateria_una_a_una, casillas_vacias, cola_larga,
@@ -82,28 +82,31 @@ PROGRAMAS DE MEDICIÓN (87)
   cuantas_veces_sale, cuantos_hilos, cuatro_retratos,
   cuenta_el_repositorio, cuentas_a_mano, culpa_en_el_colegio,
   culpa_hacia_atras, culpa_que_se_desvanece,
-  de_cuando_es_la_biblioteca, de_donde_sale_cada_figura, dos_valles,
-  editar_contexto, el_colegio, el_colegio_en_anos,
+  de_cuando_es_la_biblioteca, de_donde_sale_cada_figura,
+  diferencia_entre_repeticiones, dos_valles, editar_contexto,
+  ejemplos_de_adiestramiento, el_colegio, el_colegio_en_anos,
   el_comite_por_dentro, el_sorteo_del_arranque,
   elegir_lo_mas_probable, en_que_orden_aprende, en_serie_o_a_la_vez,
   eres_consciente, es_un_cuatro, idiomas_en_trozos,
-  la_e_de_acordarme, la_misma_direccion, la_misma_semilla,
-  la_papelera_por_dentro, la_seguridad_por_dentro,
+  la_conversacion_larga, la_e_de_acordarme, la_libreta_que_crece,
+  la_lista_de_ejercicios, la_misma_direccion, la_misma_peticion,
+  la_misma_semilla, la_papelera_por_dentro, la_seguridad_por_dentro,
   las_capas_que_resumen, ley_de_2020, lista_de_probabilidades,
   lo_habia_visto_ya, lo_que_cuesta_cambiar,
   lo_que_dicen_los_articulos, lo_que_mas_abunda, lo_que_recibe,
   lotes_en_la_tarjeta, mapa_en_la_tarjeta, maquina_entera,
   maquina_entera_detalle, maquina_entera_pasos, memoria_recurrente,
-  mirada_a_mano, ngrama, ordenes_a_la_vista, ordenes_escritas,
-  pagina_el_caballero, palabras_de_cerca, palabras_numeros,
-  pasos_a_la_vista, pasos_escritos, perceptron, piezas_de_una_letra,
-  prologo_kilobyte, que_inventan_las_capas, que_mira_cada_una,
-  reloj_a_mano, reparto_atencion, reparto_una_a_una,
-  respuesta_modelo, retropropagacion, romper_a_la_vista,
-  romper_la_maquina, seguir_entrenando, siete_segmentos,
-  sorpresa_a_mano, temperatura_a_mano, todo_o_nada,
+  mirada_a_mano, muchas_vueltas, muchas_vueltas_carpeta, ngrama,
+  ordenes_a_la_vista, ordenes_escritas, pagina_el_caballero,
+  palabras_de_cerca, palabras_numeros, pasos_a_la_vista,
+  pasos_escritos, perceptron, piezas_de_una_letra,
+  por_que_ya_contesta, prologo_kilobyte, que_inventan_las_capas,
+  que_mira_cada_una, reloj_a_mano, reparto_atencion,
+  reparto_una_a_una, respuesta_modelo, retropropagacion,
+  romper_a_la_vista, romper_la_maquina, seguir_entrenando,
+  siete_segmentos, sorpresa_a_mano, temperatura_a_mano, todo_o_nada,
   traduccion_por_dentro, traza_escalera, trocear_a_mano,
-  una_prueba_de_memoria.
+  trozo_a_trozo, una_prueba_de_memoria, una_tarea_con_asistente.
 
 PROGRAMAS QUE AYUDAN A LOS DEMÁS (8)
 
