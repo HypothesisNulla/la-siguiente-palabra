@@ -10,7 +10,7 @@ Máquina de referencia: MacBook Pro M4 Max, 36 GB de memoria unificada, macOS.
 | carpeta | qué hay |
 |:--|:--|
 | `codigo/` | un fichero por experimento, sin rutas absolutas, con semilla fija; `medir_en_mac.sh`, que lanza las mediciones en el Mac; y `historico/`, los programas que ya no se usan |
-| `datos/entrada/` | lo que entra en los programas: `quijote.txt`, `candidatos_es.txt`, `arc_25ff71a9.json`, `declaracion_universal/` y, si se descarga, `corpus_es/` (los trescientos libros, que no se publican) |
+| `datos/entrada/` | lo que entra en los programas: `quijote.txt`, `candidatos_es.txt`, `arc_25ff71a9.json`, `declaracion_universal/`, `qwen25-32b-instruct-model.safetensors.index.json` y, si se descarga, `corpus_es/` (los trescientos libros, que no se publican) |
 | `datos/salidas/` | lo que sale de ellos: las tablas guardadas (`.txt`), los `.csv`, `resultados_mac.txt`, y las carpetas de muestras y de pruebas. Cada tabla del libro se copia literalmente de una de estas salidas |
 | `datos/README.md` | de dónde viene cada dato de entrada |
 | `figuras/` | los programas de `codigo/` dibujan aquí las figuras al ejecutarse; las figuras no se publican (el `.gitignore` las deja fuera). Al clonar solo está `de-donde-sale-cada-figura.md`: qué programa dibuja cada figura del libro y de qué salidas guardadas saca sus números (lo escribe `codigo/de_donde_sale_cada_figura.py`) |

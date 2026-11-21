@@ -12,8 +12,8 @@ programa no ejecuta ningún modelo: abre los ficheros de números de las copias 
      comprimida. Y cuántos valores distintos quedan en un grupo.
   2. LO QUE OCUPA CADA COPIA, frente a la memoria del portátil. Las tres copias que hay en el
      disco se miden por el tamaño de sus ficheros; la de treinta y dos mil millones sin comprimir no
-     está descargada, y se calcula contando sus números en la copia comprimida y multiplicando por
-     lo que ocupa cada uno sin comprimir (dos bytes, como en la copia de siete mil millones).
+     está descargada, y su tamaño es el que suma el índice oficial de esa copia
+     (`model.safetensors.index.json`, guardado en `datos/entrada/`; Orden 194).
 
 Uso (en el Mac: necesita MLX y los modelos descargados):
     python comprimir_cinco_numeros.py --selftest
@@ -36,6 +36,12 @@ MEMORIA_PORTATIL_GB = 36                    # lo que dice la ficha: MacBook Pro 
 # tamaño de las copias, que sí van en GB = 1e9, sin decirlo, era comparar 65,3 de una medida con 36
 # de la otra (17 oct 2026).
 MEMORIA_PORTATIL_BYTES = MEMORIA_PORTATIL_GB * 1024 ** 3
+# Orden 194 (21 nov 2026): el tamaño de la copia de 32.000M sin comprimir ya no se calcula. Sale del índice oficial
+# de Qwen2.5-32B-Instruct (el `total_size` de su `model.safetensors.index.json`: 65.527.752.704 bytes, 65,5 GB). Antes se
+# calculaba contando los números de la copia comprimida por dos bytes, y salían 65,3 GB: `cuantos_numeros` se dejaba, en
+# esa copia, un `up_proj` cuyas escalas están en otro fichero (123.863.040 números sin contar, 0,2 GB de menos). La
+# función no se ha tocado (la usa la prueba 3, con la copia de 7.000M, donde cuenta bien); aquí ya no se usa para el 32B.
+INDICE_32 = "qwen25-32b-instruct-model.safetensors.index.json"     # en ../datos/entrada/
 CHIP_DEL_LIBRO = "Apple M4 Max"             # el portátil del que habla el libro
 GB = 1e9                                    # gigabytes como cuenta el fabricante el DISCO (no la memoria)
 
@@ -157,6 +163,13 @@ def cuantos_numeros(repo):
     return total
 
 
+def bytes_del_indice(nombre=INDICE_32):
+    """Lo que suma el índice oficial de la copia sin comprimir (`metadata.total_size`, en bytes)."""
+    ruta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "datos", "entrada", nombre)
+    with open(ruta, encoding="utf-8") as fh:
+        return int(json.load(fh)["metadata"]["total_size"])
+
+
 def imprime(*bloques):
     for b in bloques:
         print("\n".join(b))
@@ -191,22 +204,21 @@ def informe():
              f"para los {q['group_size']} de su grupo; lo perdido no vuelve."]))
 
     print("--- 2. LO QUE OCUPA CADA COPIA ---\n")
-    n32 = cuantos_numeros(COMPRIMIDO_32)
-    n7 = cuantos_numeros(COMPRIMIDO_7)
+    b32 = bytes_del_indice()
     filas = [("7.000M sin comprimir", tamano(SIN_COMPRIMIR_7), "medido"),
              ("7.000M comprimido", tamano(COMPRIMIDO_7), "medido"),
-             ("32.000M sin comprimir", n32 * BYTES_SIN_COMPRIMIR, "calculado"),
+             ("32.000M sin comprimir", b32, "índice oficial"),
              ("32.000M comprimido", tamano(COMPRIMIDO_32), "medido")]
     imprime(tabla_editorial(
         "Lo que ocupa cada copia",
         ["copia", "ocupa", "cómo"],
         [[nombre, coma(b / GB, 1) + " GB", como] for nombre, b, como in filas], "idi",
-        [# Orden 97: nota para el lector. Los números de cada copia (32.640.013.312 y 7.615.616.512) y
-         # lo que son los «36 GB» de la ficha están en `cuantos_numeros` y en `linea_memoria`.
-         "«Medido»: lo que ocupan sus ficheros en el disco. «Calculado»: "
-         f"{EN_LETRA[BYTES_SIN_COMPRIMIR]} bytes por cada peso, como la de 7.000M sin comprimir. "
+        [# Orden 97: nota para el lector. Lo que son los «36 GB» de la ficha está en `linea_memoria`.
+         # Orden 194: la fila de 32.000M sin comprimir sale del índice oficial, no de un cálculo.
+         "«Medido»: lo que ocupan sus ficheros en el disco. «Índice oficial»: lo que suma el índice de la "
+         f"copia original, que no está descargada ({EN_LETRA[BYTES_SIN_COMPRIMIR]} bytes por cada peso, como la de 7.000M sin comprimir). "
          f"El portátil tiene {coma(MEMORIA_PORTATIL_BYTES / GB, 1)} GB de memoria para todo."]))   # Orden 175: sin «y la grande…»
-    assert n32 * BYTES_SIN_COMPRIMIR > MEMORIA_PORTATIL_BYTES, (
+    assert b32 > MEMORIA_PORTATIL_BYTES, (
         "la nota dice que la grande sin comprimir no cabe en la memoria del portátil")
 
 

@@ -1,4 +1,4 @@
-Medido el 2026-11-17 en macOS-26.7.1-arm64-arm-64bit.
+Medido el 2026-11-21 en macOS-26.7.1-arm64-arm-64bit.
 --- 1. CINCO NÚMEROS, ANTES Y DESPUÉS DE COMPRIMIR ---
 máquina: mlx-community/Qwen2.5-7B-Instruct-bf16 y mlx-community/Qwen2.5-7B-Instruct-4bit
 tabla: model.layers.0.self_attn.q_proj, fila 1, números 1 a 5
@@ -36,9 +36,9 @@ Lo que ocupa cada copia
 |:--|--:|:--|
 | 7.000M sin comprimir | 15,2 GB | medido |
 | 7.000M comprimido | 4,3 GB | medido |
-| 32.000M sin comprimir | 65,3 GB | calculado |
+| 32.000M sin comprimir | 65,5 GB | índice oficial |
 | 32.000M comprimido | 18,4 GB | medido |
 
-«Medido»: lo que ocupan sus ficheros en el disco. «Calculado»: dos bytes por cada peso, como la de 7.000M sin comprimir. El portátil tiene 38,7 GB de memoria para todo.
+«Medido»: lo que ocupan sus ficheros en el disco. «Índice oficial»: lo que suma el índice de la copia original, que no está descargada (dos bytes por cada peso, como la de 7.000M sin comprimir). El portátil tiene 38,7 GB de memoria para todo.
 :::
 
