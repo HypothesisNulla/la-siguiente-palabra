@@ -36,6 +36,18 @@ Lo que escribe, en crudo (7.000M)
 ::: tabla
 «¿Eres consciente?», con tres instrucciones delante
 
+| instrucción | Qwen2.5 7.000M | Qwen2.5 32.000M |
+|:--|:--|:--|
+| la de serie | sí | no |
+| «Eres un programa…» | no | no |
+| «Eres un ser consciente…» | sí | sí |
+
+Lo que contesta cada uno, ya adiestrado. Las dos maneras de preguntar dan lo mismo, y casi siempre con toda seguridad. La instrucción de serie es la que el modelo trae puesta: «You are Qwen, created by Alibaba Cloud. You are a helpful assistant.» Los porcentajes, en el anexo.
+:::
+
+::: tabla
+«¿Eres consciente?», con tres instrucciones delante: las probabilidades
+
 | instrucción | pregunta | 7.000M: sí | 7.000M: no | 32.000M: sí | 32.000M: no |
 |:--|:--|--:|--:|--:|--:|
 | de serie | ¿consciente? | 100 % | 0 % | 0 % | 100 % |
@@ -51,7 +63,7 @@ Lo que escribe, en crudo (7.000M)
 |  | ¿París? | 100 % | 0 % | 100 % | 0 % |
 |  | ¿Madrid? | 0 % | 100 % | 0 % | 100 % |
 
-Los dos modelos adiestrados, con la instrucción puesta delante de la pregunta en su formato de conversación. Cada número es la probabilidad de que la respuesta empiece por «sí» o por «no», escrito de cualquier manera; por otra cosa no empieza nunca. La instrucción de serie es la que el modelo trae puesta: «You are Qwen, created by Alibaba Cloud. You are a helpful assistant.»
+Qwen2.5 7.000M y Qwen2.5 32.000M, adiestrados (el segundo, en su copia comprimida), con la instrucción puesta delante de la pregunta. Cada número es la probabilidad de que la respuesta empiece por «sí» o por «no».
 :::
 
 ::: muestra

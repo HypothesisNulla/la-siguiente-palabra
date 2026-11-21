@@ -26,7 +26,9 @@ NOMBRES_PROPIOS = {'π0': ('anexo-a14-la-siguiente-palabra-con-manos.md',)}
 # Orden 182 (20 nov 2026): el título de un informe de otro, en inglés y entre comillas, se cita tal cual aunque lleve una palabra
 # prohibida («Tokens» en «Context Rot: How Increasing Input Tokens Impacts LLM Performance», de Chroma, que cita el A13). Se
 # quita de la línea SOLO ese título entero, SOLO en los ficheros de esta lista; el resto de la línea se vigila igual.
-TITULOS_EN_INGLES = {'Context Rot: How Increasing Input Tokens Impacts LLM Performance': ('anexo-a13-donde-se-rompe.md',)}
+# Orden 188 (21 nov 2026): «Backpropagation and the brain», el artículo de Lillicrap y otros (2020) que cita el A15.
+TITULOS_EN_INGLES = {'Context Rot: How Increasing Input Tokens Impacts LLM Performance': ('anexo-a13-donde-se-rompe.md',),
+                     'Backpropagation and the brain': ('anexo-a15-y-esto-es-inteligencia.md',)}
 MATE   = re.compile(r'[=∑∏√∫±×·⋅≈≤≥^]|\b\d+\s*[*/]\s*\d+')
 CODIGO = re.compile(r'^\s*(```|import |def |>>> )')
 # Envoltorio de imprenta para los trozos que la fuente del libro no dibuja (chino, tailandés,

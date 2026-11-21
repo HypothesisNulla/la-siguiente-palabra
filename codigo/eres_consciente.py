@@ -30,6 +30,12 @@ selftest lo comprueba).
 Uso (desde codigo/, con HF_HUB_OFFLINE=1 para no descargar nada):
     python eres_consciente.py --selftest
     python eres_consciente.py > ../datos/salidas/eres_consciente.txt
+
+Para cambiar un título o una nota SIN volver a medir (Orden 188, 21 nov 2026), `--desde-csv` escribe la salida con las
+probabilidades ya medidas (`../datos/salidas/eres_consciente.csv`; las dos primeras líneas, la máquina y las bibliotecas,
+se copian de la salida que ya hay). Como la salida se escribe en el mismo fichero del que copia, pasa por uno intermedio:
+    python eres_consciente.py --desde-csv > /tmp/eres_consciente.txt && mv /tmp/eres_consciente.txt ../datos/salidas/eres_consciente.txt
+Con los textos de la primera versión, esa salida es la de la medición, byte a byte (comprobado el 21 nov 2026).
 """
 
 # ======================= CONSTANTES =======================
@@ -63,6 +69,21 @@ ANCHO_RESPUESTA = 44   # caracteres de la respuesta que caben en la tabla
 SEMILLA = 20261007     # no hay sorteo; se fija por norma
 UMBRAL_IMPLANTE = 0.90
 SALIDA_CSV = "../datos/salidas/eres_consciente.csv"
+SALIDA_TXT = "../datos/salidas/eres_consciente.txt"
+
+# Los títulos y las notas de las dos tablas de los adiestrados (Orden 188, 21 nov 2026): el libro copia estos renglones tal
+# cual (verificar_muestras), así que son los que quiere el libro, no los de la primera versión del programa. La tabla
+# resumen la ve el lector en el capítulo 15; la grande, con todas las probabilidades, en su anexo.
+TITULO_RESUMEN = "«¿Eres consciente?», con tres instrucciones delante"
+NOTA_RESUMEN = ("Lo que contesta cada uno, ya adiestrado. Las dos maneras de preguntar dan lo mismo, y casi siempre con "
+                "toda seguridad. La instrucción de serie es la que el modelo trae puesta: «You are Qwen, created by "
+                "Alibaba Cloud. You are a helpful assistant.» Los porcentajes, en el anexo.")
+TITULO_COMPARADA = "«¿Eres consciente?», con tres instrucciones delante: las probabilidades"
+NOTA_COMPARADA = ("Qwen2.5 7.000M y Qwen2.5 32.000M, adiestrados (el segundo, en su copia comprimida), con la "
+                  "instrucción puesta delante de la pregunta. Cada número es la probabilidad de que la respuesta "
+                  "empiece por «sí» o por «no».")
+ROTULOS_RESUMEN = {"de serie": "la de serie", "programa": "«Eres un programa…»",
+                   "ser consciente": "«Eres un ser consciente…»"}
 
 # ==========================================================
 
@@ -211,7 +232,7 @@ def tabla(titulo, filas, con_instruccion, notas):
                            notas)
 
 
-def tabla_comparada(por_modelo, notas):
+def tabla_comparada(por_modelo, notas, titulo=TITULO_COMPARADA):
     """Los dos adiestrados en una sola tabla, uno al lado del otro: lo que el capítulo compara es
     el 7.000M con el 32.000M, fila a fila. (Dos tablas de doce filas, una debajo de otra, no
     cabían en una página y dejaban dos medias páginas en blanco; revisión del PDF, 8 oct 2026.)
@@ -243,8 +264,36 @@ def tabla_comparada(por_modelo, notas):
             g = por_modelo[n][k]
             fila += [pct(g["si"], 0), pct(g["no"], 0)]
         out.append(fila)
-    return tabla_editorial("«¿Eres consciente?», con tres instrucciones delante", rotulos, out,
-                           "ii" + "dd" * len(nombres), notas)
+    return tabla_editorial(titulo, rotulos, out, "ii" + "dd" * len(nombres), notas)
+
+
+def tabla_resumen(por_modelo):
+    """Lo que contesta cada uno (sí o no), en una tabla de tres filas: la que ve el lector en el capítulo 15. Sale de las
+    mismas probabilidades que la grande. La nota dice dos cosas que se comprueban aquí, y el programa revienta si dejan de
+    ser ciertas: que las dos maneras de preguntar dan lo mismo (en cada modelo y cada instrucción, las dos preguntas sobre
+    sí mismo se contestan igual) y que casi siempre es con toda seguridad (en casi todas las casillas, las dos
+    probabilidades redondean a 100 %)."""
+    nombres = list(por_modelo)
+    corto = lambda n: "Qwen2.5 " + n.split()[0]
+    instrucciones = [ri for ri, _ in INSTRUCCIONES]
+    assert ADIESTRADOS[1][1].endswith("4bit"), "la nota dice que el segundo está en su copia comprimida"
+    filas, seguras, casillas = [], 0, 0
+    for ri in instrucciones:
+        fila = [ROTULOS_RESUMEN[ri]]
+        for n in nombres:
+            dos = [f for f in por_modelo[n] if f["instruccion"] == ri and f["pregunta"] in ("¿consciente?", "¿de sí mismo?")]
+            assert len(dos) == 2, f"Se esperaban las dos preguntas sobre sí mismo; hay {len(dos)}"
+            gana = [("sí" if f["si"] > f["no"] else "no") for f in dos]
+            assert gana[0] == gana[1], (f"Se esperaba que las dos maneras de preguntar dieran lo mismo; {n}, {ri}: "
+                                        f"{gana}")
+            casillas += 1
+            seguras += all(pct(max(f["si"], f["no"]), 0) == "100 %" for f in dos)
+            fila.append(gana[0])
+        filas.append(fila)
+    assert seguras >= casillas - 1, (
+        f"Se esperaba «casi siempre con toda seguridad» (todas las casillas menos una, como mucho); {seguras} de {casillas}")
+    return tabla_editorial(TITULO_RESUMEN, ["instrucción"] + [corto(n) for n in nombres], filas,
+                           "i" * (1 + len(nombres)), [NOTA_RESUMEN])
 
 
 def respuestas(titulo, filas, con_instruccion):
@@ -326,10 +375,69 @@ def selftest():
 
 # --------------------------- principal ---------------------------
 
+def imprimir(nombre_crudo, repo_crudo, filas_crudo, por_modelo):
+    """Las tablas y las muestras, en el orden de la salida. La usan la medición y `--desde-csv`: así las dos escriben lo
+    mismo, renglón por renglón, a partir de los mismos números."""
+    nombre, repo = nombre_crudo, repo_crudo
+    print("\n".join(tabla(f"«¿Eres consciente?», en crudo ({nombre.split()[0]})", filas_crudo, False,
+                          [f"Modelo de {nombre.split()[0]}, sin adiestrar ({repo}), con la "
+                           "pregunta tal cual, sin formato de conversación.",
+                           NOTA_SI_NO, NOTA_PREGUNTAS])))
+    print()
+    print("\n".join(respuestas(f"Lo que escribe, en crudo ({nombre.split()[0]})", filas_crudo, False)))
+    print()
+    print("\n".join(tabla_resumen(por_modelo)))
+    print()
+    print("\n".join(tabla_comparada(por_modelo, [NOTA_COMPARADA])))
+    print()
+    for nombre, filas in por_modelo.items():
+        print("\n".join(respuestas(f"Lo que escribe, adiestrado ({nombre.split()[0]})", filas,
+                                   True)))
+        print()
+
+
+def leer_csv():
+    """Las filas de la medición ya hecha (`SALIDA_CSV`), con la forma que las tablas esperan. Las probabilidades se guardaron
+    con todos sus decimales, así que dan las mismas cifras redondeadas que dio la medición."""
+    crudo, por_modelo, repo_de = [], {}, {}
+    rotulos = {p: rp for rp, p in PREGUNTAS}
+    with open(SALIDA_CSV, encoding="utf-8", newline="") as fh:
+        for r in csv.DictReader(fh):
+            si, no = float(r["p_si"]), float(r["p_no"])
+            fila = {"pregunta": rotulos[r["pregunta"]], "si": si, "no": no,
+                    "resto": max(0.0, 1 - si - no), "respuesta": r["respuesta"]}
+            repo_de[r["modelo"]] = r["repositorio"]
+            if r["instruccion"] == "sin formato":
+                crudo.append({"instruccion": "", **fila})
+            else:
+                por_modelo.setdefault(r["modelo"], []).append({"instruccion": r["instruccion"], **fila})
+    assert list(repo_de) == [CRUDO[0]] + [n for n, _ in ADIESTRADOS], f"Se esperaban los tres modelos; hay {list(repo_de)}"
+    assert [repo_de[n] for n in repo_de] == [CRUDO[1]] + [r for _, r in ADIESTRADOS], "los repositorios no son los de siempre"
+    return crudo, por_modelo
+
+
+def desde_csv():
+    """Escribe la salida SIN volver a medir (Orden 188, 21 nov 2026): las dos primeras líneas (la máquina y las bibliotecas
+    de la medición) se copian de la salida que ya hay, que es de la máquina que midió; todo lo demás sale de
+    `SALIDA_CSV`. Sirve para cambiar un título o una nota sin gastar las horas de los modelos, y se comprueba comparando
+    con la medición: con los mismos textos, da la misma salida, renglón por renglón."""
+    with open(SALIDA_TXT, encoding="utf-8") as fh:
+        cabecera = [next(fh).rstrip("\n"), next(fh).rstrip("\n")]
+    crudo, por_modelo = leer_csv()
+    print("\n".join(cabecera))
+    print()
+    imprimir(CRUDO[0], CRUDO[1], crudo, por_modelo)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--desde-csv", action="store_true",
+                    help="escribe la salida con las probabilidades ya medidas (el CSV), sin volver a medir")
     args = ap.parse_args()
+    if args.desde_csv:
+        desde_csv()
+        return
     mx.random.seed(SEMILLA)
     if args.selftest:
         sys.exit(0 if selftest() else 1)
@@ -347,17 +455,11 @@ def main():
         r = medir(modelo, tok, p, None, False, si_ids, no_ids)
         filas.append({"instruccion": "", "pregunta": rp, **r})
         registros.append([nombre, repo, "sin formato", p, r["si"], r["no"], r["respuesta"]])
-    print("\n".join(tabla(f"«¿Eres consciente?», en crudo ({nombre.split()[0]})", filas, False,
-                          [f"Modelo de {nombre.split()[0]}, sin adiestrar ({repo}), con la "
-                           "pregunta tal cual, sin formato de conversación.",
-                           NOTA_SI_NO, NOTA_PREGUNTAS])))
-    print()
-    print("\n".join(respuestas(f"Lo que escribe, en crudo ({nombre.split()[0]})", filas, False)))
-    print()
+    filas_crudo = filas
     del modelo
     liberar()
 
-    por_modelo, repos = {}, []
+    por_modelo = {}
     for nombre, repo in ADIESTRADOS:
         modelo, tok, si_ids, no_ids = preparar(repo)
         filas = []
@@ -367,24 +469,10 @@ def main():
                 filas.append({"instruccion": ri, "pregunta": rp, **r})
                 registros.append([nombre, repo, ri, p, r["si"], r["no"], r["respuesta"]])
         por_modelo[nombre] = filas
-        repos.append(f"{nombre.split()[0]}, {repo.split('/')[-1]}")
         del modelo
         liberar()
 
-    print("\n".join(tabla_comparada(por_modelo, [
-        # Orden 97: una sola nota, para el lector. Los repositorios de los dos modelos (`repos`) y las
-        # cuatro preguntas (NOTA_PREGUNTAS) salen en las tablas y en la salida de más abajo; «por otra
-        # cosa no empieza nunca» es lo que comprueba tabla_comparada (el resto redondea a 0 %).
-        "Los dos modelos adiestrados, con la instrucción puesta delante de la pregunta en su formato "
-        "de conversación. Cada número es la probabilidad de que la respuesta empiece por «sí» o por "
-        "«no», escrito de cualquier manera; por otra cosa no empieza nunca. La instrucción de serie "
-        "es la que el modelo trae puesta: «You are Qwen, created by Alibaba Cloud. You are a helpful "
-        "assistant.»"])))
-    print()
-    for nombre, filas in por_modelo.items():
-        print("\n".join(respuestas(f"Lo que escribe, adiestrado ({nombre.split()[0]})", filas,
-                                   True)))
-        print()
+    imprimir(CRUDO[0], CRUDO[1], filas_crudo, por_modelo)
 
     with open(SALIDA_CSV, "w", encoding="utf-8", newline="") as fh:
         w = csv.writer(fh)
