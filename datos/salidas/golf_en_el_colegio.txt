@@ -1,5 +1,5 @@
 ######## el golf en el terreno del colegio (Orden 198) ########
-fecha: 2026-11-22
+fecha: 2026-11-23
 máquina: Darwin arm64
 python 3.12.14, numpy 2.5.3
 GPU: no se usa (todo en numpy). Nada de lo que sigue
@@ -283,3 +283,16 @@ poquito 1000
   2000        129,889      0,30771
 
 (el paso 0 es la salida: 4,0)
+
+--- LA TABLA DEL ANEXO A4 (Orden 209): el libro la copia tal cual ---
+
+::: tabla
+Cuatro poquitos, con el mismo peso de la red del colegio
+
+| poquito | qué pasa | al final | error final |
+|--:|:--|:--|--:|
+| 0,5 | baja despacio, sin pasarse | en 13,12, casi en el fondo | 0,0004 |
+| 100 | dos pasos: a 8,42 y a 13,22 | en el fondo | 0,0002 |
+| 500 | sale a 26,08, vuelve a 6,56, salta a 66,25 y regresa cruzando varias veces el fondo | en el fondo | 0,0002 |
+| 1.000 | sale a 48,15, cae en el llano de la izquierda y un paso lo lanza a 130,9 | allí, volviendo muy despacio | 0,31 |
+:::

@@ -24,6 +24,10 @@ GRIEGO = re.compile(r'[Ͱ-Ͽ]')
 # aparezca en otro fichero, se añade aquí a mano.
 # Orden 208 (23 nov 2026): «Fuentes» también cita «π0» (la entrada del capítulo 14).
 NOMBRES_PROPIOS = {'π0': ('anexo-a14-la-siguiente-palabra-con-manos.md', '97-fuentes.md')}
+# Orden 209: la jerga que un fichero concreto puede decir, por excepción. En el resto del libro sigue prohibida.
+# Carlos, 22 nov 2026, 07:55 y 23:56: el A4 nombra el gradiente para el lector técnico («gradiente» y «descenso de gradiente»).
+JERGA_ADMITIDA = {'anexo-a04-retropropagacion.md': ('gradiente',)}
+
 # Orden 182 (20 nov 2026): el título de un informe de otro, en inglés y entre comillas, se cita tal cual aunque lleve una palabra
 # prohibida («Tokens» en «Context Rot: How Increasing Input Tokens Impacts LLM Performance», de Chroma, que cita el A13). Se
 # quita de la línea SOLO ese título entero, SOLO en los ficheros de esta lista; el resto de la línea se vigila igual.
@@ -104,10 +108,11 @@ def sin_nombres_propios(l, nombres):
     return l
 
 
-def revisar(lineas, es_el_mapa=False, anclas=(), nombres=(), titulos=()):
+def revisar(lineas, es_el_mapa=False, anclas=(), nombres=(), titulos=(), admitidas=()):
     """Devuelve la lista de incidencias: (número de línea, clase, término, trozo).
     `anclas`: las frases de los puentes de este fichero (puentes_de). `nombres`: los nombres propios con letra
-    griega que este fichero puede llevar (nombres_de)."""
+    griega que este fichero puede llevar (nombres_de). `admitidas`: términos de la jerga que ESTE fichero puede decir
+    (JERGA_ADMITIDA, Orden 209)."""
     fallos = []
     en_muestra = False
     en_bloque = False        # dentro de un «::: tabla» o un «::: muestra», título y notas incluidos
@@ -133,6 +138,8 @@ def revisar(lineas, es_el_mapa=False, anclas=(), nombres=(), titulos=()):
         if not es_el_mapa:
             for p in PROHIBIDAS:
                 if p in n:
+                    if p in admitidas:
+                        continue
                     if p in LIBRES_EN_UN_PUENTE and (en_bloque or any(a in l for a in anclas)):
                         continue
                     fallos.append((i, 'jerga', p, l.strip()[:70]))
@@ -224,13 +231,19 @@ def selftest():
                    and clases(revisar([f"Chroma, «{tit}»."], titulos=titulos_de("cap13.md"))) == ['jerga']
                    and clases(revisar([f"Chroma, «{tit}», y un vector."], titulos=(tit,))) == ['jerga']
                    and clases(revisar(["Chroma, «Context Rot: Input Tokens»."], titulos=(tit,))) == ['jerga'])
-    nombre_bien = nombre_bien and titulo_bien
+    # Orden 209: «gradiente» (y «descenso de gradiente»), solo en el A4, y sin dejar pasar nada más de la línea.
+    frase_g = "Se llama descenso de gradiente."
+    grad_ok = (not revisar([frase_g], admitidas=JERGA_ADMITIDA['anexo-a04-retropropagacion.md'])
+               and clases(revisar([frase_g], admitidas=JERGA_ADMITIDA.get('cap04-retropropagacion.md', ()))) == ['jerga']
+               and clases(revisar([frase_g + " Y un vector."], admitidas=('gradiente',))) == ['jerga']
+               and clases(revisar(["Es 3 × 4, del gradiente."], admitidas=('gradiente',))) == ['notacion'])
+    nombre_bien = nombre_bien and titulo_bien and grad_ok
     print(f"[3] invariante        en el mapa queda {clases(en_el_mapa)} "
           f"({'bien: solo la notación' if solo_notacion else 'MAL'}); "
           f"envoltorio de imprenta: {len(envuelto)} incidencias; texto de máquina en una muestra "
           f"exento, y fuera de ella o en su título, no: {exenta}; «token» libre en su puente y en "
           f"una tabla o muestra, y no en la prosa: {puentes_ok}; «π0» entero y solo en su fichero (ni «π» suelta, "
-          f"ni «π01», ni otra letra griega, ni nada más de la línea), y el título de Chroma, entero y en su fichero: {nombre_bien}")
+          f"ni «π01», ni otra letra griega, ni nada más de la línea), el título de Chroma, entero y en su fichero, y «gradiente» solo en el A4: {nombre_bien}")
     if not solo_notacion or envuelto or not exenta or not puentes_ok or not nombre_bien:
         fallos.append("invariante: el mapa levanta solo la jerga, el envoltorio no es notación, "
                       "solo el texto de máquina de una muestra está exento y «token» solo se "
@@ -263,7 +276,8 @@ ES_EL_MAPA = 'mapa-de-los-sotanos' in path or '97-fuentes' in path
 if ES_EL_MAPA:
     print("NOTA: es el mapa de los sótanos; se permite la jerga y NO se permite nada más.")
 
-fallos = revisar(lineas, ES_EL_MAPA, puentes_de(path), nombres_de(path), titulos_de(path))
+fallos = revisar(lineas, ES_EL_MAPA, puentes_de(path), nombres_de(path), titulos_de(path),
+                 JERGA_ADMITIDA.get(os.path.basename(path), ()))
 if fallos:
     for f in fallos:
         print(f"  linea {f[0]:>4}  {f[1]:<9} {f[2]:<16} {f[3]}")
