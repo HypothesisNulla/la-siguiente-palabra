@@ -19,6 +19,12 @@ desde que entran a menos de ENTRADA del fondo. Cada bola lleva en el recuadro la
 
 El relieve es el de `figura_dos_valles_relieve.py`, con el mismo punto de vista que «Dos bolas, dos valles».
 
+Orden 203 (solo maquetación, ningún número cambia): en el relieve no hay etiquetas de las bolas, solo «las tres bajan casi
+juntas» junto a la ladera, además de «valle hondo» y «valle poco hondo»; el recuadro ocupa cerca del 40 % del ancho de la
+figura (la figura es más alta y el relieve está movido a la izquierda y abajo, para no tapar su fondo); debajo del recuadro
+va la leyenda con las tres marcas y, para cada bola, su nombre, su poquito y las veces de 1/c; y en el recuadro (c) lleva
+líneas finas grises, no blancas.
+
 Uso:
     python figura_golf_en_dos_valles.py --selftest
     python figura_golf_en_dos_valles.py
@@ -29,9 +35,11 @@ Uso:
 DATOS = "../datos/salidas/golf_en_dos_valles_datos.csv"
 DESTINO = "../figuras/golf_en_dos_valles.png"
 COPIA = "../../Claude outputs/reforma-nov/cap16/ver/golf_en_dos_valles.png"
-ALTO = 5.1                      # pulgadas
-CAJA_RELIEVE = [-0.06, -0.06, 1.12, 0.80]      # dónde va el relieve (fracciones de la figura)
-CAJA_RECUADRO = [0.715, 0.545, 0.265, 0.235]   # y el recuadro, en la esquina de arriba a la derecha, bajo el subtítulo
+ALTO = 5.4                      # pulgadas
+CAJA_RELIEVE = [-0.06, -0.01, 0.80, 0.60]      # dónde va el relieve (fracciones de la figura): a la izquierda y abajo, para dejar sitio al recuadro
+ANCHO_RECUADRO = 0.40            # el recuadro mide este tanto del ancho de la figura
+CAJA_RECUADRO = [0.585, 0.500, ANCHO_RECUADRO, ANCHO_RECUADRO * 4.45 / ALTO]   # arriba a la derecha, bajo el subtítulo (4,45 pulgadas de ancho)
+TEXTO_LADERA = "las tres bajan casi juntas"
 MARCA_CADA = 10                 # en la bola (a), un punto cada tantos pasos, mientras no ha llegado al fondo (a más de EPS_MARCA de él)
 EPS_MARCA = 1e-2
 MARCAS_B = 25                   # en la bola (b), un punto en cada uno de los primeros golpes
@@ -89,7 +97,8 @@ def pq(x):
 
 
 def etiqueta(k, r):
-    return f"{TEXTOS[k]}\npoquito {pq(r['poquito'])}\n({pq(r['mult'])} veces)"
+    """El texto de la leyenda: «entra: poquito 0,032 (0,1 veces)»."""
+    return f"{TEXTOS[k]}: poquito {pq(r['poquito'])} ({pq(r['mult'])} veces)"
 
 
 def ventana(el, fondo):
@@ -138,15 +147,15 @@ def recuadro(fig, caja, paleta, el, fondo, estilos):
         if k == "c":
             c = c[:PASOS_C + 1]
         est = estilos[k]
-        if k == "c":     # el ir y venir son 40 pasos entre dos sitios: línea fina y sin borde blanco, o se vuelve una mancha
-            ax.plot(c[:, 0], c[:, 1], color="white", linewidth=0.3, zorder=4)
+        if k == "c":     # el ir y venir son 40 pasos entre dos sitios: línea fina y gris (Orden 203; la blanca dejaba un abanico)
+            ax.plot(c[:, 0], c[:, 1], color=p.contra, linewidth=0.3, zorder=4)
         else:
             ax.plot(c[:, 0], c[:, 1], color="white", linewidth=est["grosor"] * 0.55 + 1.0, zorder=3, solid_capstyle="round")
             ax.plot(c[:, 0], c[:, 1], color=est["color"], linewidth=est["grosor"] * 0.55, zorder=4)
         mk = [i for i in est["marcas"] if 0 < i < len(c)]
         if k == "a":
             mk = [i for i in mk if abs(c[i, 0] - fondo[0]) < W and abs(c[i, 1] - fondo[1]) < W]
-        ax.plot(c[mk, 0], c[mk, 1], est["marcador"], markersize=2.4 if k != "c" else 2.0, markerfacecolor=est["relleno"],
+        ax.plot(c[mk, 0], c[mk, 1], est["marcador"], markersize=3.2 if k != "c" else 2.6, markerfacecolor=est["relleno"],
                 markeredgecolor=p.tinta, markeredgewidth=0.5, zorder=5, linestyle="none")
     ax.plot([fondo[0]], [fondo[1]], "+", markersize=5, color=p.tinta, markeredgewidth=0.8, zorder=6)
     ax.set_xlim(fondo[0] - W, fondo[0] + W)
@@ -154,7 +163,19 @@ def recuadro(fig, caja, paleta, el, fondo, estilos):
     ax.set_xticks([]); ax.set_yticks([])
     for s in ax.spines.values():
         s.set_color(p.tinta); s.set_linewidth(0.8)
-    ax.set_title("el fondo del valle hondo,\nvisto desde arriba", fontsize=6.4, color=p.tinta, pad=2, linespacing=1.1)
+    ax.set_title("el fondo del valle hondo, visto desde arriba", fontsize=6.4, color=p.tinta, pad=3)
+    # la leyenda, debajo del recuadro, con las tres marcas
+    from matplotlib.lines import Line2D
+    manijas = []
+    for k in "abc":
+        if el[k] is None:
+            continue
+        est = estilos[k]
+        manijas.append(Line2D([], [], color=est["color"] if k != "c" else p.contra, linewidth=1.3 if k != "c" else 0.5,
+                              marker=est["marcador"], markersize=3.4, markerfacecolor=est["relleno"],
+                              markeredgecolor=p.tinta, markeredgewidth=0.5, label=etiqueta(k, el[k])))
+    ax.legend(handles=manijas, loc="upper right", bbox_to_anchor=(1.0, -0.025), fontsize=5.9, frameon=False,
+              handlelength=1.7, handletextpad=0.5, labelspacing=0.45, borderaxespad=0.0)
     return ax, W
 
 
@@ -167,18 +188,25 @@ def dibujar(datos, paleta, ruta):
                paleta, alto=ALTO)
     p = L.p
     estilos = estilos_de(p, el, fondo)
-    caminos, etiquetas = {}, {}
-    desp = {"a": (-0.2, 1.7, 1.2), "b": (-0.5, -2.8, 1.9), "c": (0.0, -3.4, 1.5)}
-    frac = {"a": 0.25, "b": 0.35, "c": 0.0}
+    caminos = {}
     for k in "abc":
         r = el[k]
         if r is None:
             continue
         c = np.array(r["camino"])
         caminos[k] = c[:PASOS_C + 1] if k == "c" else c
-        etiquetas[k] = {"texto": etiqueta(k, r), "frac": frac[k], "desp": desp[k]}
-    ax, dib = dibujar_relieve(L.fig, CAJA_RELIEVE, paleta, caminos, etiquetas, valles=True, estilos=estilos,
-                            corrimiento=((1.3, -1.6, 0.9), (0.6, -2.4, 1.0)))
+    ax, dib = dibujar_relieve(L.fig, CAJA_RELIEVE, paleta, caminos, {}, valles=True, estilos=estilos,
+                              corrimiento=((1.3, -1.6, 0.9), (0.6, -2.4, 1.0)))
+    # una sola etiqueta, junto a la ladera, con su línea a un punto de la bajada de (a)
+    if "a" in dib:
+        pa = dib["a"][0]
+        largo = np.concatenate([[0.0], np.cumsum(np.hypot(np.diff(pa[:, 0]), np.diff(pa[:, 1])))])
+        k = int(np.argmin(np.abs(largo - 0.35 * largo[-1])))
+        dx, dy, dz = 0.4, 2.4, 1.2
+        ax.plot([pa[k, 0], pa[k, 0] + dx], [pa[k, 1], pa[k, 1] + dy], [pa[k, 2], pa[k, 2] + dz], color=p.suave,
+                linewidth=0.6, zorder=8)
+        ax.text(pa[k, 0] + dx, pa[k, 1] + dy, pa[k, 2] + dz, TEXTO_LADERA, fontsize=7.2, color=p.tinta,
+                fontweight="bold", ha="left", zorder=9)
     axr, W = recuadro(L.fig, CAJA_RECUADRO, paleta, el, fondo, estilos)
     L.guardar(ruta)
     return ax, dib, el, W
@@ -236,10 +264,14 @@ def selftest():
                  and el["b"]["acaba"] == G.NOMBRES[0] and el["c"]["acaba"] == G.ACABA_SIN_ASENTARSE
                  and all(r["acaba"] != G.NOMBRES[0] for r in filas if r["mult"] > mults[1]))
     pasos_c = len(dib["c"][0]) - 1
-    ok3 = por_tabla and pasos_c == PASOS_C
+    textos = [t.get_text() for t in ax.texts]
+    ok_textos = (TEXTO_LADERA in textos and "valle hondo" in textos and "valle poco hondo" in textos
+                 and not any(TEXTOS[k] in t for k in "abc" for t in textos))      # Orden 203: ninguna etiqueta de bola en el relieve
+    ok3 = por_tabla and pasos_c == PASOS_C and ok_textos
     print(f"[3] invariante        las tres bolas son {', '.join(G.coma_fija(m, 1) for m in mults)} veces 1/c (esperadas "
           f"{', '.join(G.coma_fija(m, 1) for m in ESPERADAS)}) y cumplen la regla sobre la tabla; pasos de (c) dibujados: "
-          f"{pasos_c}; media anchura del recuadro: {G.coma_fija(W, 3)}: {'sí' if ok3 else 'NO'}")
+          f"{pasos_c}; media anchura del recuadro: {G.coma_fija(W, 3)}; en el relieve solo «{TEXTO_LADERA}» y los dos valles: "
+          f"{'sí' if ok_textos else 'NO'}: {'sí' if ok3 else 'NO'}")
     if not ok3:
         fallos.append("invariante: la regla no da las tres bolas esperadas, o no se dibujan los pasos de (c)")
     print()
