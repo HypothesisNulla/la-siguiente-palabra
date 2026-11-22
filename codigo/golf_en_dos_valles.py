@@ -28,10 +28,13 @@ Cómo se decide cada cosa (fijado antes de ver ningún número):
   - «sale del cuadrado»: algún punto del recorrido con un número de valor absoluto mayor que LIMITE;
     se apunta hasta dónde llega (el mayor valor absoluto de los dos números).
 
-Las tres bolas de la figura (regla fijada antes de medir, en el orden de la rejilla):
-  (a) el primer poquito que acaba en el valle hondo sin cruzar el fondo;
-  (b) el primer poquito que cruza el fondo al menos dos veces y acaba asentado en el valle hondo;
-  (c) el primer poquito que sale del cuadrado.
+Las tres bolas de la figura. La regla de la Orden 201 (a: el primero que entra sin cruzar el fondo; b: el primero
+que cruza el fondo al menos dos veces y se asienta en el valle hondo; c: el primero que sale del cuadrado) se
+sustituyó en la Orden 202 (22 nov 2026), porque (c) no existía y (a) y (b) salían como una sola línea. La medición
+no cambió (la tabla es la de la 201, número a número). Regla vigente, sobre la tabla y en el orden de la rejilla:
+  (a) «entra»: el primer poquito que acaba en el valle hondo sin cruzar el fondo;
+  (b) «se pasa y vuelve»: el último poquito que todavía acaba asentado en el valle hondo;
+  (c) «no se asienta nunca»: el primero que acaba «yendo y viniendo sin asentarse».
 Si alguna no existe en la rejilla, no se amplía la rejilla: se dice.
 
 Mediciones independientes de la máquina (sin GPU, sin tiempos).
@@ -49,7 +52,7 @@ PARADA_LEJOS = 50.0              # se para si algún número del peso pasa de aq
 H_DIFERENCIAS = 1e-3             # el salto de las diferencias finitas para la curvatura
 ASENTADO = 1e-6                  # «asentado»: en los últimos pasos ninguno mide más que esto...
 ULTIMOS_PASOS = 100              # ...y estos son los últimos pasos que se miran
-MINIMO_CRUCES_B = 2              # para la bola (b)
+ACABA_SIN_ASENTARSE = "yendo y viniendo sin asentarse"
 # Cambio técnico, hecho tras la primera medición (Orden 201; regla 2 de CLAUDE.md): el contador de cruces del
 # fondo contaba también el ruido de coma flotante. Cuando el peso ya está asentado en el fondo, la posición
 # vale el fondo más 1e-16 y el producto escalar de dos posiciones seguidas cambia de signo al azar. Con el
@@ -166,7 +169,7 @@ def resumen(camino, paro, fondo):
     elif len(pasos) >= ULTIMOS_PASOS and np.max(pasos[-ULTIMOS_PASOS:]) <= ASENTADO:
         acaba = NOMBRES[en_que_valle(xs[-1], ys[-1])]
     else:
-        acaba = "yendo y viniendo sin asentarse"
+        acaba = ACABA_SIN_ASENTARSE
     return {"acaba": acaba, "paro": paro, "fuera": fuera, "mayor": mayor, "cruces": cruces(camino, fondo),
             "altura_final": camino[-1][2], "paso_largo": float(np.max(pasos)) if len(pasos) else 0.0,
             "pasos": len(camino) - 1}
@@ -183,10 +186,11 @@ def medir():
 
 
 def elegir(filas):
-    """Las tres bolas de la figura, por la regla de la cabecera: {'a': fila|None, 'b': ..., 'c': ...}."""
+    """Las tres bolas de la figura, por la regla de la Orden 202 (ver la cabecera): {'a': fila|None, 'b': ..., 'c': ...}."""
     a = next((r for r in filas if r["acaba"] == NOMBRES[0] and r["cruces"] == 0), None)
-    b = next((r for r in filas if r["cruces"] >= MINIMO_CRUCES_B and r["acaba"] == NOMBRES[0]), None)
-    c = next((r for r in filas if r["fuera"]), None)
+    asentadas = [r for r in filas if r["acaba"] == NOMBRES[0]]
+    b = asentadas[-1] if asentadas else None
+    c = next((r for r in filas if r["acaba"] == ACABA_SIN_ASENTARSE), None)
     return {"a": a, "b": b, "c": c}
 
 
@@ -226,17 +230,20 @@ def imprimir(c, ev, fondo, filas):
         extra = f"; se paró en el paso {r['paro']}" if r["paro"] is not None else ""
         print(f"  x {f(r['mult'], 1):>4}: {miles(r['pasos'])} pasos{extra}")
     print()
-    print("--- LAS TRES BOLAS DE LA FIGURA (regla fijada antes de medir) ---")
+    print("--- LAS TRES BOLAS DE LA FIGURA (regla de la Orden 202) ---")
     print()
     el = elegir(filas)
-    texto = {"a": "(a) el primer poquito que acaba en el valle hondo, sin cruzar el fondo",
-             "b": "(b) el primer poquito que cruza el fondo al menos dos veces y acaba asentado en el valle hondo",
-             "c": "(c) el primer poquito que sale del cuadrado"}
+    texto = {"a": "(a) «entra»: el primer poquito que acaba en el valle hondo, sin cruzar el fondo",
+             "b": "(b) «se pasa y vuelve»: el último poquito que todavía acaba asentado en el valle hondo",
+             "c": "(c) «no se asienta nunca»: el primero que acaba yendo y viniendo sin asentarse"}
     for k in "abc":
         r = el[k]
         print(texto[k] + ":")
-        print("  " + (f"x {f(r['mult'], 1)} veces 1/c (poquito {poq(r['poquito'])}); {r['acaba']}; {r['cruces']} cruces"
+        print("  " + (f"{f(r['mult'], 1)} veces 1/c (poquito {poq(r['poquito'])}); {r['acaba']}; {r['cruces']} cruces"
                       if r else "NO EXISTE en la rejilla (no se amplía)"))
+    print()
+    print("Las tres bolas: " + "; ".join(
+        f"({k}) {f(el[k]['mult'], 1)} veces 1/c (poquito {poq(el[k]['poquito'])})" if el[k] else f"({k}) no existe" for k in "abc") + ".")
     print()
 
 

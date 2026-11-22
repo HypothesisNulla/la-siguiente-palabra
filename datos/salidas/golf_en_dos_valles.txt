@@ -42,12 +42,14 @@ Pasos dados, y dónde se paró por irse lejos:
   x  3,0: 2.000 pasos
   x  5,0: 2.000 pasos
 
---- LAS TRES BOLAS DE LA FIGURA (regla fijada antes de medir) ---
+--- LAS TRES BOLAS DE LA FIGURA (regla de la Orden 202) ---
 
-(a) el primer poquito que acaba en el valle hondo, sin cruzar el fondo:
-  x 0,1 veces 1/c (poquito 0,0322); en el valle hondo; 0 cruces
-(b) el primer poquito que cruza el fondo al menos dos veces y acaba asentado en el valle hondo:
-  x 1,2 veces 1/c (poquito 0,3862); en el valle hondo; 6 cruces
-(c) el primer poquito que sale del cuadrado:
-  NO EXISTE en la rejilla (no se amplía)
+(a) «entra»: el primer poquito que acaba en el valle hondo, sin cruzar el fondo:
+  0,1 veces 1/c (poquito 0,0322); en el valle hondo; 0 cruces
+(b) «se pasa y vuelve»: el último poquito que todavía acaba asentado en el valle hondo:
+  1,9 veces 1/c (poquito 0,6115); en el valle hondo; 116 cruces
+(c) «no se asienta nunca»: el primero que acaba yendo y viniendo sin asentarse:
+  2,1 veces 1/c (poquito 0,6759); yendo y viniendo sin asentarse; 1996 cruces
+
+Las tres bolas: (a) 0,1 veces 1/c (poquito 0,0322); (b) 1,9 veces 1/c (poquito 0,6115); (c) 2,1 veces 1/c (poquito 0,6759).
 

@@ -27,7 +27,7 @@ ALTO = 4.4                     # pulgadas
 REJILLA = 70                   # puntos por lado de la superficie
 REJILLA_SUELO = 140            # y del mapa del suelo
 NIVELES = 12                   # curvas de nivel
-ELEVACION, ACIMUT = 34, -100   # cómo se mira la superficie (probados 4 puntos de vista; este deja ver las dos salidas y los dos fondos)
+ELEVACION, ACIMUT = 36, 10     # cómo se mira la superficie. Orden 202: con el valle hondo del lado del lector (probados 4 puntos de vista a 10, 35 y 60 grados de acimut); se ven las dos salidas, los dos fondos y el mapa, y el final de la bola 2 queda dentro del valle
 CAJA = [-0.06, -0.10, 1.12, 0.92]   # dónde va el relieve en la figura (fracciones)
 SUBIDA = 0.10                  # lo que se levanta el camino sobre la superficie, para que no se entierre
 BAJADA_SUELO = 1.6             # a qué distancia por debajo del punto más bajo del terreno está el mapa del suelo
@@ -76,12 +76,13 @@ def recortar(camino):
     return np.vstack([c[:k], [[x, y, altura(x, y)]]]), (x, y, dx, dy)
 
 
-def dibujar_relieve(fig, caja, paleta, caminos, etiquetas, valles=True, estilos=None):
+def dibujar_relieve(fig, caja, paleta, caminos, etiquetas, valles=True, estilos=None,
+                    corrimiento=((1.3, -1.6, 0.9), (-1.3, 1.8, 0.9))):
     """Dibuja el relieve en `fig`, en el rectángulo `caja` = [izq, abajo, ancho, alto] (fracciones de la figura).
     `caminos`: {nombre: array [(x, y, altura), ...]}. `etiquetas`: {nombre: texto} (la etiqueta va en la salida) o
     {nombre: {"texto": t, "frac": f, "desp": (dx, dy, dz)}} (en el punto del camino que lleva la fracción f de su
     longitud, corrida en el terreno (dx, dy, dz)). `estilos`: {nombre: {"color": c, "grosor": g, "marcas": [índices]}}
-    (opcional: el color y el grosor del camino, los puntos que se marcan y cómo: "marcador" y "relleno"). Devuelve (eje, dibujado) donde
+    (opcional: el color y el grosor del camino, los puntos que se marcan y cómo: "marcador" y "relleno"; "sin_final": True no pone el punto negro del final). Devuelve (eje, dibujado) donde
     dibujado = {nombre: (puntos dibujados sobre la superficie, salida o None)}."""
     estilos = estilos or {}
     p = paleta
@@ -121,8 +122,9 @@ def dibujar_relieve(fig, caja, paleta, caminos, etiquetas, valles=True, estilos=
                     zorder=7, linestyle="none")
         ax.plot([pts[0, 0]], [pts[0, 1]], [pts[0, 2] + SUBIDA], "o", markersize=5.5, markerfacecolor="white",
                 markeredgecolor=p.tinta, zorder=7)
-        ax.plot([pts[-1, 0]], [pts[-1, 1]], [pts[-1, 2] + SUBIDA], "o", markersize=5.5, markerfacecolor=p.tinta,
-                markeredgecolor="white", zorder=7)
+        if not est.get("sin_final"):
+            ax.plot([pts[-1, 0]], [pts[-1, 1]], [pts[-1, 2] + SUBIDA], "o", markersize=5.5, markerfacecolor=p.tinta,
+                    markeredgecolor="white", zorder=7)
         et = etiquetas.get(nombre, "")
         if isinstance(et, dict):
             largo = np.concatenate([[0.0], np.cumsum(np.hypot(np.diff(pts[:, 0]), np.diff(pts[:, 1])))])
@@ -144,7 +146,7 @@ def dibujar_relieve(fig, caja, paleta, caminos, etiquetas, valles=True, estilos=
                     zorder=9)
     if valles:
         nombres = ("valle hondo", "valle poco hondo")
-        corrimiento = ((1.3, -1.6, 0.9), (-1.3, 1.8, 0.9))       # (x, y, z) a donde se corre cada etiqueta, para no tapar el camino
+        # `corrimiento`: (x, y, z) a donde se corre la etiqueta de cada valle, para no tapar el camino
         for i, (cx, cy, _, _) in enumerate(VALLES):
             dx, dy, dz = corrimiento[i]
             ax.plot([cx, cx + dx], [cy, cy + dy], [altura(cx, cy), altura(cx, cy) + dz], color=p.suave, linewidth=0.7, zorder=8)
