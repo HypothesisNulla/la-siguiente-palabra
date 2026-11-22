@@ -1,13 +1,13 @@
 --- selftest ---
 [1] test nulo         una carpeta sin programas: [0, 0, 0, 0]
 [2] señal implantada  8 programas, 1 .sh y 4 salidas: [1, 2, 3, 2]; como se espera: sí
-[3] invariante        186 programas en cuatro clases (15, 63, 100, 8); de los 186 .py de codigo/, cada uno en una sola: sí
+[3] invariante        187 programas en cuatro clases (15, 64, 100, 8); de los 187 .py de codigo/, cada uno en una sola: sí
                       corpus: vacío (0, 0); tres ficheros de 10, 20 y 30 bytes (3, 60); el de verdad, 300 ficheros y 138.273.144 bytes, leídos 138.273.144
 
 SELFTEST: las tres pruebas pasan.
 
 ########## cuántos programas hay en codigo/ ##########
-fecha: 2026-11-22 10:36 UTC
+fecha: 2026-11-22 19:55 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: cuenta ficheros
 
@@ -21,10 +21,10 @@ Programas de codigo/, por clase
 | clase | programas |
 |:--|--:|
 | verificadores | 15 |
-| programas de figuras | 63 |
+| programas de figuras | 64 |
 | programas de medición | 100 |
 | programas que ayudan a los demás | 8 |
-| **en total** | **186** |
+| **en total** | **187** |
 
 Cada programa está en una sola clase.
 :::
@@ -43,7 +43,7 @@ VERIFICADORES (15)
   verificar_referencias, verificar_reglas, verificar_selftests,
   verificar_titulos, verificar_trato, verificar_vocabulario.
 
-PROGRAMAS DE FIGURAS (63)
+PROGRAMAS DE FIGURAS (64)
 
   figura_apilar, figura_casillas_vacias, figura_cien_papeletas,
   figura_cifra_a_cifra, figura_con_manos, figura_copias_muestra,
@@ -69,9 +69,10 @@ PROGRAMAS DE FIGURAS (63)
   figura_red_desenrollada, figura_reloj_a_mano,
   figura_saltan_la_regla, figura_seguir_entrenando,
   figura_seis_maneras, figura_siete_segmentos,
-  figura_sorteo_del_arranque, figura_tablero, figura_todo_o_nada,
-  figura_tres_fases, figura_trocear_a_mano, figura_una_capa,
-  figura_una_neurona, figura_una_raya, figuras_el_comite_por_dentro.
+  figura_sorteo_del_arranque, figura_tablero,
+  figura_tamano_del_paso, figura_todo_o_nada, figura_tres_fases,
+  figura_trocear_a_mano, figura_una_capa, figura_una_neurona,
+  figura_una_raya, figuras_el_comite_por_dentro.
 
 PROGRAMAS DE MEDICIÓN (100)
 
