@@ -42,7 +42,7 @@ PROHIBIDAS_CON_PUENTE = ("token", "parametro")   # las de la regla 1 que un puen
 # Orden 184 (20 nov 2026): el título de un informe de otro, en inglés y entre comillas, se cita tal cual aunque lleve «Tokens»
 # («Context Rot: How Increasing Input Tokens Impacts LLM Performance», de Chroma). Es la misma excepción de verificar_reglas.py
 # (TITULOS_EN_INGLES): solo ese título entero y solo en su fichero; el resto de la línea se vigila igual.
-TITULOS_EN_INGLES = {"Context Rot: How Increasing Input Tokens Impacts LLM Performance": ("anexo-a13-donde-se-rompe.md",)}
+TITULOS_EN_INGLES = {"Context Rot: How Increasing Input Tokens Impacts LLM Performance": ("anexo-a13-donde-se-rompe.md", "97-fuentes.md")}   # (Orden 208: «Fuentes» también lo cita)
 EL_MAPA = "mapa-de-los-sotanos"                  # el capítulo de los nombres técnicos: ahí valen todas
 
 # ==========================================================

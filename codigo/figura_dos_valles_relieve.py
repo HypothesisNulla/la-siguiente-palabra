@@ -32,7 +32,8 @@ CAJA = [-0.14, -0.10, 1.12, 0.92]   # dónde va el relieve en la figura (fraccio
 # --- Orden 207: cuatro llamadas numeradas sobre el camino de la bola 2
 ARCO_LLAMADA_2 = 0.5            # la llamada 2, en el punto del camino que está a esta distancia (a lo largo del camino) de la salida
 LARGO_ENTRE_2_Y_3 = 0.8         # y la 3, «el paso siguiente»: a esta distancia más a lo largo del camino
-LARGO_FLECHA = 0.9              # la flecha de la llamada 2 (cuesta arriba), en unidades del terreno; la de la 3 mide FRACCION_FLECHA_3 de esa
+LARGO_FLECHA = 1.4              # la flecha de la llamada 2 (cuesta arriba), en unidades del terreno; la de la 3 mide FRACCION_FLECHA_3 de esa (Orden 208: era 0,9)
+SEPARACION_FLECHA_2 = 0.3       # (Orden 208) la flecha de la 2 sale corrida esto en perpendicular al camino, sin cambiar su dirección, para que no se pegue al trazo
 FRACCION_FLECHA_3 = 0.5         # (convención del dibujo: la dirección sale de la pendiente; el largo no es el del paso de verdad, que sería diminuto)
 TEXTOS_LLAMADAS = {1: "sale de aquí", 2: "la culpa de los\ndos pesos apunta\ncuesta arriba", 3: "da un paso\npequeño en contra",
                    4: "repite hasta parar\nen el valle que\ntiene más cerca"}
@@ -95,10 +96,14 @@ def calcular_llamadas(camino):
     g2 = np.array(pendiente(c[k2, 0], c[k2, 1])); g3 = np.array(pendiente(c[k3, 0], c[k3, 1]))
     u2 = g2 / np.hypot(*g2)                      # cuesta arriba
     u3 = -g3 / np.hypot(*g3)                     # cuesta abajo: en contra
+    perp = np.array([-u2[1], u2[0]])
+    if perp[1] > 0:
+        perp = -perp                              # hacia el lado de -y (la pantalla, a la izquierda), el de la superficie libre
+    base2 = tuple(c[k2, :2] + SEPARACION_FLECHA_2 * perp)
     idx = {1: 0, 2: k2, 3: k3, 4: len(c) - 1}
     flechas = {1: None, 2: tuple(LARGO_FLECHA * u2), 3: tuple(LARGO_FLECHA * FRACCION_FLECHA_3 * u3), 4: None}
     return [{"num": n, "texto": TEXTOS_LLAMADAS[n], "punto": tuple(c[idx[n]]), "indice": idx[n], "flecha": flechas[n],
-             "desp": DESPLAZAMIENTOS_LLAMADAS[n]} for n in (1, 2, 3, 4)]
+             "base": base2 if n == 2 else tuple(c[idx[n], :2]), "desp": DESPLAZAMIENTOS_LLAMADAS[n]} for n in (1, 2, 3, 4)]
 
 
 def _dibujar_llamada(ax, ll, p):
@@ -114,7 +119,8 @@ def _dibujar_llamada(ax, ll, p):
             va="center", zorder=11, bbox=dict(boxstyle="circle,pad=0.22", facecolor="white", edgecolor=p.tinta, linewidth=0.8))
     if ll["flecha"] is not None:
         fx, fy = ll["flecha"]
-        ax.quiver(x, y, z, fx, fy, 0.0, color=p.tinta, linewidth=1.6, arrow_length_ratio=0.45, zorder=9)
+        bx, by = ll["base"]
+        ax.quiver(bx, by, altura(bx, by) + SUBIDA, fx, fy, 0.0, color=p.tinta, linewidth=1.6, arrow_length_ratio=0.35, zorder=9)
 
 
 def dibujar_relieve(fig, caja, paleta, caminos, etiquetas, valles=True, estilos=None,

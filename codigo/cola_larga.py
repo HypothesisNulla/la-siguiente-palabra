@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Capítulo 15 — la cola larga, contada en los trescientos libros (L24, E28).
+Capítulo 16 — la cola larga, contada en los trescientos libros (L24, E28).
 
 El capítulo 15 explica «por qué crecer funciona» con una hipótesis: lo que se aprende son muchas
 regularidades pequeñas, unas poquísimas muy frecuentes y una cola larguísima de raras. Lo decía

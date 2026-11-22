@@ -1,9 +1,9 @@
 # De dónde sale cada figura
 
 Tabla calculada, no escrita a mano, por `codigo/de_donde_sale_cada_figura.py`.  
-Fecha: 2026-11-15 11:39 UTC.  
+Fecha: 2026-11-22 23:15 UTC.  
 Libro: con los borradores de en-curso/; numeración cotejada con La-siguiente-palabra-lectura.pdf.  
-56 figuras. La tabla no depende de la máquina: sale de ficheros de texto.
+59 figuras. La tabla no depende de la máquina: sale de ficheros de texto.
 
 Cómo se lee:
 
@@ -61,12 +61,15 @@ Cómo se lee:
 | 45 | A4 | la_rampa_del_colegio | culpa_en_el_colegio_datos.csv |
 | 46 | A4 | culpa_hacia_atras_colegio | culpa_en_el_colegio_datos.csv, culpa_en_el_colegio |
 | 47 | A4 | el_terreno_del_colegio | culpa_en_el_colegio_datos.csv, culpa_en_el_colegio |
-| 48 | A4 | la_rampa_y_el_codo | culpa_hacia_atras |
-| 49 | A5 | misma_direccion | palabras_de_cerca |
-| 50 | A8 | maquina_del_quijote | la_e_de_acordarme |
-| 51 | A8 | mirada_a_mano | mirada_a_mano |
-| 52 | A8 | el_reparto | reparto_una_a_una.csv |
-| 53 | A10 | cuanto_ha_leido | cuatro_retratos |
-| 54 | A10 | lo_mal_que_lo_hace | en_que_orden_aprende_curva.csv, en_que_orden_aprende |
-| 55 | A10 | seguir_entrenando | seguir_entrenando.csv |
-| 56 | A11 | todo_o_nada | todo_o_nada.csv |
+| 48 | A4 | tamano_del_paso | ninguna |
+| 49 | A4 | dos_valles_relieve | dos_valles.csv |
+| 50 | A4 | la_rampa_y_el_codo | culpa_hacia_atras |
+| 51 | A5 | misma_direccion | palabras_de_cerca |
+| 52 | A8 | maquina_del_quijote | la_e_de_acordarme |
+| 53 | A8 | mirada_a_mano | mirada_a_mano |
+| 54 | A8 | el_reparto | reparto_una_a_una.csv |
+| 55 | A10 | cuanto_ha_leido | cuatro_retratos |
+| 56 | A10 | lo_mal_que_lo_hace | en_que_orden_aprende_curva.csv, en_que_orden_aprende |
+| 57 | A10 | seguir_entrenando | seguir_entrenando.csv |
+| 58 | A11 | todo_o_nada | todo_o_nada.csv |
+| 59 | A15 | el_empujon | cuentas_a_mano.csv |

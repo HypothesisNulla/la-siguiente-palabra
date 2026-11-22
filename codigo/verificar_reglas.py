@@ -22,7 +22,8 @@ GRIEGO = re.compile(r'[Ͱ-Ͽ]')
 # «π0» entero (ni «π» suelta, ni «π01», ni otra letra griega), SOLO en los ficheros de esta lista (donde aparece como
 # nombre) y NADA MÁS: el resto de la línea se vigila igual. Cuando se reescriba el cap. 16 (que dice «pi cero») y
 # aparezca en otro fichero, se añade aquí a mano.
-NOMBRES_PROPIOS = {'π0': ('anexo-a14-la-siguiente-palabra-con-manos.md',)}
+# Orden 208 (23 nov 2026): «Fuentes» también cita «π0» (la entrada del capítulo 14).
+NOMBRES_PROPIOS = {'π0': ('anexo-a14-la-siguiente-palabra-con-manos.md', '97-fuentes.md')}
 # Orden 182 (20 nov 2026): el título de un informe de otro, en inglés y entre comillas, se cita tal cual aunque lleve una palabra
 # prohibida («Tokens» en «Context Rot: How Increasing Input Tokens Impacts LLM Performance», de Chroma, que cita el A13). Se
 # quita de la línea SOLO ese título entero, SOLO en los ficheros de esta lista; el resto de la línea se vigila igual.
@@ -229,7 +230,7 @@ def selftest():
           f"envoltorio de imprenta: {len(envuelto)} incidencias; texto de máquina en una muestra "
           f"exento, y fuera de ella o en su título, no: {exenta}; «token» libre en su puente y en "
           f"una tabla o muestra, y no en la prosa: {puentes_ok}; «π0» entero y solo en su fichero (ni «π» suelta, "
-          f"ni «π01», ni otra letra griega, ni nada más de la línea) y el título de Chroma, entero y en su fichero: {nombre_bien}")
+          f"ni «π01», ni otra letra griega, ni nada más de la línea), y el título de Chroma, entero y en su fichero: {nombre_bien}")
     if not solo_notacion or envuelto or not exenta or not puentes_ok or not nombre_bien:
         fallos.append("invariante: el mapa levanta solo la jerga, el envoltorio no es notación, "
                       "solo el texto de máquina de una muestra está exento y «token» solo se "
@@ -257,7 +258,8 @@ lineas = open(path, encoding='utf-8').read().split('\n')
 # Se reconoce por el NOMBRE, no por el número: al renumerar, «cap14» pasó a ser otro capítulo
 # y durante unas horas la exención se aplicó al capítulo equivocado (medido: 18 incidencias en
 # el mapa y ninguna en el nuevo 14, que es justo al revés de lo que había que vigilar).
-ES_EL_MAPA = 'mapa-de-los-sotanos' in path
+# Orden 208: «Fuentes» (97-fuentes.md) se trata como el mapa: es una lista de títulos de artículos, que llevan las palabras de la jerga.
+ES_EL_MAPA = 'mapa-de-los-sotanos' in path or '97-fuentes' in path
 if ES_EL_MAPA:
     print("NOTA: es el mapa de los sótanos; se permite la jerga y NO se permite nada más.")
 

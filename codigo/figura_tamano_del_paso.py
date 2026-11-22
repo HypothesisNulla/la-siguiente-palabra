@@ -31,7 +31,7 @@ CURVATURA = 2.0                 # error = (CURVATURA / 2) × peso², así que la
 SALIDA = -2.6                   # el peso del que salen los tres
 PRODUCTOS = (0.3, 1.6, 2.2)     # poquito × curvatura de los tres paneles
 FRACCION_FIN = 0.02             # se para cuando la distancia al fondo baja de esta fracción de la de salida
-XLIM = 4.5                      # el dibujo va de -XLIM a XLIM en horizontal
+XLIM = 4.9                      # el dibujo va de -XLIM a XLIM en horizontal (Orden 208: era 4,5 y el último punto del paso demasiado grande, 4,49, quedaba cortado por el borde)
 MAX_PASOS = 60                  # tope de seguridad
 ALTURA_FLECHA = 0.5             # lo que se levantan los extremos de cada flecha sobre la curva
 RADIO_FLECHA = 0.45             # cuánto se curva cada flecha
