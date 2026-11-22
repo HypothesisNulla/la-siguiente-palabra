@@ -1,13 +1,13 @@
 --- selftest ---
 [1] test nulo         una carpeta sin programas: [0, 0, 0, 0]
 [2] señal implantada  8 programas, 1 .sh y 4 salidas: [1, 2, 3, 2]; como se espera: sí
-[3] invariante        181 programas en cuatro clases (15, 60, 98, 8); de los 181 .py de codigo/, cada uno en una sola: sí
+[3] invariante        182 programas en cuatro clases (15, 60, 99, 8); de los 182 .py de codigo/, cada uno en una sola: sí
                       corpus: vacío (0, 0); tres ficheros de 10, 20 y 30 bytes (3, 60); el de verdad, 300 ficheros y 138.273.144 bytes, leídos 138.273.144
 
 SELFTEST: las tres pruebas pasan.
 
 ########## cuántos programas hay en codigo/ ##########
-fecha: 2026-11-21 17:38 UTC
+fecha: 2026-11-22 07:19 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: cuenta ficheros
 
@@ -22,9 +22,9 @@ Programas de codigo/, por clase
 |:--|--:|
 | verificadores | 15 |
 | programas de figuras | 60 |
-| programas de medición | 98 |
+| programas de medición | 99 |
 | programas que ayudan a los demás | 8 |
-| **en total** | **181** |
+| **en total** | **182** |
 
 Cada programa está en una sola clase.
 :::
@@ -71,7 +71,7 @@ PROGRAMAS DE FIGURAS (60)
   figura_tres_fases, figura_trocear_a_mano, figura_una_capa,
   figura_una_neurona, figura_una_raya, figuras_el_comite_por_dentro.
 
-PROGRAMAS DE MEDICIÓN (98)
+PROGRAMAS DE MEDICIÓN (99)
 
   aprender_la_trampa, banco_segun_el_diccionario, banco_y_paris,
   bateria_una_a_una, casillas_vacias, cola_larga,
@@ -87,12 +87,12 @@ PROGRAMAS DE MEDICIÓN (98)
   ejemplos_de_adiestramiento, el_colegio, el_colegio_en_anos,
   el_comite_por_dentro, el_sorteo_del_arranque,
   elegir_lo_mas_probable, en_que_orden_aprende, en_serie_o_a_la_vez,
-  eres_consciente, es_un_cuatro, idiomas_en_trozos,
-  la_conversacion_larga, la_e_de_acordarme, la_libreta_que_crece,
-  la_lista_de_ejercicios, la_misma_direccion, la_misma_peticion,
-  la_misma_semilla, la_papelera_por_dentro, la_seguridad_por_dentro,
-  las_capas_que_resumen, ley_de_2020, lista_de_probabilidades,
-  lo_habia_visto_ya, lo_que_cuesta_cambiar,
+  eres_consciente, es_un_cuatro, golf_en_el_colegio,
+  idiomas_en_trozos, la_conversacion_larga, la_e_de_acordarme,
+  la_libreta_que_crece, la_lista_de_ejercicios, la_misma_direccion,
+  la_misma_peticion, la_misma_semilla, la_papelera_por_dentro,
+  la_seguridad_por_dentro, las_capas_que_resumen, ley_de_2020,
+  lista_de_probabilidades, lo_habia_visto_ya, lo_que_cuesta_cambiar,
   lo_que_dicen_los_articulos, lo_que_mas_abunda, lo_que_recibe,
   lotes_en_la_tarjeta, mapa_en_la_tarjeta, maquina_entera,
   maquina_entera_detalle, maquina_entera_pasos, memoria_recurrente,
