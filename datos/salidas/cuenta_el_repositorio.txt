@@ -1,13 +1,13 @@
 --- selftest ---
 [1] test nulo         una carpeta sin programas: [0, 0, 0, 0]
 [2] señal implantada  8 programas, 1 .sh y 4 salidas: [1, 2, 3, 2]; como se espera: sí
-[3] invariante        182 programas en cuatro clases (15, 60, 99, 8); de los 182 .py de codigo/, cada uno en una sola: sí
+[3] invariante        183 programas en cuatro clases (15, 61, 99, 8); de los 183 .py de codigo/, cada uno en una sola: sí
                       corpus: vacío (0, 0); tres ficheros de 10, 20 y 30 bytes (3, 60); el de verdad, 300 ficheros y 138.273.144 bytes, leídos 138.273.144
 
 SELFTEST: las tres pruebas pasan.
 
 ########## cuántos programas hay en codigo/ ##########
-fecha: 2026-11-22 07:19 UTC
+fecha: 2026-11-22 08:32 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: cuenta ficheros
 
@@ -21,10 +21,10 @@ Programas de codigo/, por clase
 | clase | programas |
 |:--|--:|
 | verificadores | 15 |
-| programas de figuras | 60 |
+| programas de figuras | 61 |
 | programas de medición | 99 |
 | programas que ayudan a los demás | 8 |
-| **en total** | **182** |
+| **en total** | **183** |
 
 Cada programa está en una sola clase.
 :::
@@ -43,7 +43,7 @@ VERIFICADORES (15)
   verificar_referencias, verificar_reglas, verificar_selftests,
   verificar_titulos, verificar_trato, verificar_vocabulario.
 
-PROGRAMAS DE FIGURAS (60)
+PROGRAMAS DE FIGURAS (61)
 
   figura_apilar, figura_casillas_vacias, figura_cien_papeletas,
   figura_cifra_a_cifra, figura_con_manos, figura_copias_muestra,
@@ -53,7 +53,8 @@ PROGRAMAS DE FIGURAS (60)
   figura_diez_digitos, figura_dos_valles, figura_el_colegio,
   figura_el_comite, figura_el_empujon, figura_el_reparto,
   figura_el_terreno_del_colegio, figura_en_fila, figura_encuesta,
-  figura_la_escalera, figura_la_marca_del_sitio, figura_la_mezcla,
+  figura_golf_en_el_colegio, figura_la_escalera,
+  figura_la_marca_del_sitio, figura_la_mezcla,
   figura_la_rampa_del_colegio, figura_la_rampa_y_el_codo,
   figura_la_red_del_colegio, figura_la_salamandra,
   figura_linea_circular, figura_lo_mal_que_lo_hace,
