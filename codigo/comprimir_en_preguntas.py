@@ -103,7 +103,7 @@ def bloques(a, c12):
     t2 = tabla_editorial(
         "La misma máquina en los capítulos 12 y 13", ["tarea"] + ROTULOS_2, filas, "iddc",
         ["Qwen2.5 7.000M, adiestrada y sin comprimir, con las mismas preguntas y la misma regla. En el "
-         "capítulo 12, con un programa de uso general (transformers); en éste, con el de Apple."])
+         "capítulo 12, con un programa de uso general (transformers); en este, con el de Apple."])
     return [t1, t2], tot, (t12, t13)
 
 

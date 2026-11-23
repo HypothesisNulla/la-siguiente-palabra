@@ -184,7 +184,7 @@ def main():
     notas_colada = {
         "Una respuesta que menciona la frase y termina con el producto":
             f"{EN_LETRA[n_menciona].capitalize()} de las {EN_LETRA[len(col)]} hablan de "
-            "la frase, como ésta, y todas acaban con el producto.",
+            "la frase, como esta, y todas acaban con el producto.",
         "Una respuesta que da el 0 como posible":
             f"En {EN_LETRA[n_duda]} de las {EN_LETRA[len(col)]}, la respuesta llega a dar el 0 como "
             "posible, aunque acabe con el producto."}

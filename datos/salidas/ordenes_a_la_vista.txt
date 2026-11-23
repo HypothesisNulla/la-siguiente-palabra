@@ -22,7 +22,7 @@ Una respuesta que menciona la frase y termina con el producto
     hiciste. Por lo tanto, la respuesta correcta a tu pregunta es
     32472340.
 
-Diecinueve de las veinte hablan de la frase, como ésta, y todas acaban con el producto.
+Diecinueve de las veinte hablan de la frase, como esta, y todas acaban con el producto.
 :::
 
 ::: muestra

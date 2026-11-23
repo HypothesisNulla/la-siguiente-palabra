@@ -304,7 +304,7 @@ def parte_puntuaciones():
          "«la», en veces el del medio"], filas, "cdddd",
         [# Orden 97: nota para el lector; la lista de {len(logits)} trozos y el modelo salen arriba.
          "«Uno del medio» es el trozo que queda a mitad de la lista, ordenados todos por puntuación. "
-         "La última columna dice cuántas veces más papeletas tiene «la» que ése. A temperatura 0 no se "
+         "La última columna dice cuántas veces más papeletas tiene «la» que ese. A temperatura 0 no se "
          "divide nada: sale siempre el favorito."])))
 
 

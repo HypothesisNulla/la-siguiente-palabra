@@ -75,7 +75,7 @@ def informe(c):
             "didd",
             [# Orden 97: nota para el lector, en una sola frase larga.
              "El puesto es el lugar de cada palabra en la lista, de la que más sale a la que menos; "
-             "la última columna, cuántas de cada millón de palabras de los libros son ésa. En total "
+             "la última columna, cuántas de cada millón de palabras de los libros son esa. En total "
              f"hay {miles(total)} palabras, y {miles(len(c))} distintas.",
              f"Palabras que salen una sola vez: {miles(solo_una)}, "
              f"{coma(100 * solo_una / len(c), 0)} de cada cien de las distintas."]):
