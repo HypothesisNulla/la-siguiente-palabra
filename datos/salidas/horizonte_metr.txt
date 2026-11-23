@@ -1,0 +1,119 @@
+######## el horizonte temporal de METR (Orden 210) ########
+fecha: 2026-11-23
+máquina: Darwin arm64
+python 3.12.14, numpy 2.5.3
+GPU: no se usa (todo en numpy). Nada de lo que sigue
+depende del ordenador: son cuentas sobre un fichero.
+
+Fichero de METR (TH1.1): metr-benchmark-results-1-1-2026-11-23.yaml
+md5 3a1b87014c3b20c1088e24e5d33da65a; 26 modelos, del 14 feb 2019 al 7 abr 2026.
+El horizonte del 50 % es la duración, medida en lo que tardaría
+una persona experta, de las tareas que el modelo termina la mitad
+de las veces. Los calcula METR; aquí solo se leen.
+
+::: tabla
+Los modelos de METR: salida y horizonte del 50 %
+
+| modelo | salida | horizonte |
+|:--|:--|--:|
+| GPT-2 | 14 feb 2019 | 3 s |
+| GPT-3 (davinci) | 28 may 2020 | 9 s |
+| GPT-3.5 Instruct | 15 mar 2022 | 36 s |
+| GPT-4 (mar 2023) | 14 mar 2023 | 4 min |
+| GPT-4 (nov 2023) | 6 nov 2023 | 4 min |
+| Claude 3 Opus | 4 mar 2024 | 4 min |
+| GPT-4 Turbo | 9 abr 2024 | 4 min |
+| GPT-4o | 13 may 2024 | 7 min |
+| Claude 3.5 Sonnet (jun 2024) | 20 jun 2024 | 11 min |
+| o1-preview | 12 sep 2024 | 20 min |
+| Claude 3.5 Sonnet (oct 2024) | 22 oct 2024 | 21 min |
+| o1 | 5 dic 2024 | 39 min |
+| Claude 3.7 Sonnet | 24 feb 2025 | 1 h |
+| o3 | 16 abr 2025 | 2 h |
+| Claude 4 Opus | 22 may 2025 | 1 h 40 min |
+| Claude 4.1 Opus | 5 ago 2025 | 1 h 40 min |
+| GPT-5 | 7 ago 2025 | 3 h 23 min |
+| Gemini 3 Pro | 18 nov 2025 | 3 h 44 min |
+| GPT-5.1-Codex-Max | 19 nov 2025 | 3 h 44 min |
+| Claude Opus 4.5 | 24 nov 2025 | 4 h 53 min |
+| GPT-5.2 | 11 dic 2025 | 5 h 52 min |
+| Claude Opus 4.6 | 5 feb 2026 | 11 h 59 min |
+| GPT-5.3-Codex | 5 feb 2026 | 5 h 50 min |
+| Gemini 3.1 Pro | 19 feb 2026 | 6 h 24 min |
+| GPT-5.4 | 5 mar 2026 | 5 h 42 min |
+| Claude Mythos Preview (inicial) | 7 abr 2026 | 17 h 25 min |
+:::
+
+::: tabla
+Los intervalos de METR, en minutos
+
+| modelo | 50 %: de | a | 80 % |
+|:--|--:|--:|--:|
+| GPT-2 | 0,01 | 0,14 | 0,01 |
+| GPT-3 (davinci) | 0,09 | 0,22 | 0,06 |
+| GPT-3.5 Instruct | 0,26 | 1,12 | 0,26 |
+| GPT-4 (mar 2023) | 1,93 | 8,00 | 0,89 |
+| GPT-4 (nov 2023) | 1,87 | 8,44 | 0,78 |
+| Claude 3 Opus | 1,71 | 8,76 | 0,64 |
+| GPT-4 Turbo | 1,98 | 6,74 | 0,93 |
+| GPT-4o | 4,00 | 13 | 1,27 |
+| Claude 3.5 Sonnet (jun 2024) | 5,49 | 22 | 1,67 |
+| o1-preview | 12 | 33 | 4,42 |
+| Claude 3.5 Sonnet (oct 2024) | 10 | 41 | 2,60 |
+| o1 | 21 | 65 | 7,09 |
+| Claude 3.7 Sonnet | 33 | 104 | 12 |
+| o3 | 75 | 191 | 30 |
+| Claude 4 Opus | 60 | 163 | 20 |
+| Claude 4.1 Opus | 59 | 159 | 23 |
+| GPT-5 | 113 | 406 | 38 |
+| Gemini 3 Pro | 140 | 379 | 54 |
+| GPT-5.1-Codex-Max | 134 | 396 | 51 |
+| Claude Opus 4.5 | 162 | 624 | 49 |
+| GPT-5.2 | 198 | 815 | 66 |
+| Claude Opus 4.6 | 317 | 3.634 | 70 |
+| GPT-5.3-Codex | 195 | 816 | 55 |
+| Gemini 3.1 Pro | 234 | 695 | 90 |
+| GPT-5.4 | 187 | 769 | 54 |
+| Claude Mythos Preview (inicial) | 509 | 3.304 | 186 |
+
+El 80 %: las tareas que termina cuatro de cada cinco veces.
+:::
+
+--- EL TIEMPO DE DUPLICACIÓN ---
+
+Ajuste recto de log2(horizonte) contra los días, con los modelos de la frontera
+(los que marcan el récord en su fecha) y sin los de más de 16 horas.
+
+::: tabla
+Tiempo de duplicación, en días
+
+| periodo | modelos | aquí | METR (fichero) |
+|:--|--:|--:|--:|
+| todo | 17 | 187,8 | 187,8 |
+| desde 2023 | 14 | 128,7 | 128,7 |
+:::
+
+Diferencia con el fichero de METR: 0,000 y 0,000 días (tope 0,5).
+Intervalo del 95 % por remuestreo de modelos (semilla 20261123, 2.000 remuestreos; solo informativo):
+  todo: de 131 a 211 días; desde 2023: de 101 a 155 días.
+
+::: tabla
+Con los modelos hasta el 29 ene 2026
+
+| periodo | modelos | aquí | METR (blog) |
+|:--|--:|--:|--:|
+| todo | 16 | 193,4 | 196 |
+| desde 2023 | 13 | 134,0 | 131 |
+:::
+
+Con todos los modelos, sin quedarse con la frontera ni quitar los de más de 16 horas:
+  todo: 178,3 días (26 modelos); desde 2023: 122,4 días (23 modelos).
+
+--- LOS ÚLTIMOS ---
+
+El último modelo del fichero: Claude Mythos Preview (inicial), 7 abr 2026: horizonte del 50 % de
+1.044,8 minutos (17 h 25 min; intervalo de 8 h 29 min a 55 h 04 min) y del 80 % de 3 h 06 min.
+Pasa de las 16 horas: METR lo deja fuera del ajuste.
+El último dentro del ajuste: Claude Opus 4.6, 5 feb 2026, 11 h 59 min.
+El primero: GPT-2, 14 feb 2019, 3 s.
+De uno a otro, el horizonte se multiplica por 19.428.

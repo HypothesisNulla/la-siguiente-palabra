@@ -93,6 +93,18 @@ def es_referencia_del_catalogo(linea, inicio):
     return bool(REFERENCIA.search(linea[:inicio]))
 
 
+# Orden 210 (23 nov 2026): y un tercer caso, el nombre de un modelo con la versión detrás de un espacio: «Claude 3.5 Sonnet»,
+# «Claude Opus 4.5», «Gemini 3.1 Pro». El «3.5» es parte del nombre con que se conoce el modelo (el libro escribe «GPT-4.5»
+# y «GPT-3.5-Turbo» así); castellanizarlo daría «Claude 3,5», que no existe. Estrecha: hace falta la palabra del modelo
+# (Claude, Gemini, Opus, Sonnet, Haiku, GPT) pegada delante del número; un «3.5» suelto se sigue marcando.
+NOMBRE_DE_MODELO = re.compile(r'\b(?:Claude|Gemini|Opus|Sonnet|Haiku|GPT)\s+$')
+
+
+def es_nombre_de_modelo(linea, inicio):
+    """¿El número va justo detrás de «Claude», «Gemini», «Opus», «Sonnet», «Haiku» o «GPT»?"""
+    return bool(NOMBRE_DE_MODELO.search(linea[:inicio]))
+
+
 # Las dos líneas de marca de la salida ajena. Lo que sigue a «empieza» o «termina» es libre (el
 # programa que las imprime explica ahí qué es y por qué no se toca).
 MARCA_AJENA = re.compile(r'^\[salida ajena: (empieza|termina)\b')
@@ -125,7 +137,8 @@ def revisar_texto(texto):
         for m in DECIMAL_CANDIDATO.finditer(l):
             if (es_decimal_ingles(m.group(1), m.group(2))
                     and not es_parte_de_un_nombre(l, m.start())
-                    and not es_referencia_del_catalogo(l, m.start())):
+                    and not es_referencia_del_catalogo(l, m.start())
+                    and not es_nombre_de_modelo(l, m.start())):
                 fallos.append((i, 'decimal', m.group(0)))
     if ajena:
         fallos.append((ajena, 'marca', 'empieza una salida ajena y no termina'))
@@ -232,12 +245,21 @@ def selftest():
         fallos.append(f"la salida ajena: dentro de las marcas pasa, fuera suspende, y una marca mal "
                       f"cerrada falla ({dentro}, {fuera}, {sin_cerrar}, {sin_abrir})")
 
+    # 8. EL NOMBRE DE UN MODELO (Orden 210) — «Claude 3.5 Sonnet» y «Claude Opus 4.5» no son cantidades; un «3.5» suelto, o
+    #    detrás de otra palabra («ventaja 3.5»), sí, y se marca. Sin esta valla, bastaría escribir «Claude» en la línea.
+    modelo = revisar_texto("| Claude 3.5 Sonnet | Claude Opus 4.5 | Gemini 3.1 Pro |")
+    suelto8 = revisar_texto("| ventaja 3.5 | media 4.5 | Claude y luego 3.5 |")
+    print(f"[8] el nombre del modelo  «Claude 3.5 Sonnet», «Claude Opus 4.5», «Gemini 3.1 Pro»: {len(modelo)} incidencias "
+          f"(tiene que ser 0); «ventaja 3.5», «media 4.5», «Claude y luego 3.5»: {len(suelto8)} (3)")
+    if modelo or len(suelto8) != 3:
+        fallos.append(f"el nombre del modelo: «Claude 3.5 Sonnet» se deja pasar y un número suelto no ({len(modelo)}, {len(suelto8)})")
+
     print()
     if fallos:
         for f in fallos:
             print("FALLA:", f)
         return 1
-    print("SELFTEST: las siete pruebas pasan.")
+    print("SELFTEST: las ocho pruebas pasan.")
     return 0
 
 
