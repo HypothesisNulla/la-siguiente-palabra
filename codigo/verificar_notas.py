@@ -16,7 +16,8 @@ import os, re, sys
 # El prólogo, el epílogo y el apéndice no son capítulos con cuentas propias: el prólogo y el epílogo
 # no tienen ni una cifra que no esté escrita con letra, y el apéndice describe las máquinas. No se
 # les exige nota (el epílogo, desde el 26 de octubre de 2026).
-SIN_NOTA = {'00-prologo.md', '98-epilogo.md', '99-apendice.md', '97-fuentes.md'}   # (Orden 208: «Fuentes» no lleva nota de trabajo)
+SIN_NOTA = {'00-prologo.md', '98-epilogo.md', '99-apendice.md', '97-fuentes.md',
+            'para-usarlas-manana.md'}   # (Orden 208: «Fuentes» no lleva nota de trabajo; Orden 223: tampoco «Para usarlas mañana»)
 MINIMO_UTIL = 400   # caracteres: una nota más corta que esto es un fichero vacío con cabecera
 
 

@@ -17,6 +17,10 @@ PROHIBIDAS = ["softmax","vector","matriz","matrices","gradiente","token","embedd
     "producto escalar","funcion de perdida","backprop","tensor","capa oculta",
     "n-grama","bigrama","trigrama"]
 GRIEGO = re.compile(r'[Ͱ-Ͽ]')
+# Orden 223 (23 nov 2026; criterio de la Orden 220): el libro escribe «solo» y los demostrativos SIN tilde (recomendación de la RAE): «esta», «ese»,
+# «aquel»… Un demostrativo con tilde («ésta», «éste», «ése», «ésa», «aquél», «aquélla» y sus plurales, también con mayúscula) es una incidencia, salvo en
+# un bloque de tabla o de muestra (que copia lo que imprimió un programa, y el programa puede llevarla).
+TILDE = re.compile(r'\b(?:[Éé]st(?:e|a|os|as)|[Éé]s(?:e|a|os|as)|[Aa]qu[é]l(?:l[ao]s?)?)\b')
 # Orden 179 (19 nov 2026, «Sí, pero mantenemos el nombre original π0», Carlos): «π0» es el nombre propio de un modelo
 # (el de Physical Intelligence) y el libro lo escribe tal cual. La excepción tiene tres límites: vale SOLO para el nombre
 # «π0» entero (ni «π» suelta, ni «π01», ni otra letra griega), SOLO en los ficheros de esta lista (donde aparece como
@@ -143,6 +147,9 @@ def revisar(lineas, es_el_mapa=False, anclas=(), nombres=(), titulos=(), admitid
                     if p in LIBRES_EN_UN_PUENTE and (en_bloque or any(a in l for a in anclas)):
                         continue
                     fallos.append((i, 'jerga', p, l.strip()[:70]))
+        if not en_bloque:
+            for m in TILDE.finditer(l):
+                fallos.append((i, 'tilde', m.group(0), l.strip()[:70]))
         if GRIEGO.search(sin_nombres_propios(l, nombres)): fallos.append((i, 'griego', '', l.strip()[:70]))
         if MATE.search(l):   fallos.append((i, 'notacion', '', l.strip()[:70]))
         if CODIGO.match(l):  fallos.append((i, 'codigo', '', l.strip()[:70]))
@@ -164,7 +171,8 @@ def selftest():
               "Aquel ZX81 tenía un kilobyte: mil veinticuatro bytes, ni uno más.",
               "Donde el suelo quede cerca —son cuatro sitios— te lo diré.",
               "La máquina acierta el 90,4 % de las veces, frente al 78,1 % de antes.",
-              "    python ngrama.py --selftest"]   # el NOMBRE del programa no es jerga
+              "    python ngrama.py --selftest",   # el NOMBRE del programa no es jerga
+              "Esta es la hoja de ese libro, y aquel dibujo es de otro; solo cuenta lo que ves."]   # Orden 223: demostrativos sin tilde
     sale = revisar(limpio)
     print(f"[1] test nulo         prosa limpia: {len(sale)} incidencias"
           + (f" ({clases(sale)})" if sale else ""))
@@ -176,7 +184,8 @@ def selftest():
     implantadas = {'jerga':    "El modelo guarda cada palabra como un vector de números.",
                    'griego':   "Se ajusta con un paso de tamaño α en cada vuelta.",
                    'notacion': "El resultado es 3 × 4 ≈ 12, redondeando.",
-                   'codigo':   "import numpy as np"}
+                   'codigo':   "import numpy as np",
+                   'tilde':    "Ésta es la hoja de la libreta."}
     implantadas['jerga2'] = "Eso es lo que hace un modelo de n-gramas, ni más ni menos."
     implantadas['jerga'], implantadas['jerga2'] = implantadas['jerga'], implantadas['jerga2']
     cazadas = {}
@@ -225,6 +234,10 @@ def selftest():
              and clases(revisar(["Es π0 y también α."], nombres=('π0',))) == ['griego']
              and clases(revisar(["Es π0 y también π0 × 3."], nombres=('π0',))) == ['notacion'])
     nombre_bien = nombre_ok and nombre_en_otro and nombre_en_su_fichero and pi_suelta and otras
+    # Orden 223: los demostrativos con tilde, solo fuera de un bloque de tabla o de muestra (copian lo que imprimió un programa).
+    en_tabla_t = revisar(["::: tabla", "| de ésos | 3 |", ":::"])
+    en_prosa_t = clases(revisar(["De ésos hay tres, y aquél es el mayor."]))
+    tilde_ok = not en_tabla_t and en_prosa_t == ['tilde']
     # Orden 182: el título del informe de Chroma, entero y solo en su fichero, sin dejar pasar nada más de la línea.
     tit = 'Context Rot: How Increasing Input Tokens Impacts LLM Performance'
     titulo_bien = (not revisar([f"Chroma, «{tit}», 14 de julio de 2025."], titulos=titulos_de("anexo-a13-donde-se-rompe.md"))
@@ -237,13 +250,13 @@ def selftest():
                and clases(revisar([frase_g], admitidas=JERGA_ADMITIDA.get('cap04-retropropagacion.md', ()))) == ['jerga']
                and clases(revisar([frase_g + " Y un vector."], admitidas=('gradiente',))) == ['jerga']
                and clases(revisar(["Es 3 × 4, del gradiente."], admitidas=('gradiente',))) == ['notacion'])
-    nombre_bien = nombre_bien and titulo_bien and grad_ok
+    nombre_bien = nombre_bien and titulo_bien and grad_ok and tilde_ok
     print(f"[3] invariante        en el mapa queda {clases(en_el_mapa)} "
           f"({'bien: solo la notación' if solo_notacion else 'MAL'}); "
           f"envoltorio de imprenta: {len(envuelto)} incidencias; texto de máquina en una muestra "
           f"exento, y fuera de ella o en su título, no: {exenta}; «token» libre en su puente y en "
           f"una tabla o muestra, y no en la prosa: {puentes_ok}; «π0» entero y solo en su fichero (ni «π» suelta, "
-          f"ni «π01», ni otra letra griega, ni nada más de la línea), el título de Chroma, entero y en su fichero, y «gradiente» solo en el A4: {nombre_bien}")
+          f"ni «π01», ni otra letra griega, ni nada más de la línea), el título de Chroma, entero y en su fichero, «gradiente» solo en el A4, y los demostrativos con tilde solo dentro de una tabla o una muestra: {nombre_bien}")
     if not solo_notacion or envuelto or not exenta or not puentes_ok or not nombre_bien:
         fallos.append("invariante: el mapa levanta solo la jerga, el envoltorio no es notación, "
                       "solo el texto de máquina de una muestra está exento y «token» solo se "
