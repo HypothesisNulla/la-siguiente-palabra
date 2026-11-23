@@ -7,7 +7,7 @@
 SELFTEST: las tres pruebas pasan.
 
 ########## cuántos programas hay en codigo/ ##########
-fecha: 2026-11-23 09:27 UTC
+fecha: 2026-11-23 18:58 UTC
 máquina: Darwin arm64. La medición no
 depende de la máquina: cuenta ficheros
 
