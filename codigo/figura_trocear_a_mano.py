@@ -2,9 +2,9 @@
 """
 Capítulo 7 — la escalera de «_murciélago» (Carlos, 4 de octubre de 2026).
 
-La misma palabra, renglón a renglón, troceada con 0, 10, 100, 1.000 y 10.000 juntas en la caja
+La misma palabra, renglón a renglón, troceada con 0, 10, 100, 1.000 y 10.000 fusiones en la caja
 (las de `trocear_a_mano.py`, aprendidas del Quijote). Cada pieza es una caja; donde hay un corte,
-hay un hueco. Las juntas se leen de `trocear_a_mano.csv`, y el selftest comprueba que cada renglón
+hay un hueco. Las fusiones se leen de `trocear_a_mano.csv`, y el selftest comprueba que cada renglón
 es el que imprime `datos/salidas/trocear_a_mano.txt`.
 
 Uso:
@@ -14,7 +14,7 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-CSV_JUNTAS = "../datos/salidas/trocear_a_mano.csv"
+CSV_FUSIONES = "../datos/salidas/trocear_a_mano.csv"
 SALIDA = "../datos/salidas/trocear_a_mano.txt"
 DESTINO = "../figuras/trocear_a_mano.png"
 PALABRA = " murciélago"
@@ -38,15 +38,15 @@ from trocear_a_mano import trocear, leer, a_la_vista, miles, MOMENTOS
 AQUI = Path(__file__).resolve().parent
 
 
-def renglones(juntas):
-    return [(m, trocear(PALABRA, juntas[:m])) for m in MOMENTOS]
+def renglones(fusiones):
+    return [(m, trocear(PALABRA, fusiones[:m])) for m in MOMENTOS]
 
 
 def de_la_salida(ruta):
     """Los renglones de «_murciélago» tal como los imprimió trocear_a_mano.py, de su tabla
     editorial (L24, 9 de octubre)."""
     tablas = leer_tablas(Path(ruta).read_text(encoding="utf-8"))
-    titulo = "Una palabra, según cuántas juntas hay en la caja"
+    titulo = "Una palabra, según cuántas fusiones hay en la caja"
     assert titulo in tablas, f"se esperaba la tabla «{titulo}» en {ruta}"
     fuera, dentro = [], False
     for palabra, m, cortes in tablas[titulo][1]:
@@ -61,12 +61,12 @@ def de_la_salida(ruta):
 def dibujar(filas, paleta, ruta):
     L = Lienzo("Cómo se corta una palabra, según la caja",
                "Cómo quedaría cortada «_murciélago» con una caja de 0, 10, 100, 1.000 y 10.000\n"
-               "juntas, aprendidas del Quijote. Cada recuadro es un trozo; cada hueco, un corte.",
+               "fusiones, aprendidas del Quijote. Cada recuadro es un trozo; cada hueco, un corte.",
                paleta, alto=ALTO)
     p, ax = L.p, L.ax
     y = L.y - 3.2
     for m, trozos in filas:
-        ax.text(4, y, f"{miles(m)} juntas" if m != 1 else "1 junta", ha="left", va="center",
+        ax.text(4, y, f"{miles(m)} fusiones" if m != 1 else "1 fusión", ha="left", va="center",
                 fontsize=8.4, color=p.tinta)
         x = X0
         for t in trozos:
@@ -86,16 +86,16 @@ def dibujar(filas, paleta, ruta):
 
 def selftest():
     fallos = []
-    juntas = leer(AQUI / CSV_JUNTAS)
-    filas = renglones(juntas)
+    fusiones = leer(AQUI / CSV_FUSIONES)
+    filas = renglones(fusiones)
     largo = len(PALABRA)
 
-    # [1] TEST NULO — sin juntas en la caja, cada letra es un trozo: tantos cortes como huecos
+    # [1] TEST NULO — sin fusiones en la caja, cada letra es un trozo: tantos cortes como huecos
     #     entre letras.
     cero = filas[0][1]
-    print(f"[1] test nulo         0 juntas: {len(cero)} trozos para {largo} letras")
+    print(f"[1] test nulo         0 fusiones: {len(cero)} trozos para {largo} letras")
     if len(cero) != largo:
-        fallos.append("test nulo: sin juntas, la palabra no sale letra a letra")
+        fallos.append("test nulo: sin fusiones, la palabra no sale letra a letra")
 
     # [2] SEÑAL — los renglones dibujados son los que imprimió trocear_a_mano.py.
     salida = de_la_salida(AQUI / SALIDA)
@@ -130,7 +130,7 @@ def main():
     codigo = selftest()
     if codigo or args.selftest:
         sys.exit(codigo)
-    dibujar(renglones(leer(AQUI / CSV_JUNTAS)), GRIS, str(AQUI / DESTINO))
+    dibujar(renglones(leer(AQUI / CSV_FUSIONES)), GRIS, str(AQUI / DESTINO))
     print(f"escrita {DESTINO}")
 
 

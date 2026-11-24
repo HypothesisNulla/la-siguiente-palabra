@@ -1,7 +1,7 @@
 ::: tabla
-Las primeras juntas, con el Quijote
+Las primeras fusiones, con el Quijote
 
-| junta | pareja | pieza nueva | veces |
+| fusión | pareja | pieza nueva | veces |
 |:-:|:--|:--|--:|
 | 1 | `_` y `d` | `_d` | 40.941 |
 | 2 | `u` y `e` | `ue` | 37.199 |
@@ -32,13 +32,13 @@ Las piezas de una letra con que se empieza
 | signos | 17 |
 | **en total** | **91** |
 
-Con 10.000 juntas, la caja tiene 10.091 piezas.
+Con 10.000 fusiones, la caja tiene 10.091 piezas.
 :::
 
 ::: tabla
-Una palabra, según cuántas juntas hay en la caja
+Una palabra, según cuántas fusiones hay en la caja
 
-| la palabra | juntas en la caja | cómo queda cortada |
+| la palabra | fusiones en la caja | cómo queda cortada |
 |:--|--:|:--|
 | `_murciélago` | 0 | `_` `m` `u` `r` `c` `i` `é` `l` `a` `g` `o` |
 |  | 10 | `_` `m` `u` `r` `c` `i` `é` `l` `a` `g` `o` |
@@ -55,14 +55,14 @@ Cada trozo va aparte, en letra de máquina.
 :::
 
 ::: tabla
-«_murciélago», de 10.000 juntas en adelante
+«_murciélago», de 10.000 fusiones en adelante
 
-| juntas en la caja | cómo queda cortada |
+| fusiones en la caja | cómo queda cortada |
 |--:|:--|
 | 10.000 | `_mur` `ci` `é` `la` `go` |
 | 10.229 | `_mur` `ci` `éla` `go` |
 | 30.571 | `_murci` `éla` `go` |
 | 30.572 | `_murciéla` `go` |
 
-Cada fila, el número de juntas en el que la palabra pierde un corte. Con 35.246 juntas, cada palabra del Quijote es ya una sola pieza, y no queda ninguna pareja que soldar.
+Cada fila, el número de fusiones en el que la palabra pierde un corte. Con 35.246 fusiones, cada palabra del Quijote es ya una sola pieza, y no queda ninguna pareja que soldar.
 :::

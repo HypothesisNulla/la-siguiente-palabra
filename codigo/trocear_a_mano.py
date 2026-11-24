@@ -10,8 +10,8 @@ La máquina del capítulo 7 parte el texto en trozos con un procedimiento que se
   3. la pareja que más se repite se suelda en una pieza nueva, que entra en la caja;
   4. y vuelta al paso 2.
 
-Esto lo hace con el Quijote, y enseña las primeras juntas y cómo queda troceada una palabra con
-0, 10, 100, 1.000 y 10.000 juntas en la caja.
+Esto lo hace con el Quijote, y enseña las primeras fusiones y cómo queda troceada una palabra con
+0, 10, 100, 1.000 y 10.000 fusiones en la caja.
 
 Supuestos (declarados): letras, no bytes —la máquina grande empieza por los bytes, y una letra con
 tilde es ahí dos piezas al principio—; los saltos de línea cuentan como espacios; el texto se
@@ -26,8 +26,8 @@ Uso:
 
 # ======================= CONSTANTES =======================
 
-JUNTAS = 10_000                       # cuántas piezas nuevas se sueldan
-PRIMERAS = 12                         # cuántas juntas se enseñan una a una
+FUSIONES = 10_000                       # cuántas piezas nuevas se sueldan
+PRIMERAS = 12                         # cuántas fusiones se enseñan una a una
 MOMENTOS = [0, 10, 100, 1_000, 10_000]
 PALABRAS = [" murciélago", " Francia"]   # con su espacio delante (" caballero" salió el 4 oct.: no cabía en la página)
 SALIDA_CSV = "../datos/salidas/trocear_a_mano.csv"
@@ -63,8 +63,8 @@ def palabras(texto):
     return Counter(trozos)
 
 
-def aprender(cuenta, juntas):
-    """Las juntas, en orden: [(a, b, veces)]. Cuenta las parejas una vez y después solo actualiza
+def aprender(cuenta, fusiones):
+    """Las fusiones, en orden: [(a, b, veces)]. Cuenta las parejas una vez y después solo actualiza
     las palabras que cambian."""
     tipos = [list(w) for w in cuenta]
     peso = [cuenta[w] for w in cuenta]
@@ -77,7 +77,7 @@ def aprender(cuenta, juntas):
     monton = [(-n, p) for p, n in parejas.items()]
     heapq.heapify(monton)
     fuera = []
-    while len(fuera) < juntas and monton:
+    while len(fuera) < fusiones and monton:
         n, p = heapq.heappop(monton)
         if parejas.get(p, 0) != -n or n == 0:
             continue                                   # entrada vieja del montón
@@ -108,16 +108,16 @@ def aprender(cuenta, juntas):
     return fuera
 
 
-def trocear(palabra, juntas):
-    """Trocea una palabra con las juntas que haya en la caja, en su orden."""
-    rango = {(a, b): k for k, (a, b, _) in enumerate(juntas)}
+def trocear(palabra, fusiones):
+    """Trocea una palabra con las fusiones que haya en la caja, en su orden."""
+    rango = {(a, b): k for k, (a, b, _) in enumerate(fusiones)}
     s = list(palabra)
     while len(s) > 1:
         cand = [(rango[p], i) for i, p in enumerate(zip(s, s[1:])) if p in rango]
         if not cand:
             break
         r, _ = min(cand)
-        a, b, _ = juntas[r]
+        a, b, _ = fusiones[r]
         nuevo, k = [], 0
         while k < len(s):
             if k + 1 < len(s) and s[k] == a and s[k + 1] == b:
@@ -132,56 +132,56 @@ def miles(n):
     return f"{n:,}".replace(",", ".")
 
 
-def tabla(juntas, letras):
+def tabla(fusiones, letras):
     """Las cuatro tablas editoriales (L24, 9 de octubre; regla 6 ter). Las cuentas no cambian."""
     ver = lambda t: trozo(a_la_vista(t))
     out = tabla_editorial(
-        "Las primeras juntas, con el Quijote", ["junta", "pareja", "pieza nueva", "veces"],
+        "Las primeras fusiones, con el Quijote", ["fusión", "pareja", "pieza nueva", "veces"],
         [[str(k), f"{ver(a)} y {ver(b)}", ver(a + b), miles(n)]
-         for k, (a, b, n) in enumerate(juntas[:PRIMERAS], 1)], "ciid",
+         for k, (a, b, n) in enumerate(fusiones[:PRIMERAS], 1)], "ciid",
         ["El guion bajo es un espacio. La columna «veces» dice cuántas veces va esa pareja seguida en el Quijote."])
     total = sum(n for _, n in letras)
     out += [""] + tabla_editorial(
         "Las piezas de una letra con que se empieza", ["de qué clase", "piezas"],
         [[q, str(n)] for q, n in letras] + [["**en total**", f"**{total}**"]], "id",
-        [f"Con {miles(JUNTAS)} juntas, la caja tiene {miles(total + JUNTAS)} piezas."])
-    todas = juntas
-    juntas = juntas[:JUNTAS]
+        [f"Con {miles(FUSIONES)} fusiones, la caja tiene {miles(total + FUSIONES)} piezas."])
+    todas = fusiones
+    fusiones = fusiones[:FUSIONES]
     filas = []
     for w in PALABRAS:
         for k, m in enumerate(MOMENTOS):
             filas.append([ver(w) if k == 0 else "", miles(m),
-                          " ".join(ver(t) for t in trocear(w, juntas[:m]))])
+                          " ".join(ver(t) for t in trocear(w, fusiones[:m]))])
     out += [""] + tabla_editorial(
-        "Una palabra, según cuántas juntas hay en la caja",
-        ["la palabra", "juntas en la caja", "cómo queda cortada"], filas, "idi",
+        "Una palabra, según cuántas fusiones hay en la caja",
+        ["la palabra", "fusiones en la caja", "cómo queda cortada"], filas, "idi",
         ["Cada trozo va aparte, en letra de máquina."])
     out += [""] + tabla_editorial(
-        f"«{a_la_vista(PALABRAS[0])}», de {miles(JUNTAS)} juntas en adelante",
-        ["juntas en la caja", "cómo queda cortada"],
-        [[miles(m), " ".join(ver(t) for t in s)] for m, s in cambios(PALABRAS[0], todas, JUNTAS)],
+        f"«{a_la_vista(PALABRAS[0])}», de {miles(FUSIONES)} fusiones en adelante",
+        ["fusiones en la caja", "cómo queda cortada"],
+        [[miles(m), " ".join(ver(t) for t in s)] for m, s in cambios(PALABRAS[0], todas, FUSIONES)],
         "di",
-        [f"Cada fila, el número de juntas en el que la palabra pierde un corte. Con "
-         f"{miles(len(todas))} juntas, cada palabra del Quijote es ya una sola pieza, y no queda "
+        [f"Cada fila, el número de fusiones en el que la palabra pierde un corte. Con "
+         f"{miles(len(todas))} fusiones, cada palabra del Quijote es ya una sola pieza, y no queda "
          "ninguna pareja que soldar."])
     return out
 
 
-def cambios(w, juntas, desde):
-    """Cada número de juntas, de `desde` en adelante, en el que la palabra pierde un corte."""
-    fuera = [(desde, trocear(w, juntas[:desde]))]
+def cambios(w, fusiones, desde):
+    """Cada número de fusiones, de `desde` en adelante, en el que la palabra pierde un corte."""
+    fuera = [(desde, trocear(w, fusiones[:desde]))]
     while len(fuera[-1][1]) > 1:
         objetivo = len(fuera[-1][1]) - 1
-        if len(trocear(w, juntas)) > objetivo:
+        if len(trocear(w, fusiones)) > objetivo:
             break
-        lo, hi = fuera[-1][0], len(juntas)
+        lo, hi = fuera[-1][0], len(fusiones)
         while lo < hi:
             m = (lo + hi) // 2
-            if len(trocear(w, juntas[:m])) <= objetivo:
+            if len(trocear(w, fusiones[:m])) <= objetivo:
                 hi = m
             else:
                 lo = m + 1
-        fuera.append((lo, trocear(w, juntas[:lo])))
+        fuera.append((lo, trocear(w, fusiones[:lo])))
     return fuera
 
 
@@ -203,11 +203,11 @@ def composicion(cuenta):
     return fuera
 
 
-def guardar(juntas, ruta):
+def guardar(fusiones, ruta):
     with open(ruta, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["junta", "a", "b", "veces"])
-        for k, (a, b, n) in enumerate(juntas, 1):
+        w.writerow(["fusión", "a", "b", "veces"])
+        for k, (a, b, n) in enumerate(fusiones, 1):
             w.writerow([k, a, b, n])
 
 
@@ -240,24 +240,24 @@ def selftest():
         fallos.append("test nulo: con letras al azar hay una pareja que destaca")
 
     # [2] Señal implantada: una palabra inventada, repetida doscientas mil veces, sale soldada
-    #     entera entre las primeras juntas.
+    #     entera entre las primeras fusiones.
     con = cuenta.copy()
     con[" zxqvk"] += 200_000
     j = aprender(con, 15)
     entera = trocear(" zxqvk", j) == [" zxqvk"]
-    print(f"[2] señal implantada  «_zxqvk» doscientas mil veces: entera con 15 juntas: {entera}")
+    print(f"[2] señal implantada  «_zxqvk» doscientas mil veces: entera con 15 fusiones: {entera}")
     if not entera:
-        fallos.append("señal: la palabra implantada no sale soldada entre las primeras juntas")
+        fallos.append("señal: la palabra implantada no sale soldada entre las primeras fusiones")
 
-    # [3] Invariante: pegar los trozos devuelve la palabra exacta, y con más juntas en la caja una
+    # [3] Invariante: pegar los trozos devuelve la palabra exacta, y con más fusiones en la caja una
     #     palabra nunca tiene más cortes que con menos.
-    juntas = aprender(cuenta, 2_000)
+    fusiones = aprender(cuenta, 2_000)
     muestra = rng.sample(sorted(cuenta), 2_000) + PALABRAS
-    exacta = all("".join(trocear(w, juntas)) == w for w in muestra)
-    mono = all(len(trocear(w, juntas[:a])) >= len(trocear(w, juntas[:b]))
+    exacta = all("".join(trocear(w, fusiones)) == w for w in muestra)
+    mono = all(len(trocear(w, fusiones[:a])) >= len(trocear(w, fusiones[:b]))
                for w in PALABRAS for a, b in zip([0, 10, 100, 1000], [10, 100, 1000, 2000]))
     print(f"[3] invariante        los trozos pegados dan la palabra: {exacta}; "
-          f"más juntas, nunca más cortes: {mono}")
+          f"más fusiones, nunca más cortes: {mono}")
     if not (exacta and mono):
         fallos.append("invariante: trocear rompe la palabra o le añade cortes")
     print()
@@ -276,13 +276,13 @@ def main():
         return selftest()
     cuenta = palabras(cargar_corpus(CORPUS))
     letras = composicion(cuenta)
-    juntas = aprender(cuenta, 10 ** 9)            # hasta que no quede ninguna pareja que soldar
-    assert len(juntas) > JUNTAS, f"Se esperaban más de {JUNTAS} juntas; salieron {len(juntas)}"
-    assert all(len(trocear(w, juntas)) == 1 for w in list(cuenta)[:3000]), \
+    fusiones = aprender(cuenta, 10 ** 9)            # hasta que no quede ninguna pareja que soldar
+    assert len(fusiones) > FUSIONES, f"Se esperaban más de {FUSIONES} fusiones; salieron {len(fusiones)}"
+    assert all(len(trocear(w, fusiones)) == 1 for w in list(cuenta)[:3000]), \
         "Se esperaba que, sin parejas que soldar, cada palabra fuera una sola pieza"
-    for l in tabla(juntas, letras):
+    for l in tabla(fusiones, letras):
         print(l)
-    guardar(juntas, SALIDA_CSV)
+    guardar(fusiones, SALIDA_CSV)
     return 0
 
 
